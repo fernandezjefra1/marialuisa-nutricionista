@@ -34,18 +34,7 @@ export default function LoginPage() {
   }
 
   async function handleGoogleLogin() {
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-
-    if (error) {
-      setError("Error al conectar con Google");
-      setLoading(false);
-    }
+    setError("El inicio de sesión con Google estará disponible pronto.");
   }
 
   return (

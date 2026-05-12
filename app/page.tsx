@@ -9,8 +9,7 @@ export default function Home() {
       <Navbar />
       <HeroLibro />
       <CarruselImagenes />
-      <AcordeonInfo />
-      <Servicios />
+      <FilosofiaYServicios />
       <ProximoTaller />
       <Trayectoria />
       <Footer />
@@ -48,40 +47,38 @@ function Navbar() {
 function HeroLibro() {
   return (
     <section id="libro" className="relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 py-20 md:py-28 grid md:grid-cols-2 gap-12 lg:gap-20 items-center">
+      <div className="max-w-7xl mx-auto px-6 py-14 md:py-20 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
         {/* Texto */}
         <div className="order-2 md:order-1">
-          <p className="text-sm uppercase tracking-widest text-neutral-500 mb-6">
+          <p className="text-sm uppercase tracking-widest text-neutral-500 mb-4">
             Nuevo lanzamiento
           </p>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-tight mb-8">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-tight mb-6">
             Nutrición<br />
             <span className="font-semibold">del Bebé.</span>
           </h1>
-          <p className="text-lg text-neutral-600 leading-relaxed mb-8 max-w-lg">
+          <p className="text-base md:text-lg text-neutral-600 leading-relaxed mb-6 max-w-lg">
             Una guía única en su tipo sobre nutrición infantil preventiva, fruto
-            de años de experiencia profesional recorriendo todo el Perú. Recientemente
-            presentada en el Colegio de Nutricionistas del Perú.
+            de años de experiencia profesional recorriendo todo el Perú.
+            Recientemente presentada en el Colegio de Nutricionistas del Perú.
           </p>
 
-          {/* Características del libro */}
-          <ul className="space-y-2 mb-10 text-neutral-700">
+          <ul className="space-y-1.5 mb-6 text-neutral-700 text-sm">
             <li className="flex items-start gap-3">
-              <span className="text-neutral-900 mt-1">—</span>
+              <span className="text-neutral-900 mt-0.5">—</span>
               <span>Guía completa desde la gestación hasta los primeros años</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-neutral-900 mt-1">—</span>
+              <span className="text-neutral-900 mt-0.5">—</span>
               <span>Recetas, planes alimentarios y consejos prácticos</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-neutral-900 mt-1">—</span>
+              <span className="text-neutral-900 mt-0.5">—</span>
               <span>Basado en evidencia y experiencia profesional</span>
             </li>
           </ul>
 
-          {/* Precio y CTA */}
-          <div className="flex flex-wrap items-center gap-6 mb-8">
+          <div className="flex flex-wrap items-center gap-4 mb-6">
             <div className="flex items-baseline gap-3">
               <span className="text-4xl font-semibold">S/ 20</span>
               <span className="text-neutral-400 line-through text-lg">S/ 25</span>
@@ -91,16 +88,16 @@ function HeroLibro() {
             </span>
           </div>
 
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-3">
             <a
               href="#contacto"
-              className="bg-neutral-900 text-white px-8 py-4 rounded-full hover:bg-neutral-700 transition font-medium"
+              className="bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition font-medium"
             >
               Adquirir el libro
             </a>
             <a
               href="#sobre-mi"
-              className="border border-neutral-300 px-8 py-4 rounded-full hover:border-neutral-900 transition"
+              className="border border-neutral-300 px-6 py-3 rounded-full hover:border-neutral-900 transition"
             >
               Conocer a la autora
             </a>
@@ -110,10 +107,7 @@ function HeroLibro() {
         {/* Portada del libro */}
         <div className="order-1 md:order-2 relative">
           <div className="relative max-w-md mx-auto">
-            {/* Sombra decorativa de fondo */}
             <div className="absolute -inset-4 bg-gradient-to-br from-neutral-100 to-neutral-200 rounded-2xl rotate-3" />
-
-            {/* Imagen del libro */}
             <div className="relative aspect-[3/4] rounded-2xl shadow-2xl overflow-hidden">
               <Image
                 src="/images/libro-portada.jpg"
@@ -123,8 +117,6 @@ function HeroLibro() {
                 priority
               />
             </div>
-
-            {/* Badge flotante */}
             <div className="hidden md:block absolute -bottom-4 -left-4 bg-white border border-neutral-200 rounded-2xl p-4 shadow-lg max-w-[200px]">
               <p className="text-xs text-neutral-500 uppercase tracking-widest mb-1">
                 Por
@@ -172,10 +164,10 @@ function CarruselImagenes() {
   }, [slides.length]);
 
   return (
-    <section className="bg-neutral-50 py-24">
+    <section className="bg-neutral-50 py-14 md:py-16">
       <div className="w-full px-4 md:px-8">
-        <div className="max-w-6xl mx-auto mb-12">
-          <p className="text-sm uppercase tracking-widest text-neutral-500 mb-4">
+        <div className="max-w-6xl mx-auto mb-8">
+          <p className="text-sm uppercase tracking-widest text-neutral-500 mb-2">
             Trayectoria reciente
           </p>
           <h2 className="text-3xl md:text-4xl font-light">
@@ -199,11 +191,11 @@ function CarruselImagenes() {
                 priority={i === 0}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 text-white">
-                <h3 className="text-2xl md:text-3xl font-semibold mb-2">
+              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 text-white">
+                <h3 className="text-2xl md:text-3xl font-semibold mb-1">
                   {slide.titulo}
                 </h3>
-                <p className="text-base md:text-lg text-neutral-200 max-w-2xl">
+                <p className="text-sm md:text-base text-neutral-200 max-w-2xl">
                   {slide.descripcion}
                 </p>
               </div>
@@ -212,14 +204,14 @@ function CarruselImagenes() {
 
           <button
             onClick={() => setActual((actual - 1 + slides.length) % slides.length)}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white flex items-center justify-center transition"
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white flex items-center justify-center transition"
             aria-label="Anterior"
           >
             ←
           </button>
           <button
             onClick={() => setActual((actual + 1) % slides.length)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white flex items-center justify-center transition"
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white flex items-center justify-center transition"
             aria-label="Siguiente"
           >
             →
@@ -240,7 +232,7 @@ function CarruselImagenes() {
         </div>
 
         <div className="max-w-6xl mx-auto">
-          <p className="text-sm text-neutral-500 mt-6 text-right">
+          <p className="text-xs text-neutral-500 mt-3 text-right">
             {String(actual + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
           </p>
         </div>
@@ -249,8 +241,8 @@ function CarruselImagenes() {
   );
 }
 
-/* ---------- ACORDEÓN VISIÓN / MISIÓN / OBJETIVOS ---------- */
-function AcordeonInfo() {
+/* ---------- FILOSOFÍA + SERVICIOS (fusionados) ---------- */
+function FilosofiaYServicios() {
   const secciones = [
     {
       titulo: "Visión",
@@ -274,101 +266,86 @@ function AcordeonInfo() {
     },
   ];
 
+  const servicios = [
+    { n: "01", titulo: "Libros", desc: "Guías prácticas de nutrición preventiva." },
+    { n: "02", titulo: "Talleres", desc: "Comida dietética, fácil y saciadora." },
+    { n: "03", titulo: "Productos", desc: "Cúrcuma, sacha inchi, cacao, estevia." },
+    { n: "04", titulo: "Consultorías", desc: "Asesorías personalizadas." },
+  ];
+
   const [abierto, setAbierto] = useState<number | null>(0);
 
   return (
-    <section id="sobre-mi" className="max-w-4xl mx-auto px-6 py-24">
-      <p className="text-sm uppercase tracking-widest text-neutral-500 mb-4">
-        Nuestra propuesta
-      </p>
-      <h2 className="text-3xl md:text-4xl font-light mb-12">
-        Filosofía <span className="font-semibold">profesional.</span>
-      </h2>
+    <section id="sobre-mi" className="py-14 md:py-16">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="grid md:grid-cols-2 gap-12 md:gap-16">
+          {/* IZQUIERDA: Filosofía */}
+          <div>
+            <p className="text-sm uppercase tracking-widest text-neutral-500 mb-2">
+              Nuestra propuesta
+            </p>
+            <h2 className="text-3xl md:text-4xl font-light mb-6">
+              Filosofía <span className="font-semibold">profesional.</span>
+            </h2>
 
-      <div className="divide-y divide-neutral-200 border-t border-b border-neutral-200">
-        {secciones.map((s, i) => (
-          <div key={i}>
-            <button
-              onClick={() => setAbierto(abierto === i ? null : i)}
-              className="w-full py-6 flex items-center justify-between text-left hover:text-neutral-600 transition group"
-            >
-              <span className="text-xl md:text-2xl font-light group-hover:font-normal transition">
-                {s.titulo}
-              </span>
-              <span
-                className={`text-2xl transition-transform duration-300 ${
-                  abierto === i ? "rotate-45" : ""
-                }`}
-              >
-                +
-              </span>
-            </button>
-            <div
-              className={`grid transition-all duration-500 ease-in-out ${
-                abierto === i
-                  ? "grid-rows-[1fr] opacity-100 pb-6"
-                  : "grid-rows-[0fr] opacity-0"
-              }`}
-            >
-              <div className="overflow-hidden">
-                <p className="text-neutral-600 leading-relaxed max-w-3xl">
-                  {s.contenido}
-                </p>
-              </div>
+            <div className="divide-y divide-neutral-200 border-t border-b border-neutral-200">
+              {secciones.map((s, i) => (
+                <div key={i}>
+                  <button
+                    onClick={() => setAbierto(abierto === i ? null : i)}
+                    className="w-full py-4 flex items-center justify-between text-left hover:text-neutral-600 transition group"
+                  >
+                    <span className="text-lg md:text-xl font-light group-hover:font-normal transition">
+                      {s.titulo}
+                    </span>
+                    <span
+                      className={`text-xl transition-transform duration-300 ${
+                        abierto === i ? "rotate-45" : ""
+                      }`}
+                    >
+                      +
+                    </span>
+                  </button>
+                  <div
+                    className={`grid transition-all duration-500 ease-in-out ${
+                      abierto === i
+                        ? "grid-rows-[1fr] opacity-100 pb-4"
+                        : "grid-rows-[0fr] opacity-0"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <p className="text-sm text-neutral-600 leading-relaxed">
+                        {s.contenido}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
-    </section>
-  );
-}
 
-/* ---------- SERVICIOS ---------- */
-function Servicios() {
-  const items = [
-    {
-      n: "01",
-      titulo: "Libros",
-      desc: "Guías prácticas de nutrición preventiva para todas las etapas de la vida.",
-    },
-    {
-      n: "02",
-      titulo: "Talleres",
-      desc: "Comida dietética, fácil, saludable y saciadora. Modalidad presencial y virtual.",
-    },
-    {
-      n: "03",
-      titulo: "Productos",
-      desc: "Cúrcuma, sacha inchi, cacao orgánico y estevia de calidad seleccionada.",
-    },
-    {
-      n: "04",
-      titulo: "Consultorías",
-      desc: "Asesorías personalizadas y elaboración de proyectos de nutrición.",
-    },
-  ];
+          {/* DERECHA: Servicios */}
+          <div id="servicios">
+            <p className="text-sm uppercase tracking-widest text-neutral-500 mb-2">
+              Lo que ofrezco
+            </p>
+            <h2 className="text-3xl md:text-4xl font-light mb-6">
+              Cuatro <span className="font-semibold">pilares.</span>
+            </h2>
 
-  return (
-    <section id="servicios" className="bg-neutral-50 py-24">
-      <div className="max-w-6xl mx-auto px-6">
-        <p className="text-sm uppercase tracking-widest text-neutral-500 mb-4">
-          Lo que ofrezco
-        </p>
-        <h2 className="text-3xl md:text-4xl font-light mb-16">
-          Cuatro pilares de mi <span className="font-semibold">práctica profesional.</span>
-        </h2>
-
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-px bg-neutral-200">
-          {items.map((item) => (
-            <div
-              key={item.n}
-              className="bg-white p-8 hover:bg-neutral-100 transition group cursor-default"
-            >
-              <p className="text-sm text-neutral-400 mb-6">{item.n}</p>
-              <h3 className="text-xl font-semibold mb-3">{item.titulo}</h3>
-              <p className="text-neutral-600 text-sm leading-relaxed">{item.desc}</p>
+            <div className="grid grid-cols-2 gap-px bg-neutral-200 border border-neutral-200">
+              {servicios.map((item) => (
+                <div
+                  key={item.n}
+                  className="bg-white p-5 hover:bg-neutral-50 transition cursor-default"
+                >
+                  <p className="text-xs text-neutral-400 mb-3">{item.n}</p>
+                  <h3 className="font-semibold mb-1.5">{item.titulo}</h3>
+                  <p className="text-xs text-neutral-600 leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </section>
@@ -378,53 +355,55 @@ function Servicios() {
 /* ---------- PRÓXIMO TALLER ---------- */
 function ProximoTaller() {
   return (
-    <section id="taller" className="max-w-6xl mx-auto px-6 py-24">
-      <div className="grid md:grid-cols-2 gap-12 items-center">
-        <div className="relative aspect-[3/4] max-w-sm mx-auto md:mx-0 w-full">
-          <Image
-            src="/images/taller-dietetica.jpeg"
-            alt="Taller de Comida Dietética"
-            fill
-            className="object-contain rounded-2xl"
-          />
-        </div>
-        <div>
-          <p className="text-sm uppercase tracking-widest text-neutral-500 mb-4">
-            Próximo evento
-          </p>
-          <h2 className="text-3xl md:text-4xl font-light mb-6 leading-tight">
-            Taller de<br />
-            <span className="font-semibold">Comida Dietética.</span>
-          </h2>
-          <p className="text-neutral-600 leading-relaxed mb-8">
-            Aprende a cocinar rico y saludable. Un taller práctico donde
-            descubrirás cómo preparar comidas fáciles, saludables y saciadoras
-            que transformarán tu día a día.
-          </p>
-
-          <div className="grid grid-cols-2 gap-4 mb-8">
-            <div className="border-t border-neutral-900 pt-4">
-              <p className="text-xs uppercase tracking-widest text-neutral-500 mb-1">Presencial</p>
-              <p className="text-2xl font-semibold">S/ 80</p>
-            </div>
-            <div className="border-t border-neutral-300 pt-4">
-              <p className="text-xs uppercase tracking-widest text-neutral-500 mb-1">Virtual</p>
-              <p className="text-2xl font-semibold">S/ 40</p>
-            </div>
+    <section id="taller" className="bg-neutral-50 py-14 md:py-16">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="grid md:grid-cols-2 gap-10 items-center">
+          <div className="relative aspect-[3/4] max-w-sm mx-auto md:mx-0 w-full">
+            <Image
+              src="/images/taller-dietetica.jpeg"
+              alt="Taller de Comida Dietética"
+              fill
+              className="object-contain rounded-2xl"
+            />
           </div>
+          <div>
+            <p className="text-sm uppercase tracking-widest text-neutral-500 mb-2">
+              Próximo evento
+            </p>
+            <h2 className="text-3xl md:text-4xl font-light mb-4 leading-tight">
+              Taller de<br />
+              <span className="font-semibold">Comida Dietética.</span>
+            </h2>
+            <p className="text-neutral-600 leading-relaxed mb-6 text-sm md:text-base">
+              Aprende a cocinar rico y saludable. Un taller práctico donde
+              descubrirás cómo preparar comidas fáciles, saludables y saciadoras
+              que transformarán tu día a día.
+            </p>
 
-          <ul className="text-sm text-neutral-700 space-y-2 mb-8">
-            <li>— Degustación incluida</li>
-            <li>— Materiales: taper, cubiertos, jabón y toalla</li>
-            <li>— Modalidad presencial y virtual</li>
-          </ul>
+            <div className="grid grid-cols-2 gap-4 mb-6">
+              <div className="border-t border-neutral-900 pt-3">
+                <p className="text-xs uppercase tracking-widest text-neutral-500 mb-1">Presencial</p>
+                <p className="text-2xl font-semibold">S/ 80</p>
+              </div>
+              <div className="border-t border-neutral-300 pt-3">
+                <p className="text-xs uppercase tracking-widest text-neutral-500 mb-1">Virtual</p>
+                <p className="text-2xl font-semibold">S/ 40</p>
+              </div>
+            </div>
 
-          <a
-            href="#contacto"
-            className="inline-block bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition"
-          >
-            Reservar cupo
-          </a>
+            <ul className="text-sm text-neutral-700 space-y-1.5 mb-6">
+              <li>— Degustación incluida</li>
+              <li>— Materiales: taper, cubiertos, jabón y toalla</li>
+              <li>— Modalidad presencial y virtual</li>
+            </ul>
+
+            <a
+              href="#contacto"
+              className="inline-block bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition"
+            >
+              Reservar cupo
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -441,20 +420,20 @@ function Trayectoria() {
   ];
 
   return (
-    <section className="bg-neutral-50 py-24">
+    <section className="py-14 md:py-16">
       <div className="max-w-6xl mx-auto px-6">
-        <p className="text-sm uppercase tracking-widest text-neutral-500 mb-4">
+        <p className="text-sm uppercase tracking-widest text-neutral-500 mb-2">
           Trayectoria
         </p>
-        <h2 className="text-3xl md:text-4xl font-light mb-16">
+        <h2 className="text-3xl md:text-4xl font-light mb-10">
           Más de dos décadas <span className="font-semibold">construyendo experiencia.</span>
         </h2>
 
-        <div className="grid md:grid-cols-4 gap-8">
+        <div className="grid md:grid-cols-4 gap-6">
           {hitos.map((h, i) => (
-            <div key={i} className="border-t border-neutral-900 pt-6">
-              <p className="text-sm text-neutral-500 mb-2">{h.año}</p>
-              <h3 className="font-semibold mb-2">{h.titulo}</h3>
+            <div key={i} className="border-t border-neutral-900 pt-4">
+              <p className="text-xs text-neutral-500 mb-2 uppercase tracking-widest">{h.año}</p>
+              <h3 className="font-semibold mb-1.5">{h.titulo}</h3>
               <p className="text-sm text-neutral-600 leading-relaxed">{h.desc}</p>
             </div>
           ))}
@@ -467,34 +446,34 @@ function Trayectoria() {
 /* ---------- FOOTER ---------- */
 function Footer() {
   return (
-    <footer id="contacto" className="bg-white border-t border-neutral-200 py-16">
-      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-12">
+    <footer id="contacto" className="bg-neutral-900 text-white py-12">
+      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10">
         <div>
-          <h3 className="font-semibold mb-3">María Luisa Nutricionista</h3>
-          <p className="text-sm text-neutral-600 leading-relaxed">
+          <h3 className="font-semibold mb-2">María Luisa Nutricionista</h3>
+          <p className="text-sm text-neutral-400 leading-relaxed">
             Nutrición preventiva para todas las etapas de la vida.
           </p>
         </div>
         <div>
-          <h4 className="text-sm uppercase tracking-widest text-neutral-500 mb-3">
+          <h4 className="text-xs uppercase tracking-widest text-neutral-500 mb-3">
             Contacto
           </h4>
-          <ul className="text-sm space-y-2 text-neutral-700">
+          <ul className="text-sm space-y-1.5 text-neutral-300">
             <li>WhatsApp: por confirmar</li>
             <li>San Juan de Miraflores, Lima</li>
           </ul>
         </div>
         <div>
-          <h4 className="text-sm uppercase tracking-widest text-neutral-500 mb-3">
+          <h4 className="text-xs uppercase tracking-widest text-neutral-500 mb-3">
             Síguenos
           </h4>
-          <ul className="text-sm space-y-2 text-neutral-700">
+          <ul className="text-sm space-y-1.5 text-neutral-300">
             <li>Facebook</li>
             <li>TikTok</li>
           </ul>
         </div>
       </div>
-      <div className="max-w-6xl mx-auto px-6 mt-12 pt-8 border-t border-neutral-200 text-xs text-neutral-500">
+      <div className="max-w-6xl mx-auto px-6 mt-8 pt-6 border-t border-neutral-800 text-xs text-neutral-500">
         © {new Date().getFullYear()} María Luisa Nutricionista. Todos los derechos reservados.
       </div>
     </footer>

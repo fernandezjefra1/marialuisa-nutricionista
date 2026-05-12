@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -32,12 +33,12 @@ function Navbar() {
           <li><a href="#taller" className="hover:text-neutral-900 transition">Talleres</a></li>
           <li><a href="#contacto" className="hover:text-neutral-900 transition">Contacto</a></li>
         </ul>
-        <a
-          href="#contacto"
-          className="text-sm border border-neutral-900 px-4 py-2 rounded-full hover:bg-neutral-900 hover:text-white transition"
-        >
-          Reservar cita
-        </a>
+        <Link
+  href="/login"
+  className="text-sm border border-neutral-900 px-4 py-2 rounded-full hover:bg-neutral-900 hover:text-white transition"
+>
+  Reservar cita
+</Link>
       </div>
     </nav>
   );
@@ -89,12 +90,12 @@ function HeroLibro() {
           </div>
 
           <div className="flex flex-wrap gap-3">
-            <a
-              href="#contacto"
-              className="bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition font-medium"
-            >
-              Adquirir el libro
-            </a>
+            <Link
+  href="/login"
+  className="bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition font-medium"
+>
+  Adquirir el libro
+</Link>
             <a
               href="#sobre-mi"
               className="border border-neutral-300 px-6 py-3 rounded-full hover:border-neutral-900 transition"
@@ -397,12 +398,12 @@ function ProximoTaller() {
               <li>— Modalidad presencial y virtual</li>
             </ul>
 
-            <a
-              href="#contacto"
-              className="inline-block bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition"
-            >
-              Reservar cupo
-            </a>
+            <Link
+  href="/login"
+  className="inline-block bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition"
+>
+  Reservar cupo
+</Link>
           </div>
         </div>
       </div>

@@ -2,7 +2,13 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #5a3a3a;
+  --color-rose-light: #fdcfd4;
+  --color-rose-mid: #edaab3;
+  --color-rose-dark: #c97d8a;
+  --color-green-light: #eaf3de;
+  --color-green-mid: #afc28a;
+  --color-green-dark: #809d47;
 }
 
 @theme inline {
@@ -10,13 +16,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {

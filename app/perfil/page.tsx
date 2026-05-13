@@ -212,8 +212,20 @@ function Campo({ label, valor }: { label: string; valor: string }) {
 function TabMisCompras() {
   const { user } = useUser();
   const supabase = createClient();
+  const searchParams = useSearchParams();
   const [compras, setCompras] = useState<any[]>([]);
   const [cargando, setCargando] = useState(true);
+  const [mostrarBanner, setMostrarBanner] = useState(false);
+
+  // Detectar si viene de una compra nueva
+  useEffect(() => {
+    if (searchParams.get("nuevo") === "1") {
+      setMostrarBanner(true);
+      // Auto-ocultar después de 8 segundos
+      const timer = setTimeout(() => setMostrarBanner(false), 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     async function cargar() {
@@ -237,76 +249,89 @@ function TabMisCompras() {
     );
   }
 
-  if (compras.length === 0) {
-    return (
-      <div className="bg-white rounded-2xl border border-neutral-200 p-12 text-center">
-        <div className="text-5xl mb-4">📚</div>
-        <h3 className="text-lg font-semibold mb-2">Aún no tienes compras</h3>
-        <p className="text-sm text-neutral-600 mb-6 max-w-sm mx-auto">
-          Cuando hagas tu primera compra aparecerá aquí con todos los detalles.
-        </p>
-        <Link
-          href="/comprar-libro"
-          className="inline-block bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition text-sm font-medium"
-        >
-          Comprar el libro
-        </Link>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-3">
-      {compras.map((c) => (
-        <CompraCard key={c.id} compra={c} />
-      ))}
+    <div>
+      {/* Banner de éxito */}
+      {mostrarBanner && (
+        <div className="mb-6 bg-green-50 border-2 border-green-200 rounded-2xl p-5 flex items-start gap-4 animate-fade-in">
+          <div className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 text-xl font-bold">
+            ✓
+          </div>
+          <div className="flex-1">
+            <h3 className="font-semibold text-green-900 mb-1">¡Pedido enviado correctamente!</h3>
+            <p className="text-sm text-green-800 leading-relaxed">
+              María Luisa recibió tu pedido por WhatsApp y te contactará pronto para coordinar el pago. 
+              Tu pedido aparece abajo con estado <strong>&quot;Pendiente de pago&quot;</strong>.
+            </p>
+          </div>
+          <button
+            onClick={() => setMostrarBanner(false)}
+            className="text-green-700 hover:text-green-900 text-xl leading-none"
+            aria-label="Cerrar"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
+      {/* Lista de compras */}
+      {compras.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-neutral-200 p-12 text-center">
+          <div className="text-5xl mb-4">📚</div>
+          <h3 className="text-lg font-semibold mb-2">Aún no tienes compras</h3>
+          <p className="text-sm text-neutral-600 mb-6 max-w-sm mx-auto">
+            Cuando hagas tu primera compra aparecerá aquí con todos los detalles.
+          </p>
+          <Link
+            href="/comprar-libro"
+            className="inline-block bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition text-sm font-medium"
+          >
+            Comprar el libro
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {compras.map((c) => (
+            <CompraCard key={c.id} compra={c} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
+/* ---------- CARD DE COMPRA ---------- */
 function CompraCard({ compra }: { compra: any }) {
-  const estadoColor = {
-    pendiente: "bg-amber-50 text-amber-700 border-amber-200",
-    pagado: "bg-blue-50 text-blue-700 border-blue-200",
-    enviado: "bg-purple-50 text-purple-700 border-purple-200",
-    completado: "bg-green-50 text-green-700 border-green-200",
-    cancelado: "bg-neutral-100 text-neutral-600 border-neutral-200",
-  }[compra.estado as string] || "bg-neutral-100 text-neutral-600 border-neutral-200";
-
-  const estadoTexto = {
-    pendiente: "Pendiente de pago",
-    pagado: "Pago confirmado",
-    enviado: "En camino",
-    completado: "Entregado",
-    cancelado: "Cancelado",
-  }[compra.estado as string] || compra.estado;
-
   const fecha = new Date(compra.created_at).toLocaleDateString("es-PE", {
-    day: "numeric",
-    month: "short",
     year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 
-  return (
-    <div className="bg-white rounded-2xl border border-neutral-200 p-5 md:p-6">
-      <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
-        <div>
-          <p className="font-semibold">{compra.producto}</p>
-          <p className="text-xs text-neutral-500 mt-0.5">
-            {compra.formato === "virtual" ? "📱 Libro Digital" : "📚 Libro Físico"} · {fecha}
-          </p>
-        </div>
-        <span className={`text-xs px-3 py-1 rounded-full border ${estadoColor} font-medium`}>
-          {estadoTexto}
-        </span>
-      </div>
+  const estadoConfig: Record<string, { label: string; className: string }> = {
+    pendiente:  { label: "Pendiente de pago",  className: "bg-yellow-50 text-yellow-700 border-yellow-200" },
+    pagado:     { label: "Pagado",             className: "bg-green-50 text-green-700 border-green-200" },
+    enviado:    { label: "Enviado",            className: "bg-blue-50 text-blue-700 border-blue-200" },
+    entregado:  { label: "Entregado",          className: "bg-neutral-100 text-neutral-600 border-neutral-200" },
+    cancelado:  { label: "Cancelado",          className: "bg-red-50 text-red-600 border-red-200" },
+  };
 
-      <div className="flex flex-wrap items-end justify-between gap-3 pt-3 border-t border-neutral-100">
-        <div className="text-xs text-neutral-500">
-          <span className="capitalize">{compra.metodo_pago}</span>
-          {compra.direccion && <> · {compra.direccion}</>}
-        </div>
-        <p className="text-lg font-semibold">S/ {compra.precio}</p>
+  const estado = estadoConfig[compra.estado] ?? { label: compra.estado, className: "bg-neutral-100 text-neutral-600 border-neutral-200" };
+
+  return (
+    <div className="bg-white rounded-2xl border border-neutral-200 p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+      <div className="text-3xl">{compra.formato === "virtual" ? "📱" : "📚"}</div>
+      <div className="flex-1 min-w-0">
+        <p className="font-semibold text-sm">{compra.producto}</p>
+        <p className="text-xs text-neutral-500 mt-0.5">
+          {compra.formato === "virtual" ? "Libro Digital (PDF)" : "Libro Físico"} · {fecha}
+        </p>
+      </div>
+      <div className="flex items-center gap-4">
+        <p className="font-semibold text-sm">S/ {compra.precio}</p>
+        <span className={`text-xs px-3 py-1 rounded-full border font-medium ${estado.className}`}>
+          {estado.label}
+        </span>
       </div>
     </div>
   );

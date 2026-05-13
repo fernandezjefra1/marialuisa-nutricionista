@@ -7,7 +7,7 @@ import { useUser } from "@/lib/use-user";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white text-neutral-900">
+    <main className="min-h-screen bg-[var(--yucca)] text-[var(--texto-principal)]">
       <Navbar />
       <HeroLibro />
       <CarruselImagenes />
@@ -22,16 +22,16 @@ export default function Home() {
 /* ---------- NAVBAR ---------- */
 function Navbar() {
   return (
-    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-neutral-200">
+    <nav className="sticky top-0 z-50 bg-[var(--yucca-soft)]/90 backdrop-blur-sm border-b border-[var(--borde-rosa)]">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="font-semibold tracking-tight">
-          María Luisa <span className="text-neutral-500">Nutricionista</span>
+        <Link href="/" className="font-semibold tracking-tight text-[var(--texto-principal)]">
+          María Luisa <span className="text-[var(--primrose)]">Nutricionista</span>
         </Link>
-        <ul className="hidden md:flex gap-8 text-sm text-neutral-600">
-          <li><a href="#libro" className="hover:text-neutral-900 transition">Libro</a></li>
-          <li><a href="#sobre-mi" className="hover:text-neutral-900 transition">Sobre mí</a></li>
-          <li><a href="#servicios" className="hover:text-neutral-900 transition">Servicios</a></li>
-          <li><a href="#taller" className="hover:text-neutral-900 transition">Talleres</a></li>
+        <ul className="hidden md:flex gap-8 text-sm text-[var(--texto-suave)]">
+          <li><a href="#libro" className="hover:text-[var(--primrose)] transition">Libro</a></li>
+          <li><a href="#sobre-mi" className="hover:text-[var(--primrose)] transition">Sobre mí</a></li>
+          <li><a href="#servicios" className="hover:text-[var(--primrose)] transition">Servicios</a></li>
+          <li><a href="#taller" className="hover:text-[var(--primrose)] transition">Talleres</a></li>
         </ul>
         <MenuUsuario />
       </div>
@@ -44,24 +44,22 @@ function MenuUsuario() {
   const { user, nombre, signOut, loading } = useUser();
   const [abierto, setAbierto] = useState(false);
 
-  // Mientras carga la info de auth
   if (loading) {
-    return <div className="w-24 h-9" />; // Placeholder para evitar saltos
+    return <div className="w-24 h-9" />;
   }
 
-  // Si NO está logueado
   if (!user) {
     return (
       <div className="flex items-center gap-2">
         <Link
           href="/login"
-          className="hidden sm:inline-block text-sm text-neutral-600 hover:text-neutral-900 px-3 py-2 transition"
+          className="hidden sm:inline-block text-sm text-[var(--texto-suave)] hover:text-[var(--primrose)] px-3 py-2 transition"
         >
           Iniciar sesión
         </Link>
         <Link
           href="/login?redirect=/comprar-libro"
-          className="text-sm border border-neutral-900 px-4 py-2 rounded-full hover:bg-neutral-900 hover:text-white transition"
+          className="text-sm bg-[var(--primrose)] text-white px-4 py-2 rounded-full hover:bg-[var(--primrose-hover)] transition shadow-md shadow-pink-200"
         >
           Reservar cita
         </Link>
@@ -69,7 +67,6 @@ function MenuUsuario() {
     );
   }
 
-  // Avatar: foto de Google o iniciales
   const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture;
   const iniciales = nombre
     .split(" ")
@@ -78,29 +75,28 @@ function MenuUsuario() {
     .join("")
     .toUpperCase();
 
-  // Si SÍ está logueado
   return (
     <div className="relative">
       <button
         onClick={() => setAbierto(!abierto)}
-        className="flex items-center gap-3 hover:bg-neutral-100 rounded-full pl-1 pr-3 py-1 transition"
+        className="flex items-center gap-3 hover:bg-[var(--pinktone-soft)] rounded-full pl-1 pr-3 py-1 transition"
       >
         {avatarUrl ? (
-  // eslint-disable-next-line @next/next/no-img-element
-  <img
-    src={avatarUrl}
-    alt={nombre}
-    className="w-8 h-8 rounded-full object-cover"
-    referrerPolicy="no-referrer"
-  />
-) : (
-          <div className="w-8 h-8 rounded-full bg-neutral-900 text-white text-xs font-semibold flex items-center justify-center">
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={avatarUrl}
+            alt={nombre}
+            className="w-8 h-8 rounded-full object-cover border-2 border-[var(--pinktone)]"
+            referrerPolicy="no-referrer"
+          />
+        ) : (
+          <div className="w-8 h-8 rounded-full bg-[var(--primrose)] text-white text-xs font-semibold flex items-center justify-center">
             {iniciales}
           </div>
         )}
-        <span className="text-sm font-medium hidden sm:inline">{nombre.split(" ")[0]}</span>
+        <span className="text-sm font-medium hidden sm:inline text-[var(--texto-principal)]">{nombre.split(" ")[0]}</span>
         <svg
-          className={`w-3.5 h-3.5 text-neutral-400 transition-transform ${abierto ? "rotate-180" : ""}`}
+          className={`w-3.5 h-3.5 text-[var(--texto-tenue)] transition-transform ${abierto ? "rotate-180" : ""}`}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -110,48 +106,43 @@ function MenuUsuario() {
         </svg>
       </button>
 
-      {/* Menú desplegable */}
       {abierto && (
         <>
-          {/* Backdrop invisible para cerrar al hacer click afuera */}
           <div
             className="fixed inset-0 z-40"
             onClick={() => setAbierto(false)}
           />
-          <div className="absolute right-0 mt-2 w-64 bg-white border border-neutral-200 rounded-2xl shadow-lg z-50 overflow-hidden">
-            {/* Header del menú */}
-            <div className="p-4 border-b border-neutral-100">
-              <p className="text-sm font-semibold truncate">{nombre}</p>
-              <p className="text-xs text-neutral-500 truncate">{user.email}</p>
+          <div className="absolute right-0 mt-2 w-64 bg-white border border-[var(--borde-rosa)] rounded-2xl shadow-xl shadow-pink-100 z-50 overflow-hidden">
+            <div className="p-4 border-b border-[var(--borde-suave)] bg-[var(--pinktone-soft)]">
+              <p className="text-sm font-semibold truncate text-[var(--texto-principal)]">{nombre}</p>
+              <p className="text-xs text-[var(--texto-suave)] truncate">{user.email}</p>
             </div>
 
-            {/* Opciones */}
             <div className="py-1">
               <Link
                 href="/perfil"
                 onClick={() => setAbierto(false)}
-                className="block px-4 py-2.5 text-sm hover:bg-neutral-50 transition"
+                className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
               >
                 Mi perfil
               </Link>
               <Link
                 href="/perfil?tab=compras"
                 onClick={() => setAbierto(false)}
-                className="block px-4 py-2.5 text-sm hover:bg-neutral-50 transition"
+                className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
               >
                 Mis compras
               </Link>
               <Link
                 href="/perfil?tab=fidelizacion"
                 onClick={() => setAbierto(false)}
-                className="block px-4 py-2.5 text-sm hover:bg-neutral-50 transition"
+                className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
               >
                 Programa de fidelización
               </Link>
             </div>
 
-            {/* Cerrar sesión */}
-            <div className="border-t border-neutral-100 py-1">
+            <div className="border-t border-[var(--borde-suave)] py-1">
               <button
                 onClick={async () => {
                   await signOut();
@@ -173,58 +164,58 @@ function MenuUsuario() {
 /* ---------- HERO: LIBRO DESTACADO ---------- */
 function HeroLibro() {
   return (
-    <section id="libro" className="relative overflow-hidden">
+    <section id="libro" className="relative overflow-hidden bg-[var(--yucca)]">
       <div className="max-w-7xl mx-auto px-6 py-14 md:py-20 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
         {/* Texto */}
         <div className="order-2 md:order-1">
-          <p className="text-sm uppercase tracking-widest text-neutral-500 mb-4">
-            Nuevo lanzamiento
+          <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-4 font-medium">
+            ✿ Nuevo lanzamiento
           </p>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-tight mb-6">
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-tight mb-6 text-[var(--texto-principal)]">
             Nutrición<br />
-            <span className="font-semibold">del Bebé.</span>
+            <span className="font-semibold text-[var(--primrose)]">del Bebé.</span>
           </h1>
-          <p className="text-base md:text-lg text-neutral-600 leading-relaxed mb-6 max-w-lg">
+          <p className="text-base md:text-lg text-[var(--texto-suave)] leading-relaxed mb-6 max-w-lg">
             Una guía única en su tipo sobre nutrición infantil preventiva, fruto
             de años de experiencia profesional recorriendo todo el Perú.
             Recientemente presentada en el Colegio de Nutricionistas del Perú.
           </p>
 
-          <ul className="space-y-1.5 mb-6 text-neutral-700 text-sm">
+          <ul className="space-y-1.5 mb-6 text-[var(--texto-principal)] text-sm">
             <li className="flex items-start gap-3">
-              <span className="text-neutral-900 mt-0.5">—</span>
+              <span className="text-[var(--primrose)] mt-0.5">✿</span>
               <span>Guía completa desde la gestación hasta los primeros años</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-neutral-900 mt-0.5">—</span>
+              <span className="text-[var(--primrose)] mt-0.5">✿</span>
               <span>Recetas, planes alimentarios y consejos prácticos</span>
             </li>
             <li className="flex items-start gap-3">
-              <span className="text-neutral-900 mt-0.5">—</span>
+              <span className="text-[var(--primrose)] mt-0.5">✿</span>
               <span>Basado en evidencia y experiencia profesional</span>
             </li>
           </ul>
 
           <div className="flex flex-wrap items-center gap-4 mb-6">
             <div className="flex items-baseline gap-3">
-              <span className="text-4xl font-semibold">S/ 20</span>
-              <span className="text-neutral-400 line-through text-lg">S/ 25</span>
+              <span className="text-4xl font-semibold text-[var(--texto-principal)]">S/ 20</span>
+              <span className="text-[var(--texto-tenue)] line-through text-lg">S/ 25</span>
             </div>
-            <span className="text-xs uppercase tracking-widest text-green-700 bg-green-50 px-3 py-1 rounded-full">
+            <span className="text-xs uppercase tracking-widest text-[var(--texto-principal)] bg-[var(--lime-soft)] border border-[var(--lime)] px-3 py-1 rounded-full font-medium">
               Edición disponible
             </span>
           </div>
 
           <div className="flex flex-wrap gap-3">
             <Link
-  href="/comprar-libro"
-  className="bg-neutral-900 text-white px-8 py-4 rounded-full hover:bg-neutral-700 transition font-medium"
->
-  Adquirir el libro
-</Link>
+              href="/comprar-libro"
+              className="bg-[var(--primrose)] text-white px-8 py-4 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
+            >
+              Adquirir el libro
+            </Link>
             <a
               href="#sobre-mi"
-              className="border border-neutral-300 px-6 py-3 rounded-full hover:border-neutral-900 transition"
+              className="border-2 border-[var(--primrose)] text-[var(--primrose)] px-6 py-3 rounded-full hover:bg-[var(--pinktone-soft)] transition font-medium"
             >
               Conocer a la autora
             </a>
@@ -234,8 +225,9 @@ function HeroLibro() {
         {/* Portada del libro */}
         <div className="order-1 md:order-2 relative">
           <div className="relative max-w-md mx-auto">
-            <div className="absolute -inset-4 bg-gradient-to-br from-neutral-100 to-neutral-200 rounded-2xl rotate-3" />
-            <div className="relative aspect-[3/4] rounded-2xl shadow-2xl overflow-hidden">
+            {/* Sombra decorativa rosa */}
+            <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl rotate-3" />
+            <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
               <Image
                 src="/images/libro-portada.jpg"
                 alt="Libro Nutrición del Bebé - Lic. María Luisa"
@@ -244,12 +236,12 @@ function HeroLibro() {
                 priority
               />
             </div>
-            <div className="hidden md:block absolute -bottom-4 -left-4 bg-white border border-neutral-200 rounded-2xl p-4 shadow-lg max-w-[200px]">
-              <p className="text-xs text-neutral-500 uppercase tracking-widest mb-1">
-                Por
+            <div className="hidden md:block absolute -bottom-4 -left-4 bg-white border border-[var(--borde-rosa)] rounded-2xl p-4 shadow-lg shadow-pink-100 max-w-[200px]">
+              <p className="text-xs text-[var(--primrose)] uppercase tracking-widest mb-1 font-medium">
+                ✿ Por
               </p>
-              <p className="font-semibold text-sm">Lic. María Luisa</p>
-              <p className="text-xs text-neutral-600">Nutricionista colegiada</p>
+              <p className="font-semibold text-sm text-[var(--texto-principal)]">Lic. María Luisa</p>
+              <p className="text-xs text-[var(--texto-suave)]">Nutricionista colegiada</p>
             </div>
           </div>
         </div>
@@ -291,18 +283,18 @@ function CarruselImagenes() {
   }, [slides.length]);
 
   return (
-    <section className="bg-neutral-50 py-14 md:py-16">
+    <section className="bg-[var(--pinktone-soft)] py-14 md:py-16">
       <div className="w-full px-4 md:px-8">
         <div className="max-w-6xl mx-auto mb-8">
-          <p className="text-sm uppercase tracking-widest text-neutral-500 mb-2">
-            Trayectoria reciente
+          <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-medium">
+            ✿ Trayectoria reciente
           </p>
-          <h2 className="text-3xl md:text-4xl font-light">
-            Momentos que marcan <span className="font-semibold">una carrera.</span>
+          <h2 className="text-3xl md:text-4xl font-light text-[var(--texto-principal)]">
+            Momentos que marcan <span className="font-semibold text-[var(--primrose)]">una carrera.</span>
           </h2>
         </div>
 
-        <div className="relative overflow-hidden rounded-2xl bg-neutral-900 h-[300px] sm:h-[400px] md:h-[450px]">
+        <div className="relative overflow-hidden rounded-3xl bg-[var(--texto-principal)] h-[300px] sm:h-[400px] md:h-[450px] shadow-xl shadow-pink-200">
           {slides.map((slide, i) => (
             <div
               key={i}
@@ -317,12 +309,12 @@ function CarruselImagenes() {
                 className={slide.ajuste === "contain" ? "object-contain" : "object-cover"}
                 priority={i === 0}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#4A2E32]/90 via-[#4A2E32]/20 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 text-white">
                 <h3 className="text-2xl md:text-3xl font-semibold mb-1">
                   {slide.titulo}
                 </h3>
-                <p className="text-sm md:text-base text-neutral-200 max-w-2xl">
+                <p className="text-sm md:text-base text-pink-50 max-w-2xl">
                   {slide.descripcion}
                 </p>
               </div>
@@ -331,14 +323,14 @@ function CarruselImagenes() {
 
           <button
             onClick={() => setActual((actual - 1 + slides.length) % slides.length)}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white flex items-center justify-center transition"
+            className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/30 backdrop-blur-sm hover:bg-[var(--primrose)] text-white flex items-center justify-center transition"
             aria-label="Anterior"
           >
             ←
           </button>
           <button
             onClick={() => setActual((actual + 1) % slides.length)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 text-white flex items-center justify-center transition"
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/30 backdrop-blur-sm hover:bg-[var(--primrose)] text-white flex items-center justify-center transition"
             aria-label="Siguiente"
           >
             →
@@ -350,7 +342,7 @@ function CarruselImagenes() {
                 key={i}
                 onClick={() => setActual(i)}
                 className={`h-1.5 rounded-full transition-all ${
-                  i === actual ? "w-8 bg-white" : "w-4 bg-white/50"
+                  i === actual ? "w-8 bg-[var(--primrose)]" : "w-4 bg-white/60"
                 }`}
                 aria-label={`Ir al slide ${i + 1}`}
               />
@@ -359,7 +351,7 @@ function CarruselImagenes() {
         </div>
 
         <div className="max-w-6xl mx-auto">
-          <p className="text-xs text-neutral-500 mt-3 text-right">
+          <p className="text-xs text-[var(--texto-suave)] mt-3 text-right">
             {String(actual + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
           </p>
         </div>
@@ -368,7 +360,7 @@ function CarruselImagenes() {
   );
 }
 
-/* ---------- FILOSOFÍA + SERVICIOS (fusionados) ---------- */
+/* ---------- FILOSOFÍA + SERVICIOS ---------- */
 function FilosofiaYServicios() {
   const secciones = [
     {
@@ -394,39 +386,39 @@ function FilosofiaYServicios() {
   ];
 
   const servicios = [
-    { n: "01", titulo: "Libros", desc: "Guías prácticas de nutrición preventiva." },
-    { n: "02", titulo: "Talleres", desc: "Comida dietética, fácil y saciadora." },
-    { n: "03", titulo: "Productos", desc: "Cúrcuma, sacha inchi, cacao, estevia." },
-    { n: "04", titulo: "Consultorías", desc: "Asesorías personalizadas." },
+    { n: "01", titulo: "Libros", desc: "Guías prácticas de nutrición preventiva.", color: "primrose" },
+    { n: "02", titulo: "Talleres", desc: "Comida dietética, fácil y saciadora.", color: "lime" },
+    { n: "03", titulo: "Productos", desc: "Cúrcuma, sacha inchi, cacao, estevia.", color: "primrose" },
+    { n: "04", titulo: "Consultorías", desc: "Asesorías personalizadas.", color: "lime" },
   ];
 
   const [abierto, setAbierto] = useState<number | null>(0);
 
   return (
-    <section id="sobre-mi" className="py-14 md:py-16">
+    <section id="sobre-mi" className="py-14 md:py-16 bg-[var(--yucca)]">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-12 md:gap-16">
           {/* IZQUIERDA: Filosofía */}
           <div>
-            <p className="text-sm uppercase tracking-widest text-neutral-500 mb-2">
-              Nuestra propuesta
+            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-medium">
+              ✿ Nuestra propuesta
             </p>
-            <h2 className="text-3xl md:text-4xl font-light mb-6">
-              Filosofía <span className="font-semibold">profesional.</span>
+            <h2 className="text-3xl md:text-4xl font-light mb-6 text-[var(--texto-principal)]">
+              Filosofía <span className="font-semibold text-[var(--primrose)]">profesional.</span>
             </h2>
 
-            <div className="divide-y divide-neutral-200 border-t border-b border-neutral-200">
+            <div className="divide-y divide-[var(--borde-suave)] border-t border-b border-[var(--borde-rosa)]">
               {secciones.map((s, i) => (
                 <div key={i}>
                   <button
                     onClick={() => setAbierto(abierto === i ? null : i)}
-                    className="w-full py-4 flex items-center justify-between text-left hover:text-neutral-600 transition group"
+                    className="w-full py-4 flex items-center justify-between text-left hover:text-[var(--primrose)] transition group"
                   >
-                    <span className="text-lg md:text-xl font-light group-hover:font-normal transition">
+                    <span className="text-lg md:text-xl font-light group-hover:font-normal transition text-[var(--texto-principal)]">
                       {s.titulo}
                     </span>
                     <span
-                      className={`text-xl transition-transform duration-300 ${
+                      className={`text-xl transition-transform duration-300 text-[var(--primrose)] ${
                         abierto === i ? "rotate-45" : ""
                       }`}
                     >
@@ -441,7 +433,7 @@ function FilosofiaYServicios() {
                     }`}
                   >
                     <div className="overflow-hidden">
-                      <p className="text-sm text-neutral-600 leading-relaxed">
+                      <p className="text-sm text-[var(--texto-suave)] leading-relaxed">
                         {s.contenido}
                       </p>
                     </div>
@@ -453,22 +445,28 @@ function FilosofiaYServicios() {
 
           {/* DERECHA: Servicios */}
           <div id="servicios">
-            <p className="text-sm uppercase tracking-widest text-neutral-500 mb-2">
-              Lo que ofrezco
+            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-medium">
+              ✿ Lo que ofrezco
             </p>
-            <h2 className="text-3xl md:text-4xl font-light mb-6">
-              Cuatro <span className="font-semibold">pilares.</span>
+            <h2 className="text-3xl md:text-4xl font-light mb-6 text-[var(--texto-principal)]">
+              Cuatro <span className="font-semibold text-[var(--primrose)]">pilares.</span>
             </h2>
 
-            <div className="grid grid-cols-2 gap-px bg-neutral-200 border border-neutral-200">
+            <div className="grid grid-cols-2 gap-3">
               {servicios.map((item) => (
                 <div
                   key={item.n}
-                  className="bg-white p-5 hover:bg-neutral-50 transition cursor-default"
+                  className={`p-5 rounded-2xl border-2 transition cursor-default ${
+                    item.color === "primrose"
+                      ? "bg-[var(--pinktone-soft)] border-[var(--borde-rosa)] hover:bg-[var(--pinktone)]"
+                      : "bg-[var(--lime-soft)] border-[var(--lime)]/30 hover:bg-[var(--lime)]/30"
+                  }`}
                 >
-                  <p className="text-xs text-neutral-400 mb-3">{item.n}</p>
-                  <h3 className="font-semibold mb-1.5">{item.titulo}</h3>
-                  <p className="text-xs text-neutral-600 leading-relaxed">{item.desc}</p>
+                  <p className={`text-xs mb-3 font-semibold ${
+                    item.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
+                  }`}>{item.n}</p>
+                  <h3 className="font-semibold mb-1.5 text-[var(--texto-principal)]">{item.titulo}</h3>
+                  <p className="text-xs text-[var(--texto-suave)] leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -482,54 +480,55 @@ function FilosofiaYServicios() {
 /* ---------- PRÓXIMO TALLER ---------- */
 function ProximoTaller() {
   return (
-    <section id="taller" className="bg-neutral-50 py-14 md:py-16">
+    <section id="taller" className="bg-[var(--lime-soft)] py-14 md:py-16">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div className="relative aspect-[3/4] max-w-sm mx-auto md:mx-0 w-full">
+            <div className="absolute -inset-3 bg-white rounded-2xl shadow-lg shadow-green-100 -rotate-2" />
             <Image
               src="/images/taller-dietetica.jpeg"
               alt="Taller de Comida Dietética"
               fill
-              className="object-contain rounded-2xl"
+              className="object-contain rounded-2xl relative"
             />
           </div>
           <div>
-            <p className="text-sm uppercase tracking-widest text-neutral-500 mb-2">
-              Próximo evento
+            <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-medium">
+              ✿ Próximo evento
             </p>
-            <h2 className="text-3xl md:text-4xl font-light mb-4 leading-tight">
+            <h2 className="text-3xl md:text-4xl font-light mb-4 leading-tight text-[var(--texto-principal)]">
               Taller de<br />
-              <span className="font-semibold">Comida Dietética.</span>
+              <span className="font-semibold text-[var(--lime)]">Comida Dietética.</span>
             </h2>
-            <p className="text-neutral-600 leading-relaxed mb-6 text-sm md:text-base">
+            <p className="text-[var(--texto-suave)] leading-relaxed mb-6 text-sm md:text-base">
               Aprende a cocinar rico y saludable. Un taller práctico donde
               descubrirás cómo preparar comidas fáciles, saludables y saciadoras
               que transformarán tu día a día.
             </p>
 
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="border-t border-neutral-900 pt-3">
-                <p className="text-xs uppercase tracking-widest text-neutral-500 mb-1">Presencial</p>
-                <p className="text-2xl font-semibold">S/ 80</p>
+              <div className="bg-white border-2 border-[var(--primrose)] rounded-2xl p-4">
+                <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-1 font-semibold">Presencial</p>
+                <p className="text-2xl font-semibold text-[var(--texto-principal)]">S/ 80</p>
               </div>
-              <div className="border-t border-neutral-300 pt-3">
-                <p className="text-xs uppercase tracking-widest text-neutral-500 mb-1">Virtual</p>
-                <p className="text-2xl font-semibold">S/ 40</p>
+              <div className="bg-white border-2 border-[var(--lime)] rounded-2xl p-4">
+                <p className="text-xs uppercase tracking-widest text-[var(--lime)] mb-1 font-semibold">Virtual</p>
+                <p className="text-2xl font-semibold text-[var(--texto-principal)]">S/ 40</p>
               </div>
             </div>
 
-            <ul className="text-sm text-neutral-700 space-y-1.5 mb-6">
-              <li>— Degustación incluida</li>
-              <li>— Materiales: taper, cubiertos, jabón y toalla</li>
-              <li>— Modalidad presencial y virtual</li>
+            <ul className="text-sm text-[var(--texto-principal)] space-y-1.5 mb-6">
+              <li className="flex items-start gap-2"><span className="text-[var(--lime)]">✿</span> Degustación incluida</li>
+              <li className="flex items-start gap-2"><span className="text-[var(--lime)]">✿</span> Materiales: taper, cubiertos, jabón y toalla</li>
+              <li className="flex items-start gap-2"><span className="text-[var(--lime)]">✿</span> Modalidad presencial y virtual</li>
             </ul>
 
             <Link
-  href="/login"
-  className="inline-block bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition"
->
-  Reservar cupo
-</Link>
+              href="/login"
+              className="inline-block bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
+            >
+              Reservar cupo
+            </Link>
           </div>
         </div>
       </div>
@@ -547,21 +546,21 @@ function Trayectoria() {
   ];
 
   return (
-    <section className="py-14 md:py-16">
+    <section className="py-14 md:py-16 bg-[var(--yucca-soft)]">
       <div className="max-w-6xl mx-auto px-6">
-        <p className="text-sm uppercase tracking-widest text-neutral-500 mb-2">
-          Trayectoria
+        <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-medium">
+          ✿ Trayectoria
         </p>
-        <h2 className="text-3xl md:text-4xl font-light mb-10">
-          Más de dos décadas <span className="font-semibold">construyendo experiencia.</span>
+        <h2 className="text-3xl md:text-4xl font-light mb-10 text-[var(--texto-principal)]">
+          Más de dos décadas <span className="font-semibold text-[var(--primrose)]">construyendo experiencia.</span>
         </h2>
 
         <div className="grid md:grid-cols-4 gap-6">
           {hitos.map((h, i) => (
-            <div key={i} className="border-t border-neutral-900 pt-4">
-              <p className="text-xs text-neutral-500 mb-2 uppercase tracking-widest">{h.año}</p>
-              <h3 className="font-semibold mb-1.5">{h.titulo}</h3>
-              <p className="text-sm text-neutral-600 leading-relaxed">{h.desc}</p>
+            <div key={i} className="bg-white border border-[var(--borde-rosa)] rounded-2xl p-5 shadow-sm shadow-pink-100">
+              <p className="text-xs text-[var(--primrose)] mb-2 uppercase tracking-widest font-semibold">{h.año}</p>
+              <h3 className="font-semibold mb-1.5 text-[var(--texto-principal)]">{h.titulo}</h3>
+              <p className="text-sm text-[var(--texto-suave)] leading-relaxed">{h.desc}</p>
             </div>
           ))}
         </div>
@@ -573,39 +572,46 @@ function Trayectoria() {
 /* ---------- FOOTER ---------- */
 function Footer() {
   return (
-    <footer id="contacto" className="bg-neutral-900 text-white py-12">
+    <footer id="contacto" className="bg-[var(--texto-principal)] text-white py-12">
       <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10">
         <div>
-          <h3 className="font-semibold mb-2">María Luisa Nutricionista</h3>
-          <p className="text-sm text-neutral-400 leading-relaxed">
+          <h3 className="font-semibold mb-2">
+            María Luisa <span className="text-[var(--primrose)]">Nutricionista</span>
+          </h3>
+          <p className="text-sm text-pink-100/70 leading-relaxed">
             Nutrición preventiva para todas las etapas de la vida.
           </p>
         </div>
         <div>
-          <h4 className="text-xs uppercase tracking-widest text-neutral-500 mb-3">
-            Contacto
+          <h4 className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-3 font-semibold">
+            ✿ Contacto
           </h4>
-          <ul className="text-sm space-y-1.5 text-neutral-300">
+          <ul className="text-sm space-y-1.5 text-pink-50">
             <li>WhatsApp: 985 577 017</li>
             <li>San Juan de Miraflores, Lima</li>
           </ul>
         </div>
         <div>
-          <h4 className="text-xs uppercase tracking-widest text-neutral-500 mb-3">
-            Síguenos
+          <h4 className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-3 font-semibold">
+            ✿ Síguenos
           </h4>
-          <ul className="text-sm space-y-1.5 text-neutral-300">
+          <ul className="text-sm space-y-1.5 text-pink-50">
             <li>Facebook</li>
             <li>
-             <a href="https://www.tiktok.com/@maraluisanutricio?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer">
-              TikTok: MaríaLuisaNutricionista
-             </a>
+              <a 
+                href="https://www.tiktok.com/@maraluisanutricio?is_from_webapp=1&sender_device=pc" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-[var(--primrose)] transition"
+              >
+                TikTok: MaríaLuisaNutricionista
+              </a>
             </li>
           </ul>
         </div>
       </div>
-      <div className="max-w-6xl mx-auto px-6 mt-8 pt-6 border-t border-neutral-800 text-xs text-neutral-500">
-        © {new Date().getFullYear()} María Luisa Nutricionista. Todos los derechos reservados.
+      <div className="max-w-6xl mx-auto px-6 mt-8 pt-6 border-t border-pink-100/20 text-xs text-pink-100/50">
+        © {new Date().getFullYear()} María Luisa Nutricionista. Hecho con ✿ y dedicación.
       </div>
     </footer>
   );

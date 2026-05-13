@@ -586,7 +586,7 @@ function Footer() {
             Contacto
           </h4>
           <ul className="text-sm space-y-1.5 text-neutral-300">
-            <li>WhatsApp: 985 577 017</li>
+            <li>WhatsApp: 959 560 616</li>
             <li>San Juan de Miraflores, Lima</li>
           </ul>
         </div>

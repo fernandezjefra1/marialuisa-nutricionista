@@ -34,7 +34,19 @@ export default function LoginPage() {
   }
 
   async function handleGoogleLogin() {
-    setError("El inicio de sesión con Google estará disponible pronto.");
+    setLoading(true);
+    setError(null);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      setError("Error al conectar con Google: " + error.message);
+      setLoading(false);
+    }
   }
 
   return (

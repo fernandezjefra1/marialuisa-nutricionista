@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useUser } from "@/lib/use-user";
 
 export default function Home() {
   return (
@@ -23,24 +24,149 @@ function Navbar() {
   return (
     <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-neutral-200">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <div className="font-semibold tracking-tight">
+        <Link href="/" className="font-semibold tracking-tight">
           María Luisa <span className="text-neutral-500">Nutricionista</span>
-        </div>
+        </Link>
         <ul className="hidden md:flex gap-8 text-sm text-neutral-600">
           <li><a href="#libro" className="hover:text-neutral-900 transition">Libro</a></li>
           <li><a href="#sobre-mi" className="hover:text-neutral-900 transition">Sobre mí</a></li>
           <li><a href="#servicios" className="hover:text-neutral-900 transition">Servicios</a></li>
           <li><a href="#taller" className="hover:text-neutral-900 transition">Talleres</a></li>
-          <li><a href="#contacto" className="hover:text-neutral-900 transition">Contacto</a></li>
         </ul>
-        <Link
-  href="/login"
-  className="text-sm border border-neutral-900 px-4 py-2 rounded-full hover:bg-neutral-900 hover:text-white transition"
->
-  Reservar cita
-</Link>
+        <MenuUsuario />
       </div>
     </nav>
+  );
+}
+
+/* ---------- MENÚ DEL USUARIO ---------- */
+function MenuUsuario() {
+  const { user, nombre, signOut, loading } = useUser();
+  const [abierto, setAbierto] = useState(false);
+
+  // Mientras carga la info de auth
+  if (loading) {
+    return <div className="w-24 h-9" />; // Placeholder para evitar saltos
+  }
+
+  // Si NO está logueado
+  if (!user) {
+    return (
+      <div className="flex items-center gap-2">
+        <Link
+          href="/login"
+          className="hidden sm:inline-block text-sm text-neutral-600 hover:text-neutral-900 px-3 py-2 transition"
+        >
+          Iniciar sesión
+        </Link>
+        <Link
+          href="/login?redirect=/comprar-libro"
+          className="text-sm border border-neutral-900 px-4 py-2 rounded-full hover:bg-neutral-900 hover:text-white transition"
+        >
+          Reservar cita
+        </Link>
+      </div>
+    );
+  }
+
+  // Avatar: foto de Google o iniciales
+  const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture;
+  const iniciales = nombre
+    .split(" ")
+    .map((p: string) => p[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
+  // Si SÍ está logueado
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setAbierto(!abierto)}
+        className="flex items-center gap-3 hover:bg-neutral-100 rounded-full pl-1 pr-3 py-1 transition"
+      >
+        {avatarUrl ? (
+  // eslint-disable-next-line @next/next/no-img-element
+  <img
+    src={avatarUrl}
+    alt={nombre}
+    className="w-8 h-8 rounded-full object-cover"
+    referrerPolicy="no-referrer"
+  />
+) : (
+          <div className="w-8 h-8 rounded-full bg-neutral-900 text-white text-xs font-semibold flex items-center justify-center">
+            {iniciales}
+          </div>
+        )}
+        <span className="text-sm font-medium hidden sm:inline">{nombre.split(" ")[0]}</span>
+        <svg
+          className={`w-3.5 h-3.5 text-neutral-400 transition-transform ${abierto ? "rotate-180" : ""}`}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+
+      {/* Menú desplegable */}
+      {abierto && (
+        <>
+          {/* Backdrop invisible para cerrar al hacer click afuera */}
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setAbierto(false)}
+          />
+          <div className="absolute right-0 mt-2 w-64 bg-white border border-neutral-200 rounded-2xl shadow-lg z-50 overflow-hidden">
+            {/* Header del menú */}
+            <div className="p-4 border-b border-neutral-100">
+              <p className="text-sm font-semibold truncate">{nombre}</p>
+              <p className="text-xs text-neutral-500 truncate">{user.email}</p>
+            </div>
+
+            {/* Opciones */}
+            <div className="py-1">
+              <Link
+                href="/perfil"
+                onClick={() => setAbierto(false)}
+                className="block px-4 py-2.5 text-sm hover:bg-neutral-50 transition"
+              >
+                Mi perfil
+              </Link>
+              <Link
+                href="/perfil?tab=compras"
+                onClick={() => setAbierto(false)}
+                className="block px-4 py-2.5 text-sm hover:bg-neutral-50 transition"
+              >
+                Mis compras
+              </Link>
+              <Link
+                href="/perfil?tab=fidelizacion"
+                onClick={() => setAbierto(false)}
+                className="block px-4 py-2.5 text-sm hover:bg-neutral-50 transition"
+              >
+                Programa de fidelización
+              </Link>
+            </div>
+
+            {/* Cerrar sesión */}
+            <div className="border-t border-neutral-100 py-1">
+              <button
+                onClick={async () => {
+                  await signOut();
+                  setAbierto(false);
+                  window.location.href = "/";
+                }}
+                className="block w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition"
+              >
+                Cerrar sesión
+              </button>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
   );
 }
 
@@ -91,8 +217,8 @@ function HeroLibro() {
 
           <div className="flex flex-wrap gap-3">
             <Link
-  href="/login"
-  className="bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition font-medium"
+  href="/comprar-libro"
+  className="bg-neutral-900 text-white px-8 py-4 rounded-full hover:bg-neutral-700 transition font-medium"
 >
   Adquirir el libro
 </Link>

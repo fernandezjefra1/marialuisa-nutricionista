@@ -587,7 +587,7 @@ function Footer() {
           </h4>
           <ul className="text-sm space-y-1.5 text-neutral-300">
             <li>WhatsApp: 959 560 616</li>
-            <li>San Juan de Miraflores, Lima</li>
+            <li>SJM, Limaaaaa</li>
           </ul>
         </div>
         <div>

@@ -598,7 +598,7 @@ function Footer() {
             <li>Facebook</li>
             <li>
              <a href="https://www.tiktok.com/@maraluisanutricio?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer">
-              TikTok: Maríaluisanutricionista
+              TikTok: MaríaLuisaNutricionista
              </a>
             </li>
           </ul>

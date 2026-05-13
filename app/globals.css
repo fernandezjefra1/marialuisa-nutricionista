@@ -1,11 +1,16 @@
 @import "tailwindcss";
 
 :root {
+  /* Colores principales */
   --background: #ffffff;
-  --foreground: #5a3a3a;
+  --foreground: #111111;
+
+  /* Paleta rosada */
   --color-rose-light: #fdcfd4;
   --color-rose-mid: #edaab3;
   --color-rose-dark: #c97d8a;
+
+  /* Paleta verde */
   --color-green-light: #eaf3de;
   --color-green-mid: #afc28a;
   --color-green-dark: #809d47;
@@ -14,8 +19,20 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+
+/* Estilos globales */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {

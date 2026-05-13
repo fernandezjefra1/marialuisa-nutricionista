@@ -3,27 +3,30 @@
 :root {
   /* === PALETA COQUETTE === */
   /* Rosas */
-  --primrose: #F297A0;      /* Rosa fuerte - acentos principales, botones */
-  --primrose-hover: #E07E89; /* Rosa fuerte oscurecido - para hovers */
-  --pinktone: #F9D0CE;       /* Rosa pastel suave - fondos, badges */
-  --pinktone-soft: #FDE8E7;  /* Rosa pastel muy suave - hovers sutiles */
+  --primrose: #F297A0;
+  --primrose-hover: #E07E89;
+  --pinktone: #F9D0CE;
+  --pinktone-soft: #FDE8E7;
 
-  /* Verdes */
-  --lime: #B6BB79;           /* Verde oliva - acentos naturales */
-  --lime-soft: #E5E7CC;      /* Verde oliva claro - fondos verdes suaves */
+  /* Verdes (más vibrantes) */
+  --lime: #9CAB58;           /* Verde oliva más intenso */
+  --lime-hover: #828F47;     /* Verde oliva oscurecido */
+  --lime-mid: #B6BB79;       /* Verde oliva original */
+  --lime-soft: #E5E7CC;      /* Verde oliva claro */
 
-  /* Cremas / Neutros cálidos */
-  --yucca: #F3EBD8;          /* Beige crema - fondo principal */
-  --yucca-soft: #FAF5E8;     /* Crema más claro - fondos alternos */
+  /* Cremas */
+  --yucca: #F3EBD8;
+  --yucca-soft: #FAF5E8;
 
   /* Texto */
-  --texto-principal: #4A2E32;  /* Marrón rosado oscuro para texto */
-  --texto-suave: #8B6B70;      /* Texto secundario */
-  --texto-tenue: #B89BA0;      /* Placeholders, etiquetas tenues */
+  --texto-principal: #4A2E32;
+  --texto-suave: #8B6B70;
+  --texto-tenue: #B89BA0;
 
   /* Bordes */
   --borde-rosa: #F5C5C3;
   --borde-suave: #EDD5D2;
+  --borde-verde: #C5CC9E;
 
   /* Sistema base */
   --background: var(--yucca);
@@ -41,4 +44,60 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ============================================
+   ANIMACIONES DECORATIVAS
+   ============================================ */
+
+/* Halo pulsante para imagen del taller */
+@keyframes halo-pulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 0 0 rgba(242, 151, 160, 0.4),
+      0 0 0 0 rgba(156, 171, 88, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 0 0 20px rgba(242, 151, 160, 0),
+      0 0 0 40px rgba(156, 171, 88, 0);
+  }
+}
+
+.halo-animado {
+  animation: halo-pulse 3s ease-in-out infinite;
+}
+
+/* Halo giratorio degradado de fondo */
+@keyframes halo-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.halo-fondo {
+  position: absolute;
+  inset: -20px;
+  border-radius: 24px;
+  background: conic-gradient(
+    from 0deg,
+    var(--primrose),
+    var(--lime),
+    var(--pinktone),
+    var(--lime-mid),
+    var(--primrose)
+  );
+  filter: blur(20px);
+  opacity: 0.5;
+  animation: halo-rotate 8s linear infinite;
+  z-index: 0;
+}
+
+/* Flotación suave */
+@keyframes flotar {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.flotar {
+  animation: flotar 4s ease-in-out infinite;
 }

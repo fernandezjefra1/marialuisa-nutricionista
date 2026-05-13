@@ -596,7 +596,11 @@ function Footer() {
           </h4>
           <ul className="text-sm space-y-1.5 text-neutral-300">
             <li>Facebook</li>
-            <li>TikTok:https://www.tiktok.com/@maraluisanutricio?is_from_webapp=1&sender_device=pc</li>
+            <li>
+             <a href="https://www.tiktok.com/@maraluisanutricio?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer">
+              TikTok
+             </a>
+            </li>
           </ul>
         </div>
       </div>

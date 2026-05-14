@@ -217,11 +217,9 @@ function TabMisCompras() {
   const [cargando, setCargando] = useState(true);
   const [mostrarBanner, setMostrarBanner] = useState(false);
 
-  // Detectar si viene de una compra nueva
   useEffect(() => {
     if (searchParams.get("nuevo") === "1") {
       setMostrarBanner(true);
-      // Auto-ocultar después de 8 segundos
       const timer = setTimeout(() => setMostrarBanner(false), 8000);
       return () => clearTimeout(timer);
     }
@@ -230,12 +228,37 @@ function TabMisCompras() {
   useEffect(() => {
     async function cargar() {
       if (!user) return;
-      const { data } = await supabase
+
+      // Cargar compras de libros
+      const { data: comprasLibros } = await supabase
         .from("compras")
         .select("*")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-      setCompras(data || []);
+
+      // Cargar pedidos del carrito
+      const { data: pedidos } = await supabase
+        .from("pedidos")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      // Normalizar ambos para mostrarlos juntos
+      const todasLasCompras = [
+        ...(comprasLibros || []).map((c) => ({
+          ...c,
+          tipo_compra: "libro",
+          total_display: c.precio,
+        })),
+        ...(pedidos || []).map((p) => ({
+          ...p,
+          tipo_compra: "carrito",
+          producto: `Pedido de ${p.items?.length || 0} producto${p.items?.length !== 1 ? "s" : ""}`,
+          total_display: p.total,
+        })),
+      ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+      setCompras(todasLasCompras);
       setCargando(false);
     }
     cargar();
@@ -251,7 +274,6 @@ function TabMisCompras() {
 
   return (
     <div>
-      {/* Banner de éxito */}
       {mostrarBanner && (
         <div className="mb-6 bg-green-50 border-2 border-green-200 rounded-2xl p-5 flex items-start gap-4 animate-fade-in">
           <div className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 text-xl font-bold">
@@ -260,7 +282,7 @@ function TabMisCompras() {
           <div className="flex-1">
             <h3 className="font-semibold text-green-900 mb-1">¡Pedido enviado correctamente!</h3>
             <p className="text-sm text-green-800 leading-relaxed">
-              María Luisa recibió tu pedido por WhatsApp y te contactará pronto para coordinar el pago. 
+              María Luisa recibió tu pedido por WhatsApp y te contactará pronto para coordinar el pago.
               Tu pedido aparece abajo con estado <strong>&quot;Pendiente de pago&quot;</strong>.
             </p>
           </div>
@@ -274,7 +296,6 @@ function TabMisCompras() {
         </div>
       )}
 
-      {/* Lista de compras */}
       {compras.length === 0 ? (
         <div className="bg-white rounded-2xl border border-neutral-200 p-12 text-center">
           <div className="text-5xl mb-4">📚</div>
@@ -283,16 +304,16 @@ function TabMisCompras() {
             Cuando hagas tu primera compra aparecerá aquí con todos los detalles.
           </p>
           <Link
-            href="/comprar-libro"
+            href="/productos"
             className="inline-block bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition text-sm font-medium"
           >
-            Comprar el libro
+            Explorar la tienda
           </Link>
         </div>
       ) : (
         <div className="space-y-3">
           {compras.map((c) => (
-            <CompraCard key={c.id} compra={c} />
+            <CompraCard key={`${c.tipo_compra}-${c.id}`} compra={c} />
           ))}
         </div>
       )}
@@ -300,38 +321,75 @@ function TabMisCompras() {
   );
 }
 
-/* ---------- CARD DE COMPRA ---------- */
 function CompraCard({ compra }: { compra: any }) {
+  const estadoColor = {
+    pendiente: "bg-amber-50 text-amber-700 border-amber-200",
+    pagado: "bg-blue-50 text-blue-700 border-blue-200",
+    enviado: "bg-purple-50 text-purple-700 border-purple-200",
+    completado: "bg-green-50 text-green-700 border-green-200",
+    cancelado: "bg-neutral-100 text-neutral-600 border-neutral-200",
+  }[compra.estado as string] || "bg-neutral-100 text-neutral-600 border-neutral-200";
+
+  const estadoTexto = {
+    pendiente: "Pendiente de pago",
+    pagado: "Pago confirmado",
+    enviado: "En camino",
+    completado: "Entregado",
+    cancelado: "Cancelado",
+  }[compra.estado as string] || compra.estado;
+
   const fecha = new Date(compra.created_at).toLocaleDateString("es-PE", {
-    year: "numeric",
-    month: "long",
     day: "numeric",
+    month: "short",
+    year: "numeric",
   });
 
-  const estadoConfig: Record<string, { label: string; className: string }> = {
-    pendiente:  { label: "Pendiente de pago",  className: "bg-yellow-50 text-yellow-700 border-yellow-200" },
-    pagado:     { label: "Pagado",             className: "bg-green-50 text-green-700 border-green-200" },
-    enviado:    { label: "Enviado",            className: "bg-blue-50 text-blue-700 border-blue-200" },
-    entregado:  { label: "Entregado",          className: "bg-neutral-100 text-neutral-600 border-neutral-200" },
-    cancelado:  { label: "Cancelado",          className: "bg-red-50 text-red-600 border-red-200" },
-  };
-
-  const estado = estadoConfig[compra.estado] ?? { label: compra.estado, className: "bg-neutral-100 text-neutral-600 border-neutral-200" };
+  const esCarrito = compra.tipo_compra === "carrito";
 
   return (
-    <div className="bg-white rounded-2xl border border-neutral-200 p-5 flex flex-col sm:flex-row sm:items-center gap-4">
-      <div className="text-3xl">{compra.formato === "virtual" ? "📱" : "📚"}</div>
-      <div className="flex-1 min-w-0">
-        <p className="font-semibold text-sm">{compra.producto}</p>
-        <p className="text-xs text-neutral-500 mt-0.5">
-          {compra.formato === "virtual" ? "Libro Digital (PDF)" : "Libro Físico"} · {fecha}
-        </p>
-      </div>
-      <div className="flex items-center gap-4">
-        <p className="font-semibold text-sm">S/ {compra.precio}</p>
-        <span className={`text-xs px-3 py-1 rounded-full border font-medium ${estado.className}`}>
-          {estado.label}
+    <div className="bg-white rounded-2xl border border-neutral-200 p-5 md:p-6">
+      <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
+        <div>
+          <p className="font-semibold">{compra.producto}</p>
+          <p className="text-xs text-neutral-500 mt-0.5">
+            {esCarrito
+              ? `🛒 Pedido de productos · ${fecha}`
+              : compra.formato === "virtual"
+              ? `📱 Libro Digital · ${fecha}`
+              : `📚 Libro Físico · ${fecha}`}
+          </p>
+        </div>
+        <span className={`text-xs px-3 py-1 rounded-full border ${estadoColor} font-medium`}>
+          {estadoTexto}
         </span>
+      </div>
+
+      {/* Si es pedido de carrito, mostrar lista de items */}
+      {esCarrito && compra.items && compra.items.length > 0 && (
+        <div className="mb-3 p-3 bg-neutral-50 rounded-lg">
+          <p className="text-xs text-neutral-500 mb-2 uppercase tracking-widest">Productos</p>
+          <ul className="space-y-1 text-sm">
+            {compra.items.slice(0, 3).map((item: any, i: number) => (
+              <li key={i} className="flex justify-between text-neutral-700">
+                <span>{item.cantidad}× {item.nombre}</span>
+                <span className="text-neutral-500">S/ {item.subtotal?.toFixed(2)}</span>
+              </li>
+            ))}
+            {compra.items.length > 3 && (
+              <li className="text-xs text-neutral-500 italic">
+                ... y {compra.items.length - 3} más
+              </li>
+            )}
+          </ul>
+        </div>
+      )}
+
+      <div className="flex flex-wrap items-end justify-between gap-3 pt-3 border-t border-neutral-100">
+        <div className="text-xs text-neutral-500">
+          <span className="capitalize">{compra.metodo_pago}</span>
+          {compra.direccion && <> · {compra.direccion}</>}
+        </div>
+        <p className="text-lg font-semibold">S/ {compra.total_display}</p>
       </div>
     </div>
   );

@@ -142,9 +142,10 @@ export default function ComprarLibroPage() {
     mensaje += `Por favor confírmame los datos para coordinar el pago. ¡Gracias!`;
 
     const url = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensaje)}`;
-    window.open(url, "_blank");
+window.open(url, "_blank");
 
-    setEnviando(false);
+// Redirigir al perfil con flag de "nuevo pedido"
+router.push("/perfil?tab=compras&nuevo=1");
   }
 
   return (

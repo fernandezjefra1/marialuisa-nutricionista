@@ -12,6 +12,8 @@ export default function Home() {
       <HeroLibro />
       <CarruselImagenes />
       <FilosofiaYServicios />
+      <SeccionProductos />
+      <SeccionEmpresas />
       <ProximoTaller />
       <Trayectoria />
       <Footer />
@@ -28,11 +30,12 @@ function Navbar() {
           María Luisa <span className="text-[var(--primrose)]">Nutricionista</span>
         </Link>
         <ul className="hidden md:flex gap-8 text-sm text-[var(--texto-suave)]">
-          <li><a href="#libro" className="hover:text-[var(--primrose)] transition">Libro</a></li>
-          <li><a href="#sobre-mi" className="hover:text-[var(--primrose)] transition">Sobre mí</a></li>
-          <li><a href="#servicios" className="hover:text-[var(--lime)] transition">Servicios</a></li>
-          <li><a href="#taller" className="hover:text-[var(--lime)] transition">Talleres</a></li>
-        </ul>
+  <li><a href="#libro" className="hover:text-[var(--primrose)] transition">Libro</a></li>
+  <li><Link href="/productos" className="hover:text-[var(--primrose)] transition">Tienda</Link></li>
+  <li><a href="#sobre-mi" className="hover:text-[var(--primrose)] transition">Sobre mí</a></li>
+  <li><a href="#taller" className="hover:text-[var(--lime)] transition">Talleres</a></li>
+  <li><Link href="/empresas" className="hover:text-[var(--lime)] transition">Empresas</Link></li>
+</ul>
         <MenuUsuario />
       </div>
     </nav>
@@ -624,7 +627,11 @@ function Footer() {
             Contacto
           </h4>
           <ul className="text-sm space-y-1.5 text-pink-50">
-            <li>WhatsApp: 985 577 017</li>
+            <li>
+              <a href="https://wa.me/51985577017" target="_blank">
+                  WhatsApp: 959 560 616
+              </a>
+              </li>
             <li>San Juan de Miraflores, Lima</li>
           </ul>
         </div>
@@ -651,5 +658,144 @@ function Footer() {
         © {new Date().getFullYear()} María Luisa Nutricionista. Todos los derechos reservados.
       </div>
     </footer>
+
+  );
+}
+/* ---------- SECCIÓN PRODUCTOS DESTACADOS ---------- */
+function SeccionProductos() {
+  const productos = [
+    { nombre: "Harina de Cúrcuma", precio: 15, descripcion: "Libre de gluten · 250 gr", color: "primrose" },
+    { nombre: "Salvado de Trigo", precio: 12, descripcion: "100% Fibra Natural · 500 gr", color: "lime" },
+    { nombre: "Sacha Inchi", precio: 25, descripcion: "Omega-3 y proteínas · 250 gr", color: "primrose" },
+    { nombre: "Cacao Orgánico", precio: 20, descripcion: "Sin azúcar añadida · 200 gr", color: "lime" },
+  ];
+
+  return (
+    <section id="tienda" className="py-14 md:py-16 bg-[var(--pinktone-soft)]">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-4">
+          <div>
+            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
+              Nuestra tienda
+            </p>
+            <h2 className="text-3xl md:text-4xl font-light text-[var(--texto-principal)]">
+              Productos <span className="font-semibold text-[var(--primrose)]">naturales.</span>
+            </h2>
+            <p className="text-[var(--texto-suave)] mt-2 text-sm md:text-base max-w-lg">
+              Superalimentos, harinas y suplementos cuidadosamente seleccionados.
+            </p>
+          </div>
+          <Link
+            href="/productos"
+            className="text-sm border-2 border-[var(--primrose)] text-[var(--primrose)] px-5 py-2.5 rounded-full hover:bg-[var(--primrose)] hover:text-white transition font-medium w-fit"
+          >
+            Ver tienda completa →
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          {productos.map((p, i) => (
+            <Link
+              key={i}
+              href="/productos"
+              className="bg-white rounded-2xl border-2 border-[var(--borde-rosa)] p-5 hover:border-[var(--primrose)] hover:shadow-lg hover:shadow-pink-200 hover:-translate-y-1 transition group"
+            >
+              <div className={`aspect-square rounded-xl mb-4 flex items-center justify-center text-4xl ${
+                p.color === "primrose" ? "bg-[var(--pinktone-soft)]" : "bg-[var(--lime-soft)]"
+              }`}>
+                <span className={p.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"}>
+                  ◇
+                </span>
+              </div>
+              <p className={`text-xs uppercase tracking-widest mb-1 font-semibold ${
+                p.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
+              }`}>
+                Destacado
+              </p>
+              <h3 className="font-semibold text-[var(--texto-principal)] mb-1 text-sm">{p.nombre}</h3>
+              <p className="text-xs text-[var(--texto-suave)] mb-3 leading-relaxed">{p.descripcion}</p>
+              <p className="text-lg font-semibold text-[var(--texto-principal)]">S/ {p.precio}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+/* ---------- SECCIÓN EMPRESAS ---------- */
+function SeccionEmpresas() {
+  return (
+    <section className="py-14 md:py-16 bg-gradient-to-br from-[var(--lime-soft)] via-[var(--yucca)] to-[var(--pinktone-soft)]">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold">
+              Para empresas
+            </p>
+            <h2 className="text-3xl md:text-4xl font-light mb-4 leading-tight text-[var(--texto-principal)]">
+              Bienestar nutricional<br />
+              <span className="font-semibold text-[var(--lime)]">para tu equipo.</span>
+            </h2>
+            <p className="text-[var(--texto-suave)] leading-relaxed mb-6 text-sm md:text-base">
+              Programa corporativo de evaluación nutricional con la Hoja de Levantamiento
+              Nutricional, charlas y planes personalizados para cada colaborador.
+              Mejora el rendimiento, reduce el ausentismo y cuida a tu equipo.
+            </p>
+
+            <ul className="text-sm text-[var(--texto-principal)] space-y-2 mb-6">
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--primrose)] font-bold">—</span>
+                Evaluación individual a cada colaborador
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--lime)] font-bold">—</span>
+                Charlas y talleres in-company
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--primrose)] font-bold">—</span>
+                Profesional colegiada con experiencia
+              </li>
+            </ul>
+
+            <Link
+              href="/empresas"
+              className="inline-block bg-[var(--lime)] text-white px-6 py-3 rounded-full hover:bg-[var(--lime-hover)] transition font-medium shadow-lg shadow-green-200"
+            >
+              Conocer el programa
+            </Link>
+          </div>
+
+          <div className="relative">
+            <div className="bg-white rounded-2xl p-8 shadow-xl shadow-green-100 border-2 border-[var(--borde-verde)]">
+              <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold">
+                Empresas que confían
+              </p>
+              <p className="text-2xl font-light text-[var(--texto-principal)] mb-2 leading-relaxed">
+                &quot;Más de <span className="font-semibold text-[var(--lime)]">20 años</span> recorriendo
+                el Perú evaluando nutricionalmente a familias y trabajadores.&quot;
+              </p>
+              <p className="text-sm text-[var(--texto-suave)] mt-4">
+                — Lic. María Luisa Peña Valdivia, Nutricionista colegiada
+              </p>
+
+              <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-[var(--borde-rosa)]">
+                <div>
+                  <p className="text-2xl font-semibold text-[var(--primrose)]">20+</p>
+                  <p className="text-xs text-[var(--texto-suave)]">Años de experiencia</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-semibold text-[var(--lime)]">100%</p>
+                  <p className="text-xs text-[var(--texto-suave)]">Personalizado</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-semibold text-[var(--primrose)]">B2B</p>
+                  <p className="text-xs text-[var(--texto-suave)]">Servicio empresarial</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

@@ -12,6 +12,7 @@ export default function Home() {
       <HeroLibro />
       <CarruselImagenes />
       <FilosofiaYServicios />
+      <SeccionEmpresas />
       <ProximoTaller />
       <Trayectoria />
       <Footer />
@@ -28,11 +29,12 @@ function Navbar() {
           María Luisa <span className="text-[var(--primrose)]">Nutricionista</span>
         </Link>
         <ul className="hidden md:flex gap-8 text-sm text-[var(--texto-suave)]">
-          <li><a href="#libro" className="hover:text-[var(--primrose)] transition">Libro</a></li>
-          <li><a href="#sobre-mi" className="hover:text-[var(--primrose)] transition">Sobre mí</a></li>
-          <li><a href="#servicios" className="hover:text-[var(--lime)] transition">Servicios</a></li>
-          <li><a href="#taller" className="hover:text-[var(--lime)] transition">Talleres</a></li>
-        </ul>
+  <li><a href="#libro" className="hover:text-[var(--primrose)] transition">Libro</a></li>
+  <li><a href="#sobre-mi" className="hover:text-[var(--primrose)] transition">Sobre mí</a></li>
+  <li><a href="#servicios" className="hover:text-[var(--lime)] transition">Servicios</a></li>
+  <li><a href="#taller" className="hover:text-[var(--lime)] transition">Talleres</a></li>
+  <li><Link href="/empresas" className="hover:text-[var(--lime)] transition">Empresas</Link></li>
+</ul>
         <MenuUsuario />
       </div>
     </nav>
@@ -651,5 +653,84 @@ function Footer() {
         © {new Date().getFullYear()} María Luisa Nutricionista. Todos los derechos reservados.
       </div>
     </footer>
+
+  );
+}
+
+/* ---------- SECCIÓN EMPRESAS ---------- */
+function SeccionEmpresas() {
+  return (
+    <section className="py-14 md:py-16 bg-gradient-to-br from-[var(--lime-soft)] via-[var(--yucca)] to-[var(--pinktone-soft)]">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold">
+              Para empresas
+            </p>
+            <h2 className="text-3xl md:text-4xl font-light mb-4 leading-tight text-[var(--texto-principal)]">
+              Bienestar nutricional<br />
+              <span className="font-semibold text-[var(--lime)]">para tu equipo.</span>
+            </h2>
+            <p className="text-[var(--texto-suave)] leading-relaxed mb-6 text-sm md:text-base">
+              Programa corporativo de evaluación nutricional con la Hoja de Levantamiento
+              Nutricional, charlas y planes personalizados para cada colaborador.
+              Mejora el rendimiento, reduce el ausentismo y cuida a tu equipo.
+            </p>
+
+            <ul className="text-sm text-[var(--texto-principal)] space-y-2 mb-6">
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--primrose)] font-bold">—</span>
+                Evaluación individual a cada colaborador
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--lime)] font-bold">—</span>
+                Charlas y talleres in-company
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--primrose)] font-bold">—</span>
+                Profesional colegiada con experiencia
+              </li>
+            </ul>
+
+            <Link
+              href="/empresas"
+              className="inline-block bg-[var(--lime)] text-white px-6 py-3 rounded-full hover:bg-[var(--lime-hover)] transition font-medium shadow-lg shadow-green-200"
+            >
+              Conocer el programa
+            </Link>
+          </div>
+
+          <div className="relative">
+            <div className="bg-white rounded-2xl p-8 shadow-xl shadow-green-100 border-2 border-[var(--borde-verde)]">
+              <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold">
+                Empresas que confían
+              </p>
+              <p className="text-2xl font-light text-[var(--texto-principal)] mb-2 leading-relaxed">
+                &quot;Más de <span className="font-semibold text-[var(--lime)]">20 años</span> recorriendo
+                el Perú evaluando nutricionalmente a familias y trabajadores.&quot;
+              </p>
+              <p className="text-sm text-[var(--texto-suave)] mt-4">
+                — Lic. María Luisa Peña Valdivia, Nutricionista colegiada
+              </p>
+
+              <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-[var(--borde-rosa)]">
+                <div>
+                  <p className="text-2xl font-semibold text-[var(--primrose)]">20+</p>
+                  <p className="text-xs text-[var(--texto-suave)]">Años de experiencia</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-semibold text-[var(--lime)]">100%</p>
+                  <p className="text-xs text-[var(--texto-suave)]">Personalizado</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-semibold text-[var(--primrose)]">B2B</p>
+                  <p className="text-xs text-[var(--texto-suave)]">Servicio empresarial</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }

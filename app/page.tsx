@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@/lib/use-user";
+import { useAdmin } from "@/lib/use-admin";
 
 export default function Home() {
   return (
@@ -121,6 +122,7 @@ function Navbar() {
 function MenuUsuario() {
   const { user, nombre, signOut, loading } = useUser();
   const [abierto, setAbierto] = useState(false);
+  const { esAdmin } = useAdmin();
 
   if (loading) {
     return <div className="w-24 h-9" />;
@@ -197,28 +199,42 @@ function MenuUsuario() {
             </div>
 
             <div className="py-1">
-              <Link
-                href="/perfil"
-                onClick={() => setAbierto(false)}
-                className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
-              >
-                Mi perfil
-              </Link>
-              <Link
-                href="/perfil?tab=compras"
-                onClick={() => setAbierto(false)}
-                className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
-              >
-                Mis compras
-              </Link>
-              <Link
-                href="/perfil?tab=fidelizacion"
-                onClick={() => setAbierto(false)}
-                className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
-              >
-                Programa de fidelización
-              </Link>
-            </div>
+  <Link
+    href="/perfil"
+    onClick={() => setAbierto(false)}
+    className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
+  >
+    Mi perfil
+  </Link>
+  <Link
+    href="/perfil?tab=compras"
+    onClick={() => setAbierto(false)}
+    className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
+  >
+    Mis compras
+  </Link>
+  <Link
+    href="/perfil?tab=fidelizacion"
+    onClick={() => setAbierto(false)}
+    className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
+  >
+    Programa de fidelización
+  </Link>
+
+  {/* Link al panel admin - SOLO visible para admins */}
+  {esAdmin && (
+    <>
+      <div className="border-t border-[var(--borde-suave)] my-1" />
+      <Link
+        href="/admin"
+        onClick={() => setAbierto(false)}
+        className="block px-4 py-2.5 text-sm font-semibold text-[var(--primrose)] hover:bg-[var(--pinktone-soft)] transition"
+      >
+        🔧 Panel administrador
+      </Link>
+    </>
+  )}
+</div>
 
             <div className="border-t border-[var(--borde-suave)] py-1">
               <button

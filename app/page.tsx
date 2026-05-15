@@ -23,21 +23,96 @@ export default function Home() {
 
 /* ---------- NAVBAR ---------- */
 function Navbar() {
+  const [menuAbierto, setMenuAbierto] = useState(false);
+
   return (
     <nav className="sticky top-0 z-50 bg-[var(--yucca-soft)]/95 backdrop-blur-sm border-b border-[var(--borde-rosa)]">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="font-semibold tracking-tight text-[var(--texto-principal)]">
           María Luisa <span className="text-[var(--primrose)]">Nutricionista</span>
         </Link>
+
+        {/* Menú desktop */}
         <ul className="hidden md:flex gap-8 text-sm text-[var(--texto-suave)]">
-  <li><a href="#libro" className="hover:text-[var(--primrose)] transition">Libro</a></li>
-  <li><Link href="/productos" className="hover:text-[var(--primrose)] transition">Tienda</Link></li>
-  <li><a href="#sobre-mi" className="hover:text-[var(--primrose)] transition">Sobre mí</a></li>
-  <li><a href="#taller" className="hover:text-[var(--lime)] transition">Talleres</a></li>
-  <li><Link href="/empresas" className="hover:text-[var(--lime)] transition">Empresas</Link></li>
-</ul>
-        <MenuUsuario />
+          <li><a href="#libro" className="hover:text-[var(--primrose)] transition">Libro</a></li>
+          <li><Link href="/productos" className="hover:text-[var(--primrose)] transition">Tienda</Link></li>
+          <li><a href="#sobre-mi" className="hover:text-[var(--primrose)] transition">Sobre mí</a></li>
+          <li><a href="#taller" className="hover:text-[var(--lime)] transition">Talleres</a></li>
+          <li><Link href="/empresas" className="hover:text-[var(--lime)] transition">Empresas</Link></li>
+        </ul>
+
+        <div className="flex items-center gap-3">
+          <MenuUsuario />
+
+          {/* Botón hamburguesa - solo en mobile */}
+          <button
+            onClick={() => setMenuAbierto(!menuAbierto)}
+            className="md:hidden w-10 h-10 rounded-full hover:bg-[var(--pinktone-soft)] flex items-center justify-center transition"
+            aria-label="Abrir menú"
+          >
+            <svg className="w-6 h-6 text-[var(--texto-principal)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              {menuAbierto ? (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
       </div>
+
+      {/* Menú mobile desplegable */}
+      {menuAbierto && (
+        <div className="md:hidden border-t border-[var(--borde-rosa)] bg-[var(--yucca-soft)]">
+          <ul className="px-6 py-4 space-y-1">
+            <li>
+              <a
+                href="#libro"
+                onClick={() => setMenuAbierto(false)}
+                className="block py-3 px-4 rounded-lg text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition font-medium"
+              >
+                Libro
+              </a>
+            </li>
+            <li>
+              <Link
+                href="/productos"
+                onClick={() => setMenuAbierto(false)}
+                className="block py-3 px-4 rounded-lg text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition font-medium"
+              >
+                Tienda
+              </Link>
+            </li>
+            <li>
+              <a
+                href="#sobre-mi"
+                onClick={() => setMenuAbierto(false)}
+                className="block py-3 px-4 rounded-lg text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition font-medium"
+              >
+                Sobre mí
+              </a>
+            </li>
+            <li>
+              <a
+                href="#taller"
+                onClick={() => setMenuAbierto(false)}
+                className="block py-3 px-4 rounded-lg text-[var(--texto-principal)] hover:bg-[var(--lime-soft)] transition font-medium"
+              >
+                Talleres
+              </a>
+            </li>
+            <li>
+              <Link
+                href="/empresas"
+                onClick={() => setMenuAbierto(false)}
+                className="block py-3 px-4 rounded-lg text-[var(--texto-principal)] hover:bg-[var(--lime-soft)] transition font-medium"
+              >
+                Empresas
+              </Link>
+            </li>
+          </ul>
+        </div>
+      )}
     </nav>
   );
 }

@@ -199,78 +199,41 @@ function MenuUsuario() {
             </div>
 
             <div className="py-1">
-  <Link
-    href="/perfil"
-    onClick={() => setAbierto(false)}
-    className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
-  >
-    Mi perfil
-  </Link>
-  <Link
-    href="/perfil?tab=compras"
-    onClick={() => setAbierto(false)}
-    className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
-  >
-    Mis compras
-  </Link>
-  <Link
-    href="/perfil?tab=fidelizacion"
-    onClick={() => setAbierto(false)}
-    className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
-  >
-    Programa de fidelización
-  </Link>
+              <Link
+                href="/perfil"
+                onClick={() => setAbierto(false)}
+                className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
+              >
+                Mi perfil
+              </Link>
+              <Link
+                href="/perfil?tab=compras"
+                onClick={() => setAbierto(false)}
+                className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
+              >
+                Mis compras
+              </Link>
+              <Link
+                href="/perfil?tab=fidelizacion"
+                onClick={() => setAbierto(false)}
+                className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
+              >
+                Programa de fidelización
+              </Link>
 
-  {/* Link al panel admin - SOLO visible para admins */}
-  {esAdmin && (
-    <>
-      <div className="border-t border-[var(--borde-suave)] my-1" />
-      <Link
-        href="/admin"
-        onClick={() => setAbierto(false)}
-        className="block px-4 py-2.5 text-sm font-semibold text-[var(--primrose)] hover:bg-[var(--pinktone-soft)] transition"
-      >
-        🔧 Panel administrador
-      </Link>
-    </>
-  )}<div className="py-1">
-  <Link
-    href="/perfil"
-    onClick={() => setAbierto(false)}
-    className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
-  >
-    Mi perfil
-  </Link>
-  <Link
-    href="/perfil?tab=compras"
-    onClick={() => setAbierto(false)}
-    className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
-  >
-    Mis compras
-  </Link>
-  <Link
-    href="/perfil?tab=fidelizacion"
-    onClick={() => setAbierto(false)}
-    className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
-  >
-    Programa de fidelización
-  </Link>
-
-  {/* Link al panel admin - SOLO visible para admins */}
-  {esAdmin && (
-    <>
-      <div className="border-t border-[var(--borde-suave)] my-1" />
-      <Link
-        href="/admin"
-        onClick={() => setAbierto(false)}
-        className="block px-4 py-2.5 text-sm font-semibold text-[var(--primrose)] hover:bg-[var(--pinktone-soft)] transition"
-      >
-        🔧 Panel administrador
-      </Link>
-    </>
-  )}
-</div>
-</div>
+              {esAdmin && (
+                <>
+                  <div className="border-t border-[var(--borde-suave)] my-1" />
+                  <Link
+                    href="/admin"
+                    onClick={() => setAbierto(false)}
+                    className="block px-4 py-2.5 text-sm font-semibold text-[var(--primrose)] hover:bg-[var(--pinktone-soft)] transition"
+                  >
+                    🔧 Panel administrador
+                  </Link>
+                </>
+              )}
+            </div>
 
             <div className="border-t border-[var(--borde-suave)] py-1">
               <button

@@ -664,10 +664,34 @@ function Footer() {
 /* ---------- SECCIÓN PRODUCTOS DESTACADOS ---------- */
 function SeccionProductos() {
   const productos = [
-    { nombre: "Harina de Cúrcuma", precio: 15, descripcion: "Libre de gluten · 250 gr", color: "primrose" },
-    { nombre: "Salvado de Trigo", precio: 12, descripcion: "100% Fibra Natural · 500 gr", color: "lime" },
-    { nombre: "Sacha Inchi", precio: 25, descripcion: "Omega-3 y proteínas · 250 gr", color: "primrose" },
-    { nombre: "Cacao Orgánico", precio: 20, descripcion: "Sin azúcar añadida · 200 gr", color: "lime" },
+    { 
+      nombre: "Harina de Cúrcuma", 
+      precio: 15, 
+      descripcion: "Libre de gluten · 250 gr", 
+      color: "primrose",
+      imagen: "/images/harinaCurcuma.png"  
+    },
+    { 
+      nombre: "Salvado de Trigo", 
+      precio: 12, 
+      descripcion: "100% Fibra Natural · 500 gr", 
+      color: "lime",
+      imagen: "/images/salvadoTrigo.png" 
+    },
+    { 
+      nombre: "Sacha Inchi", 
+      precio: 25, 
+      descripcion: "Omega-3 y proteínas · 250 gr", 
+      color: "primrose",
+      imagen: "/images/SachaInchi.png"   
+    },
+    { 
+      nombre: "Cacao Orgánico", 
+      precio: 20, 
+      descripcion: "Sin azúcar añadida · 200 gr", 
+      color: "lime",
+      imagen: "/images/Cacao.png"         
+    },
   ];
 
   return (
@@ -700,13 +724,14 @@ function SeccionProductos() {
               href="/productos"
               className="bg-white rounded-2xl border-2 border-[var(--borde-rosa)] p-5 hover:border-[var(--primrose)] hover:shadow-lg hover:shadow-pink-200 hover:-translate-y-1 transition group"
             >
-              <div className={`aspect-square rounded-xl mb-4 flex items-center justify-center text-4xl ${
-                p.color === "primrose" ? "bg-[var(--pinktone-soft)]" : "bg-[var(--lime-soft)]"
-              }`}>
-                <span className={p.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"}>
-                  ◇
-                </span>
-              </div>
+              <div className="aspect-square rounded-xl mb-4 overflow-hidden relative">
+               <Image
+                  src={p.imagen}
+                  alt={p.nombre}
+                  fill
+                  className="object-contain p-2"
+                 />
+                </div>
               <p className={`text-xs uppercase tracking-widest mb-1 font-semibold ${
                 p.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
               }`}>

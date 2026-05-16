@@ -331,14 +331,18 @@ function HeroLibro() {
             </li>
           </ul>
 
-          <div className="flex flex-wrap items-center gap-4 mb-6">
-            <div className="flex items-baseline gap-3">
-              <span className="text-4xl font-semibold text-[var(--texto-principal)]">S/ 20</span>
-              <span className="text-[var(--texto-tenue)] line-through text-lg">S/ 25</span>
+          <div className="flex flex-wrap items-center gap-3 mb-6">
+            <div className="bg-[var(--lime-soft)] border-2 border-[var(--lime)] rounded-2xl px-5 py-3 flex flex-col items-start">
+              <span className="text-xs uppercase tracking-widest text-[var(--lime)] font-semibold mb-0.5">Versión digital</span>
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-semibold text-[var(--texto-principal)]">S/ 10</span>
+                <span className="text-xs bg-[var(--lime)] text-white px-2 py-0.5 rounded-full font-semibold">¡Oferta!</span>
+              </div>
             </div>
-            <span className="text-xs uppercase tracking-widest text-white bg-[var(--lime)] px-3 py-1 rounded-full font-semibold shadow-md shadow-green-200">
-              Edición disponible
-            </span>
+            <div className="flex flex-col items-start px-4 py-3">
+              <span className="text-xs uppercase tracking-widest text-[var(--texto-tenue)] font-semibold mb-0.5">Físico</span>
+              <span className="text-2xl font-light text-[var(--texto-tenue)]">S/ 20</span>
+            </div>
           </div>
 
           <div className="flex flex-wrap gap-3">

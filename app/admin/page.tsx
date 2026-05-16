@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase";
 
+type ProductoAlerta = { id: number; nombre: string; stock: number; };
+
+const UMBRAL_CRITICO = 5;
+const UMBRAL_ADVERTENCIA = 10;
+
 export default function AdminDashboard() {
   const supabase = createClient();
   const [stats, setStats] = useState({
@@ -21,6 +26,7 @@ export default function AdminDashboard() {
   });
   const [cargando, setCargando] = useState(true);
   const [actividadReciente, setActividadReciente] = useState<any[]>([]);
+  const [productosAlerta, setProductosAlerta] = useState<ProductoAlerta[]>([]);
 
   useEffect(() => {
     async function cargar() {
@@ -84,6 +90,16 @@ export default function AdminDashboard() {
         .slice(0, 8);
 
       setActividadReciente(recientes);
+
+      // Productos con stock bajo o agotado
+      const { data: stockBajo } = await supabase
+        .from("productos")
+        .select("id, nombre, stock")
+        .eq("activo", true)
+        .lte("stock", UMBRAL_ADVERTENCIA)
+        .order("stock");
+      setProductosAlerta(stockBajo || []);
+
       setCargando(false);
     }
     cargar();
@@ -107,6 +123,11 @@ export default function AdminDashboard() {
         </h1>
         <p className="text-sm text-[var(--texto-suave)] capitalize mt-1">{hoy}</p>
       </div>
+
+      {/* Alerta de stock */}
+      {productosAlerta.length > 0 && (
+        <AlertaStock productos={productosAlerta} />
+      )}
 
       {/* Stats principales */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
@@ -279,6 +300,81 @@ function ActividadItem({ item }: { item: any }) {
       }`}>
         {item.estado}
       </span>
+    </div>
+  );
+}
+
+function AlertaStock({ productos }: { productos: ProductoAlerta[] }) {
+  const agotados = productos.filter((p) => p.stock === 0);
+  const criticos = productos.filter((p) => p.stock > 0 && p.stock <= UMBRAL_CRITICO);
+  const advertencia = productos.filter((p) => p.stock > UMBRAL_CRITICO && p.stock <= UMBRAL_ADVERTENCIA);
+
+  return (
+    <div className="mb-8 bg-amber-50 border-2 border-amber-300 rounded-2xl p-5">
+      <div className="flex items-start gap-3 mb-4">
+        <span className="text-2xl">⚠️</span>
+        <div className="flex-1">
+          <p className="font-semibold text-amber-800 text-base">
+            Alerta de inventario — {productos.length} producto{productos.length !== 1 ? "s" : ""} requieren atención
+          </p>
+          <p className="text-sm text-amber-700 mt-0.5">
+            Revisa y repone el stock para no quedarte sin existencias.
+          </p>
+        </div>
+        <Link
+          href="/admin/productos"
+          className="flex-shrink-0 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl text-xs font-semibold transition"
+        >
+          Gestionar stock →
+        </Link>
+      </div>
+
+      <div className="space-y-3">
+        {agotados.length > 0 && (
+          <div>
+            <p className="text-xs font-semibold text-red-700 uppercase tracking-widest mb-2">Sin stock</p>
+            <div className="grid sm:grid-cols-2 gap-2">
+              {agotados.map((p) => (
+                <div key={p.id} className="flex items-center gap-2 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+                  <span className="text-red-500 text-base">🔴</span>
+                  <p className="text-sm font-medium text-red-900 truncate">{p.nombre}</p>
+                  <span className="ml-auto text-xs text-red-600 font-semibold whitespace-nowrap">0 unidades</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {criticos.length > 0 && (
+          <div>
+            <p className="text-xs font-semibold text-amber-700 uppercase tracking-widest mb-2">Stock crítico (≤ {UMBRAL_CRITICO})</p>
+            <div className="grid sm:grid-cols-2 gap-2">
+              {criticos.map((p) => (
+                <div key={p.id} className="flex items-center gap-2 bg-white border border-amber-200 rounded-xl px-3 py-2">
+                  <span className="text-amber-500 text-base">🟡</span>
+                  <p className="text-sm font-medium text-amber-900 truncate">{p.nombre}</p>
+                  <span className="ml-auto text-xs text-amber-600 font-semibold whitespace-nowrap">{p.stock} und.</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {advertencia.length > 0 && (
+          <div>
+            <p className="text-xs font-semibold text-yellow-700 uppercase tracking-widest mb-2">Por agotarse (≤ {UMBRAL_ADVERTENCIA})</p>
+            <div className="grid sm:grid-cols-2 gap-2">
+              {advertencia.map((p) => (
+                <div key={p.id} className="flex items-center gap-2 bg-white border border-yellow-200 rounded-xl px-3 py-2">
+                  <span className="text-yellow-500 text-base">🟠</span>
+                  <p className="text-sm font-medium text-yellow-900 truncate">{p.nombre}</p>
+                  <span className="ml-auto text-xs text-yellow-600 font-semibold whitespace-nowrap">{p.stock} und.</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

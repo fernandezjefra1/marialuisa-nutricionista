@@ -28,6 +28,37 @@ export default function ComprarLibroPage() {
   const [metodoPago, setMetodoPago] = useState<MetodoPago>("yape");
   const [error, setError] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
+  const [errores, setErrores] = useState<Record<string, string>>({});
+
+  function validarCampo(campo: string, valor: string): string {
+    switch (campo) {
+      case "nombre":
+        if (!valor.trim()) return "El nombre es obligatorio";
+        if (valor.trim().length < 3) return "El nombre debe tener al menos 3 caracteres";
+        if (!valor.trim().includes(" ")) return "Ingresa tu nombre y apellido";
+        return "";
+      case "whatsapp":
+        if (!valor) return "El número de WhatsApp es obligatorio";
+        if (valor.length < 9) return "Debe tener exactamente 9 dígitos";
+        if (!valor.startsWith("9")) return "El número debe empezar con 9";
+        return "";
+      case "correo":
+        if (!valor) return "El correo es obligatorio";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) return "Ingresa un correo válido (ejemplo@correo.com)";
+        return "";
+      case "direccion":
+        if (!valor.trim()) return "La dirección es obligatoria";
+        if (valor.trim().length < 10) return "La dirección es muy corta, sé más específico";
+        if (!/\d/.test(valor)) return "Incluye el número de la calle (ej: Av. Lima 245)";
+        return "";
+      default:
+        return "";
+    }
+  }
+
+  function marcarError(campo: string, valor: string) {
+    setErrores((prev) => ({ ...prev, [campo]: validarCampo(campo, valor) }));
+  }
 
   useEffect(() => {
     if (!loadingUser && !user) router.push("/login?redirect=/comprar-libro");
@@ -49,17 +80,19 @@ export default function ComprarLibroPage() {
 
   if (!user) return null;
 
-  function validar() {
-    if (!nombre.trim()) return "Por favor ingresa tu nombre completo";
-    if (!whatsapp.trim() || whatsapp.length < 9) return "Por favor ingresa un WhatsApp válido";
-    if (!correo.trim() || !correo.includes("@")) return "Por favor ingresa un correo válido";
-    if (formato === "fisico" && !direccion.trim()) return "Por favor ingresa tu dirección";
-    return null;
+  function validar(): boolean {
+    const nuevosErrores: Record<string, string> = {
+      nombre: validarCampo("nombre", nombre),
+      whatsapp: validarCampo("whatsapp", whatsapp),
+      correo: validarCampo("correo", correo),
+      direccion: formato === "fisico" ? validarCampo("direccion", direccion) : "",
+    };
+    setErrores(nuevosErrores);
+    return Object.values(nuevosErrores).every((e) => e === "");
   }
 
   async function handleConfirmar() {
-    const errorValidacion = validar();
-    if (errorValidacion) { setError(errorValidacion); window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+    if (!validar()) { window.scrollTo({ top: 0, behavior: "smooth" }); return; }
     setError(null);
     setEnviando(true);
 
@@ -197,24 +230,46 @@ export default function ComprarLibroPage() {
                   <input
                     type="text"
                     value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
+                    maxLength={80}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/[^a-záéíóúüñA-ZÁÉÍÓÚÜÑ\s]/g, "");
+                      setNombre(val);
+                      if (errores.nombre) marcarError("nombre", val);
+                    }}
+                    onBlur={() => marcarError("nombre", nombre)}
                     placeholder="María García López"
-                    className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] px-4 py-3 rounded-xl text-[#31543d] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition"
+                    className={`font-nunito w-full px-4 py-3 rounded-xl text-[#31543d] outline-none transition border-2 ${
+                      errores.nombre ? "border-red-400 bg-red-50" :
+                      nombre && !errores.nombre ? "border-green-400 bg-[#f0f8ec]" :
+                      "border-[#C5DFC5] bg-[#f0f8ec] focus:border-[#6daa6d]"
+                    }`}
                   />
+                  {errores.nombre && <p className="font-nunito text-red-500 text-xs mt-1">{errores.nombre}</p>}
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label className="font-nunito text-xs uppercase tracking-widest text-[#5a7255] mb-2 block font-semibold">
-                      WhatsApp *
+                      WhatsApp * <span className="normal-case tracking-normal font-normal text-[#8aa487]">(9 dígitos)</span>
                     </label>
                     <input
                       type="tel"
                       value={whatsapp}
-                      onChange={(e) => setWhatsapp(e.target.value)}
-                      placeholder="999 888 777"
-                      className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] px-4 py-3 rounded-xl text-[#31543d] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition"
+                      maxLength={9}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, "").slice(0, 9);
+                        setWhatsapp(val);
+                        if (errores.whatsapp) marcarError("whatsapp", val);
+                      }}
+                      onBlur={() => marcarError("whatsapp", whatsapp)}
+                      placeholder="987654321"
+                      className={`font-nunito w-full px-4 py-3 rounded-xl text-[#31543d] outline-none transition border-2 ${
+                        errores.whatsapp ? "border-red-400 bg-red-50" :
+                        whatsapp.length === 9 ? "border-green-400 bg-[#f0f8ec]" :
+                        "border-[#C5DFC5] bg-[#f0f8ec] focus:border-[#6daa6d]"
+                      }`}
                     />
+                    {errores.whatsapp && <p className="font-nunito text-red-500 text-xs mt-1">{errores.whatsapp}</p>}
                   </div>
                   <div>
                     <label className="font-nunito text-xs uppercase tracking-widest text-[#5a7255] mb-2 block font-semibold">
@@ -223,10 +278,20 @@ export default function ComprarLibroPage() {
                     <input
                       type="email"
                       value={correo}
-                      onChange={(e) => setCorreo(e.target.value)}
+                      maxLength={100}
+                      onChange={(e) => {
+                        setCorreo(e.target.value);
+                        if (errores.correo) marcarError("correo", e.target.value);
+                      }}
+                      onBlur={() => marcarError("correo", correo)}
                       placeholder="tu@correo.com"
-                      className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] px-4 py-3 rounded-xl text-[#31543d] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition"
+                      className={`font-nunito w-full px-4 py-3 rounded-xl text-[#31543d] outline-none transition border-2 ${
+                        errores.correo ? "border-red-400 bg-red-50" :
+                        correo && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo) ? "border-green-400 bg-[#f0f8ec]" :
+                        "border-[#C5DFC5] bg-[#f0f8ec] focus:border-[#6daa6d]"
+                      }`}
                     />
+                    {errores.correo && <p className="font-nunito text-red-500 text-xs mt-1">{errores.correo}</p>}
                   </div>
                 </div>
 
@@ -238,23 +303,36 @@ export default function ComprarLibroPage() {
                       </p>
                     </div>
                     <div>
-                      <label className="font-nunito text-xs uppercase tracking-widest text-[#5a7255] mb-2 block font-semibold">Dirección *</label>
+                      <label className="font-nunito text-xs uppercase tracking-widest text-[#5a7255] mb-2 block font-semibold">
+                        Dirección * <span className="normal-case tracking-normal font-normal text-[#8aa487]">(incluye número de calle)</span>
+                      </label>
                       <input
                         type="text"
                         value={direccion}
-                        onChange={(e) => setDireccion(e.target.value)}
+                        maxLength={200}
+                        onChange={(e) => {
+                          setDireccion(e.target.value);
+                          if (errores.direccion) marcarError("direccion", e.target.value);
+                        }}
+                        onBlur={() => marcarError("direccion", direccion)}
                         placeholder="Av. Las Flores 123"
-                        className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] px-4 py-3 rounded-xl text-[#31543d] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition"
+                        className={`font-nunito w-full px-4 py-3 rounded-xl text-[#31543d] outline-none transition border-2 ${
+                          errores.direccion ? "border-red-400 bg-red-50" :
+                          direccion.trim().length >= 10 && /\d/.test(direccion) ? "border-green-400 bg-[#f0f8ec]" :
+                          "border-[#C5DFC5] bg-[#f0f8ec] focus:border-[#6daa6d]"
+                        }`}
                       />
+                      {errores.direccion && <p className="font-nunito text-red-500 text-xs mt-1">{errores.direccion}</p>}
                     </div>
                     <div>
                       <label className="font-nunito text-xs uppercase tracking-widest text-[#5a7255] mb-2 block font-semibold">Referencia (opcional)</label>
                       <input
                         type="text"
                         value={referencia}
+                        maxLength={150}
                         onChange={(e) => setReferencia(e.target.value)}
                         placeholder="Frente al parque, casa color blanco"
-                        className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] px-4 py-3 rounded-xl text-[#31543d] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition"
+                        className="font-nunito w-full bg-[#f0f8ec] border-2 border-[#C5DFC5] px-4 py-3 rounded-xl text-[#31543d] outline-none focus:border-[#6daa6d] transition"
                       />
                     </div>
                   </>

@@ -26,6 +26,37 @@ export default function ComprarCarritoPage() {
   const [metodoPago, setMetodoPago] = useState<MetodoPago>("yape");
   const [error, setError] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
+  const [errores, setErrores] = useState<Record<string, string>>({});
+
+  function validarCampo(campo: string, valor: string): string {
+    switch (campo) {
+      case "nombre":
+        if (!valor.trim()) return "El nombre es obligatorio";
+        if (valor.trim().length < 3) return "El nombre debe tener al menos 3 caracteres";
+        if (!valor.trim().includes(" ")) return "Ingresa tu nombre y apellido";
+        return "";
+      case "whatsapp":
+        if (!valor) return "El número de WhatsApp es obligatorio";
+        if (valor.length < 9) return "Debe tener exactamente 9 dígitos";
+        if (!valor.startsWith("9")) return "El número debe empezar con 9";
+        return "";
+      case "correo":
+        if (!valor) return "El correo es obligatorio";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) return "Ingresa un correo válido (ejemplo@correo.com)";
+        return "";
+      case "direccion":
+        if (!valor.trim()) return "La dirección es obligatoria";
+        if (valor.trim().length < 10) return "La dirección es muy corta, sé más específico";
+        if (!/\d/.test(valor)) return "Incluye el número de la calle (ej: Av. Lima 245)";
+        return "";
+      default:
+        return "";
+    }
+  }
+
+  function marcarError(campo: string, valor: string) {
+    setErrores((prev) => ({ ...prev, [campo]: validarCampo(campo, valor) }));
+  }
 
   // Redirigir si no está logueado
   useEffect(() => {
@@ -61,18 +92,19 @@ export default function ComprarCarritoPage() {
     return null; // El useEffect ya redirige
   }
 
-  function validar() {
-    if (!nombre.trim()) return "Por favor ingresa tu nombre completo";
-    if (!whatsapp.trim() || whatsapp.length < 9) return "Por favor ingresa un WhatsApp válido";
-    if (!correo.trim() || !correo.includes("@")) return "Por favor ingresa un correo válido";
-    if (!direccion.trim()) return "Por favor ingresa tu dirección de envío";
-    return null;
+  function validar(): boolean {
+    const nuevosErrores = {
+      nombre: validarCampo("nombre", nombre),
+      whatsapp: validarCampo("whatsapp", whatsapp),
+      correo: validarCampo("correo", correo),
+      direccion: validarCampo("direccion", direccion),
+    };
+    setErrores(nuevosErrores);
+    return Object.values(nuevosErrores).every((e) => e === "");
   }
 
   async function handleConfirmar() {
-    const errorValidacion = validar();
-    if (errorValidacion) {
-      setError(errorValidacion);
+    if (!validar()) {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
@@ -212,24 +244,46 @@ export default function ComprarCarritoPage() {
                   <input
                     type="text"
                     value={nombre}
-                    onChange={(e) => setNombre(e.target.value)}
+                    maxLength={80}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/[^a-záéíóúüñA-ZÁÉÍÓÚÜÑ\s]/g, "");
+                      setNombre(val);
+                      if (errores.nombre) marcarError("nombre", val);
+                    }}
+                    onBlur={() => marcarError("nombre", nombre)}
                     placeholder="María García López"
-                    className="w-full border border-[var(--borde-rosa)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--primrose)] transition"
+                    className={`w-full border px-4 py-3 rounded-lg focus:outline-none transition ${
+                      errores.nombre ? "border-red-400 bg-red-50 focus:border-red-500" :
+                      nombre && !errores.nombre ? "border-green-400 focus:border-green-500" :
+                      "border-[var(--borde-rosa)] focus:border-[var(--primrose)]"
+                    }`}
                   />
+                  {errores.nombre && <p className="text-red-500 text-xs mt-1">{errores.nombre}</p>}
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
                     <label className="text-xs uppercase tracking-widest text-[var(--texto-suave)] mb-2 block font-semibold">
-                      WhatsApp *
+                      WhatsApp * <span className="normal-case tracking-normal font-normal text-[var(--texto-tenue)]">(9 dígitos)</span>
                     </label>
                     <input
                       type="tel"
                       value={whatsapp}
-                      onChange={(e) => setWhatsapp(e.target.value)}
-                      placeholder="999 888 777"
-                      className="w-full border border-[var(--borde-rosa)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--primrose)] transition"
+                      maxLength={9}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, "").slice(0, 9);
+                        setWhatsapp(val);
+                        if (errores.whatsapp) marcarError("whatsapp", val);
+                      }}
+                      onBlur={() => marcarError("whatsapp", whatsapp)}
+                      placeholder="987654321"
+                      className={`w-full border px-4 py-3 rounded-lg focus:outline-none transition ${
+                        errores.whatsapp ? "border-red-400 bg-red-50 focus:border-red-500" :
+                        whatsapp.length === 9 ? "border-green-400 focus:border-green-500" :
+                        "border-[var(--borde-rosa)] focus:border-[var(--primrose)]"
+                      }`}
                     />
+                    {errores.whatsapp && <p className="text-red-500 text-xs mt-1">{errores.whatsapp}</p>}
                   </div>
 
                   <div>
@@ -239,10 +293,20 @@ export default function ComprarCarritoPage() {
                     <input
                       type="email"
                       value={correo}
-                      onChange={(e) => setCorreo(e.target.value)}
+                      maxLength={100}
+                      onChange={(e) => {
+                        setCorreo(e.target.value);
+                        if (errores.correo) marcarError("correo", e.target.value);
+                      }}
+                      onBlur={() => marcarError("correo", correo)}
                       placeholder="tu@correo.com"
-                      className="w-full border border-[var(--borde-rosa)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--primrose)] transition"
+                      className={`w-full border px-4 py-3 rounded-lg focus:outline-none transition ${
+                        errores.correo ? "border-red-400 bg-red-50 focus:border-red-500" :
+                        correo && !errores.correo && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo) ? "border-green-400 focus:border-green-500" :
+                        "border-[var(--borde-rosa)] focus:border-[var(--primrose)]"
+                      }`}
                     />
+                    {errores.correo && <p className="text-red-500 text-xs mt-1">{errores.correo}</p>}
                   </div>
                 </div>
               </div>
@@ -262,15 +326,25 @@ export default function ComprarCarritoPage() {
 
                 <div>
                   <label className="text-xs uppercase tracking-widest text-[var(--texto-suave)] mb-2 block font-semibold">
-                    Dirección *
+                    Dirección * <span className="normal-case tracking-normal font-normal text-[var(--texto-tenue)]">(incluye número de calle)</span>
                   </label>
                   <input
                     type="text"
                     value={direccion}
-                    onChange={(e) => setDireccion(e.target.value)}
+                    maxLength={200}
+                    onChange={(e) => {
+                      setDireccion(e.target.value);
+                      if (errores.direccion) marcarError("direccion", e.target.value);
+                    }}
+                    onBlur={() => marcarError("direccion", direccion)}
                     placeholder="Av. Las Flores 123, San Juan de Miraflores"
-                    className="w-full border border-[var(--borde-rosa)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--lime)] transition"
+                    className={`w-full border px-4 py-3 rounded-lg focus:outline-none transition ${
+                      errores.direccion ? "border-red-400 bg-red-50 focus:border-red-500" :
+                      direccion.trim().length >= 10 && /\d/.test(direccion) ? "border-green-400 focus:border-green-500" :
+                      "border-[var(--borde-rosa)] focus:border-[var(--lime)]"
+                    }`}
                   />
+                  {errores.direccion && <p className="text-red-500 text-xs mt-1">{errores.direccion}</p>}
                 </div>
 
                 <div>

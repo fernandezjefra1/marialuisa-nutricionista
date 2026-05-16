@@ -3,45 +3,59 @@
 :root {
 
   /* =========================================
-     PALETA PRINCIPAL — VERDES DOMINANTES
+     PALETA PRINCIPAL — VERDES PASTEL
      ========================================= */
 
-  --lime: #A7CC68;
-  --lime-hover: #8fb454;
-  --lime-mid: #bddb8a;
-  --lime-soft: #eef6df;
+  --lime: #8FBD8F;
+  --lime-hover: #76A876;
+  --lime-mid: #AECFAE;
+  --lime-soft: #E8F5E8;
 
   /* =========================================
-     ROSADOS SUAVES — SOLO ACENTOS
+     ROSADOS PASTEL — BOTONES PRINCIPALES
      ========================================= */
 
-  --primrose: #e79aac;
-  --primrose-hover: #d88397;
+  --primrose: #C4607A;
+  --primrose-hover: #A84D65;
+  --primrose-pastel: #F0C0CE;
 
-  --pinktone: #ffe4ea;
-  --pinktone-soft: #fff7f9;
+  --pinktone: #FDEDF3;
+  --pinktone-soft: #FFF5F8;
 
   /* =========================================
-     CREMAS
+     FONDOS VERDES — DOS TONOS ALTERNADOS
      ========================================= */
 
-  --yucca: #f7f7f1;
-  --yucca-soft: #fcfcf8;
+  --verde-pastel: #d4edcc;
+  --verde-fuerte: #6daa6d;
+
+  /* compatibilidad con clases anteriores */
+  --verde-1: #d4edcc;
+  --verde-2: #d4edcc;
+  --verde-3: #6daa6d;
+  --verde-4: #6daa6d;
+
+  /* =========================================
+     CREMAS (ahora verde pastel)
+     ========================================= */
+
+  --yucca: #d4edcc;
+  --yucca-soft: #ddf2d4;
 
   /* =========================================
      TEXTOS
      ========================================= */
 
-  --texto-principal: #32452d;
-  --texto-suave: #6f7f68;
-  --texto-tenue: #9aa595;
+  --texto-principal: #2d4a2d;
+  --texto-suave: #5a7255;
+  --texto-tenue: #8aa487;
 
   /* =========================================
      BORDES
      ========================================= */
 
-  --borde-verde: #d9e7ba;
-  --borde-suave: #edf1e8;
+  --borde-verde: #C5DFC5;
+  --borde-suave: #E3EEE3;
   --borde-rosa: #f6dde3;
 
   /* =========================================
@@ -73,6 +87,165 @@ body {
 
 
 /* =========================================
+   FUENTE ELEGANTE COQUETTE
+   ========================================= */
+
+.font-playfair {
+  font-family: var(--font-playfair), serif;
+}
+
+.font-nunito {
+  font-family: var(--font-nunito), sans-serif;
+}
+
+
+
+/* =========================================
+   SPARKLE — BRILLITO TITILANTE
+   ========================================= */
+
+@keyframes sparkle-twinkle {
+  0%, 100% {
+    opacity: 0.1;
+    transform: scale(0.6) rotate(0deg);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.3) rotate(35deg);
+  }
+}
+
+.sparkle-item {
+  animation: sparkle-twinkle var(--dur, 4s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+
+
+/* =========================================
+   CORAZÓN FLOTANTE
+   ========================================= */
+
+@keyframes heart-float {
+  0%, 100% {
+    transform: translateY(0px) rotate(-8deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-16px) rotate(8deg);
+    opacity: 1;
+  }
+}
+
+.heart-float {
+  animation: heart-float var(--dur, 4s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+
+
+/* =========================================
+   SHIMMER — TEXTO BRILLANTE
+   ========================================= */
+
+@keyframes shimmer-move {
+  0% { background-position: -300% center; }
+  100% { background-position: 300% center; }
+}
+
+.shimmer-rose {
+  background: linear-gradient(
+    90deg,
+    var(--primrose) 20%,
+    #f0a0b8 45%,
+    #ffe0ea 50%,
+    #f0a0b8 55%,
+    var(--primrose) 80%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-move 4s linear infinite;
+}
+
+.shimmer-white {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.8) 20%,
+    #ffd6e8 45%,
+    #fff 50%,
+    #ffd6e8 55%,
+    rgba(255,255,255,0.8) 80%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-move 4s linear infinite;
+}
+
+
+
+/* =========================================
+   LAZO — PULSO TIERNO
+   ========================================= */
+
+@keyframes bow-sway {
+  0%, 100% {
+    transform: scale(1) rotate(-6deg);
+  }
+  50% {
+    transform: scale(1.2) rotate(6deg);
+  }
+}
+
+.bow-animate {
+  display: inline-block;
+  animation: bow-sway 3s ease-in-out infinite;
+}
+
+
+
+/* =========================================
+   BOTÓN COQUETTE — REBOTE
+   ========================================= */
+
+@keyframes btn-pop {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.08); }
+  65%  { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+.btn-coquette:hover {
+  animation: btn-pop 0.4s ease forwards;
+}
+
+
+
+/* =========================================
+   BRILLO FONDO HERO
+   ========================================= */
+
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(1.08);
+  }
+}
+
+.coquette-glow {
+  animation: glow-pulse 5s ease-in-out infinite;
+}
+
+
+
+/* =========================================
    ANIMACIÓN HALO
    ========================================= */
 
@@ -80,14 +253,14 @@ body {
 
   0%, 100% {
     box-shadow:
-      0 0 0 0 rgba(167, 204, 104, 0.35),
-      0 0 0 0 rgba(231, 154, 172, 0.15);
+      0 0 0 0 rgba(143, 189, 143, 0.35),
+      0 0 0 0 rgba(242, 168, 191, 0.2);
   }
 
   50% {
     box-shadow:
-      0 0 0 18px rgba(167, 204, 104, 0),
-      0 0 0 35px rgba(231, 154, 172, 0);
+      0 0 0 18px rgba(143, 189, 143, 0),
+      0 0 0 35px rgba(242, 168, 191, 0);
   }
 }
 
@@ -206,7 +379,7 @@ body {
 
 .btn-green {
 
-  background: var(--lime);
+  background: var(--primrose);
 
   color: white;
 
@@ -215,7 +388,7 @@ body {
 
 .btn-green:hover {
 
-  background: var(--lime-hover);
+  background: var(--primrose-hover);
 }
 
 .btn-pink {
@@ -256,7 +429,7 @@ body {
   border-color: var(--lime);
 
   box-shadow:
-    0 0 0 4px rgba(167, 204, 104, 0.18);
+    0 0 0 4px rgba(143, 189, 143, 0.2);
 }
 
 
@@ -270,15 +443,15 @@ body {
   background:
     linear-gradient(
       to bottom,
-      #f8fbf2,
-      #eef6df
+      var(--verde-2),
+      var(--verde-3)
     );
 }
 
 
 
 /* =========================================
-   SECCIONES CREMA
+   SECCIONES CREMA (ahora verde suave)
    ========================================= */
 
 .section-cream {
@@ -286,8 +459,8 @@ body {
   background:
     linear-gradient(
       to bottom,
-      #fcfcf8,
-      #f4f6ee
+      var(--verde-1),
+      var(--verde-2)
     );
 }
 
@@ -315,7 +488,7 @@ body {
 
 .button-main {
 
-  background: var(--lime);
+  background: var(--primrose);
 
   color: white;
 
@@ -324,12 +497,12 @@ body {
   transition: 0.3s ease;
 
   box-shadow:
-    0 10px 25px rgba(167, 204, 104, 0.28);
+    0 10px 25px rgba(242, 168, 191, 0.35);
 }
 
 .button-main:hover {
 
-  background: var(--lime-hover);
+  background: var(--primrose-hover);
 
   transform: translateY(-1px);
 }
@@ -342,9 +515,9 @@ body {
 
 .button-secondary {
 
-  border: 2px solid var(--lime);
+  border: 2px solid var(--primrose);
 
-  color: var(--lime);
+  color: var(--primrose);
 
   border-radius: 999px;
 
@@ -353,7 +526,7 @@ body {
 
 .button-secondary:hover {
 
-  background: var(--lime-soft);
+  background: var(--pinktone);
 }
 
 
@@ -383,7 +556,7 @@ body {
   transform: translateY(-4px);
 
   box-shadow:
-    0 18px 30px rgba(167, 204, 104, 0.16);
+    0 18px 30px rgba(143, 189, 143, 0.2);
 }
 
 
@@ -394,7 +567,7 @@ body {
 
 .footer-soft {
 
-  background: #5f7c52;
+  background: #6a9a6a;
 
   color: white;
 }

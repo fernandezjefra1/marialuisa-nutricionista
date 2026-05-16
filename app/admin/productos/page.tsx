@@ -211,7 +211,7 @@ export default function AdminProductos() {
         filtroActivo === "todos" ||
         (filtroActivo === "activos" && p.activo) ||
         (filtroActivo === "inactivos" && !p.activo) ||
-        (filtroActivo === "stock-bajo" && p.activo && p.stock <= UMBRAL_STOCK_BAJO);
+        (filtroActivo === "stock-bajo" && p.stock <= UMBRAL_STOCK_BAJO);
       return matchBusqueda && matchCategoria && matchActivo;
     })
     .sort((a, b) => {

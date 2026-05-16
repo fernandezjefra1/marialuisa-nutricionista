@@ -39,6 +39,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: "/admin/pedidos-libro", label: "Pedidos de libro", icono: "📚" },
     { href: "/admin/pedidos-productos", label: "Pedidos de tienda", icono: "🛒" },
     { href: "/admin/solicitudes", label: "Solicitudes empresariales", icono: "🏢" },
+    { href: "/admin/productos", label: "Gestión de productos", icono: "🥑" },
   ];
 
   return (

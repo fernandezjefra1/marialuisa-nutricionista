@@ -8,7 +8,8 @@ import { useAdmin } from "@/lib/use-admin";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[var(--yucca)] text-[var(--texto-principal)]">
+    <main className="min-h-screen bg-[var(--verde-pastel)] text-[var(--texto-principal)]">
+      <FloatingSparkles />
       <Navbar />
       <HeroLibro />
       <CarruselImagenes />
@@ -22,24 +23,65 @@ export default function Home() {
   );
 }
 
+/* ---------- BRILLITOS FLOTANTES ---------- */
+function FloatingSparkles() {
+  const items = [
+    { char: "✦", top: "8%",  left: "2%",  dur: "3.5s", delay: "0s"   },
+    { char: "♡", top: "18%", left: "95%", dur: "4.5s", delay: "0.8s" },
+    { char: "✿", top: "38%", left: "1%",  dur: "5s",   delay: "1.5s" },
+    { char: "✦", top: "52%", left: "97%", dur: "4s",   delay: "0.3s" },
+    { char: "♡", top: "68%", left: "3%",  dur: "3.8s", delay: "2s"   },
+    { char: "✿", top: "82%", left: "93%", dur: "4.2s", delay: "1.2s" },
+    { char: "✦", top: "28%", left: "98%", dur: "5.5s", delay: "2.5s" },
+    { char: "♡", top: "72%", left: "1%",  dur: "4.8s", delay: "0.6s" },
+    { char: "✦", top: "5%",  left: "50%", dur: "3.5s", delay: "1.8s" },
+    { char: "✿", top: "92%", left: "48%", dur: "4s",   delay: "3s"   },
+    { char: "♡", top: "45%", left: "99%", dur: "3.8s", delay: "1s"   },
+    { char: "✦", top: "60%", left: "0%",  dur: "5s",   delay: "2.2s" },
+  ];
+
+  return (
+    <div
+      className="fixed inset-0 pointer-events-none z-10 overflow-hidden"
+      aria-hidden="true"
+    >
+      {items.map((item, i) => (
+        <span
+          key={i}
+          className="absolute text-[var(--primrose)] sparkle-item"
+          style={{
+            top: item.top,
+            left: item.left,
+            fontSize: i % 3 === 0 ? "18px" : i % 3 === 1 ? "14px" : "20px",
+            ["--dur" as string]: item.dur,
+            ["--delay" as string]: item.delay,
+          }}
+        >
+          {item.char}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 /* ---------- NAVBAR ---------- */
 function Navbar() {
   const [menuAbierto, setMenuAbierto] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 bg-[var(--yucca-soft)]/95 backdrop-blur-sm border-b border-[var(--borde-rosa)]">
+    <nav className="sticky top-0 z-50 bg-[var(--verde-pastel)]/95 backdrop-blur-sm border-b border-[var(--borde-verde)]">
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="font-semibold tracking-tight text-[var(--texto-principal)]">
-          María Luisa <span className="text-[var(--primrose)]">Nutricionista</span>
+        <Link href="/" className="font-playfair font-semibold tracking-tight text-[var(--texto-principal)]">
+          María Luisa <span className="shimmer-rose">Nutricionista</span>
         </Link>
 
         {/* Menú desktop */}
-        <ul className="hidden md:flex gap-8 text-sm text-[var(--texto-suave)]">
-          <li><a href="#libro" className="hover:text-[var(--primrose)] transition">Libro</a></li>
-          <li><Link href="/productos" className="hover:text-[var(--primrose)] transition">Tienda</Link></li>
-          <li><a href="#sobre-mi" className="hover:text-[var(--primrose)] transition">Sobre mí</a></li>
-          <li><a href="#taller" className="hover:text-[var(--lime)] transition">Talleres</a></li>
-          <li><Link href="/empresas" className="hover:text-[var(--lime)] transition">Empresas</Link></li>
+        <ul className="hidden md:flex gap-2 text-sm">
+          <li><a href="#libro" className="px-4 py-2 rounded-full bg-[#F2A0BC] text-white hover:bg-[var(--primrose)] transition-all duration-300">Libro</a></li>
+          <li><Link href="/productos" className="px-4 py-2 rounded-full bg-[#F2A0BC] text-white hover:bg-[var(--primrose)] transition-all duration-300">Tienda</Link></li>
+          <li><a href="#sobre-mi" className="px-4 py-2 rounded-full bg-[#F2A0BC] text-white hover:bg-[var(--primrose)] transition-all duration-300">Sobre mí</a></li>
+          <li><a href="#taller" className="px-4 py-2 rounded-full bg-[#F2A0BC] text-white hover:bg-[var(--primrose)] transition-all duration-300">Talleres</a></li>
+          <li><Link href="/empresas" className="px-4 py-2 rounded-full bg-[#F2A0BC] text-white hover:bg-[var(--primrose)] transition-all duration-300">Empresas</Link></li>
         </ul>
 
         <div className="flex items-center gap-3">
@@ -64,7 +106,7 @@ function Navbar() {
 
       {/* Menú mobile desplegable */}
       {menuAbierto && (
-        <div className="md:hidden border-t border-[var(--borde-rosa)] bg-[var(--yucca-soft)]">
+        <div className="md:hidden border-t border-[var(--borde-verde)] bg-[var(--verde-1)]">
           <ul className="px-6 py-4 space-y-1">
             <li>
               <a
@@ -133,13 +175,13 @@ function MenuUsuario() {
       <div className="flex items-center gap-2">
         <Link
           href="/login"
-          className="hidden sm:inline-block text-sm text-[var(--texto-suave)] hover:text-[var(--primrose)] px-3 py-2 transition"
+          className="hidden sm:inline-block text-sm px-4 py-2 rounded-full bg-[#F2A0BC] text-white hover:bg-[var(--primrose)] transition-all duration-300"
         >
           Iniciar sesión
         </Link>
         <Link
           href="/login?redirect=/comprar-libro"
-          className="text-sm bg-[var(--primrose)] text-white px-4 py-2 rounded-full hover:bg-[var(--primrose-hover)] transition shadow-md shadow-pink-200"
+          className="text-sm bg-[#F2A0BC] text-white px-4 py-2 rounded-full hover:bg-[var(--primrose)] transition-all duration-300 shadow-md shadow-pink-200"
         >
           Reservar cita
         </Link>
@@ -257,18 +299,18 @@ function MenuUsuario() {
 /* ---------- HERO: LIBRO DESTACADO ---------- */
 function HeroLibro() {
   return (
-    <section id="libro" className="relative overflow-hidden bg-[var(--yucca)]">
+    <section id="libro" className="relative overflow-hidden bg-[var(--verde-pastel)]">
       <div className="max-w-7xl mx-auto px-6 py-14 md:py-20 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
         {/* Texto */}
         <div className="order-2 md:order-1">
-          <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold">
-            Nuevo lanzamiento
+          <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold flex items-center gap-2">
+            <span className="bow-animate">🎀</span> Nuevo lanzamiento
           </p>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-tight mb-6 text-[var(--texto-principal)]">
+          <h1 className="font-playfair text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-tight mb-6 text-[var(--texto-principal)]">
             Nutrición<br />
-            <span className="font-semibold text-[var(--primrose)]">del Bebé.</span>
+            <span className="font-semibold shimmer-rose">del Bebé.</span>
           </h1>
-          <p className="text-base md:text-lg text-[var(--texto-suave)] leading-relaxed mb-6 max-w-lg">
+          <p className="font-nunito text-base md:text-lg text-[var(--texto-suave)] leading-relaxed mb-6 max-w-lg">
             Una guía única en su tipo sobre nutrición infantil preventiva, fruto
             de años de experiencia profesional recorriendo todo el Perú.
             Recientemente presentada en el Colegio de Nutricionistas del Perú.
@@ -302,15 +344,15 @@ function HeroLibro() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/comprar-libro"
-              className="bg-[var(--primrose)] text-white px-8 py-4 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
+              className="btn-coquette bg-[var(--primrose)] text-white px-8 py-4 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
             >
-              Adquirir el libro
+              ✦ Adquirir el libro
             </Link>
             <a
               href="#sobre-mi"
-              className="border-2 border-[var(--primrose)] text-[var(--primrose)] px-6 py-3 rounded-full hover:bg-[var(--pinktone-soft)] transition font-medium"
+              className="btn-coquette border-2 border-[var(--primrose)] text-[var(--primrose)] px-6 py-3 rounded-full hover:bg-[var(--pinktone-soft)] transition font-medium"
             >
-              Conocer a la autora
+              Conocer a la autora ♡
             </a>
           </div>
         </div>
@@ -375,14 +417,14 @@ function CarruselImagenes() {
   }, [slides.length]);
 
   return (
-    <section className="bg-[var(--pinktone-soft)] py-14 md:py-16">
+    <section className="bg-[var(--verde-fuerte)] py-14 md:py-16">
       <div className="w-full px-4 md:px-8">
         <div className="max-w-6xl mx-auto mb-8">
-          <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
-            Trayectoria reciente
+          <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
+            <span className="bow-animate">🎀</span> Trayectoria reciente
           </p>
-          <h2 className="text-3xl md:text-4xl font-light text-[var(--texto-principal)]">
-            Momentos que marcan <span className="font-semibold text-[var(--primrose)]">una carrera.</span>
+          <h2 className="font-playfair text-3xl md:text-4xl font-light text-white">
+            Momentos que marcan <span className="font-semibold shimmer-white">una carrera.</span>
           </h2>
         </div>
 
@@ -493,15 +535,15 @@ function FilosofiaYServicios() {
   const [abierto, setAbierto] = useState<number | null>(0);
 
   return (
-    <section id="sobre-mi" className="py-14 md:py-16 bg-[var(--yucca)]">
+    <section id="sobre-mi" className="py-14 md:py-16 bg-[var(--verde-pastel)]">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-12 md:gap-16">
           {/* IZQUIERDA: Filosofía con acordeón alternando colores */}
           <div>
-            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
-              Nuestra propuesta
+            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center gap-2">
+              <span className="bow-animate">🎀</span> Nuestra propuesta
             </p>
-            <h2 className="text-3xl md:text-4xl font-light mb-6 text-[var(--texto-principal)]">
+            <h2 className="font-playfair text-3xl md:text-4xl font-light mb-6 text-[var(--texto-principal)]">
               Filosofía <span className="font-semibold text-[var(--lime)]">profesional.</span>
             </h2>
 
@@ -547,7 +589,7 @@ function FilosofiaYServicios() {
                       }`}
                     >
                       <div className="overflow-hidden">
-                        <p className="text-sm text-[var(--texto-suave)] leading-relaxed">
+                        <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed">
                           {s.contenido}
                         </p>
                       </div>
@@ -581,7 +623,7 @@ function FilosofiaYServicios() {
                     item.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
                   }`}>{item.n}</p>
                   <h3 className="font-semibold mb-1.5 text-[var(--texto-principal)]">{item.titulo}</h3>
-                  <p className="text-xs text-[var(--texto-suave)] leading-relaxed">{item.desc}</p>
+                  <p className="font-nunito text-xs text-[var(--texto-suave)] leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -595,7 +637,7 @@ function FilosofiaYServicios() {
 /* ---------- PRÓXIMO TALLER ---------- */
 function ProximoTaller() {
   return (
-    <section id="taller" className="bg-[var(--lime-soft)] py-14 md:py-16">
+    <section id="taller" className="bg-[var(--verde-fuerte)] py-14 md:py-16">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           {/* Imagen con halo animado */}
@@ -614,39 +656,44 @@ function ProximoTaller() {
           </div>
 
           <div>
-            <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold">
-              Próximo evento
+            <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
+              <span className="bow-animate">🎀</span> Próximo evento
             </p>
-            <h2 className="text-3xl md:text-4xl font-light mb-4 leading-tight text-[var(--texto-principal)]">
+            <h2 className="font-playfair text-3xl md:text-4xl font-light mb-4 leading-tight text-white">
               Taller de<br />
-              <span className="font-semibold text-[var(--lime)]">Comida Dietética.</span>
+              <span className="font-semibold shimmer-white">Comida Dietética.</span>
             </h2>
-            <p className="text-[var(--texto-suave)] leading-relaxed mb-6 text-sm md:text-base">
+            <p className="font-nunito text-white/80 leading-relaxed mb-6 text-sm md:text-base">
               Aprende a cocinar rico y saludable. Un taller práctico donde
               descubrirás cómo preparar comidas fáciles, saludables y saciadoras
               que transformarán tu día a día.
             </p>
 
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-white border-2 border-[var(--primrose)] rounded-2xl p-4 shadow-md shadow-pink-100">
-                <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-1 font-semibold">Presencial</p>
-                <p className="text-2xl font-semibold text-[var(--texto-principal)]">S/ 80</p>
+              <div className="bg-white/20 border-2 border-white/40 rounded-2xl p-4">
+                <p className="text-xs uppercase tracking-widest text-white/80 mb-1 font-semibold">Presencial</p>
+                <p className="text-2xl font-semibold text-white">S/ 80</p>
               </div>
-              <div className="bg-white border-2 border-[var(--lime)] rounded-2xl p-4 shadow-md shadow-green-100">
-                <p className="text-xs uppercase tracking-widest text-[var(--lime)] mb-1 font-semibold">Virtual</p>
-                <p className="text-2xl font-semibold text-[var(--texto-principal)]">S/ 40</p>
+              <div className="bg-white/20 border-2 border-white/40 rounded-2xl p-4">
+                <p className="text-xs uppercase tracking-widest text-white/80 mb-1 font-semibold">Virtual</p>
+                <p className="text-2xl font-semibold text-white">S/ 40</p>
               </div>
             </div>
 
-            <ul className="text-sm text-[var(--texto-principal)] space-y-1.5 mb-6">
-              <li className="flex items-start gap-2"><span className="text-[var(--lime)] font-bold">—</span> Degustación incluida</li>
-              <li className="flex items-start gap-2"><span className="text-[var(--primrose)] font-bold">—</span> Materiales: taper, cubiertos, jabón y toalla</li>
-              <li className="flex items-start gap-2"><span className="text-[var(--lime)] font-bold">—</span> Modalidad presencial y virtual</li>
+            <ul className="text-sm text-white/90 space-y-1.5 mb-6">
+              <li className="flex items-start gap-2"><span className="text-[var(--pinktone)] font-bold">—</span> Degustación incluida</li>
+              <li className="flex items-start gap-2"><span className="text-[var(--pinktone)] font-bold">—</span> Materiales: taper, cubiertos, jabón y toalla</li>
+              <li className="flex items-start gap-2"><span className="text-[var(--pinktone)] font-bold">—</span> Modalidad presencial y virtual</li>
             </ul>
 
             <Link
+<<<<<<< HEAD
               href="/reservar-taller"
               className="inline-block bg-[var(--lime)] text-white px-6 py-3 rounded-full hover:bg-[var(--lime-hover)] transition font-medium shadow-lg shadow-green-200"
+=======
+              href="/login"
+              className="inline-block bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
+>>>>>>> 9f63bf44bd3b9a866f55feb4fb91e8b688505f46
             >
               Reservar cupo
             </Link>
@@ -667,7 +714,7 @@ function Trayectoria() {
   ];
 
   return (
-    <section className="py-14 md:py-16 bg-[var(--yucca-soft)]">
+    <section className="py-14 md:py-16 bg-[var(--verde-pastel)]">
       <div className="max-w-6xl mx-auto px-6">
         <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
           Trayectoria
@@ -785,23 +832,23 @@ function SeccionProductos() {
   ];
 
   return (
-    <section id="tienda" className="py-14 md:py-16 bg-[var(--pinktone-soft)]">
+    <section id="tienda" className="py-14 md:py-16 bg-[var(--verde-fuerte)]">
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-4">
           <div>
-            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
-              Nuestra tienda
+            <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
+              <span className="bow-animate">🎀</span> Nuestra tienda
             </p>
-            <h2 className="text-3xl md:text-4xl font-light text-[var(--texto-principal)]">
-              Productos <span className="font-semibold text-[var(--primrose)]">naturales.</span>
+            <h2 className="font-playfair text-3xl md:text-4xl font-light text-white">
+              Productos <span className="font-semibold shimmer-white">naturales.</span>
             </h2>
-            <p className="text-[var(--texto-suave)] mt-2 text-sm md:text-base max-w-lg">
+            <p className="font-nunito text-white/80 mt-2 text-sm md:text-base max-w-lg">
               Superalimentos, harinas y suplementos cuidadosamente seleccionados.
             </p>
           </div>
           <Link
             href="/productos"
-            className="text-sm border-2 border-[var(--primrose)] text-[var(--primrose)] px-5 py-2.5 rounded-full hover:bg-[var(--primrose)] hover:text-white transition font-medium w-fit"
+            className="text-sm bg-[var(--primrose)] text-white px-5 py-2.5 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium w-fit"
           >
             Ver tienda completa →
           </Link>
@@ -840,7 +887,7 @@ function SeccionProductos() {
 /* ---------- SECCIÓN EMPRESAS ---------- */
 function SeccionEmpresas() {
   return (
-    <section className="py-14 md:py-16 bg-gradient-to-br from-[var(--lime-soft)] via-[var(--yucca)] to-[var(--pinktone-soft)]">
+    <section className="py-14 md:py-16 bg-[var(--verde-pastel)]">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div>
@@ -851,7 +898,7 @@ function SeccionEmpresas() {
               Bienestar nutricional<br />
               <span className="font-semibold text-[var(--lime)]">para tu equipo.</span>
             </h2>
-            <p className="text-[var(--texto-suave)] leading-relaxed mb-6 text-sm md:text-base">
+            <p className="font-nunito text-[var(--texto-suave)] leading-relaxed mb-6 text-sm md:text-base">
               Programa corporativo de evaluación nutricional con la Hoja de Levantamiento
               Nutricional, charlas y planes personalizados para cada colaborador.
               Mejora el rendimiento, reduce el ausentismo y cuida a tu equipo.

@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import { useUser, NIVELES_FIDELIZACION } from "@/lib/use-user";
 
-// === CONFIGURACIÓN ===
 const WHATSAPP_NUMERO = "51941827803";
 const PRECIO_VIRTUAL = 10;
 const PRECIO_FISICO = 20;
@@ -30,220 +29,169 @@ export default function ComprarLibroPage() {
   const [error, setError] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
 
-  // Redirigir a login si no está autenticado (después de que termine de cargar)
   useEffect(() => {
-    if (!loadingUser && !user) {
-      router.push("/login?redirect=/comprar-libro");
-    }
+    if (!loadingUser && !user) router.push("/login?redirect=/comprar-libro");
   }, [loadingUser, user, router]);
 
-  // Auto-llenar nombre y correo cuando el usuario esté disponible
   useEffect(() => {
-    if (user) {
-      setNombre(nombreUsuario);
-      setCorreo(correoUsuario);
-    }
+    if (user) { setNombre(nombreUsuario); setCorreo(correoUsuario); }
   }, [user, nombreUsuario, correoUsuario]);
 
   const precio = formato === "virtual" ? PRECIO_VIRTUAL : PRECIO_FISICO;
 
-  // Mientras carga la info del usuario
   if (loadingUser) {
     return (
-      <main className="min-h-screen bg-neutral-50 flex items-center justify-center">
-        <p className="text-sm text-neutral-500">Cargando...</p>
-      </main>
+      <div className="min-h-screen bg-[#d4edcc] flex items-center justify-center">
+        <p className="font-nunito text-sm text-[#5a7255]">Cargando...</p>
+      </div>
     );
   }
 
-  // Si no hay usuario, no renderizamos nada (el useEffect ya redirige)
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
   function validar() {
     if (!nombre.trim()) return "Por favor ingresa tu nombre completo";
     if (!whatsapp.trim() || whatsapp.length < 9) return "Por favor ingresa un WhatsApp válido";
     if (!correo.trim() || !correo.includes("@")) return "Por favor ingresa un correo válido";
-    if (formato === "fisico") {
-      if (!direccion.trim()) return "Por favor ingresa tu dirección";
-    }
+    if (formato === "fisico" && !direccion.trim()) return "Por favor ingresa tu dirección";
     return null;
   }
 
   async function handleConfirmar() {
     const errorValidacion = validar();
-    if (errorValidacion) {
-      setError(errorValidacion);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
+    if (errorValidacion) { setError(errorValidacion); window.scrollTo({ top: 0, behavior: "smooth" }); return; }
     setError(null);
     setEnviando(true);
 
-    // 1. Guardar la compra en Supabase
     const { error: errorDb } = await supabase.from("compras").insert({
       user_id: user!.id,
       producto: "Libro Nutrición del Bebé",
-      formato,
-      precio,
-      nombre,
-      whatsapp,
-      correo,
+      formato, precio, nombre, whatsapp, correo,
       direccion: formato === "fisico" ? direccion : null,
       referencia: formato === "fisico" ? referencia : null,
       metodo_pago: metodoPago,
       estado: "pendiente",
     });
 
-    if (errorDb) {
-      setError("Hubo un error al guardar tu pedido. Intenta de nuevo.");
-      setEnviando(false);
-      console.error(errorDb);
-      return;
-    }
+    if (errorDb) { setError("Hubo un error al guardar tu pedido. Intenta de nuevo."); setEnviando(false); return; }
 
-    // 2. Calcular el nuevo nivel tras esta compra
     const nuevoTotal = numCompras + 1;
     let nuevoNivel = NIVELES_FIDELIZACION[0];
-    for (const n of NIVELES_FIDELIZACION) {
-      if (nuevoTotal >= n.comprasMinimas) nuevoNivel = n;
-    }
+    for (const n of NIVELES_FIDELIZACION) { if (nuevoTotal >= n.comprasMinimas) nuevoNivel = n; }
 
-    // 3. Construir mensaje de WhatsApp
-    const metodoTexto = {
-      yape: "Yape",
-      plin: "Plin",
-      transferencia: "Transferencia bancaria",
-      efectivo: "Efectivo contra entrega",
-    }[metodoPago];
-
+    const metodoTexto = { yape: "Yape", plin: "Plin", transferencia: "Transferencia bancaria", efectivo: "Efectivo contra entrega" }[metodoPago];
     const formatoTexto = formato === "virtual" ? "Libro Digital (PDF)" : "Libro Físico";
 
-    let mensaje = `📚 *NUEVO PEDIDO — Libro Nutrición del Bebé*\n\n`;
-    mensaje += `*— Cliente —*\n`;
-    mensaje += `Nombre: ${nombre}\n`;
-    mensaje += `WhatsApp: ${whatsapp}\n`;
-    mensaje += `Correo: ${correo}\n`;
-    mensaje += `${nuevoNivel.emoji} Nivel: ${nuevoNivel.nombre} (${nuevoTotal} compra${nuevoTotal !== 1 ? "s" : ""})\n\n`;
-    mensaje += `*— Producto —*\n`;
-    mensaje += `Formato: ${formatoTexto}\n`;
-    mensaje += `Precio: S/ ${precio}\n\n`;
+    let mensaje = `NUEVO PEDIDO — Libro Nutrición del Bebé\n\n`;
+    mensaje += `— Cliente —\nNombre: ${nombre}\nWhatsApp: ${whatsapp}\nCorreo: ${correo}\nNivel: ${nuevoNivel.nombre} (${nuevoTotal} compra${nuevoTotal !== 1 ? "s" : ""})\n\n`;
+    mensaje += `— Producto —\nFormato: ${formatoTexto}\nPrecio: S/ ${precio}\n\n`;
+    if (formato === "fisico") { mensaje += `— Envío —\nDirección: ${direccion}\n`; if (referencia) mensaje += `Referencia: ${referencia}\n`; mensaje += `\n`; }
+    mensaje += `— Pago —\nMétodo: ${metodoTexto}\n\nPor favor confírmame los datos para coordinar el pago. ¡Gracias!`;
 
-    if (formato === "fisico") {
-      mensaje += `*— Envío (San Juan de Miraflores) —*\n`;
-      mensaje += `Dirección: ${direccion}\n`;
-      if (referencia) mensaje += `Referencia: ${referencia}\n`;
-      mensaje += `\n`;
-    }
-
-    mensaje += `*— Pago —*\n`;
-    mensaje += `Método: ${metodoTexto}\n\n`;
-    mensaje += `Por favor confírmame los datos para coordinar el pago. ¡Gracias!`;
-
-    const url = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensaje)}`;
-window.open(url, "_blank");
-
-// Redirigir al perfil con flag de "nuevo pedido"
-router.push("/perfil?tab=compras&nuevo=1");
+    window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensaje)}`, "_blank");
+    router.push("/perfil?tab=compras&nuevo=1");
   }
 
   return (
-    <main className="min-h-screen bg-neutral-50">
-      {/* Header simple */}
-      <header className="bg-white border-b border-neutral-200">
+    <div className="min-h-screen bg-[#d4edcc]">
+
+      {/* Header */}
+      <header className="bg-[#edf7e8] border-b border-[#C5DFC5]">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-sm text-neutral-500 hover:text-neutral-900 transition">
+          <Link href="/" className="font-nunito text-sm text-[#5a7255] hover:text-[#31543d] transition flex items-center gap-1">
             ← Volver al inicio
           </Link>
-          <p className="text-sm font-semibold">María Luisa Nutricionista</p>
+          <p className="font-playfair font-semibold text-[#31543d]">María Luisa Nutricionista</p>
         </div>
       </header>
 
       <div className="max-w-5xl mx-auto px-6 py-12">
         <div className="grid lg:grid-cols-[1fr_380px] gap-10">
-          {/* Columna izquierda: Formulario */}
+
+          {/* ---- COLUMNA IZQUIERDA: FORMULARIO ---- */}
           <div>
-            <p className="text-sm uppercase tracking-widest text-neutral-500 mb-2">
+            <p className="font-nunito text-xs uppercase tracking-widest text-[#6daa6d] mb-2 font-semibold">
               Finalizar compra
             </p>
-            <h1 className="text-3xl md:text-4xl font-light mb-2">
-              Completa tu <span className="font-semibold">pedido.</span>
+            <h1 className="font-playfair text-3xl md:text-4xl font-light text-[#31543d] mb-2">
+              Completa tu <span className="font-semibold shimmer-rose">pedido.</span>
             </h1>
-            <p className="text-neutral-600 mb-10 text-sm">
+            <p className="font-nunito text-[#5a7255] mb-10 text-sm">
               Llena este formulario y María Luisa coordinará contigo por WhatsApp.
             </p>
 
             {error && (
-              <div className="mb-6 text-sm text-red-700 bg-red-50 border border-red-200 px-4 py-3 rounded-lg">
+              <div className="mb-6 font-nunito text-sm text-red-700 bg-red-50 border border-red-200 px-4 py-3 rounded-xl">
                 {error}
               </div>
             )}
 
             {/* PASO 1: Formato */}
             <section className="mb-10">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="w-7 h-7 rounded-full bg-neutral-900 text-white text-xs flex items-center justify-center font-semibold">1</span>
-                <h2 className="text-lg font-semibold">Elige el formato</h2>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="w-7 h-7 rounded-full bg-[#6daa6d] text-white text-xs flex items-center justify-center font-semibold">1</span>
+                <h2 className="font-playfair text-lg font-semibold text-[#31543d]">Elige el formato</h2>
               </div>
 
               <div className="grid sm:grid-cols-2 gap-3">
+                {/* Libro Digital */}
                 <button
                   type="button"
                   onClick={() => setFormato("virtual")}
-                  className={`text-left p-5 rounded-2xl border-2 transition ${
-                    formato === "virtual"
-                      ? "border-neutral-900 bg-white"
-                      : "border-neutral-200 bg-white hover:border-neutral-400"
+                  className={`text-left p-5 rounded-2xl border-2 transition bg-white ${
+                    formato === "virtual" ? "border-[#6daa6d] shadow-md shadow-green-100" : "border-[#C5DFC5] hover:border-[#6daa6d]"
                   }`}
                 >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="text-2xl">📱</div>
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                      formato === "virtual" ? "border-neutral-900" : "border-neutral-300"
-                    }`}>
-                      {formato === "virtual" && <div className="w-2.5 h-2.5 bg-neutral-900 rounded-full" />}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${formato === "virtual" ? "bg-[#d4edcc]" : "bg-[#f0f8ec]"}`}>
+                      <svg className="w-5 h-5 text-[#6daa6d]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <rect x="5" y="2" width="14" height="20" rx="2"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/><line x1="9" y1="15" x2="13" y2="15"/>
+                      </svg>
+                    </div>
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${formato === "virtual" ? "border-[#6daa6d]" : "border-[#C5DFC5]"}`}>
+                      {formato === "virtual" && <div className="w-2.5 h-2.5 bg-[#6daa6d] rounded-full" />}
                     </div>
                   </div>
-                  <h3 className="font-semibold mb-1">Libro Digital</h3>
-                  <p className="text-xs text-neutral-500 mb-3">PDF · Lo recibes por correo</p>
-                  <p className="text-2xl font-semibold">S/ {PRECIO_VIRTUAL}</p>
+                  <h3 className="font-playfair font-semibold text-[#31543d] mb-1">Libro Digital</h3>
+                  <p className="font-nunito text-xs text-[#5a7255] mb-3">PDF · Lo recibes por correo</p>
+                  <p className="font-playfair text-2xl font-semibold text-[#31543d]">S/ {PRECIO_VIRTUAL}</p>
                 </button>
 
+                {/* Libro Físico */}
                 <button
                   type="button"
                   onClick={() => setFormato("fisico")}
-                  className={`text-left p-5 rounded-2xl border-2 transition ${
-                    formato === "fisico"
-                      ? "border-neutral-900 bg-white"
-                      : "border-neutral-200 bg-white hover:border-neutral-400"
+                  className={`text-left p-5 rounded-2xl border-2 transition bg-white ${
+                    formato === "fisico" ? "border-[#6daa6d] shadow-md shadow-green-100" : "border-[#C5DFC5] hover:border-[#6daa6d]"
                   }`}
                 >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="text-2xl">📚</div>
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                      formato === "fisico" ? "border-neutral-900" : "border-neutral-300"
-                    }`}>
-                      {formato === "fisico" && <div className="w-2.5 h-2.5 bg-neutral-900 rounded-full" />}
+                  <div className="flex items-start justify-between mb-3">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${formato === "fisico" ? "bg-[#d4edcc]" : "bg-[#f0f8ec]"}`}>
+                      <svg className="w-5 h-5 text-[#6daa6d]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                      </svg>
+                    </div>
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${formato === "fisico" ? "border-[#6daa6d]" : "border-[#C5DFC5]"}`}>
+                      {formato === "fisico" && <div className="w-2.5 h-2.5 bg-[#6daa6d] rounded-full" />}
                     </div>
                   </div>
-                  <h3 className="font-semibold mb-1">Libro Físico</h3>
-                  <p className="text-xs text-neutral-500 mb-3">Delivery gratis en San Juan</p>
-                  <p className="text-2xl font-semibold">S/ {PRECIO_FISICO}</p>
+                  <h3 className="font-playfair font-semibold text-[#31543d] mb-1">Libro Físico</h3>
+                  <p className="font-nunito text-xs text-[#C4607A] font-medium mb-3">Delivery gratis en San Juan</p>
+                  <p className="font-playfair text-2xl font-semibold text-[#31543d]">S/ {PRECIO_FISICO}</p>
                 </button>
               </div>
             </section>
 
             {/* PASO 2: Datos */}
             <section className="mb-10">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="w-7 h-7 rounded-full bg-neutral-900 text-white text-xs flex items-center justify-center font-semibold">2</span>
-                <h2 className="text-lg font-semibold">Tus datos</h2>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="w-7 h-7 rounded-full bg-[#6daa6d] text-white text-xs flex items-center justify-center font-semibold">2</span>
+                <h2 className="font-playfair text-lg font-semibold text-[#31543d]">Tus datos</h2>
               </div>
 
-              <div className="space-y-4 bg-white p-6 rounded-2xl border border-neutral-200">
+              <div className="space-y-4 bg-white p-6 rounded-2xl border border-[#C5DFC5]">
                 <div>
-                  <label className="text-xs uppercase tracking-widest text-neutral-500 mb-2 block">
+                  <label className="font-nunito text-xs uppercase tracking-widest text-[#5a7255] mb-2 block font-semibold">
                     Nombre completo *
                   </label>
                   <input
@@ -251,13 +199,13 @@ router.push("/perfil?tab=compras&nuevo=1");
                     value={nombre}
                     onChange={(e) => setNombre(e.target.value)}
                     placeholder="María García López"
-                    className="w-full border border-neutral-300 px-4 py-3 rounded-lg focus:outline-none focus:border-neutral-900 transition"
+                    className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] px-4 py-3 rounded-xl text-[#31543d] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition"
                   />
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs uppercase tracking-widest text-neutral-500 mb-2 block">
+                    <label className="font-nunito text-xs uppercase tracking-widest text-[#5a7255] mb-2 block font-semibold">
                       WhatsApp *
                     </label>
                     <input
@@ -265,12 +213,11 @@ router.push("/perfil?tab=compras&nuevo=1");
                       value={whatsapp}
                       onChange={(e) => setWhatsapp(e.target.value)}
                       placeholder="999 888 777"
-                      className="w-full border border-neutral-300 px-4 py-3 rounded-lg focus:outline-none focus:border-neutral-900 transition"
+                      className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] px-4 py-3 rounded-xl text-[#31543d] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition"
                     />
                   </div>
-
                   <div>
-                    <label className="text-xs uppercase tracking-widest text-neutral-500 mb-2 block">
+                    <label className="font-nunito text-xs uppercase tracking-widest text-[#5a7255] mb-2 block font-semibold">
                       Correo electrónico *
                     </label>
                     <input
@@ -278,40 +225,36 @@ router.push("/perfil?tab=compras&nuevo=1");
                       value={correo}
                       onChange={(e) => setCorreo(e.target.value)}
                       placeholder="tu@correo.com"
-                      className="w-full border border-neutral-300 px-4 py-3 rounded-lg focus:outline-none focus:border-neutral-900 transition"
+                      className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] px-4 py-3 rounded-xl text-[#31543d] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition"
                     />
                   </div>
                 </div>
 
                 {formato === "fisico" && (
                   <>
-                    <div className="pt-2 border-t border-neutral-200">
-                      <p className="text-xs uppercase tracking-widest text-neutral-500 mb-3 mt-3">
+                    <div className="pt-2 border-t border-[#C5DFC5]">
+                      <p className="font-nunito text-xs uppercase tracking-widest text-[#6daa6d] mb-3 mt-3 font-semibold">
                         Dirección de envío (San Juan de Miraflores)
                       </p>
                     </div>
                     <div>
-                      <label className="text-xs uppercase tracking-widest text-neutral-500 mb-2 block">
-                        Dirección *
-                      </label>
+                      <label className="font-nunito text-xs uppercase tracking-widest text-[#5a7255] mb-2 block font-semibold">Dirección *</label>
                       <input
                         type="text"
                         value={direccion}
                         onChange={(e) => setDireccion(e.target.value)}
                         placeholder="Av. Las Flores 123"
-                        className="w-full border border-neutral-300 px-4 py-3 rounded-lg focus:outline-none focus:border-neutral-900 transition"
+                        className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] px-4 py-3 rounded-xl text-[#31543d] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition"
                       />
                     </div>
                     <div>
-                      <label className="text-xs uppercase tracking-widest text-neutral-500 mb-2 block">
-                        Referencia (opcional)
-                      </label>
+                      <label className="font-nunito text-xs uppercase tracking-widest text-[#5a7255] mb-2 block font-semibold">Referencia (opcional)</label>
                       <input
                         type="text"
                         value={referencia}
                         onChange={(e) => setReferencia(e.target.value)}
                         placeholder="Frente al parque, casa color blanco"
-                        className="w-full border border-neutral-300 px-4 py-3 rounded-lg focus:outline-none focus:border-neutral-900 transition"
+                        className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] px-4 py-3 rounded-xl text-[#31543d] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition"
                       />
                     </div>
                   </>
@@ -321,9 +264,9 @@ router.push("/perfil?tab=compras&nuevo=1");
 
             {/* PASO 3: Método de pago */}
             <section className="mb-10">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="w-7 h-7 rounded-full bg-neutral-900 text-white text-xs flex items-center justify-center font-semibold">3</span>
-                <h2 className="text-lg font-semibold">Método de pago</h2>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="w-7 h-7 rounded-full bg-[#6daa6d] text-white text-xs flex items-center justify-center font-semibold">3</span>
+                <h2 className="font-playfair text-lg font-semibold text-[#31543d]">Método de pago</h2>
               </div>
 
               <div className="space-y-2">
@@ -335,7 +278,7 @@ router.push("/perfil?tab=compras&nuevo=1");
                 )}
               </div>
 
-              <p className="text-xs text-neutral-500 mt-4">
+              <p className="font-nunito text-xs text-[#5a7255] mt-4 leading-relaxed">
                 María Luisa te enviará por WhatsApp los datos para realizar el pago una vez confirmes el pedido.
               </p>
             </section>
@@ -345,119 +288,106 @@ router.push("/perfil?tab=compras&nuevo=1");
             </div>
           </div>
 
-          {/* Columna derecha: Resumen sticky */}
+          {/* ---- COLUMNA DERECHA: RESUMEN ---- */}
           <aside className="lg:sticky lg:top-6 lg:self-start space-y-4">
-            {/* Card de fidelización */}
-            <div className="bg-gradient-to-br from-neutral-900 to-neutral-700 text-white rounded-2xl p-6">
-              <p className="text-xs uppercase tracking-widest text-neutral-400 mb-3">
+
+            {/* Fidelización */}
+            <div className="bg-gradient-to-br from-[#31543d] to-[#4a7a58] text-white rounded-2xl p-6">
+              <p className="font-nunito text-xs uppercase tracking-widest text-white/60 mb-3 font-semibold">
                 Programa de Fidelización
               </p>
               <div className="flex items-center gap-3 mb-3">
-                <span className="text-3xl">{nivel.emoji}</span>
+                <span className="text-2xl">{nivel.emoji}</span>
                 <div>
-                  <p className="font-semibold">{nivel.nombre}</p>
-                  <p className="text-xs text-neutral-300">{numCompras} compra{numCompras !== 1 ? "s" : ""} realizadas</p>
+                  <p className="font-playfair font-semibold">{nivel.nombre}</p>
+                  <p className="font-nunito text-xs text-white/70">{numCompras} compra{numCompras !== 1 ? "s" : ""} realizadas</p>
                 </div>
               </div>
               {proximoNivel ? (
-                <div className="border-t border-neutral-700 pt-3 text-xs text-neutral-300 leading-relaxed">
-                  <p className="text-neutral-400 mb-1">Próximo nivel: {proximoNivel.emoji} {proximoNivel.nombre}</p>
+                <div className="border-t border-white/20 pt-3 text-xs text-white/70 leading-relaxed font-nunito">
+                  <p className="text-white/50 mb-1">Próximo nivel: {proximoNivel.emoji} {proximoNivel.nombre}</p>
                   <p>Te faltan <span className="text-white font-semibold">{proximoNivel.comprasFaltantes}</span> compra{proximoNivel.comprasFaltantes !== 1 ? "s" : ""} para desbloquearlo</p>
-                  <p className="text-neutral-400 italic mt-1">{proximoNivel.beneficio}</p>
+                  <p className="text-white/50 italic mt-1">{proximoNivel.beneficio}</p>
                 </div>
               ) : (
-                <div className="border-t border-neutral-700 pt-3 text-xs text-neutral-300">
-                  <p>🎉 ¡Felicidades! Ya alcanzaste el nivel máximo.</p>
+                <div className="border-t border-white/20 pt-3 text-xs text-white/70 font-nunito">
+                  <p>¡Felicidades! Ya alcanzaste el nivel máximo.</p>
                 </div>
               )}
             </div>
 
-            {/* Card de pedido */}
-            <div className="bg-white rounded-2xl border border-neutral-200 p-6">
-              <h3 className="font-semibold mb-4">Resumen del pedido</h3>
+            {/* Resumen del pedido */}
+            <div className="bg-white rounded-2xl border border-[#C5DFC5] p-6">
+              <h3 className="font-playfair font-semibold text-[#31543d] mb-4">Resumen del pedido</h3>
 
-              <div className="flex gap-4 pb-4 border-b border-neutral-200">
-                <div className="relative w-16 h-20 bg-neutral-100 rounded-md overflow-hidden flex-shrink-0">
-                  <Image
-                    src="/images/libro-portada.jpg"
-                    alt="Libro"
-                    fill
-                    className="object-cover"
-                  />
+              <div className="flex gap-4 pb-4 border-b border-[#C5DFC5]">
+                <div className="relative w-16 h-20 bg-[#f0f8ec] rounded-xl overflow-hidden flex-shrink-0">
+                  <Image src="/images/libro-portada.jpg" alt="Libro" fill className="object-cover" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm">Nutrición del Bebé</p>
-                  <p className="text-xs text-neutral-500 mt-1">
+                  <p className="font-playfair font-semibold text-sm text-[#31543d]">Nutrición del Bebé</p>
+                  <p className="font-nunito text-xs text-[#5a7255] mt-1">
                     {formato === "virtual" ? "Libro Digital (PDF)" : "Libro Físico"}
                   </p>
-                  <p className="text-sm font-semibold mt-2">S/ {precio}</p>
+                  <p className="font-playfair text-sm font-semibold mt-2 text-[#31543d]">S/ {precio}</p>
                 </div>
               </div>
 
-              <div className="py-4 space-y-2 text-sm">
-                <div className="flex justify-between text-neutral-600">
+              <div className="py-4 space-y-2 text-sm font-nunito">
+                <div className="flex justify-between text-[#5a7255]">
                   <span>Subtotal</span>
                   <span>S/ {precio}</span>
                 </div>
-                <div className="flex justify-between text-neutral-600">
+                <div className="flex justify-between text-[#5a7255]">
                   <span>Envío</span>
-                  <span className="text-green-700 font-medium">
+                  <span className="text-[#6daa6d] font-semibold">
                     {formato === "fisico" ? "Gratis" : "—"}
                   </span>
                 </div>
               </div>
 
-              <div className="flex justify-between pt-4 border-t border-neutral-200 mb-6">
-                <span className="font-semibold">Total</span>
-                <span className="text-2xl font-semibold">S/ {precio}</span>
+              <div className="flex justify-between pt-4 border-t border-[#C5DFC5] mb-6">
+                <span className="font-playfair font-semibold text-[#31543d]">Total</span>
+                <span className="font-playfair text-2xl font-semibold text-[#31543d]">S/ {precio}</span>
               </div>
 
               <div className="hidden lg:block">
                 <BotonConfirmar onClick={handleConfirmar} precio={precio} enviando={enviando} />
               </div>
 
-              <p className="text-xs text-neutral-500 text-center mt-4 leading-relaxed">
+              <p className="font-nunito text-xs text-[#5a7255] text-center mt-4 leading-relaxed">
                 Al confirmar, se abrirá WhatsApp con tu pedido pre-llenado para que María Luisa coordine el pago.
               </p>
             </div>
           </aside>
+
         </div>
       </div>
-    </main>
+    </div>
   );
 }
 
 /* ---------- COMPONENTES AUXILIARES ---------- */
 
-function OpcionPago({
-  seleccionado,
-  onClick,
-  titulo,
-  descripcion,
-}: {
-  seleccionado: boolean;
-  onClick: () => void;
-  titulo: string;
-  descripcion: string;
+function OpcionPago({ seleccionado, onClick, titulo, descripcion }: {
+  seleccionado: boolean; onClick: () => void; titulo: string; descripcion: string;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`w-full text-left p-4 rounded-xl border-2 transition flex items-center gap-4 ${
-        seleccionado
-          ? "border-neutral-900 bg-white"
-          : "border-neutral-200 bg-white hover:border-neutral-400"
+      className={`w-full text-left p-4 rounded-xl border-2 transition flex items-center gap-4 bg-white ${
+        seleccionado ? "border-[#6daa6d] shadow-sm shadow-green-100" : "border-[#C5DFC5] hover:border-[#6daa6d]"
       }`}
     >
       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-        seleccionado ? "border-neutral-900" : "border-neutral-300"
+        seleccionado ? "border-[#6daa6d]" : "border-[#C5DFC5]"
       }`}>
-        {seleccionado && <div className="w-2.5 h-2.5 bg-neutral-900 rounded-full" />}
+        {seleccionado && <div className="w-2.5 h-2.5 bg-[#6daa6d] rounded-full" />}
       </div>
       <div className="flex-1">
-        <p className="font-semibold text-sm">{titulo}</p>
-        <p className="text-xs text-neutral-500">{descripcion}</p>
+        <p className="font-playfair font-semibold text-sm text-[#31543d]">{titulo}</p>
+        <p className="font-nunito text-xs text-[#5a7255]">{descripcion}</p>
       </div>
     </button>
   );
@@ -468,9 +398,9 @@ function BotonConfirmar({ onClick, precio, enviando }: { onClick: () => void; pr
     <button
       onClick={onClick}
       disabled={enviando}
-      className="w-full bg-[#25D366] hover:bg-[#1FAA52] disabled:opacity-50 text-white px-6 py-4 rounded-full transition font-semibold shadow-lg shadow-green-200 flex items-center justify-center gap-3"
+      className="btn-coquette w-full bg-[#25D366] hover:bg-[#1FAA52] disabled:opacity-50 text-white px-6 py-4 rounded-full transition font-semibold shadow-lg shadow-green-200 flex items-center justify-center gap-3 font-nunito"
     >
-      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+      <svg className="w-5 h-5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
       </svg>
       {enviando ? "Procesando..." : `Confirmar pedido · S/ ${precio}`}

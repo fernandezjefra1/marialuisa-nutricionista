@@ -12,6 +12,7 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -19,12 +20,7 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       setError("Correo o contraseña incorrectos");
       setLoading(false);
@@ -36,14 +32,10 @@ export default function LoginPage() {
 
   async function handleGoogleLogin() {
     setLoading(true);
-
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
-
     if (error) {
       setError(error.message);
       setLoading(false);
@@ -51,155 +43,218 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#edf5ea] flex items-center justify-center p-6">
+    <div className="min-h-screen bg-[#d4edcc] flex flex-col items-center justify-center p-4">
 
-      <div className="w-full max-w-7xl bg-white rounded-[45px] shadow-2xl overflow-hidden grid md:grid-cols-2">
+      {/* Brillitos decorativos */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+        {[
+          { char: "✦", top: "8%",  left: "2%",  size: "16px", delay: "0s",   dur: "3.5s" },
+          { char: "♡", top: "20%", left: "95%", size: "14px", delay: "0.8s", dur: "4.5s" },
+          { char: "✿", top: "70%", left: "1%",  size: "18px", delay: "1.5s", dur: "5s"   },
+          { char: "✦", top: "85%", left: "94%", size: "12px", delay: "0.3s", dur: "4s"   },
+          { char: "♡", top: "50%", left: "97%", size: "10px", delay: "2s",   dur: "3.8s" },
+        ].map((s, i) => (
+          <span
+            key={i}
+            className="absolute text-[#C4607A] sparkle-item"
+            style={{
+              top: s.top, left: s.left, fontSize: s.size,
+              ["--dur" as string]: s.dur, ["--delay" as string]: s.delay,
+            }}
+          >
+            {s.char}
+          </span>
+        ))}
+      </div>
 
-        {/* PANEL IZQUIERDO */}
-        <div className="relative bg-[#f4f8f1] flex flex-col items-center justify-start px-0 pt-0 pb-12 overflow-hidden">
+      {/* Card */}
+      <div className="w-full max-w-5xl bg-white rounded-[40px] shadow-2xl shadow-green-200 overflow-hidden grid md:grid-cols-[1fr_1.1fr]">
 
-          {/* FORMAS DECORATIVAS */}
-          <div className="absolute bottom-[-120px] left-[-80px] w-[300px] h-[300px] bg-[#dcebd8] rounded-full opacity-70"></div>
+        {/* ---- PANEL IZQUIERDO: FORMULARIO ---- */}
+        <div className="px-10 py-12 flex flex-col justify-between bg-white">
 
-          <div className="absolute bottom-[-140px] right-[-100px] w-[320px] h-[320px] bg-[#f3dce3] rounded-full opacity-60"></div>
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-2 mb-6">
+            <span className="text-2xl bow-animate">🌿</span>
+            <div>
+              <p className="font-playfair font-bold text-[#31543d] text-lg leading-tight">María Luisa</p>
+              <p className="text-[10px] uppercase tracking-widest text-[#5a7255]">Nutricionista</p>
+            </div>
+          </Link>
 
-          <div className="absolute top-[-90px] right-[-70px] w-[220px] h-[220px] bg-[#e6f0e2] rounded-full opacity-70"></div>
-
-
-          {/* IMAGEN */}
-          <div className="relative z-10 w-full flex justify-center pt-0">
-
-            <Image
-              src="/images/login-doctora.jpeg"
-              alt="Nutricionista"
-              width={820}
-              height={620}
-              className="object-contain"
-            />
-
+          {/* Heading */}
+          <div className="mb-7">
+            <h1 className="text-4xl font-bold text-[#31543d] leading-tight">
+              ¡Bienvenida{" "}
+              <span className="font-playfair italic text-[#C4607A]">de nuevo!</span>{" "}
+              <span className="text-[#C4607A]">♡</span>
+            </h1>
+            <p className="font-nunito mt-3 text-[#5a7255] leading-relaxed text-sm">
+              Inicia sesión para reservar tu cita<br />
+              y continuar tu camino hacia tu bienestar.
+            </p>
           </div>
 
-
-          {/* TEXTOS */}
-          <div className="relative z-10 px-8">
-
-            <h2 className="mt-2 text-5xl font-serif text-[#31543d] text-center leading-tight">
-              Bienestar natural
-            </h2>
-
-            <p className="mt-3 text-xl italic text-[#d79aa3] text-center">
-              vida en equilibrio ♡
-            </p>
-
-            <p className="mt-6 text-base text-[#55735f] text-center leading-7 max-w-md mx-auto">
-              Tu salud comienza con pequeños cambios
-            </p>
-
-          </div>
-
-        </div>
-
-
-        {/* PANEL LOGIN */}
-        <div className="px-10 py-14 md:px-16 flex flex-col justify-center bg-white">
-
-          <h1 className="text-6xl font-serif text-[#31543d] leading-tight">
-            ¡Bienvenida!
-          </h1>
-
-          <p className="mt-3 text-[#5d7766] text-lg">
-            Inicia sesión para continuar
-          </p>
-
-
-          {/* GOOGLE */}
+          {/* Google */}
           <button
             onClick={handleGoogleLogin}
             disabled={loading}
-            className="w-full mt-10 border border-[#d8b1d7] bg-[#efd8ef] hover:bg-[#e8c8e5] py-4 rounded-2xl text-[#31543d] font-medium transition duration-300"
+            className="btn-coquette w-full flex items-center justify-center gap-3 border border-gray-200 bg-white hover:bg-gray-50 py-3.5 rounded-2xl text-gray-700 font-medium transition duration-300 shadow-sm mb-5"
           >
+            <svg width="20" height="20" viewBox="0 0 48 48">
+              <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.5 33.4 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.7-.1-4z"/>
+              <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.1 18.9 12 24 12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
+              <path fill="#4CAF50" d="M24 44c5.2 0 10-1.8 13.7-4.8l-6.3-5.2C29.5 35.6 26.9 36 24 36c-5.2 0-9.5-2.6-11.3-6.3l-6.6 5.1C9.8 39.8 16.4 44 24 44z"/>
+              <path fill="#1976D2" d="M43.6 20H24v8h11.3c-.9 2.4-2.5 4.4-4.6 5.8l6.3 5.2C40.7 35.6 44 30.2 44 24c0-1.3-.1-2.7-.4-4z"/>
+            </svg>
             Continuar con Google
           </button>
 
-
-          <div className="text-center text-[#75a380] text-sm my-6">
-            o continúa con tu correo
+          {/* Divider */}
+          <div className="relative flex items-center mb-5">
+            <div className="flex-1 h-px bg-gray-200" />
+            <span className="mx-3 text-xs text-[#8aa487] bg-white px-2 font-nunito">o con correo</span>
+            <div className="flex-1 h-px bg-gray-200" />
           </div>
 
+          {/* Formulario */}
+          <form onSubmit={handleEmailLogin} className="space-y-4">
 
-          {/* FORMULARIO */}
-          <form
-            onSubmit={handleEmailLogin}
-            className="space-y-5"
-          >
+            {/* Email */}
+            <div className="relative">
+              <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8aa487]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+              </svg>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Correo electrónico"
+                className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] pl-11 pr-4 py-3.5 rounded-2xl text-[#31543d] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition"
+              />
+            </div>
 
-            <input
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Correo electrónico"
-              className="w-full bg-[#f8fcf6] border border-[#dbe8d7] px-5 py-4 rounded-2xl text-[#31543d] outline-none focus:border-[#8caf94] focus:ring-2 focus:ring-[#dcebd8] transition"
-            />
+            {/* Contraseña */}
+            <div className="relative">
+              <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8aa487]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input
+                type={showPassword ? "text" : "password"}
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Contraseña"
+                className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] pl-11 pr-12 py-3.5 rounded-2xl text-[#31543d] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8aa487] hover:text-[#31543d] transition"
+              >
+                {showPassword ? (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                ) : (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                )}
+              </button>
+            </div>
 
+            {error && <p className="text-red-500 text-sm font-nunito">{error}</p>}
 
-            <input
-              type="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Contraseña"
-              className="w-full bg-[#f8fcf6] border border-[#dbe8d7] px-5 py-4 rounded-2xl text-[#31543d] outline-none focus:border-[#8caf94] focus:ring-2 focus:ring-[#dcebd8] transition"
-            />
-
-
-            {error && (
-              <p className="text-red-500 text-sm">
-                {error}
-              </p>
-            )}
-
-
-            {/* BOTÓN LOGIN */}
+            {/* Submit */}
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#b07cab] hover:bg-[#9c6997] text-white py-4 rounded-2xl font-semibold transition duration-300 shadow-md"
+              className="btn-coquette w-full bg-[#6daa6d] hover:bg-[#5a9a5a] text-white py-4 rounded-2xl font-semibold transition duration-300 shadow-md shadow-green-200 flex items-center justify-center gap-2"
             >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               {loading ? "Ingresando..." : "Iniciar sesión"}
             </button>
 
           </form>
 
-
-          {/* LINK REGISTRO */}
-          <p className="text-center mt-8 text-[#6d826f]">
-            ¿No tienes cuenta?{" "}
-
-            <Link
-              href="/registro"
-              className="text-[#d79aa3] font-semibold hover:underline"
-            >
-              Crear cuenta
-            </Link>
-
-          </p>
-
-
-          {/* VOLVER */}
-          <div className="mt-8">
-            <Link
-              href="/"
-              className="text-sm text-[#5d7766] hover:text-[#31543d] transition"
-            >
+          {/* Volver al inicio */}
+          <div className="mt-6">
+            <Link href="/" className="text-sm text-[#5a7255] hover:text-[#31543d] transition font-nunito">
               ← Volver al inicio
             </Link>
+          </div>
+
+          {/* Registro */}
+          <div className="mt-4 bg-[#f0f8ec] rounded-2xl p-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-lg">🌿</span>
+              <div>
+                <p className="text-xs text-[#5a7255] font-nunito">¿No tienes cuenta?</p>
+                <Link href="/registro" className="text-sm font-semibold text-[#C4607A] hover:underline font-nunito">
+                  Crea tu cuenta y comienza hoy
+                </Link>
+              </div>
+            </div>
+            <Link
+              href="/registro"
+              className="w-9 h-9 rounded-full bg-[#C4607A] text-white flex items-center justify-center hover:bg-[#A84D65] transition text-sm font-bold"
+            >
+              →
+            </Link>
+          </div>
+
+        </div>
+
+        {/* ---- PANEL DERECHO: IMAGEN ---- */}
+        <div className="hidden md:flex flex-col relative bg-[#edf7e8] overflow-hidden">
+
+          {/* Círculos decorativos */}
+          <div className="absolute top-[-50px] right-[-50px] w-40 h-40 bg-[#C4607A]/10 rounded-full" />
+          <div className="absolute top-[30%] left-[-30px] w-24 h-24 bg-[#d4edcc] rounded-full" />
+
+          {/* Imagen — sin padding para que llegue a las esquinas */}
+          <div className="flex-1 relative overflow-hidden">
+            <Image
+              src="/images/login-doctora.jpeg"
+              alt="Nutricionista"
+              fill
+              className="object-cover object-center"
+            />
+          </div>
+
+          {/* Texto inferior — mismo tono del panel pero un poco más oscuro */}
+          <div className="bg-[#f4f8f4] px-8 py-5">
+            <h2 className="font-playfair italic text-2xl text-[#31543d] leading-snug">
+              Pequeños cambios,
+              <span className="font-semibold text-[#6daa6d] not-italic"> + grandes resultados </span>
+              <span className="text-[#C4607A]">🌿 ♡</span>
+            </h2>
+            <div className="flex gap-5 mt-3">
+              {[
+                { icon: "🥗", label: "Alimentación", sub: "personalizada" },
+                { icon: "♡",  label: "Bienestar",    sub: "integral" },
+                { icon: "📅", label: "Citas",         sub: "fáciles y rápidas" },
+              ].map((item) => (
+                <div key={item.label} className="flex items-center gap-2">
+                  <span className="w-8 h-8 rounded-full bg-[#edf7e8] flex items-center justify-center text-sm shrink-0">
+                    {item.icon}
+                  </span>
+                  <div>
+                    <p className="text-xs font-semibold text-[#31543d] font-nunito">{item.label}</p>
+                    <p className="text-[10px] text-[#5a7255] font-nunito">{item.sub}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
 
         </div>
 
       </div>
 
-    </main>
+      {/* Footer */}
+      <p className="mt-5 text-sm text-[#5a7255] font-nunito flex items-center gap-2">
+        🌿 Tu salud es tu mejor inversión 🍓
+      </p>
+
+    </div>
   );
 }

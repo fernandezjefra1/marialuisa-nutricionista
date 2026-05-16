@@ -645,7 +645,7 @@ function ProximoTaller() {
             </ul>
 
             <Link
-              href="/login"
+              href="/reservar-taller"
               className="inline-block bg-[var(--lime)] text-white px-6 py-3 rounded-full hover:bg-[var(--lime-hover)] transition font-medium shadow-lg shadow-green-200"
             >
               Reservar cupo

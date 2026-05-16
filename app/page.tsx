@@ -415,11 +415,23 @@ function CarruselImagenes() {
       ajuste: "cover",
     },
     {
-      imagen: "/images/taller-dietetica.jpeg",
-      titulo: "Taller de Comida Dietética",
-      descripcion: "Aprende a cocinar rico y saludable. Modalidad presencial y virtual.",
-      ajuste: "contain",
-    },
+  imagen: "/images/ExperienciaLaboral.jpeg",
+  titulo: "Lonchera Saludable",
+  descripcion: "Guía práctica para preparar loncheras nutritivas y balanceadas para tus hijos, elaborada por la Nutri. Maria Luisa Peña.",
+  ajuste: "contain",
+},
+{
+  imagen: "/images/CitasRealizadas.jpeg",
+  titulo: "Consultas Nutricionales",
+  descripcion: "Sesiones personalizadas donde evaluamos tus hábitos alimenticios y creamos un plan nutricional adaptado a tus necesidades.",
+  ajuste: "contain",
+},
+{
+  imagen: "/images/ReunionConEscolares.jpeg",
+  titulo: "Talleres con Escolares",
+  descripcion: "Actividades educativas y dinámicas para enseñar a los niños la importancia de una alimentación saludable desde temprana edad.",
+  ajuste: "contain",
+},
   ];
 
   const [actual, setActual] = useState(0);

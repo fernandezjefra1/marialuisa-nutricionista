@@ -54,6 +54,7 @@ export default function AdminProductos() {
   const [form, setForm] = useState<Omit<Producto, "id">>(VACIO);
   const [guardando, setGuardando] = useState(false);
   const [confirmEliminar, setConfirmEliminar] = useState<Producto | null>(null);
+  const [subiendoImagen, setSubiendoImagen] = useState(false);
 
   useEffect(() => {
     cargar();
@@ -119,6 +120,34 @@ export default function AdminProductos() {
 
     setGuardando(false);
     setModalAbierto(false);
+  }
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const archivo = e.target.files?.[0];
+    if (!archivo) return;
+
+    const extensionesPermitidas = ["image/jpeg", "image/png", "image/webp", "image/heic"];
+    if (!extensionesPermitidas.includes(archivo.type) && !archivo.name.toLowerCase().endsWith(".heic")) {
+      alert("Solo se permiten imágenes (JPG, PNG, WEBP o HEIC).");
+      return;
+    }
+
+    setSubiendoImagen(true);
+    const nombreArchivo = `producto_${Date.now()}_${archivo.name.replace(/\s+/g, "_")}`;
+
+    const { error } = await supabase.storage
+      .from("productos")
+      .upload(nombreArchivo, archivo, { upsert: true });
+
+    if (error) {
+      alert("Error al subir la imagen. Verifica que el bucket 'productos' exista en Supabase Storage.");
+      setSubiendoImagen(false);
+      return;
+    }
+
+    const { data: urlData } = supabase.storage.from("productos").getPublicUrl(nombreArchivo);
+    setForm((prev) => ({ ...prev, imagen_url: urlData.publicUrl }));
+    setSubiendoImagen(false);
   }
 
   async function confirmarEliminar(p: Producto) {
@@ -418,18 +447,64 @@ export default function AdminProductos() {
                 </select>
               </div>
 
-              {/* URL Imagen */}
+              {/* Imagen — subida directa desde el celular */}
               <div>
-                <label className="text-xs uppercase tracking-widest text-[var(--texto-suave)] font-semibold block mb-1">
-                  URL de imagen
+                <label className="text-xs uppercase tracking-widest text-[var(--texto-suave)] font-semibold block mb-2">
+                  Foto del producto
                 </label>
-                <input
-                  type="url"
-                  value={form.imagen_url || ""}
-                  onChange={(e) => setForm({ ...form, imagen_url: e.target.value })}
-                  className="w-full border border-[var(--borde-rosa)] px-4 py-2 rounded-lg focus:outline-none focus:border-[var(--primrose)] text-sm"
-                  placeholder="https://..."
-                />
+
+                {/* Vista previa */}
+                {form.imagen_url && (
+                  <div className="mb-3 relative w-28 h-28 rounded-xl overflow-hidden border-2 border-[var(--borde-rosa)] bg-[var(--pinktone-soft)]">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={form.imagen_url}
+                      alt="Vista previa"
+                      className="w-full h-full object-contain"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setForm((prev) => ({ ...prev, imagen_url: "" }))}
+                      className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full text-xs flex items-center justify-center leading-none hover:bg-red-600"
+                      title="Quitar imagen"
+                    >
+                      ×
+                    </button>
+                  </div>
+                )}
+
+                {/* Botón de subida */}
+                <label className={`flex items-center gap-3 cursor-pointer w-full border-2 border-dashed rounded-xl px-4 py-4 transition ${
+                  subiendoImagen
+                    ? "border-[var(--lime)] bg-[var(--lime-soft)] cursor-not-allowed"
+                    : "border-[var(--borde-rosa)] bg-[var(--pinktone-soft)] hover:border-[var(--primrose)] hover:bg-[var(--pinktone)]"
+                }`}>
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/heic,.heic"
+                    className="hidden"
+                    disabled={subiendoImagen}
+                    onChange={handleImageUpload}
+                  />
+                  {subiendoImagen ? (
+                    <>
+                      <span className="text-xl">⏳</span>
+                      <span className="text-sm text-[var(--texto-suave)]">Subiendo imagen...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-2xl">📷</span>
+                      <div>
+                        <p className="text-sm font-semibold text-[var(--texto-principal)]">
+                          {form.imagen_url ? "Cambiar foto" : "Subir foto del producto"}
+                        </p>
+                        <p className="text-xs text-[var(--texto-suave)]">
+                          Elige una foto desde tu celular o computadora
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </label>
               </div>
 
               {/* Checkboxes */}

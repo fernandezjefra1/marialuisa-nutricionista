@@ -70,14 +70,21 @@ export function useUser() {
       setUser(user);
 
       if (user) {
-        // Contar las compras del usuario
-        const { count } = await supabase
+        // Contar compras de libros
+        const { count: countLibros } = await supabase
           .from("compras")
           .select("*", { count: "exact", head: true })
           .eq("user_id", user.id)
           .neq("estado", "cancelado");
 
-        setNumCompras(count || 0);
+        // Contar pedidos de productos (carrito)
+        const { count: countPedidos } = await supabase
+          .from("pedidos")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", user.id)
+          .neq("estado", "cancelado");
+
+        setNumCompras((countLibros || 0) + (countPedidos || 0));
       }
 
       setLoading(false);

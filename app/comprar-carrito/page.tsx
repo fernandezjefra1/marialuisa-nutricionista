@@ -114,6 +114,21 @@ export default function ComprarCarritoPage() {
       return;
     }
 
+    // Descontar stock de cada producto comprado
+    for (const item of items) {
+      const { data: prod } = await supabase
+        .from("productos")
+        .select("stock")
+        .eq("id", item.id)
+        .single();
+      if (prod) {
+        await supabase
+          .from("productos")
+          .update({ stock: Math.max(0, prod.stock - item.cantidad) })
+          .eq("id", item.id);
+      }
+    }
+
     // Construir mensaje WhatsApp
     const metodoTexto = {
       yape: "Yape",

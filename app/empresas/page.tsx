@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -136,7 +137,7 @@ export default function EmpresasPage() {
           <div className="grid md:grid-cols-2 gap-6">
             <CardServicio
               numero="01"
-              titulo="Hoja de Levantamiento Nutricional"
+              titulo={<><span className="text-[var(--lime)]">Hoja de Levantamiento Nutricional</span></>}
               descripcion="Evaluación individualizada de cada colaborador. Documento estructurado que recopila datos clave, diagnostica su estado nutricional y diseña intervenciones personalizadas."
               color="lime"
             />
@@ -155,7 +156,7 @@ export default function EmpresasPage() {
             <CardServicio
               numero="04"
               titulo="Charlas y talleres in-company"
-              descripcion="Capacitaciones presenciales o virtuales sobre nutrición preventiva, alimentación saludable y hábitos para la oficina."
+              descripcion={<>Capacitaciones presenciales o virtuales sobre nutrición <span className="text-[var(--lime)] font-semibold">preventiva</span>, alimentación saludable y hábitos para la oficina.</>}
               color="lime"
             />
           </div>
@@ -358,8 +359,8 @@ function CardServicio({
   color,
 }: {
   numero: string;
-  titulo: string;
-  descripcion: string;
+  titulo: React.ReactNode;
+  descripcion: React.ReactNode;
   color: "primrose" | "lime";
 }) {
   return (

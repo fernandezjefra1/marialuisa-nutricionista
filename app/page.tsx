@@ -304,6 +304,15 @@ function HeroLibro() {
       <div className="max-w-7xl mx-auto px-6 py-14 md:py-20 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
         {/* Texto */}
         <div className="order-2 md:order-1">
+          <div className="mb-5">
+            <p className="font-playfair text-xl md:text-2xl text-[var(--lime)] font-semibold italic leading-snug mb-1">
+              &ldquo;Vive la magia de la comida dietética&rdquo;
+            </p>
+            <p className="text-sm text-[var(--texto-suave)]">
+              Lic. María Luisa Peña &nbsp;·&nbsp; <span className="font-medium text-[var(--texto-principal)]">Universidad Nacional Mayor de San Marcos</span>
+            </p>
+          </div>
+
           <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold flex items-center gap-2">
             <span className="bow-animate">🎀</span> Nuevo lanzamiento
           </p>
@@ -312,7 +321,8 @@ function HeroLibro() {
             <span className="font-semibold shimmer-rose">del Bebé.</span>
           </h1>
           <p className="font-nunito text-base md:text-lg text-[var(--texto-suave)] leading-relaxed mb-6 max-w-lg">
-            Una guía única en su tipo sobre nutrición infantil preventiva, fruto
+            Una guía única en su tipo sobre nutrición infantil{" "}
+            <span className="text-[var(--lime)] font-semibold">preventiva</span>, fruto
             de años de experiencia profesional recorriendo todo el Perú.
             Recientemente presentada en el Colegio de Nutricionistas del Perú.
           </p>
@@ -707,7 +717,7 @@ function ProximoTaller() {
 /* ---------- TRAYECTORIA ---------- */
 function Trayectoria() {
   const hitos = [
-    { año: "Años de carrera", titulo: "Trabajo en MINSA", desc: "Recorrido por todas las regiones del Perú como nutricionista.", color: "primrose" },
+    { año: "Años de carrera", titulo: "Trabajo en MINSA", desc: "Recorrido por todas las regiones del Perú en forma presencial como nutricionista.", color: "primrose" },
     { año: "Experiencia", titulo: "Sector público", desc: "Trabajo en SENA y diversas instituciones de salud.", color: "lime" },
     { año: "Reciente", titulo: "Conferencista", desc: "Presentación en el Colegio de Nutricionistas del Perú.", color: "primrose" },
     { año: "Hoy", titulo: "Práctica privada", desc: "Enfoque en prevención y nutrición personalizada.", color: "lime" },
@@ -1007,8 +1017,9 @@ function SeccionEmpresas() {
               <span className="font-semibold text-[var(--lime)]">para tu equipo.</span>
             </h2>
             <p className="font-nunito text-[var(--texto-suave)] leading-relaxed mb-6 text-sm md:text-base">
-              Programa corporativo de evaluación nutricional con la Hoja de Levantamiento
-              Nutricional, charlas y planes personalizados para cada colaborador.
+              Programa corporativo de evaluación nutricional con la{" "}
+              <span className="text-[var(--lime)] font-semibold">Hoja de Levantamiento Nutricional</span>,
+              charlas y planes personalizados para cada colaborador.
               Mejora el rendimiento, reduce el ausentismo y cuida a tu equipo.
             </p>
 

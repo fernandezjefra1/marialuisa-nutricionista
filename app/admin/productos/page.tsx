@@ -17,7 +17,6 @@ type Producto = {
 
 const CATEGORIAS_PRODUCTOS = ["harinas", "semillas", "superalimentos", "endulzantes", "cereales", "general"];
 const CATEGORIAS_SNACKS = ["snacks", "bebidas", "comida-dietetica"];
-const TODAS_CATEGORIAS = [...CATEGORIAS_PRODUCTOS, ...CATEGORIAS_SNACKS];
 
 const TIPO_CATEGORIA: Record<string, string> = {
   harinas: "Producto",
@@ -201,18 +200,24 @@ export default function AdminProductos() {
     setProductos((prev) => prev.map((x) => (x.id === p.id ? { ...x, activo: nuevoActivo } : x)));
   }
 
-  const productosFiltrados = productos.filter((p) => {
-    const matchBusqueda =
-      busqueda === "" ||
-      p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
-      (p.descripcion || "").toLowerCase().includes(busqueda.toLowerCase());
-    const matchCategoria = filtroCategoria === "todas" || p.categoria === filtroCategoria;
-    const matchActivo =
-      filtroActivo === "todos" ||
-      (filtroActivo === "activos" && p.activo) ||
-      (filtroActivo === "inactivos" && !p.activo);
-    return matchBusqueda && matchCategoria && matchActivo;
-  });
+  const productosFiltrados = productos
+    .filter((p) => {
+      const matchBusqueda =
+        busqueda === "" ||
+        p.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+        (p.descripcion || "").toLowerCase().includes(busqueda.toLowerCase());
+      const matchCategoria = filtroCategoria === "todas" || p.categoria === filtroCategoria;
+      const matchActivo =
+        filtroActivo === "todos" ||
+        (filtroActivo === "activos" && p.activo) ||
+        (filtroActivo === "inactivos" && !p.activo) ||
+        (filtroActivo === "stock-bajo" && p.activo && p.stock <= UMBRAL_STOCK_BAJO);
+      return matchBusqueda && matchCategoria && matchActivo;
+    })
+    .sort((a, b) => {
+      if (filtroActivo !== "stock-bajo") return 0;
+      return a.stock - b.stock;
+    });
 
   const totalActivos = productos.filter((p) => p.activo).length;
   const totalSnacks = productos.filter((p) => CATEGORIAS_SNACKS.includes(p.categoria)).length;
@@ -347,6 +352,7 @@ export default function AdminProductos() {
           <option value="activos">Solo activos</option>
           <option value="inactivos">Solo inactivos</option>
           <option value="todos">Todos</option>
+          <option value="stock-bajo">⚠️ Stock bajo</option>
         </select>
       </div>
 

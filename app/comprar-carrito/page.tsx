@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase";
 import { useUser } from "@/lib/use-user";
 import { useCarrito } from "@/lib/use-carrito";
 
-const WHATSAPP_NUMERO = "51941827803";
+const WHATSAPP_NUMERO = "51985577017";
 
 type MetodoPago = "yape" | "plin" | "transferencia" | "efectivo";
 

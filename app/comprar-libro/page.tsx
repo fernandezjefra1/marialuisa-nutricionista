@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import { useUser, NIVELES_FIDELIZACION } from "@/lib/use-user";
 
-const WHATSAPP_NUMERO = "51941827803";
+const WHATSAPP_NUMERO = "51985577017";
 const PRECIO_VIRTUAL = 10;
 const PRECIO_FISICO = 20;
 

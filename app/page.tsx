@@ -309,7 +309,7 @@ function HeroLibro() {
               &ldquo;Vive la magia de la comida dietética&rdquo;
             </p>
             <p className="text-sm text-[var(--texto-suave)]">
-              Lic. María Luisa Peña &nbsp;·&nbsp; <span className="font-medium text-[var(--texto-principal)]">Universidad Nacional Mayor de San Marcos</span>
+              María Luisa Nutricionista &nbsp;·&nbsp; <span className="font-medium text-[var(--texto-principal)]">Universidad de San Marcos</span>
             </p>
           </div>
 
@@ -327,7 +327,7 @@ function HeroLibro() {
             Recientemente presentada en el Colegio de Nutricionistas del Perú.
           </p>
 
-          <ul className="space-y-1.5 mb-6 text-[var(--texto-principal)] text-sm">
+          <ul className="space-y-1.5 mb-6 text-[var(--texto-principal)] text-base">
             <li className="flex items-start gap-3">
               <span className="text-[var(--primrose)] mt-0.5 font-bold">—</span>
               <span>Guía completa desde la gestación hasta los primeros años</span>
@@ -517,7 +517,7 @@ function FilosofiaYServicios() {
     {
       titulo: "Visión",
       contenido:
-        "Promover y vender servicios y productos nutricionales dedicados a la nutrición preventiva en todas las etapas de la vida.",
+        <>Promover y vender servicios y productos nutricionales dedicados a la nutrición <span className="text-[var(--lime)] font-semibold">preventiva</span> en todas las etapas de la vida.</>,
       color: "primrose",
     },
     {
@@ -541,7 +541,7 @@ function FilosofiaYServicios() {
   ];
 
   const servicios = [
-    { n: "01", titulo: "Libros", desc: "Guías prácticas de nutrición preventiva.", color: "primrose" },
+    { n: "01", titulo: "Libros", desc: <>Guías prácticas de nutrición <span className="text-[var(--lime)] font-semibold">preventiva</span>.</>, color: "primrose" },
     { n: "02", titulo: "Talleres", desc: "Comida dietética, fácil y saciadora.", color: "lime" },
     { n: "03", titulo: "Productos", desc: "Cúrcuma, sacha inchi, cacao, estevia.", color: "lime" },
     { n: "04", titulo: "Consultorías", desc: "Asesorías personalizadas.", color: "primrose" },
@@ -604,7 +604,7 @@ function FilosofiaYServicios() {
                       }`}
                     >
                       <div className="overflow-hidden">
-                        <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed">
+                        <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">
                           {s.contenido}
                         </p>
                       </div>
@@ -638,7 +638,7 @@ function FilosofiaYServicios() {
                     item.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
                   }`}>{item.n}</p>
                   <h3 className="font-semibold mb-1.5 text-[var(--texto-principal)]">{item.titulo}</h3>
-                  <p className="font-nunito text-xs text-[var(--texto-suave)] leading-relaxed">{item.desc}</p>
+                  <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -695,7 +695,7 @@ function ProximoTaller() {
               </div>
             </div>
 
-            <ul className="text-sm text-white/90 space-y-1.5 mb-6">
+            <ul className="text-base text-white/90 space-y-1.5 mb-6">
               <li className="flex items-start gap-2"><span className="text-[var(--pinktone)] font-bold">—</span> Degustación incluida</li>
               <li className="flex items-start gap-2"><span className="text-[var(--pinktone)] font-bold">—</span> Materiales: taper, cubiertos, jabón y toalla</li>
               <li className="flex items-start gap-2"><span className="text-[var(--pinktone)] font-bold">—</span> Modalidad presencial y virtual</li>
@@ -717,7 +717,7 @@ function ProximoTaller() {
 /* ---------- TRAYECTORIA ---------- */
 function Trayectoria() {
   const hitos = [
-    { año: "Años de carrera", titulo: "Trabajo en MINSA", desc: "Recorrido por todas las regiones del Perú en forma presencial como nutricionista.", color: "primrose" },
+    { año: "Años de carrera", titulo: "Trabajo en MINSA", desc: "Ha trabajado en todo el Perú en forma presencial.", color: "primrose" },
     { año: "Experiencia", titulo: "Sector público", desc: "Trabajo en SENA y diversas instituciones de salud.", color: "lime" },
     { año: "Reciente", titulo: "Conferencista", desc: "Presentación en el Colegio de Nutricionistas del Perú.", color: "primrose" },
     { año: "Hoy", titulo: "Práctica privada", desc: "Enfoque en prevención y nutrición personalizada.", color: "lime" },
@@ -747,7 +747,7 @@ function Trayectoria() {
                 h.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
               }`}>{h.año}</p>
               <h3 className="font-semibold mb-1.5 text-[var(--texto-principal)]">{h.titulo}</h3>
-              <p className="text-sm text-[var(--texto-suave)] leading-relaxed">{h.desc}</p>
+              <p className="text-base text-[var(--texto-suave)] leading-relaxed">{h.desc}</p>
             </div>
           ))}
         </div>
@@ -766,7 +766,7 @@ function Footer() {
             María Luisa <span className="text-[var(--primrose)]">Nutricionista</span>
           </h3>
           <p className="text-sm text-pink-100/70 leading-relaxed">
-            Nutrición preventiva para todas las etapas de la vida.
+            Nutrición <span className="text-[var(--primrose)] font-semibold">preventiva</span> para todas las etapas de la vida.
           </p>
         </div>
         <div>
@@ -779,7 +779,17 @@ function Footer() {
                   WhatsApp: 959 560 616
               </a>
               </li>
-            <li>San Juan de Miraflores, Lima</li>
+            <li>
+              <a
+                href="https://www.google.com/maps/place/Residencial+Mart%C3%ADn/@-12.1669714,-76.9685542,20z/data=!4m6!3m5!1s0x9105b96811cf226b:0x1e33f53b4d52f3d4!8m2!3d-12.1669142!4d-76.968644!16s%2Fg%2F11sdn55n89?hl=es&entry=ttu&g_ep=EgoyMDI2MDUxMy4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[var(--primrose)] transition"
+              >
+                📍 Calle José del Carmen Verastegui 303<br />
+                San Juan de Miraflores, Lima
+              </a>
+            </li>
           </ul>
         </div>
         <div>

@@ -9,7 +9,7 @@ import { createClient } from "@/lib/supabase";
 import { useUser } from "@/lib/use-user";
 
 // === CONFIGURACIÓN ===
-const WHATSAPP_NUMERO = "51941827803";
+const WHATSAPP_NUMERO = "51985577017";
 
 export default function EmpresasPage() {
   const router = useRouter();
@@ -198,7 +198,7 @@ export default function EmpresasPage() {
               <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-3 font-semibold">
                 Beneficios para tu empresa
               </p>
-              <ul className="space-y-3 text-sm text-[var(--texto-principal)]">
+              <ul className="space-y-3 text-base text-[var(--texto-principal)]">
                 <li>Reducción del ausentismo por temas de salud</li>
                 <li>Mejora en el rendimiento y concentración del equipo</li>
                 <li>Cumplimiento de responsabilidad social empresarial</li>
@@ -254,7 +254,7 @@ export default function EmpresasPage() {
           <h2 className="text-3xl md:text-4xl font-light text-center mb-3 text-[var(--texto-principal)]">
             Solicita <span className="font-semibold text-[var(--lime)]">información.</span>
           </h2>
-          <p className="text-sm text-[var(--texto-suave)] text-center mb-10 leading-relaxed">
+          <p className="text-base text-[var(--texto-suave)] text-center mb-10 leading-relaxed">
             María Luisa recibirá tu solicitud por WhatsApp y te contactará en menos de 24 horas
             para coordinar una reunión inicial.
           </p>
@@ -375,7 +375,7 @@ function CardServicio({
         {numero}
       </p>
       <h3 className="font-semibold mb-2 text-[var(--texto-principal)]">{titulo}</h3>
-      <p className="text-sm text-[var(--texto-suave)] leading-relaxed">{descripcion}</p>
+      <p className="text-base text-[var(--texto-suave)] leading-relaxed">{descripcion}</p>
     </div>
   );
 }
@@ -395,7 +395,7 @@ function PasoCard({
         {numero}
       </div>
       <h3 className="font-semibold mb-2 text-[var(--texto-principal)]">{titulo}</h3>
-      <p className="text-sm text-[var(--texto-suave)] leading-relaxed">{descripcion}</p>
+      <p className="text-base text-[var(--texto-suave)] leading-relaxed">{descripcion}</p>
     </div>
   );
 }

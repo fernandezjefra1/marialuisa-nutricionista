@@ -31,7 +31,7 @@ const TIPO_CATEGORIA: Record<string, string> = {
 };
 
 const UMBRAL_STOCK_BAJO = 5;
-const WHATSAPP_PROPIO = "51941827803"; // número de María Luisa para notificarse a sí misma
+const WHATSAPP_PROPIO = "51985577017";
 
 const VACIO: Omit<Producto, "id"> = {
   nombre: "",

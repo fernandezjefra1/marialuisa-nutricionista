@@ -1,34 +1,53 @@
 @import "tailwindcss";
 
 :root {
-  /* === PALETA COQUETTE === */
-  /* Rosas */
-  --primrose: #F297A0;
-  --primrose-hover: #E07E89;
-  --pinktone: #F9D0CE;
-  --pinktone-soft: #FDE8E7;
 
-  /* Verdes (más vibrantes) */
-  --lime: #9CAB54;           /* Verde oliva más intenso */
-  --lime-hover: #55A139;     /* Verde oliva oscurecido */
-  --lime-mid: #B6BB79;       /* Verde oliva original */
-  --lime-soft: #E5E7CC;      /* Verde oliva claro */
+  /* =========================================
+     PALETA PRINCIPAL — VERDES DOMINANTES
+     ========================================= */
 
-  /* Cremas */
-  --yucca: #F3EBD8;
-  --yucca-soft: #FAF5E8;
+  --lime: #A7CC68;
+  --lime-hover: #8fb454;
+  --lime-mid: #bddb8a;
+  --lime-soft: #eef6df;
 
-  /* Texto */
-  --texto-principal: #4A2E32;
-  --texto-suave: #8B6B70;
-  --texto-tenue: #B89BA0;
+  /* =========================================
+     ROSADOS SUAVES — SOLO ACENTOS
+     ========================================= */
 
-  /* Bordes */
-  --borde-rosa: #F5C5C3;
-  --borde-suave: #EDD5D2;
-  --borde-verde: #C5CC9E;
+  --primrose: #e79aac;
+  --primrose-hover: #d88397;
 
-  /* Sistema base */
+  --pinktone: #ffe4ea;
+  --pinktone-soft: #fff7f9;
+
+  /* =========================================
+     CREMAS
+     ========================================= */
+
+  --yucca: #f7f7f1;
+  --yucca-soft: #fcfcf8;
+
+  /* =========================================
+     TEXTOS
+     ========================================= */
+
+  --texto-principal: #32452d;
+  --texto-suave: #6f7f68;
+  --texto-tenue: #9aa595;
+
+  /* =========================================
+     BORDES
+     ========================================= */
+
+  --borde-verde: #d9e7ba;
+  --borde-suave: #edf1e8;
+  --borde-rosa: #f6dde3;
+
+  /* =========================================
+     SISTEMA
+     ========================================= */
+
   --background: var(--yucca);
   --foreground: var(--texto-principal);
 }
@@ -36,8 +55,13 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -46,67 +70,106 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ============================================
-   ANIMACIONES DECORATIVAS
-   ============================================ */
 
-/* Halo pulsante para imagen del taller */
+
+/* =========================================
+   ANIMACIÓN HALO
+   ========================================= */
+
 @keyframes halo-pulse {
+
   0%, 100% {
-    box-shadow: 
-      0 0 0 0 rgba(242, 151, 160, 0.4),
-      0 0 0 0 rgba(156, 171, 88, 0.3);
+    box-shadow:
+      0 0 0 0 rgba(167, 204, 104, 0.35),
+      0 0 0 0 rgba(231, 154, 172, 0.15);
   }
+
   50% {
-    box-shadow: 
-      0 0 0 20px rgba(242, 151, 160, 0),
-      0 0 0 40px rgba(156, 171, 88, 0);
+    box-shadow:
+      0 0 0 18px rgba(167, 204, 104, 0),
+      0 0 0 35px rgba(231, 154, 172, 0);
   }
 }
 
 .halo-animado {
-  animation: halo-pulse 3s ease-in-out infinite;
+  animation: halo-pulse 3.5s ease-in-out infinite;
 }
 
-/* Halo giratorio degradado de fondo */
+
+
+/* =========================================
+   HALO GIRATORIO
+   ========================================= */
+
 @keyframes halo-rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .halo-fondo {
   position: absolute;
+
   inset: -20px;
-  border-radius: 24px;
+
+  border-radius: 30px;
+
   background: conic-gradient(
     from 0deg,
-    var(--primrose),
     var(--lime),
-    var(--pinktone),
-    var(--lime-mid),
-    var(--primrose)
+    var(--primrose),
+    var(--lime-soft),
+    #f7ffe7,
+    var(--lime)
   );
-  filter: blur(20px);
-  opacity: 0.5;
-  animation: halo-rotate 8s linear infinite;
+
+  opacity: 0.35;
+
+  filter: blur(22px);
+
+  animation: halo-rotate 10s linear infinite;
+
   z-index: 0;
 }
 
-/* Flotación suave */
+
+
+/* =========================================
+   FLOTACIÓN
+   ========================================= */
+
 @keyframes flotar {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
+
+  0%, 100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
 }
 
 .flotar {
   animation: flotar 4s ease-in-out infinite;
 }
-/* Animación fade-in para banners */
+
+
+
+/* =========================================
+   FADE IN
+   ========================================= */
+
 @keyframes fade-in {
+
   from {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -115,4 +178,223 @@ body {
 
 .animate-fade-in {
   animation: fade-in 0.4s ease-out;
+}
+
+
+
+/* =========================================
+   TARJETAS
+   ========================================= */
+
+.card-soft {
+
+  background: white;
+
+  border: 1px solid var(--borde-verde);
+
+  border-radius: 28px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+
+
+/* =========================================
+   BOTONES
+   ========================================= */
+
+.btn-green {
+
+  background: var(--lime);
+
+  color: white;
+
+  transition: 0.3s ease;
+}
+
+.btn-green:hover {
+
+  background: var(--lime-hover);
+}
+
+.btn-pink {
+
+  background: var(--primrose);
+
+  color: white;
+
+  transition: 0.3s ease;
+}
+
+.btn-pink:hover {
+
+  background: var(--primrose-hover);
+}
+
+
+
+/* =========================================
+   INPUTS
+   ========================================= */
+
+.input-soft {
+
+  background: white;
+
+  border: 1px solid var(--borde-verde);
+
+  border-radius: 18px;
+
+  transition: 0.25s ease;
+}
+
+.input-soft:focus {
+
+  outline: none;
+
+  border-color: var(--lime);
+
+  box-shadow:
+    0 0 0 4px rgba(167, 204, 104, 0.18);
+}
+
+
+
+/* =========================================
+   SECCIONES VERDES
+   ========================================= */
+
+.section-soft-green {
+
+  background:
+    linear-gradient(
+      to bottom,
+      #f8fbf2,
+      #eef6df
+    );
+}
+
+
+
+/* =========================================
+   SECCIONES CREMA
+   ========================================= */
+
+.section-cream {
+
+  background:
+    linear-gradient(
+      to bottom,
+      #fcfcf8,
+      #f4f6ee
+    );
+}
+
+
+
+/* =========================================
+   NAVBAR
+   ========================================= */
+
+.nav-soft {
+
+  background: rgba(252, 252, 248, 0.92);
+
+  backdrop-filter: blur(12px);
+
+  border-bottom:
+    1px solid var(--borde-verde);
+}
+
+
+
+/* =========================================
+   BOTÓN PRINCIPAL
+   ========================================= */
+
+.button-main {
+
+  background: var(--lime);
+
+  color: white;
+
+  border-radius: 999px;
+
+  transition: 0.3s ease;
+
+  box-shadow:
+    0 10px 25px rgba(167, 204, 104, 0.28);
+}
+
+.button-main:hover {
+
+  background: var(--lime-hover);
+
+  transform: translateY(-1px);
+}
+
+
+
+/* =========================================
+   BOTÓN SECUNDARIO
+   ========================================= */
+
+.button-secondary {
+
+  border: 2px solid var(--lime);
+
+  color: var(--lime);
+
+  border-radius: 999px;
+
+  transition: 0.3s ease;
+}
+
+.button-secondary:hover {
+
+  background: var(--lime-soft);
+}
+
+
+
+/* =========================================
+   TARJETAS PRODUCTOS
+   ========================================= */
+
+.product-card {
+
+  background: white;
+
+  border: 1px solid var(--borde-verde);
+
+  border-radius: 24px;
+
+  transition: 0.3s ease;
+
+  box-shadow:
+    0 6px 18px rgba(167, 204, 104, 0.08);
+}
+
+.product-card:hover {
+
+  border-color: var(--lime);
+
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 18px 30px rgba(167, 204, 104, 0.16);
+}
+
+
+
+/* =========================================
+   FOOTER
+   ========================================= */
+
+.footer-soft {
+
+  background: #5f7c52;
+
+  color: white;
 }

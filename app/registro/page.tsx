@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 
@@ -49,116 +50,192 @@ export default function RegistroPage() {
     }
   }
 
-  // Pantalla de éxito tras registrarse
+  // PANTALLA ÉXITO
   if (success) {
     return (
-      <main className="min-h-screen bg-white flex items-center justify-center px-6 py-12">
-        <div className="w-full max-w-md text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-50 text-green-700 text-3xl mb-6">
+      <main className="min-h-screen bg-[#edf5ea] flex items-center justify-center p-6">
+
+        <div className="bg-white rounded-[40px] shadow-2xl p-12 max-w-lg w-full text-center">
+
+          <div className="w-20 h-20 rounded-full bg-[#dcebd8] flex items-center justify-center mx-auto text-4xl text-[#4f7057]">
             ✓
           </div>
-          <h1 className="text-2xl md:text-3xl font-light mb-3">
+
+          <h1 className="text-5xl font-serif text-[#31543d] mt-6">
             Revisa tu correo
           </h1>
-          <p className="text-neutral-600 mb-2">
+
+          <p className="text-[#5f7865] mt-4">
             Te enviamos un enlace de confirmación a:
           </p>
-          <p className="font-semibold mb-8">{email}</p>
-          <p className="text-sm text-neutral-500 mb-8">
+
+          <p className="font-semibold text-[#31543d] mt-2">
+            {email}
+          </p>
+
+          <p className="text-sm text-[#7b9180] mt-6 leading-7">
             Haz clic en el enlace del correo para activar tu cuenta y poder reservar citas.
           </p>
+
           <Link
             href="/"
-            className="inline-block bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition"
+            className="inline-block mt-8 bg-[#5f8a68] hover:bg-[#4f7057] text-white px-8 py-4 rounded-2xl transition"
           >
             Volver al inicio
           </Link>
+
         </div>
+
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-white flex items-center justify-center px-6 py-12">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-10">
-          <Link href="/" className="text-sm text-neutral-500 hover:text-neutral-900 transition">
-            ← Volver al inicio
-          </Link>
-          <h1 className="text-3xl md:text-4xl font-light mt-6 mb-2">
-            Crear cuenta<span className="font-semibold">.</span>
-          </h1>
-          <p className="text-sm text-neutral-600">
-            Únete y reserva tu cita
-          </p>
+    <main className="min-h-screen bg-[#edf5ea] flex items-center justify-center p-6">
+
+      <div className="w-full max-w-7xl bg-white rounded-[45px] shadow-2xl overflow-hidden grid md:grid-cols-2">
+
+        {/* PANEL IZQUIERDO */}
+        <div className="relative bg-[#f4f8f1] flex flex-col items-center justify-start px-0 pt-0 pb-12 overflow-hidden">
+
+          {/* FORMAS DECORATIVAS */}
+          <div className="absolute bottom-[-120px] left-[-80px] w-[300px] h-[300px] bg-[#dcebd8] rounded-full opacity-70"></div>
+
+          <div className="absolute bottom-[-140px] right-[-100px] w-[320px] h-[320px] bg-[#f3dce3] rounded-full opacity-60"></div>
+
+          <div className="absolute top-[-90px] right-[-70px] w-[220px] h-[220px] bg-[#e6f0e2] rounded-full opacity-70"></div>
+
+
+          {/* IMAGEN */}
+          <div className="relative z-10 w-full flex justify-center pt-0">
+
+            <Image
+              src="/images/registro-nutricion.jpeg"
+              alt="Nutricionista"
+              width={820}
+              height={620}
+              className="object-contain"
+            />
+
+          </div>
+
+
+          {/* TEXTOS */}
+          <div className="relative z-10 px-8">
+
+            <h2 className="mt-2 text-5xl font-serif text-[#31543d] text-center leading-tight">
+              Empieza tu cambio
+            </h2>
+
+            <p className="mt-3 text-xl italic text-[#d79aa3] text-center">
+              bienestar y armonía ♡
+            </p>
+
+            <p className="mt-6 text-base text-[#55735f] text-center leading-7 max-w-md mx-auto">
+              Crea tu cuenta y comienza tu camino hacia una vida más saludable
+            </p>
+
+          </div>
+
         </div>
 
-        <form onSubmit={handleSignup} className="space-y-4">
-          <div>
-            <label className="text-xs uppercase tracking-widest text-neutral-500 mb-2 block">
-              Nombre completo
-            </label>
+
+        {/* FORMULARIO */}
+        <div className="px-10 py-14 md:px-16 flex flex-col justify-center bg-white">
+
+          <h1 className="text-6xl font-serif text-[#31543d] leading-tight">
+            Crear cuenta
+          </h1>
+
+          <p className="mt-3 text-[#5d7766] text-lg">
+            Únete y reserva tus citas
+          </p>
+
+
+          {/* FORM */}
+          <form
+            onSubmit={handleSignup}
+            className="space-y-5 mt-10"
+          >
+
             <input
               type="text"
               required
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
-              className="w-full border border-neutral-300 px-4 py-3 rounded-lg focus:outline-none focus:border-neutral-900 transition"
-              placeholder="María García"
+              placeholder="Nombre completo"
+              className="w-full bg-[#f8fcf6] border border-[#dbe8d7] px-5 py-4 rounded-2xl text-[#31543d] outline-none focus:border-[#8caf94] focus:ring-2 focus:ring-[#dcebd8] transition"
             />
-          </div>
 
-          <div>
-            <label className="text-xs uppercase tracking-widest text-neutral-500 mb-2 block">
-              Correo electrónico
-            </label>
+
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-neutral-300 px-4 py-3 rounded-lg focus:outline-none focus:border-neutral-900 transition"
-              placeholder="tu@correo.com"
+              placeholder="Correo electrónico"
+              className="w-full bg-[#f8fcf6] border border-[#dbe8d7] px-5 py-4 rounded-2xl text-[#31543d] outline-none focus:border-[#8caf94] focus:ring-2 focus:ring-[#dcebd8] transition"
             />
-          </div>
 
-          <div>
-            <label className="text-xs uppercase tracking-widest text-neutral-500 mb-2 block">
-              Contraseña
-            </label>
+
             <input
               type="password"
               required
               minLength={6}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-neutral-300 px-4 py-3 rounded-lg focus:outline-none focus:border-neutral-900 transition"
-              placeholder="Mínimo 6 caracteres"
+              placeholder="Contraseña"
+              className="w-full bg-[#f8fcf6] border border-[#dbe8d7] px-5 py-4 rounded-2xl text-[#31543d] outline-none focus:border-[#8caf94] focus:ring-2 focus:ring-[#dcebd8] transition"
             />
+
+
+            {error && (
+              <p className="text-red-500 text-sm">
+                {error}
+              </p>
+            )}
+
+
+            {/* BOTÓN */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#b07cab] hover:bg-[#9c6997] text-white py-4 rounded-2xl font-semibold transition duration-300 shadow-md"
+            >
+              {loading ? "Creando cuenta..." : "Crear cuenta"}
+            </button>
+
+          </form>
+
+
+          {/* LOGIN */}
+          <p className="text-center mt-8 text-[#6d826f]">
+            ¿Ya tienes cuenta?{" "}
+
+            <Link
+              href="/login"
+              className="text-[#d79aa3] font-semibold hover:underline"
+            >
+              Iniciar sesión
+            </Link>
+
+          </p>
+
+
+          {/* VOLVER */}
+          <div className="mt-8">
+            <Link
+              href="/"
+              className="text-sm text-[#5d7766] hover:text-[#31543d] transition"
+            >
+              ← Volver al inicio
+            </Link>
           </div>
 
-          {error && (
-            <p className="text-sm text-red-600 bg-red-50 border border-red-200 px-4 py-2 rounded-lg">
-              {error}
-            </p>
-          )}
+        </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition disabled:opacity-50 font-medium"
-          >
-            {loading ? "Creando cuenta..." : "Crear cuenta"}
-          </button>
-        </form>
-
-        <p className="text-sm text-neutral-600 text-center mt-8">
-          ¿Ya tienes cuenta?{" "}
-          <Link href="/login" className="font-semibold text-neutral-900 hover:underline">
-            Iniciar sesión
-          </Link>
-        </p>
       </div>
+
     </main>
   );
 }

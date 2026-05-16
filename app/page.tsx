@@ -14,6 +14,7 @@ export default function Home() {
       <HeroLibro />
       <CarruselImagenes />
       <FilosofiaYServicios />
+      <SeccionEnfermedades />
       <SeccionProductos />
       <SeccionEmpresas />
       <ProximoTaller />
@@ -797,6 +798,114 @@ function Footer() {
 
   );
 }
+/* ---------- SECCIÓN ENFERMEDADES PREVENIBLES ---------- */
+function SeccionEnfermedades() {
+  const enfermedades = [
+    {
+      nombre: "Anemia",
+      descripcion: "Una alimentación rica en hierro y vitamina C previene la deficiencia que afecta a millones de niños y mujeres en el Perú.",
+      icono: "🩸",
+      color: "lime",
+    },
+    {
+      nombre: "Obesidad y sobrepeso",
+      descripcion: "Dietas equilibradas con alimentos naturales regulan el peso corporal y reducen el riesgo de enfermedades asociadas.",
+      icono: "⚖️",
+      color: "primrose",
+    },
+    {
+      nombre: "Diabetes tipo 2",
+      descripcion: "Controlar el consumo de azúcares refinados y elegir alimentos de bajo índice glucémico reduce significativamente el riesgo.",
+      icono: "🍃",
+      color: "lime",
+    },
+    {
+      nombre: "Hipertensión arterial",
+      descripcion: "Reducir el sodio e incorporar potasio, magnesio y fibra ayuda a mantener la presión arterial en niveles saludables.",
+      icono: "❤️",
+      color: "primrose",
+    },
+    {
+      nombre: "Osteoporosis",
+      descripcion: "El calcio, la vitamina D y el fósforo desde la infancia construyen huesos fuertes que protegen en la adultez y vejez.",
+      icono: "🦴",
+      color: "lime",
+    },
+    {
+      nombre: "Enfermedades cardiovasculares",
+      descripcion: "Omega-3, fibra y antioxidantes reducen el colesterol malo y protegen el corazón a largo plazo.",
+      icono: "🫀",
+      color: "primrose",
+    },
+    {
+      nombre: "Desnutrición infantil",
+      descripcion: "Una nutrición adecuada desde la gestación y los primeros años garantiza el desarrollo físico e intelectual del niño.",
+      icono: "👶",
+      color: "lime",
+    },
+    {
+      nombre: "Gastritis y problemas digestivos",
+      descripcion: "Alimentos naturales, fibra y hábitos alimenticios ordenados protegen la mucosa gástrica y mejoran el tránsito intestinal.",
+      icono: "🌿",
+      color: "primrose",
+    },
+    {
+      nombre: "Colesterol alto",
+      descripcion: "Superalimentos como la sacha inchi y el cacao orgánico aportan grasas saludables que equilibran los niveles de colesterol.",
+      icono: "🥗",
+      color: "lime",
+    },
+  ];
+
+  return (
+    <section className="py-14 md:py-20 bg-[var(--verde-pastel)]">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="text-center mb-12">
+          <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold flex items-center justify-center gap-2">
+            <span className="bow-animate">🎀</span> Nutrición preventiva
+          </p>
+          <h2 className="font-playfair text-3xl md:text-4xl font-light mb-4 text-[var(--texto-principal)]">
+            Enfermedades que se <span className="font-semibold text-[var(--lime)]">pueden prevenir.</span>
+          </h2>
+          <p className="font-nunito text-[var(--texto-suave)] max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
+            Una buena nutrición es la mejor medicina preventiva. Estos son algunos de los problemas de salud
+            que podemos reducir o evitar con hábitos alimenticios adecuados desde temprana edad.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+          {enfermedades.map((e, i) => (
+            <div
+              key={i}
+              className={`rounded-2xl p-5 border-2 transition hover:-translate-y-1 hover:shadow-lg ${
+                e.color === "lime"
+                  ? "bg-[var(--lime-soft)] border-[var(--borde-verde)] hover:border-[var(--lime)] hover:shadow-green-100"
+                  : "bg-white border-[var(--borde-suave)] hover:border-[var(--lime)] hover:shadow-green-100"
+              }`}
+            >
+              <div className="flex items-start gap-3 mb-3">
+                <span className="text-2xl">{e.icono}</span>
+                <h3 className="font-semibold text-[var(--texto-principal)] leading-tight pt-0.5">{e.nombre}</h3>
+              </div>
+              <p className="font-nunito text-xs text-[var(--texto-suave)] leading-relaxed">{e.descripcion}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-10 text-center">
+          <div className="inline-block bg-[var(--verde-fuerte)] text-white rounded-2xl px-8 py-5 max-w-2xl">
+            <p className="font-nunito text-sm leading-relaxed text-white/90">
+              <span className="font-semibold text-white">Recuerda:</span> la prevención siempre es más efectiva
+              y menos costosa que el tratamiento. Con la orientación profesional adecuada, cada familia puede
+              construir una base nutricional sólida para toda la vida.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ---------- SECCIÓN PRODUCTOS DESTACADOS ---------- */
 function SeccionProductos() {
   const productos = [

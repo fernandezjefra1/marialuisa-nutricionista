@@ -402,7 +402,7 @@ function HeroLibro() {
 /* ---------- CARRUSEL DE IMÁGENES ---------- */
 function CarruselImagenes() {
   const slides = [
-    {
+{
       imagen: "/images/conferencia-1.jpeg",
       titulo: "Conferencia en el Colegio de Nutricionistas",
       descripcion: "Presentación oficial del libro 'Nutrición del Bebé' ante colegas del sector.",
@@ -415,23 +415,23 @@ function CarruselImagenes() {
       ajuste: "cover",
     },
     {
-  imagen: "/images/ExperienciaLaboral.jpeg",
-  titulo: "Lonchera Saludable",
-  descripcion: "Guía práctica para preparar loncheras nutritivas y balanceadas para tus hijos, elaborada por la Nutri. Maria Luisa Peña.",
-  ajuste: "contain",
-},
-{
-  imagen: "/images/CitasRealizadas.jpeg",
-  titulo: "Consultas Nutricionales",
-  descripcion: "Sesiones personalizadas donde evaluamos tus hábitos alimenticios y creamos un plan nutricional adaptado a tus necesidades.",
-  ajuste: "contain",
-},
-{
-  imagen: "/images/ReunionConEscolares.jpeg",
-  titulo: "Talleres con Escolares",
-  descripcion: "Actividades educativas y dinámicas para enseñar a los niños la importancia de una alimentación saludable desde temprana edad.",
-  ajuste: "contain",
-},
+      imagen: "/images/ExperienciaLaboral.jpeg",
+      titulo: "Lonchera Saludable",
+      descripcion: "Guía práctica para preparar loncheras nutritivas y balanceadas para tus hijos, elaborada por la Nutri. Maria Luisa Peña.",
+      ajuste: "cover",
+    },
+    {
+      imagen: "/images/CitasRealizadas.jpeg",
+      titulo: "Consultas Nutricionales",
+      descripcion: "Sesiones personalizadas donde evaluamos tus hábitos alimenticios y creamos un plan nutricional adaptado a tus necesidades.",
+      ajuste: "cover",
+    },
+    {
+      imagen: "/images/ReunionConEscolares.jpeg",
+      titulo: "Talleres con Escolares",
+      descripcion: "Actividades educativas y dinámicas para enseñar a los niños la importancia de una alimentación saludable desde temprana edad.",
+      ajuste: "cover",
+    },
   ];
 
   const [actual, setActual] = useState(0);

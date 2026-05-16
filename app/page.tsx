@@ -417,26 +417,26 @@ function CarruselImagenes() {
     posicion: "center center",
   },
   {
-    imagen: "/images/ExperienciaLaboral.jpeg",
-    titulo: "Lonchera Saludable",
-    descripcion: "Guía práctica para preparar loncheras nutritivas y balanceadas para tus hijos, elaborada por la Nutri. Maria Luisa Peña.",
-    ajuste: "cover",
-    posicion: "center top",
-  },
-  {
-    imagen: "/images/CitasRealizadas.jpeg",
-    titulo: "Consultas Nutricionales",
-    descripcion: "Sesiones personalizadas donde evaluamos tus hábitos alimenticios y creamos un plan nutricional adaptado a tus necesidades.",
-    ajuste: "cover",
-    posicion: "center top", // 👈 enfoca la cara, no el cuerpo
-  },
-  {
-    imagen: "/images/ReunionConEscolares.jpeg",
-    titulo: "Talleres con Escolares",
-    descripcion: "Actividades educativas y dinámicas para enseñar a los niños la importancia de una alimentación saludable desde temprana edad.",
-    ajuste: "cover",
-    posicion: "center center",
-  },
+  imagen: "/images/ExperienciaLaboral.jpeg",
+  titulo: "Lonchera Saludable",
+  descripcion: "Guía práctica para preparar loncheras nutritivas y balanceadas para tus hijos, elaborada por la Nutri. Maria Luisa Peña.",
+  ajuste: "contain",
+  posicion: "center center",
+},
+{
+  imagen: "/images/CitasRealizadas.jpeg",
+  titulo: "Consultas Nutricionales",
+  descripcion: "Sesiones personalizadas donde evaluamos tus hábitos alimenticios y creamos un plan nutricional adaptado a tus necesidades.",
+  ajuste: "contain",
+  posicion: "center center",
+},
+{
+  imagen: "/images/ReunionConEscolares.jpeg",
+  titulo: "Talleres con Escolares",
+  descripcion: "Actividades educativas y dinámicas para enseñar a los niños la importancia de una alimentación saludable desde temprana edad.",
+  ajuste: "contain",
+  posicion: "center center",
+},
 ];
 
   const [actual, setActual] = useState(0);

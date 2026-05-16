@@ -402,37 +402,42 @@ function HeroLibro() {
 /* ---------- CARRUSEL DE IMÁGENES ---------- */
 function CarruselImagenes() {
   const slides = [
-{
-      imagen: "/images/conferencia-1.jpeg",
-      titulo: "Conferencia en el Colegio de Nutricionistas",
-      descripcion: "Presentación oficial del libro 'Nutrición del Bebé' ante colegas del sector.",
-      ajuste: "cover",
-    },
-    {
-      imagen: "/images/conferencia-grupo.jpeg",
-      titulo: "Compartiendo conocimiento",
-      descripcion: "Profesionales y asistentes recibiendo el libro durante la conferencia.",
-      ajuste: "cover",
-    },
-    {
-      imagen: "/images/ExperienciaLaboral.jpeg",
-      titulo: "Lonchera Saludable",
-      descripcion: "Guía práctica para preparar loncheras nutritivas y balanceadas para tus hijos, elaborada por la Nutri. Maria Luisa Peña.",
-      ajuste: "cover",
-    },
-    {
-      imagen: "/images/CitasRealizadas.jpeg",
-      titulo: "Consultas Nutricionales",
-      descripcion: "Sesiones personalizadas donde evaluamos tus hábitos alimenticios y creamos un plan nutricional adaptado a tus necesidades.",
-      ajuste: "cover",
-    },
-    {
-      imagen: "/images/ReunionConEscolares.jpeg",
-      titulo: "Talleres con Escolares",
-      descripcion: "Actividades educativas y dinámicas para enseñar a los niños la importancia de una alimentación saludable desde temprana edad.",
-      ajuste: "cover",
-    },
-  ];
+  {
+    imagen: "/images/conferencia-1.jpeg",
+    titulo: "Conferencia en el Colegio de Nutricionistas",
+    descripcion: "Presentación oficial del libro 'Nutrición del Bebé' ante colegas del sector.",
+    ajuste: "cover",
+    posicion: "center center",
+  },
+  {
+    imagen: "/images/conferencia-grupo.jpeg",
+    titulo: "Compartiendo conocimiento",
+    descripcion: "Profesionales y asistentes recibiendo el libro durante la conferencia.",
+    ajuste: "cover",
+    posicion: "center center",
+  },
+  {
+    imagen: "/images/ExperienciaLaboral.jpeg",
+    titulo: "Lonchera Saludable",
+    descripcion: "Guía práctica para preparar loncheras nutritivas y balanceadas para tus hijos, elaborada por la Nutri. Maria Luisa Peña.",
+    ajuste: "cover",
+    posicion: "center top",
+  },
+  {
+    imagen: "/images/CitasRealizadas.jpeg",
+    titulo: "Consultas Nutricionales",
+    descripcion: "Sesiones personalizadas donde evaluamos tus hábitos alimenticios y creamos un plan nutricional adaptado a tus necesidades.",
+    ajuste: "cover",
+    posicion: "center top", // 👈 enfoca la cara, no el cuerpo
+  },
+  {
+    imagen: "/images/ReunionConEscolares.jpeg",
+    titulo: "Talleres con Escolares",
+    descripcion: "Actividades educativas y dinámicas para enseñar a los niños la importancia de una alimentación saludable desde temprana edad.",
+    ajuste: "cover",
+    posicion: "center center",
+  },
+];
 
   const [actual, setActual] = useState(0);
 
@@ -465,12 +470,13 @@ function CarruselImagenes() {
               }`}
             >
               <Image
-                src={slide.imagen}
-                alt={slide.titulo}
-                fill
-                className={slide.ajuste === "contain" ? "object-contain" : "object-cover"}
-                priority={i === 0}
-              />
+  src={slide.imagen}
+  alt={slide.titulo}
+  fill
+  className={slide.ajuste === "contain" ? "object-contain" : "object-cover"}
+  style={{ objectPosition: slide.posicion ?? "center center" }}
+  priority={i === 0}
+/>
               {/* Overlay solo abajo para el texto, mucho más sutil */}
               <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 text-white">

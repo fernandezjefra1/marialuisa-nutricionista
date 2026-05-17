@@ -224,13 +224,11 @@ export default function ProductosContent() {
       {/* ===== HERO — FLYER ===== */}
       <section className="w-full">
         <div className="relative w-full">
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src="/images/flayer_tienda.png"
             alt="Tienda María Luisa Nutricionista"
-            width={1920}
-            height={600}
-            className="w-full h-auto object-cover"
-            priority
+            className="w-full h-auto block"
           />
         </div>
       </section>

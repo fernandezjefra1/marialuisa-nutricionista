@@ -185,10 +185,10 @@ export default function ProductosContent() {
       </header>
 
       {/* ===== HERO — FLYER ===== */}
-      <section className="w-full bg-white">
+      <section className="w-full bg-white overflow-hidden" style={{maxHeight:"320px"}}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/flayeeeeeeerfinal.png" 
+          src="/images/flayeeeeeeerfinal.png"
           alt="Tienda María Luisa Nutricionista"
           style={{display:"block", width:"100%", height:"auto"}}
         />

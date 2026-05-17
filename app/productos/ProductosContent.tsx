@@ -185,7 +185,7 @@ export default function ProductosContent() {
       </header>
 
       {/* ===== HERO — FLYER ===== */}
-      <section className="w-full overflow-hidden" style={{height:"285px"}}>
+      <section className="w-full overflow-hidden" style={{height:"290px"}}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/flayeeeeeeerfinal.png"

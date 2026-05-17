@@ -222,15 +222,14 @@ export default function ProductosContent() {
       </header>
 
       {/* ===== HERO — FLYER ===== */}
-      <section className="w-full">
-        <div className="relative w-full">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/flayer_tienda.png"
-            alt="Tienda María Luisa Nutricionista"
-            className="w-full h-auto block"
-          />
-        </div>
+      <section className="w-full overflow-hidden" style={{maxHeight: "320px"}}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/flayer_tienda.png"
+          alt="Tienda María Luisa Nutricionista"
+          className="w-full object-cover object-center block"
+          style={{maxHeight: "320px"}}
+        />
       </section>
 
       {/* ===== TABS ===== */}

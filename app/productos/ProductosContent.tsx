@@ -39,43 +39,6 @@ function getBadge(producto: Producto): string {
   return BADGE_CATEGORIA[producto.categoria] || "Destacado";
 }
 
-/* ---- SVG DECORACIONES HERO ---- */
-function AvocadoSvg() {
-  return (
-    <svg viewBox="0 0 80 110" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <ellipse cx="40" cy="65" rx="32" ry="42" fill="#6daa6d"/>
-      <ellipse cx="40" cy="60" rx="22" ry="32" fill="#c8e8a8"/>
-      <ellipse cx="40" cy="68" rx="12" ry="16" fill="#8B5E3C"/>
-      <ellipse cx="40" cy="20" rx="18" ry="22" fill="#4a8a4a"/>
-    </svg>
-  );
-}
-function LimeSvg() {
-  return (
-    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <circle cx="40" cy="40" r="36" fill="#a8d870"/>
-      <circle cx="40" cy="40" r="28" fill="#c8f090" stroke="#8abe50" strokeWidth="1"/>
-      {[0,60,120,180,240,300].map((deg,i) => (
-        <line key={i} x1="40" y1="40"
-          x2={40 + 24*Math.cos((deg*Math.PI)/180)}
-          y2={40 + 24*Math.sin((deg*Math.PI)/180)}
-          stroke="#8abe50" strokeWidth="1.5"/>
-      ))}
-      <circle cx="40" cy="40" r="4" fill="#8abe50"/>
-    </svg>
-  );
-}
-function LeafSvg() {
-  return (
-    <svg viewBox="0 0 60 90" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <path d="M30 85 C10 60 5 35 20 15 C30 5 50 10 55 30 C60 50 45 70 30 85Z" fill="#5a9a5a"/>
-      <line x1="30" y1="85" x2="30" y2="20" stroke="#4a8a4a" strokeWidth="2"/>
-      {[30,50,65,75].map((y,i) => (
-        <line key={i} x1="30" y1={y} x2={i%2===0?45:15} y2={y-10} stroke="#4a8a4a" strokeWidth="1.5"/>
-      ))}
-    </svg>
-  );
-}
 
 export default function ProductosContent() {
   const router = useRouter();
@@ -222,13 +185,12 @@ export default function ProductosContent() {
       </header>
 
       {/* ===== HERO — FLYER ===== */}
-      <section className="w-full overflow-hidden" style={{maxHeight: "320px"}}>
+      <section className="w-full flex justify-center bg-white">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/flayer_tienda.png"
+          src="/images/flayer2.png"
           alt="Tienda María Luisa Nutricionista"
-          className="w-full object-cover object-center block"
-          style={{maxHeight: "320px"}}
+          style={{display:"block", maxWidth:"100%", height:"auto"}}
         />
       </section>
 

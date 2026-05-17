@@ -185,12 +185,12 @@ export default function ProductosContent() {
       </header>
 
       {/* ===== HERO — FLYER ===== */}
-      <section className="w-full flex justify-center bg-white">
+      <section className="w-full bg-white">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/flayer2.png"
           alt="Tienda María Luisa Nutricionista"
-          style={{display:"block", maxWidth:"100%", height:"auto"}}
+          style={{display:"block", width:"100%", height:"auto"}}
         />
       </section>
 

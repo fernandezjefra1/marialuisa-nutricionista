@@ -221,68 +221,17 @@ export default function ProductosContent() {
         </div>
       </header>
 
-      {/* ===== HERO ===== */}
-      <section className="relative overflow-hidden bg-white py-10 md:py-14">
-        {/* Decoraciones fondo */}
-        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-          <div className="absolute top-8 right-16 text-[var(--primrose)] text-2xl sparkle-item" style={{"--dur":"3s","--delay":"0s"} as React.CSSProperties}>♡</div>
-          <div className="absolute top-20 right-40 text-[var(--lime)] text-xl sparkle-item" style={{"--dur":"4s","--delay":"0.5s"} as React.CSSProperties}>✦</div>
-          <div className="absolute bottom-10 right-24 text-[var(--primrose)] text-lg sparkle-item" style={{"--dur":"3.5s","--delay":"1s"} as React.CSSProperties}>✿</div>
-          <div className="absolute top-1/2 left-1/3 text-[var(--lime)] text-sm sparkle-item" style={{"--dur":"5s","--delay":"0.8s"} as React.CSSProperties}>+</div>
-          <div className="absolute top-6 left-1/2 text-[var(--primrose)] text-base sparkle-item" style={{"--dur":"4.5s","--delay":"1.5s"} as React.CSSProperties}>♡</div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-0 flex items-center gap-0">
-
-          {/* Columna izquierda: decoraciones food */}
-          <div className="hidden lg:flex flex-col items-end gap-2 shrink-0 relative" style={{width:"140px", marginLeft:"-20px"}}>
-            <div className="w-20 h-24 flotar" style={{"--dur":"5s"} as React.CSSProperties}><AvocadoSvg /></div>
-            <div className="w-16 h-16 flotar" style={{"--dur":"4s","animationDelay":"1s"} as React.CSSProperties}><LimeSvg /></div>
-            <div className="w-12 h-16 flotar" style={{"--dur":"6s","animationDelay":"0.5s"} as React.CSSProperties}><LeafSvg /></div>
-          </div>
-
-          {/* Centro: texto */}
-          <div className="flex-1 px-8 md:px-10 py-4">
-            <p className="font-nunito text-sm uppercase tracking-widest text-[var(--primrose)] mb-3 font-semibold flex items-center gap-2">
-              <span className="text-base">✳</span> Tienda
-            </p>
-            <h1 className="font-playfair text-4xl md:text-6xl font-bold text-[var(--texto-principal)] mb-4 leading-tight">
-              {tabActiva === "productos" ? (
-                <>Productos <span className="text-[var(--primrose)]">naturales.</span></>
-              ) : (
-                <>Snacks y <span className="text-[var(--lime)]">comida saludable.</span></>
-              )}
-            </h1>
-            <p className="font-nunito text-base md:text-lg text-[var(--texto-suave)] max-w-lg leading-relaxed">
-              {tabActiva === "productos"
-                ? "Suplementos, harinas y superalimentos cuidadosamente seleccionados para tu bienestar y una nutrición preventiva."
-                : "Bebidas, sándwiches y platos preparados con ingredientes frescos del día."}
-            </p>
-          </div>
-
-          {/* Columna derecha: collage de productos */}
-          <div className="hidden md:flex shrink-0 relative" style={{width:"320px", height:"240px"}}>
-            {/* Smoothie blob */}
-            <div className="absolute left-0 top-4 w-28 h-36 rounded-3xl bg-gradient-to-b from-[#b5e88a] to-[#6daa6d] shadow-lg flex items-end justify-center pb-3 flotar" style={{"--dur":"5s","animationDelay":"0.3s"} as React.CSSProperties}>
-              <div className="w-16 h-5 bg-[#8abe50] rounded-full"/>
-            </div>
-            {/* Sacha Inchi */}
-            <div className="absolute left-16 top-0 w-24 h-24 rounded-2xl bg-white shadow-md overflow-hidden border-2 border-[var(--borde-verde)] flotar" style={{"--dur":"4s","animationDelay":"1s"} as React.CSSProperties}>
-              <Image src="/images/SachaInchi.png" alt="Sacha Inchi" fill className="object-contain p-2"/>
-            </div>
-            {/* Libro */}
-            <div className="absolute right-2 top-6 w-32 h-44 rounded-2xl overflow-hidden shadow-xl border-4 border-white rotate-3 flotar" style={{"--dur":"6s","animationDelay":"0.5s"} as React.CSSProperties}>
-              <Image src="/images/libro-portada.jpg" alt="Libro Nutrición del Bebé" fill className="object-cover"/>
-            </div>
-            {/* Harina */}
-            <div className="absolute left-4 bottom-2 w-20 h-20 rounded-2xl bg-white shadow-md overflow-hidden border-2 border-[var(--borde-rosa)] -rotate-6 flotar" style={{"--dur":"4.5s","animationDelay":"1.5s"} as React.CSSProperties}>
-              <Image src="/images/harinaCurcuma.png" alt="Harina Cúrcuma" fill className="object-contain p-1"/>
-            </div>
-            {/* Sparkles */}
-            <span className="absolute top-2 right-20 text-[var(--primrose)] text-xl sparkle-item" style={{"--dur":"3s","--delay":"0s"} as React.CSSProperties}>✦</span>
-            <span className="absolute bottom-6 right-6 text-[var(--lime)] text-sm sparkle-item" style={{"--dur":"4s","--delay":"0.8s"} as React.CSSProperties}>♡</span>
-          </div>
-
+      {/* ===== HERO — FLYER ===== */}
+      <section className="w-full">
+        <div className="relative w-full">
+          <Image
+            src="/images/flayer_tienda.png"
+            alt="Tienda María Luisa Nutricionista"
+            width={1920}
+            height={600}
+            className="w-full h-auto object-cover"
+            priority
+          />
         </div>
       </section>
 

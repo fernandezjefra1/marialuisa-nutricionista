@@ -72,9 +72,9 @@ function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 bg-[var(--verde-pastel)]/95 backdrop-blur-sm border-b border-[var(--borde-verde)]">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="font-playfair font-semibold tracking-tight text-[var(--texto-principal)]">
-          María Luisa <span className="shimmer-rose">Nutricionista</span>
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-3 md:py-4 flex items-center justify-between gap-2">
+        <Link href="/" className="font-playfair font-semibold tracking-tight text-[var(--texto-principal)] text-sm md:text-base">
+          <span className="hidden sm:inline">María Luisa </span><span className="shimmer-rose">Nutricionista</span>
         </Link>
 
         {/* Menú desktop */}
@@ -86,7 +86,7 @@ function Navbar() {
           <li><Link href="/empresas" className="px-4 py-2 rounded-full bg-[#F2A0BC] text-white hover:bg-[var(--primrose)] transition-all duration-300">Empresas</Link></li>
         </ul>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 md:gap-3">
           <MenuUsuario />
 
           {/* Botón hamburguesa - solo en mobile */}
@@ -183,7 +183,7 @@ function MenuUsuario() {
         </Link>
         <Link
           href="/login?redirect=/comprar-libro"
-          className="text-sm bg-[#F2A0BC] text-white px-4 py-2 rounded-full hover:bg-[var(--primrose)] transition-all duration-300 shadow-md shadow-pink-200"
+          className="text-xs sm:text-sm bg-[#F2A0BC] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:bg-[var(--primrose)] transition-all duration-300 shadow-md shadow-pink-200 whitespace-nowrap"
         >
           Reservar cita
         </Link>
@@ -317,7 +317,7 @@ function HeroLibro() {
           <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold flex items-center gap-2">
             <span className="bow-animate">🎀</span> Nuevo lanzamiento
           </p>
-          <h1 className="font-playfair text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-tight mb-6 text-[var(--texto-principal)]">
+          <h1 className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light leading-[1.05] tracking-tight mb-6 text-[var(--texto-principal)]">
             Nutrición<br />
             <span className="font-semibold shimmer-rose">del Bebé.</span>
           </h1>
@@ -360,7 +360,7 @@ function HeroLibro() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/comprar-libro"
-              className="btn-coquette bg-[var(--primrose)] text-white px-8 py-4 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
+              className="btn-coquette bg-[var(--primrose)] text-white px-5 py-3 md:px-8 md:py-4 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
             >
               ✦ Adquirir el libro
             </Link>
@@ -456,7 +456,7 @@ function CarruselImagenes() {
           <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
             <span className="bow-animate">🎀</span> Trayectoria reciente
           </p>
-          <h2 className="font-playfair text-4xl md:text-5xl font-bold text-white">
+          <h2 className="font-playfair text-3xl md:text-5xl font-bold text-white">
             Momentos que marcan <span className="font-semibold shimmer-white">una carrera.</span>
           </h2>
         </div>
@@ -577,7 +577,7 @@ function FilosofiaYServicios() {
             <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center gap-2">
               <span className="bow-animate">🎀</span> Nuestra propuesta
             </p>
-            <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6 text-[var(--texto-principal)]">
+            <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-6 text-[var(--texto-principal)]">
               Filosofía <span className="font-semibold text-[var(--lime)]">profesional.</span>
             </h2>
 
@@ -639,7 +639,7 @@ function FilosofiaYServicios() {
             <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold">
               Lo que ofrezco
             </p>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[var(--texto-principal)]">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 text-[var(--texto-principal)]">
               Cuatro <span className="font-semibold text-[var(--primrose)]">pilares.</span>
             </h2>
 
@@ -671,7 +671,7 @@ function FilosofiaYServicios() {
 /* ---------- PRÓXIMO TALLER ---------- */
 function ProximoTaller() {
   return (
-    <section id="taller" className="bg-[var(--verde-fuerte)] py-14 md:py-16">
+    <section id="taller" className="bg-[var(--verde-fuerte)] py-14 md:py-16 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           {/* Imagen con halo animado */}
@@ -693,7 +693,7 @@ function ProximoTaller() {
             <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
               <span className="bow-animate">🎀</span> Próximo evento
             </p>
-            <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-4 leading-tight text-white">
+            <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-4 leading-tight text-white">
               Taller de<br />
               <span className="font-semibold shimmer-white">Comida Dietética.</span>
             </h2>
@@ -748,11 +748,11 @@ function Trayectoria() {
         <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
           Trayectoria
         </p>
-        <h2 className="text-4xl md:text-5xl font-bold mb-10 text-[var(--texto-principal)]">
+        <h2 className="text-3xl md:text-5xl font-bold mb-10 text-[var(--texto-principal)]">
           Más de dos décadas <span className="font-semibold text-[var(--lime)]">construyendo experiencia.</span>
         </h2>
 
-        <div className="grid md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
           {hitos.map((h, i) => (
             <div
               key={i}
@@ -903,7 +903,7 @@ function SeccionEnfermedades() {
           <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold flex items-center justify-center gap-2">
             <span className="bow-animate">🎀</span> Nutrición preventiva
           </p>
-          <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-4 text-[var(--texto-principal)]">
+          <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-4 text-[var(--texto-principal)]">
             Enfermedades que se <span className="font-semibold text-[var(--lime)]">pueden prevenir.</span>
           </h2>
           <p className="font-nunito text-[var(--texto-suave)] max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
@@ -986,7 +986,7 @@ function SeccionProductos() {
             <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
               <span className="bow-animate">🎀</span> Nuestra tienda
             </p>
-            <h2 className="font-playfair text-4xl md:text-5xl font-bold text-white">
+            <h2 className="font-playfair text-3xl md:text-5xl font-bold text-white">
               Productos <span className="font-semibold shimmer-white">naturales.</span>
             </h2>
             <p className="font-nunito text-white/80 mt-2 text-sm md:text-base max-w-lg">
@@ -1034,7 +1034,7 @@ function SeccionProductos() {
 /* ---------- ASESORÍAS PARA PROYECTOS ---------- */
 function AsesoriasProyectos() {
   return (
-    <section className="py-14 md:py-16 bg-[var(--yucca-soft)]">
+    <section className="py-14 md:py-16 bg-[var(--yucca-soft)] overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           {/* Foto izquierda — mobile: arriba, desktop: izquierda */}
@@ -1058,7 +1058,7 @@ function AsesoriasProyectos() {
             <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
               Mi especialidad
             </p>
-            <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-4 leading-tight text-[var(--texto-principal)]">
+            <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-4 leading-tight text-[var(--texto-principal)]">
               Asesorías para<br />
               <span className="font-semibold text-[var(--primrose)]">Proyectos nutricionales.</span>
             </h2>
@@ -1106,17 +1106,17 @@ function AsesoriasProyectos() {
             — Lic. María Luisa Peña Valdivia
           </p>
 
-          <div className="grid grid-cols-3 gap-4 pt-6 border-t border-[var(--borde-rosa)]">
+          <div className="grid grid-cols-3 gap-2 md:gap-4 pt-6 border-t border-[var(--borde-rosa)]">
             <div>
-              <p className="text-2xl font-semibold text-[var(--primrose)]">20+</p>
+              <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">20+</p>
               <p className="text-xs text-[var(--texto-suave)]">Años en MINSA</p>
             </div>
             <div>
-              <p className="text-2xl font-semibold text-[var(--lime)]">Nacional</p>
+              <p className="text-lg md:text-2xl font-semibold text-[var(--lime)]">Nacional</p>
               <p className="text-xs text-[var(--texto-suave)]">Proyectos en todo el Perú</p>
             </div>
             <div>
-              <p className="text-2xl font-semibold text-[var(--primrose)]">Experta</p>
+              <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">Experta</p>
               <p className="text-xs text-[var(--texto-suave)]">Asesoría especializada</p>
             </div>
           </div>
@@ -1136,7 +1136,7 @@ function SeccionEmpresas() {
             <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold">
               Para empresas
             </p>
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 leading-tight text-[var(--texto-principal)]">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4 leading-tight text-[var(--texto-principal)]">
               Bienestar nutricional<br />
               <span className="font-semibold text-[var(--lime)]">para tu equipo.</span>
             </h2>
@@ -1183,17 +1183,17 @@ function SeccionEmpresas() {
                 — Lic. María Luisa Peña Valdivia, Nutricionista colegiada
               </p>
 
-              <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-[var(--borde-rosa)]">
+              <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8 pt-6 border-t border-[var(--borde-rosa)]">
                 <div>
-                  <p className="text-2xl font-semibold text-[var(--primrose)]">20+</p>
+                  <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">20+</p>
                   <p className="text-xs text-[var(--texto-suave)]">Años de experiencia</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-semibold text-[var(--lime)]">100%</p>
+                  <p className="text-lg md:text-2xl font-semibold text-[var(--lime)]">100%</p>
                   <p className="text-xs text-[var(--texto-suave)]">Personalizado</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-semibold text-[var(--primrose)]">B2B</p>
+                  <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">B2B</p>
                   <p className="text-xs text-[var(--texto-suave)]">Servicio empresarial</p>
                 </div>
               </div>

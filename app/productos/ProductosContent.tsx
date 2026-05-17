@@ -137,7 +137,7 @@ export default function ProductosContent() {
           <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
             Tienda
           </p>
-          <h1 className="text-4xl md:text-5xl font-light text-[var(--texto-principal)] mb-3">
+          <h1 className="text-3xl md:text-5xl font-light text-[var(--texto-principal)] mb-3">
             {tabActiva === "productos" ? (
               <>Productos <span className="font-semibold text-[var(--primrose)]">naturales.</span></>
             ) : (

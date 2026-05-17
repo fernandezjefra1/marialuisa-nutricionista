@@ -106,7 +106,7 @@ export default function EmpresasPage() {
           <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-4 font-semibold">
             Programa Corporativo
           </p>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight mb-6 text-[var(--texto-principal)]">
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-light leading-tight mb-6 text-[var(--texto-principal)]">
             Bienestar Nutricional<br />
             <span className="font-semibold text-[var(--lime)]">para tu Empresa.</span>
           </h1>
@@ -117,7 +117,7 @@ export default function EmpresasPage() {
           </p>
           <a
             href="#solicitar"
-            className="inline-block bg-[var(--lime)] text-white px-8 py-4 rounded-full hover:bg-[var(--lime-hover)] transition font-medium shadow-lg shadow-green-200"
+            className="inline-block bg-[var(--lime)] text-white px-5 py-3 md:px-8 md:py-4 rounded-full hover:bg-[var(--lime-hover)] transition font-medium shadow-lg shadow-green-200"
           >
             Solicitar información
           </a>

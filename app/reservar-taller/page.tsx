@@ -99,7 +99,7 @@ export default function ReservarTallerPage() {
           <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-4 font-semibold">
             Próximo evento
           </p>
-          <h1 className="text-4xl md:text-5xl font-light leading-tight mb-4 text-[var(--texto-principal)]">
+          <h1 className="text-3xl md:text-5xl font-light leading-tight mb-4 text-[var(--texto-principal)]">
             Taller de<br />
             <span className="font-semibold text-[var(--lime)]">Comida Dietética.</span>
           </h1>

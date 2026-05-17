@@ -795,7 +795,7 @@ function Footer() {
           <ul className="text-sm space-y-1.5 text-pink-50">
             <li>
               <a href="https://wa.me/51985577017" target="_blank">
-                  WhatsApp: 959 560 616
+                  WhatsApp: 985 577 017
               </a>
               </li>
             <li>

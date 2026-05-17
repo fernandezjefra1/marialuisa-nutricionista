@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCarrito } from "@/lib/use-carrito";
@@ -8,6 +8,12 @@ import { useCarrito } from "@/lib/use-carrito";
 export default function CarritoFlotante() {
   const { items, cantidadTotal, subtotal, cambiarCantidad, eliminar, vaciar, cargado } = useCarrito();
   const [abierto, setAbierto] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setAbierto(true);
+    window.addEventListener("abrir-carrito", handler);
+    return () => window.removeEventListener("abrir-carrito", handler);
+  }, []);
 
   // No renderizar nada hasta que se cargue el carrito
   if (!cargado) return null;

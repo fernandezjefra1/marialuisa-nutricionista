@@ -21,12 +21,68 @@ type Producto = {
 
 const CATEGORIAS_SNACKS = ["snacks", "bebidas", "comida-dietetica"];
 
+const BADGE_CATEGORIA: Record<string, string> = {
+  libros: "Guía completa",
+  harinas: "100% Natural",
+  superalimentos: "Omega 3-6-9",
+  semillas: "100% Natural",
+  endulzantes: "Sin azúcar",
+  cereales: "100% Natural",
+  snacks: "Fresco del día",
+  bebidas: "Fresco",
+  "comida-dietetica": "Dietético",
+};
+
+function getBadge(producto: Producto): string {
+  const nombre = producto.nombre.toLowerCase();
+  if (nombre.includes("físico") || nombre.includes("fisico")) return "Envío incluido";
+  return BADGE_CATEGORIA[producto.categoria] || "Destacado";
+}
+
+/* ---- SVG DECORACIONES HERO ---- */
+function AvocadoSvg() {
+  return (
+    <svg viewBox="0 0 80 110" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <ellipse cx="40" cy="65" rx="32" ry="42" fill="#6daa6d"/>
+      <ellipse cx="40" cy="60" rx="22" ry="32" fill="#c8e8a8"/>
+      <ellipse cx="40" cy="68" rx="12" ry="16" fill="#8B5E3C"/>
+      <ellipse cx="40" cy="20" rx="18" ry="22" fill="#4a8a4a"/>
+    </svg>
+  );
+}
+function LimeSvg() {
+  return (
+    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <circle cx="40" cy="40" r="36" fill="#a8d870"/>
+      <circle cx="40" cy="40" r="28" fill="#c8f090" stroke="#8abe50" strokeWidth="1"/>
+      {[0,60,120,180,240,300].map((deg,i) => (
+        <line key={i} x1="40" y1="40"
+          x2={40 + 24*Math.cos((deg*Math.PI)/180)}
+          y2={40 + 24*Math.sin((deg*Math.PI)/180)}
+          stroke="#8abe50" strokeWidth="1.5"/>
+      ))}
+      <circle cx="40" cy="40" r="4" fill="#8abe50"/>
+    </svg>
+  );
+}
+function LeafSvg() {
+  return (
+    <svg viewBox="0 0 60 90" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+      <path d="M30 85 C10 60 5 35 20 15 C30 5 50 10 55 30 C60 50 45 70 30 85Z" fill="#5a9a5a"/>
+      <line x1="30" y1="85" x2="30" y2="20" stroke="#4a8a4a" strokeWidth="2"/>
+      {[30,50,65,75].map((y,i) => (
+        <line key={i} x1="30" y1={y} x2={i%2===0?45:15} y2={y-10} stroke="#4a8a4a" strokeWidth="1.5"/>
+      ))}
+    </svg>
+  );
+}
+
 export default function ProductosContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, loading: loadingUser } = useUser();
   const supabase = createClient();
-  const { agregar } = useCarrito();
+  const { agregar, cantidadTotal } = useCarrito();
 
   const [productos, setProductos] = useState<Producto[]>([]);
   const [cargando, setCargando] = useState(true);
@@ -61,7 +117,7 @@ export default function ProductosContent() {
 
   if (loadingUser || !user) {
     return (
-      <main className="min-h-screen bg-[var(--yucca)] flex items-center justify-center">
+      <main className="min-h-screen bg-white flex items-center justify-center">
         <p className="text-sm text-[var(--texto-suave)]">Cargando...</p>
       </main>
     );
@@ -110,6 +166,7 @@ export default function ProductosContent() {
       endulzantes: "Endulzantes",
       cereales: "Cereales",
       general: "General",
+      libros: "Libros",
       snacks: "Sándwiches",
       bebidas: "Bebidas",
       "comida-dietetica": "Comida dietética",
@@ -117,112 +174,168 @@ export default function ProductosContent() {
     return nombres[cat] || cat;
   };
 
+  function abrirCarrito() {
+    window.dispatchEvent(new CustomEvent("abrir-carrito"));
+  }
+
   return (
-    <main className="min-h-screen bg-[var(--yucca)]">
-      {/* Header */}
-      <header className="bg-[var(--yucca-soft)] border-b border-[var(--borde-rosa)] sticky top-0 z-30">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-sm text-[var(--texto-suave)] hover:text-[var(--primrose)] transition">
+    <main className="min-h-screen bg-white">
+
+      {/* ===== HEADER ===== */}
+      <header className="bg-white border-b border-[var(--borde-rosa)] sticky top-0 z-30">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link href="/" className="text-sm text-[var(--texto-suave)] hover:text-[var(--primrose)] transition font-nunito">
             ← Volver al inicio
           </Link>
-          <p className="text-sm font-semibold text-[var(--texto-principal)]">
-            María Luisa <span className="text-[var(--primrose)]">Nutricionista</span>
-          </p>
-        </div>
-      </header>
-
-      {/* Hero */}
-      <section className="bg-[var(--pinktone-soft)] py-12 md:py-14">
-        <div className="max-w-6xl mx-auto px-6 text-center">
-          <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
-            Tienda
-          </p>
-          <h1 className="text-3xl md:text-5xl font-light text-[var(--texto-principal)] mb-3">
-            {tabActiva === "productos" ? (
-              <>Productos <span className="font-semibold text-[var(--primrose)]">naturales.</span></>
-            ) : (
-              <>Snacks y <span className="font-semibold text-[var(--lime)]">comida saludable.</span></>
-            )}
-          </h1>
-          <p className="text-sm md:text-base text-[var(--texto-suave)] max-w-2xl mx-auto">
-            {tabActiva === "productos"
-              ? "Superalimentos, harinas y suplementos cuidadosamente seleccionados."
-              : "Bebidas, sándwiches y platos preparados con ingredientes frescos del día."}
-          </p>
-        </div>
-      </section>
-
-      {/* TABS PRINCIPALES */}
-      <section className="bg-white border-b border-[var(--borde-rosa)] sticky top-[57px] z-20">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex gap-1 justify-center">
-            <button
-              onClick={() => cambiarTab("productos")}
-              className={`px-6 py-4 font-medium text-sm transition relative ${
-                tabActiva === "productos"
-                  ? "text-[var(--primrose)]"
-                  : "text-[var(--texto-suave)] hover:text-[var(--texto-principal)]"
-              }`}
-            >
-              <span className="flex items-center gap-2">
-                Productos
-                <span className={`text-xs px-2 py-0.5 rounded-full ${
-                  tabActiva === "productos"
-                    ? "bg-[var(--primrose)] text-white"
-                    : "bg-[var(--pinktone-soft)] text-[var(--texto-suave)]"
-                }`}>
-                  {todosProductos.length}
-                </span>
-              </span>
-              {tabActiva === "productos" && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--primrose)]" />
-              )}
+          <div className="flex items-center gap-2">
+            <p className="font-playfair font-bold text-[var(--texto-principal)] text-base">
+              María Luisa <span className="text-[var(--primrose)]">Nutricionista</span>
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button className="w-9 h-9 flex items-center justify-center rounded-full border border-[var(--borde-rosa)] hover:bg-[var(--pinktone-soft)] transition">
+              <svg className="w-4 h-4 text-[var(--primrose)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
             </button>
-
+            <button className="w-9 h-9 flex items-center justify-center rounded-full border border-[var(--borde-rosa)] hover:bg-[var(--pinktone-soft)] transition">
+              <svg className="w-4 h-4 text-[var(--texto-suave)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+              </svg>
+            </button>
             <button
-              onClick={() => cambiarTab("snacks")}
-              className={`px-6 py-4 font-medium text-sm transition relative ${
-                tabActiva === "snacks"
-                  ? "text-[var(--lime)]"
-                  : "text-[var(--texto-suave)] hover:text-[var(--texto-principal)]"
-              }`}
+              onClick={abrirCarrito}
+              className="flex items-center gap-2 bg-[var(--primrose)] hover:bg-[var(--primrose-hover)] text-white px-4 py-2 rounded-full transition text-sm font-semibold shadow-md shadow-pink-200"
             >
-              <span className="flex items-center gap-2">
-                Snacks
-                <span className={`text-xs px-2 py-0.5 rounded-full ${
-                  tabActiva === "snacks"
-                    ? "bg-[var(--lime)] text-white"
-                    : "bg-[var(--lime-soft)] text-[var(--texto-suave)]"
-                }`}>
-                  {todosSnacks.length}
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              Carrito
+              {cantidadTotal > 0 && (
+                <span className="bg-white text-[var(--primrose)] rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+                  {cantidadTotal}
                 </span>
-              </span>
-              {tabActiva === "snacks" && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--lime)]" />
               )}
             </button>
           </div>
         </div>
+      </header>
+
+      {/* ===== HERO ===== */}
+      <section className="relative overflow-hidden bg-white py-10 md:py-14">
+        {/* Decoraciones fondo */}
+        <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+          <div className="absolute top-8 right-16 text-[var(--primrose)] text-2xl sparkle-item" style={{"--dur":"3s","--delay":"0s"} as React.CSSProperties}>♡</div>
+          <div className="absolute top-20 right-40 text-[var(--lime)] text-xl sparkle-item" style={{"--dur":"4s","--delay":"0.5s"} as React.CSSProperties}>✦</div>
+          <div className="absolute bottom-10 right-24 text-[var(--primrose)] text-lg sparkle-item" style={{"--dur":"3.5s","--delay":"1s"} as React.CSSProperties}>✿</div>
+          <div className="absolute top-1/2 left-1/3 text-[var(--lime)] text-sm sparkle-item" style={{"--dur":"5s","--delay":"0.8s"} as React.CSSProperties}>+</div>
+          <div className="absolute top-6 left-1/2 text-[var(--primrose)] text-base sparkle-item" style={{"--dur":"4.5s","--delay":"1.5s"} as React.CSSProperties}>♡</div>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-0 flex items-center gap-0">
+
+          {/* Columna izquierda: decoraciones food */}
+          <div className="hidden lg:flex flex-col items-end gap-2 shrink-0 relative" style={{width:"140px", marginLeft:"-20px"}}>
+            <div className="w-20 h-24 flotar" style={{"--dur":"5s"} as React.CSSProperties}><AvocadoSvg /></div>
+            <div className="w-16 h-16 flotar" style={{"--dur":"4s","animationDelay":"1s"} as React.CSSProperties}><LimeSvg /></div>
+            <div className="w-12 h-16 flotar" style={{"--dur":"6s","animationDelay":"0.5s"} as React.CSSProperties}><LeafSvg /></div>
+          </div>
+
+          {/* Centro: texto */}
+          <div className="flex-1 px-8 md:px-10 py-4">
+            <p className="font-nunito text-sm uppercase tracking-widest text-[var(--primrose)] mb-3 font-semibold flex items-center gap-2">
+              <span className="text-base">✳</span> Tienda
+            </p>
+            <h1 className="font-playfair text-4xl md:text-6xl font-bold text-[var(--texto-principal)] mb-4 leading-tight">
+              {tabActiva === "productos" ? (
+                <>Productos <span className="text-[var(--primrose)]">naturales.</span></>
+              ) : (
+                <>Snacks y <span className="text-[var(--lime)]">comida saludable.</span></>
+              )}
+            </h1>
+            <p className="font-nunito text-base md:text-lg text-[var(--texto-suave)] max-w-lg leading-relaxed">
+              {tabActiva === "productos"
+                ? "Suplementos, harinas y superalimentos cuidadosamente seleccionados para tu bienestar y una nutrición preventiva."
+                : "Bebidas, sándwiches y platos preparados con ingredientes frescos del día."}
+            </p>
+          </div>
+
+          {/* Columna derecha: collage de productos */}
+          <div className="hidden md:flex shrink-0 relative" style={{width:"320px", height:"240px"}}>
+            {/* Smoothie blob */}
+            <div className="absolute left-0 top-4 w-28 h-36 rounded-3xl bg-gradient-to-b from-[#b5e88a] to-[#6daa6d] shadow-lg flex items-end justify-center pb-3 flotar" style={{"--dur":"5s","animationDelay":"0.3s"} as React.CSSProperties}>
+              <div className="w-16 h-5 bg-[#8abe50] rounded-full"/>
+            </div>
+            {/* Sacha Inchi */}
+            <div className="absolute left-16 top-0 w-24 h-24 rounded-2xl bg-white shadow-md overflow-hidden border-2 border-[var(--borde-verde)] flotar" style={{"--dur":"4s","animationDelay":"1s"} as React.CSSProperties}>
+              <Image src="/images/SachaInchi.png" alt="Sacha Inchi" fill className="object-contain p-2"/>
+            </div>
+            {/* Libro */}
+            <div className="absolute right-2 top-6 w-32 h-44 rounded-2xl overflow-hidden shadow-xl border-4 border-white rotate-3 flotar" style={{"--dur":"6s","animationDelay":"0.5s"} as React.CSSProperties}>
+              <Image src="/images/libro-portada.jpg" alt="Libro Nutrición del Bebé" fill className="object-cover"/>
+            </div>
+            {/* Harina */}
+            <div className="absolute left-4 bottom-2 w-20 h-20 rounded-2xl bg-white shadow-md overflow-hidden border-2 border-[var(--borde-rosa)] -rotate-6 flotar" style={{"--dur":"4.5s","animationDelay":"1.5s"} as React.CSSProperties}>
+              <Image src="/images/harinaCurcuma.png" alt="Harina Cúrcuma" fill className="object-contain p-1"/>
+            </div>
+            {/* Sparkles */}
+            <span className="absolute top-2 right-20 text-[var(--primrose)] text-xl sparkle-item" style={{"--dur":"3s","--delay":"0s"} as React.CSSProperties}>✦</span>
+            <span className="absolute bottom-6 right-6 text-[var(--lime)] text-sm sparkle-item" style={{"--dur":"4s","--delay":"0.8s"} as React.CSSProperties}>♡</span>
+          </div>
+
+        </div>
       </section>
 
-      {/* FILTROS SECUNDARIOS POR CATEGORÍA */}
+      {/* ===== TABS ===== */}
+      <section className="bg-white border-b border-[var(--borde-rosa)] sticky top-[65px] z-20">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex gap-1 justify-center">
+            {(["productos","snacks"] as const).map((tab) => {
+              const activa = tabActiva === tab;
+              const color = tab === "productos" ? "var(--primrose)" : "var(--lime)";
+              const count = tab === "productos" ? todosProductos.length : todosSnacks.length;
+              return (
+                <button
+                  key={tab}
+                  onClick={() => cambiarTab(tab)}
+                  className={`px-8 py-4 font-medium text-base transition relative font-nunito capitalize ${
+                    activa ? "text-[var(--texto-principal)]" : "text-[var(--texto-suave)] hover:text-[var(--texto-principal)]"
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    {tab === "productos" ? "Productos" : "Snacks"}
+                    <span className="text-sm px-2 py-0.5 rounded-full" style={{
+                      background: activa ? color : "var(--pinktone-soft)",
+                      color: activa ? "white" : "var(--texto-suave)"
+                    }}>
+                      {count}
+                    </span>
+                  </span>
+                  {activa && (
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5" style={{background: color}} />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== FILTROS CATEGORÍA ===== */}
       {categoriasDeTab.length > 2 && (
-        <section className="bg-white py-4 border-b border-[var(--borde-rosa)]">
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="flex flex-wrap gap-2 justify-center">
+        <section className="bg-white py-5 border-b border-[var(--borde-rosa)]">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="flex flex-wrap gap-3 justify-center">
               {categoriasDeTab.map((cat) => {
                 const activa = categoriaActiva === cat;
-                const colorTab = tabActiva === "productos" ? "primrose" : "lime";
                 return (
                   <button
                     key={cat}
                     onClick={() => setCategoriaActiva(cat)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                    className={`px-5 py-2 rounded-full text-base font-medium transition font-nunito border-2 ${
                       activa
-                        ? colorTab === "primrose"
-                          ? "bg-[var(--primrose)] text-white shadow-md shadow-pink-200"
-                          : "bg-[var(--lime)] text-white shadow-md shadow-green-200"
-                        : "bg-[var(--pinktone-soft)] text-[var(--texto-principal)] hover:bg-[var(--pinktone)]"
+                        ? "bg-[var(--primrose)] border-[var(--primrose)] text-white shadow-md shadow-pink-200"
+                        : "bg-white border-[var(--borde-rosa)] text-[var(--texto-principal)] hover:border-[var(--primrose)] hover:text-[var(--primrose)]"
                     }`}
                   >
                     {nombreCategoria(cat)}
@@ -234,19 +347,19 @@ export default function ProductosContent() {
         </section>
       )}
 
-      {/* Grid */}
-      <section className="py-12 md:py-16">
-        <div className="max-w-6xl mx-auto px-6">
+      {/* ===== GRID DE PRODUCTOS ===== */}
+      <section className="py-12 md:py-16 bg-[var(--lime-soft)]">
+        <div className="max-w-7xl mx-auto px-6">
           {cargando ? (
             <p className="text-center text-sm text-[var(--texto-suave)] py-12">Cargando...</p>
           ) : productosFiltrados.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-sm text-[var(--texto-suave)]">
+              <p className="text-base text-[var(--texto-suave)] font-nunito">
                 No hay items en esta categoría todavía.
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {productosFiltrados.map((producto) => (
                 <ProductoCard
                   key={producto.id}
@@ -261,12 +374,48 @@ export default function ProductosContent() {
         </div>
       </section>
 
+      {/* ===== FEATURES ROW ===== */}
+      <section className="bg-white py-10 border-t border-[var(--borde-verde)]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {([
+              {
+                svg: <svg className="w-5 h-5 text-[var(--lime)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+                title: "100% Naturales", sub: "Productos seleccionados con altos estándares",
+              },
+              {
+                svg: <svg className="w-5 h-5 text-[var(--lime)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
+                title: "Calidad Garantizada", sub: "Marcas confiables y seguras para tu salud",
+              },
+              {
+                svg: <svg className="w-5 h-5 text-[var(--lime)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>,
+                title: "Nutrición Preventiva", sub: "Para todas las etapas de la vida",
+              },
+              {
+                svg: <svg className="w-5 h-5 text-[var(--lime)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>,
+                title: "Envíos Seguros", sub: "Llegamos a tu hogar con mucho cuidado",
+              },
+            ] as { svg: React.ReactNode; title: string; sub: string }[]).map((f, i) => (
+              <div key={i} className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-[var(--lime-soft)] border border-[var(--borde-verde)] flex items-center justify-center shrink-0">
+                  {f.svg}
+                </div>
+                <div>
+                  <p className="font-nunito font-semibold text-base text-[var(--texto-principal)]">{f.title}</p>
+                  <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mt-0.5">{f.sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <CarritoFlotante />
     </main>
   );
 }
 
-/* ---------- TARJETA DE PRODUCTO ---------- */
+/* ===== TARJETA DE PRODUCTO ===== */
 function ProductoCard({
   producto,
   onAgregar,
@@ -283,24 +432,17 @@ function ProductoCard({
   const colorPrincipal = esSnack ? "lime" : "primrose";
 
   return (
-    <div className={`bg-white rounded-2xl border-2 overflow-hidden shadow-md transition group hover:-translate-y-1 ${
-      colorPrincipal === "primrose"
-        ? "border-[var(--borde-rosa)] shadow-pink-100 hover:shadow-pink-200"
-        : "border-[var(--borde-verde)] shadow-green-100 hover:shadow-green-200"
-    }`}>
+    <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-[var(--borde-verde)] group">
+
       {/* Imagen */}
-      <div className={`relative aspect-square overflow-hidden ${
-        colorPrincipal === "primrose" ? "bg-[var(--pinktone-soft)]" : "bg-[var(--lime-soft)]"
-      }`}>
+      <div className="relative aspect-square overflow-hidden bg-[var(--lime-soft)]">
         {producto.imagen_url ? (
           <Image
             src={producto.imagen_url}
             alt={producto.nombre}
             fill
             className="object-cover group-hover:scale-105 transition duration-500"
-            onError={(e) => {
-              (e.target as HTMLImageElement).style.display = "none";
-            }}
+            onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-[var(--texto-tenue)] text-5xl">
@@ -308,49 +450,57 @@ function ProductoCard({
           </div>
         )}
 
-        {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5">
-          {producto.destacado && (
-            <span className={`text-white text-xs px-3 py-1 rounded-full font-semibold shadow-md ${
-              colorPrincipal === "primrose" ? "bg-[var(--primrose)]" : "bg-[var(--lime)]"
-            }`}>
-              Destacado
-            </span>
-          )}
-          {sinStock ? (
-            <span className="bg-red-500 text-white text-xs px-3 py-1 rounded-full font-semibold">
-              Agotado
-            </span>
-          ) : stockBajo ? (
-            <span className="bg-amber-500 text-white text-xs px-3 py-1 rounded-full font-semibold">
-              Últimos {producto.stock}
-            </span>
-          ) : null}
-        </div>
+        {/* Badge destacado — top left */}
+        {producto.destacado && (
+          <span className={`absolute top-3 left-3 text-white text-xs px-3 py-1 rounded-full font-semibold shadow ${
+            colorPrincipal === "primrose" ? "bg-[var(--primrose)]" : "bg-[var(--lime)]"
+          }`}>
+            Destacado
+          </span>
+        )}
+
+        {/* Stock badge */}
+        {sinStock ? (
+          <span className="absolute top-3 left-3 bg-red-500 text-white text-xs px-3 py-1 rounded-full font-semibold">Agotado</span>
+        ) : stockBajo && !producto.destacado ? (
+          <span className="absolute top-3 left-3 bg-amber-500 text-white text-xs px-3 py-1 rounded-full font-semibold">Últimos {producto.stock}</span>
+        ) : null}
+
+        {/* Corazón — top right */}
+        <button className="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow hover:scale-110 transition">
+          <svg className="w-4 h-4 text-[var(--primrose)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+
+        {/* Badge descriptivo — bottom left */}
+        <span className="absolute bottom-3 left-3 bg-[var(--lime)] text-white text-xs px-3 py-1 rounded-full font-semibold shadow">
+          {getBadge(producto)}
+        </span>
       </div>
 
       {/* Info */}
-      <div className="p-5">
-        <p className={`text-xs uppercase tracking-widest mb-1 font-semibold ${
+      <div className="p-4">
+        <p className={`font-nunito text-xs uppercase tracking-widest mb-1 font-semibold ${
           colorPrincipal === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
         }`}>
-          {producto.categoria.replace("-", " ")}
+          {nombreCategoria(producto.categoria)}
         </p>
-        <h3 className="font-semibold text-[var(--texto-principal)] mb-2">{producto.nombre}</h3>
+        <h3 className="font-semibold text-[var(--texto-principal)] mb-1.5 text-base leading-snug">{producto.nombre}</h3>
         {producto.descripcion && (
-          <p className="text-xs text-[var(--texto-suave)] leading-relaxed mb-4 line-clamp-2">
+          <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-4 line-clamp-2">
             {producto.descripcion}
           </p>
         )}
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <p className="text-2xl font-semibold text-[var(--texto-principal)]">
             S/ {producto.precio}
           </p>
           <button
             onClick={onAgregar}
             disabled={sinStock}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+            className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition ${
               sinStock
                 ? "bg-neutral-200 text-neutral-400 cursor-not-allowed"
                 : recienAgregado
@@ -360,10 +510,32 @@ function ProductoCard({
                 : "bg-[var(--lime)] hover:bg-[var(--lime-hover)] text-white shadow-md shadow-green-200"
             }`}
           >
-            {recienAgregado ? "✓ Agregado" : sinStock ? "Agotado" : "Agregar"}
+            {recienAgregado ? (
+              "✓ Agregado"
+            ) : sinStock ? (
+              "Agotado"
+            ) : (
+              <>
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                Agregar al carrito
+              </>
+            )}
           </button>
         </div>
       </div>
     </div>
   );
+}
+
+/* Helper usado en ProductoCard */
+function nombreCategoria(cat: string) {
+  const nombres: Record<string, string> = {
+    todos: "Todos", harinas: "Harinas", semillas: "Semillas",
+    superalimentos: "Superalimentos", endulzantes: "Endulzantes",
+    cereales: "Cereales", general: "General", libros: "Libros",
+    snacks: "Sándwiches", bebidas: "Bebidas", "comida-dietetica": "Comida dietética",
+  };
+  return nombres[cat] || cat;
 }

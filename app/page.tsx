@@ -17,6 +17,7 @@ export default function Home() {
       <SeccionEnfermedades />
       <SeccionProductos />
       <SeccionEmpresas />
+      <AsesoriasProyectos />
       <ProximoTaller />
       <Trayectoria />
       <Footer />
@@ -330,7 +331,7 @@ function HeroLibro() {
           <ul className="space-y-1.5 mb-6 text-[var(--texto-principal)] text-base">
             <li className="flex items-start gap-3">
               <span className="text-[var(--primrose)] mt-0.5 font-bold">—</span>
-              <span>Guía completa desde la gestación hasta los primeros años</span>
+              <span>Guía práctica desde los 6 meses de edad hasta el año de vida</span>
             </li>
             <li className="flex items-start gap-3">
               <span className="text-[var(--lime)] mt-0.5 font-bold">—</span>
@@ -455,7 +456,7 @@ function CarruselImagenes() {
           <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
             <span className="bow-animate">🎀</span> Trayectoria reciente
           </p>
-          <h2 className="font-playfair text-3xl md:text-4xl font-light text-white">
+          <h2 className="font-playfair text-4xl md:text-5xl font-bold text-white">
             Momentos que marcan <span className="font-semibold shimmer-white">una carrera.</span>
           </h2>
         </div>
@@ -576,7 +577,7 @@ function FilosofiaYServicios() {
             <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center gap-2">
               <span className="bow-animate">🎀</span> Nuestra propuesta
             </p>
-            <h2 className="font-playfair text-3xl md:text-4xl font-light mb-6 text-[var(--texto-principal)]">
+            <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-6 text-[var(--texto-principal)]">
               Filosofía <span className="font-semibold text-[var(--lime)]">profesional.</span>
             </h2>
 
@@ -638,7 +639,7 @@ function FilosofiaYServicios() {
             <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold">
               Lo que ofrezco
             </p>
-            <h2 className="text-3xl md:text-4xl font-light mb-6 text-[var(--texto-principal)]">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[var(--texto-principal)]">
               Cuatro <span className="font-semibold text-[var(--primrose)]">pilares.</span>
             </h2>
 
@@ -692,7 +693,7 @@ function ProximoTaller() {
             <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
               <span className="bow-animate">🎀</span> Próximo evento
             </p>
-            <h2 className="font-playfair text-3xl md:text-4xl font-light mb-4 leading-tight text-white">
+            <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-4 leading-tight text-white">
               Taller de<br />
               <span className="font-semibold shimmer-white">Comida Dietética.</span>
             </h2>
@@ -736,7 +737,7 @@ function ProximoTaller() {
 function Trayectoria() {
   const hitos = [
     { año: "Años de carrera", titulo: "Trabajo en MINSA", desc: "Ha trabajado en todo el Perú en forma presencial.", color: "primrose" },
-    { año: "Experiencia", titulo: "Sector público", desc: "Trabajo en SENA y diversas instituciones de salud.", color: "lime" },
+    { año: "Experiencia", titulo: "Sector público", desc: "Trabajo en CENAN y diversas instituciones de salud.", color: "lime" },
     { año: "Reciente", titulo: "Conferencista", desc: "Presentación en el Colegio de Nutricionistas del Perú.", color: "primrose" },
     { año: "Hoy", titulo: "Práctica privada", desc: "Enfoque en prevención y nutrición personalizada.", color: "lime" },
   ];
@@ -747,7 +748,7 @@ function Trayectoria() {
         <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
           Trayectoria
         </p>
-        <h2 className="text-3xl md:text-4xl font-light mb-10 text-[var(--texto-principal)]">
+        <h2 className="text-4xl md:text-5xl font-bold mb-10 text-[var(--texto-principal)]">
           Más de dos décadas <span className="font-semibold text-[var(--lime)]">construyendo experiencia.</span>
         </h2>
 
@@ -902,7 +903,7 @@ function SeccionEnfermedades() {
           <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold flex items-center justify-center gap-2">
             <span className="bow-animate">🎀</span> Nutrición preventiva
           </p>
-          <h2 className="font-playfair text-3xl md:text-4xl font-light mb-4 text-[var(--texto-principal)]">
+          <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-4 text-[var(--texto-principal)]">
             Enfermedades que se <span className="font-semibold text-[var(--lime)]">pueden prevenir.</span>
           </h2>
           <p className="font-nunito text-[var(--texto-suave)] max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
@@ -985,7 +986,7 @@ function SeccionProductos() {
             <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
               <span className="bow-animate">🎀</span> Nuestra tienda
             </p>
-            <h2 className="font-playfair text-3xl md:text-4xl font-light text-white">
+            <h2 className="font-playfair text-4xl md:text-5xl font-bold text-white">
               Productos <span className="font-semibold shimmer-white">naturales.</span>
             </h2>
             <p className="font-nunito text-white/80 mt-2 text-sm md:text-base max-w-lg">
@@ -1030,6 +1031,101 @@ function SeccionProductos() {
     </section>
   );
 }
+/* ---------- ASESORÍAS PARA PROYECTOS ---------- */
+function AsesoriasProyectos() {
+  return (
+    <section className="py-14 md:py-16 bg-[var(--yucca-soft)]">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="grid md:grid-cols-2 gap-10 items-center">
+          {/* Foto izquierda — mobile: arriba, desktop: izquierda */}
+          <div className="relative">
+            {/* TODO: reemplazar src con /images/marialuisa-perfil.jpg cuando esté disponible */}
+            <div className="relative max-w-md mx-auto md:mx-0">
+              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl rotate-2" />
+              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
+                <Image
+                  src="/images/conferencia-1.jpeg"
+                  alt="Lic. María Luisa Peña Valdivia — Nutricionista"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Texto derecha */}
+          <div>
+            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
+              Mi especialidad
+            </p>
+            <h2 className="font-playfair text-4xl md:text-5xl font-bold mb-4 leading-tight text-[var(--texto-principal)]">
+              Asesorías para<br />
+              <span className="font-semibold text-[var(--primrose)]">Proyectos nutricionales.</span>
+            </h2>
+            <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed mb-6">
+              Más de dos décadas diseñando e implementando proyectos de nutrición preventiva en instituciones,
+              comunidades y empresas del Perú. Si tu organización necesita una estrategia nutricional con
+              impacto real, conversemos.
+            </p>
+
+            <ul className="text-base text-[var(--texto-principal)] space-y-2 mb-6">
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--primrose)] font-bold">—</span>
+                Diagnóstico nutricional poblacional
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--lime)] font-bold">—</span>
+                Diseño de programas de intervención
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--primrose)] font-bold">—</span>
+                Capacitación a personal y equipos de salud
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-[var(--lime)] font-bold">—</span>
+                Evaluación de impacto y seguimiento
+              </li>
+            </ul>
+
+            <Link
+              href="/empresas"
+              className="inline-block bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
+            >
+              Solicitar asesoría
+            </Link>
+          </div>
+        </div>
+
+        {/* Card con cita y stats */}
+        <div className="mt-12 bg-white rounded-2xl p-8 shadow-xl shadow-pink-100 border-2 border-[var(--borde-rosa)]">
+          <p className="text-2xl font-light text-[var(--texto-principal)] leading-relaxed max-w-3xl">
+            &quot;Mi fuerte es la nutrición a escala. Si quieres impactar a tu comunidad, escuela o equipo,{" "}
+            <span className="font-semibold text-[var(--primrose)]">te ayudo a diseñarlo bien.</span>&quot;
+          </p>
+          <p className="text-sm text-[var(--texto-suave)] mt-4 mb-8">
+            — Lic. María Luisa Peña Valdivia
+          </p>
+
+          <div className="grid grid-cols-3 gap-4 pt-6 border-t border-[var(--borde-rosa)]">
+            <div>
+              <p className="text-2xl font-semibold text-[var(--primrose)]">20+</p>
+              <p className="text-xs text-[var(--texto-suave)]">Años en MINSA</p>
+            </div>
+            <div>
+              <p className="text-2xl font-semibold text-[var(--lime)]">Nacional</p>
+              <p className="text-xs text-[var(--texto-suave)]">Proyectos en todo el Perú</p>
+            </div>
+            <div>
+              <p className="text-2xl font-semibold text-[var(--primrose)]">Experta</p>
+              <p className="text-xs text-[var(--texto-suave)]">Asesoría especializada</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ---------- SECCIÓN EMPRESAS ---------- */
 function SeccionEmpresas() {
   return (
@@ -1040,7 +1136,7 @@ function SeccionEmpresas() {
             <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold">
               Para empresas
             </p>
-            <h2 className="text-3xl md:text-4xl font-light mb-4 leading-tight text-[var(--texto-principal)]">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 leading-tight text-[var(--texto-principal)]">
               Bienestar nutricional<br />
               <span className="font-semibold text-[var(--lime)]">para tu equipo.</span>
             </h2>

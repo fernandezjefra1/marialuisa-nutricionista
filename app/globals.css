@@ -76,7 +76,7 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 18px; /* accesibilidad adultos mayores — escala todo el sitio vía rem */
+  font-size: 20px; /* accesibilidad adultos mayores — escala todo el sitio vía rem */
 }
 
 body {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@/lib/use-user";
@@ -8,7 +8,7 @@ import { useAdmin } from "@/lib/use-admin";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[var(--verde-pastel)] text-[var(--texto-principal)]">
+    <main className="min-h-screen bg-[#f5f0e8] text-[var(--texto-principal)]">
       <FloatingSparkles />
       <Navbar />
       <HeroLibro />
@@ -22,6 +22,186 @@ export default function Home() {
       <Trayectoria />
       <Footer />
     </main>
+  );
+}
+
+/* ---------- ICONOS SVG REUTILIZABLES ---------- */
+function IcoHeart({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>;
+}
+function IcoEye({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>;
+}
+function IcoTarget({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>;
+}
+function IcoPerson({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
+}
+function IcoChild({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="5" r="3"/><path d="M12 8v5"/><path d="M9 21v-4l3-3 3 3v4"/><path d="M7 13l2-2"/><path d="M17 13l-2-2"/></svg>;
+}
+function IcoBook({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>;
+}
+function IcoBlender({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 6h18"/><path d="M19 6L8 21H5L3 6"/><path d="M13 6V3"/><path d="M11 6V3"/></svg>;
+}
+function IcoBowl({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 22C6.5 22 2 17.5 2 12h20c0 5.5-4.5 10-10 10z"/><path d="M2 12h20"/><path d="M7 8l2-4"/><path d="M17 8l-2-4"/><path d="M12 8V4"/></svg>;
+}
+function IcoChat({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>;
+}
+function IcoPin({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>;
+}
+function IcoDrop({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8 7 4 11.5 4 15a8 8 0 0 0 16 0c0-3.5-4-8-8-13z"/></svg>;
+}
+function IcoScale({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 3v18"/><path d="M3 7l9-4 9 4"/><path d="M3 7c0 3.3 2.7 6 6 6s6-2.7 6-6"/><path d="M9 13c0 3.3 2.7 6 6 6s6-2.7 6-6"/></svg>;
+}
+function IcoLeaf({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>;
+}
+function IcoBone({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M17 10c.7-.7 1.69 0 2.5 0a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0-2.5 2.5c0 .81.7 1.8 0 2.5l-5 5c-.7.7-1.69 0-2.5 0a2.5 2.5 0 0 0 0 5 2.5 2.5 0 0 0 2.5-2.5c0-.81-.7-1.8 0-2.5l5-5z"/></svg>;
+}
+function IcoWave({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>;
+}
+function IcoStomach({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M9 3H7a4 4 0 0 0-4 4v1a4 4 0 0 0 4 4h.5"/><path d="M14.5 12H15a4 4 0 0 1 4 4v1a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4v-1"/><path d="M9 3v9"/></svg>;
+}
+
+/* ---------- FONDO VEGETAL ANIMADO (ilustraciones SVG coloridas) ---------- */
+function FoodBg() {
+  type P = { style?: React.CSSProperties; className?: string };
+
+  /* Smoothie copa — esquina superior izquierda */
+  const Smoothie = ({ className, style }: P) => (
+    <svg className={className} style={style} viewBox="0 0 120 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M25 40 L35 150 Q60 162 85 150 L95 40 Z" fill="#b8dda0"/>
+      <path d="M28 60 L36 148 Q60 158 84 148 L92 60 Z" fill="#7dbf6a"/>
+      <path d="M25 40 Q60 45 95 40 Q60 35 25 40Z" fill="#a0cfaa"/>
+      <rect x="55" y="5" width="10" height="55" rx="5" fill="white" opacity="0.9"/>
+      <rect x="55" y="5" width="5" height="55" rx="5" fill="#7dbf6a" opacity="0.6"/>
+      <ellipse cx="60" cy="40" rx="35" ry="8" fill="#a8d890" opacity="0.5"/>
+      <circle cx="38" cy="90" r="4" fill="#5aaa5a" opacity="0.4"/>
+      <circle cx="82" cy="110" r="3" fill="#5aaa5a" opacity="0.4"/>
+    </svg>
+  );
+
+  /* Aguacate cortado — izquierda medio */
+  const Avocado = ({ className, style }: P) => (
+    <svg className={className} style={style} viewBox="0 0 130 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M65 8 Q22 55 22 105 Q22 155 65 160 Q108 155 108 105 Q108 55 65 8Z" fill="#2d5016"/>
+      <path d="M65 22 Q38 65 38 105 Q38 145 65 150 Q92 145 92 105 Q92 65 65 22Z" fill="#c8e096"/>
+      <ellipse cx="65" cy="110" rx="20" ry="26" fill="#8B5E3C"/>
+      <ellipse cx="65" cy="108" rx="14" ry="18" fill="#a0724a"/>
+    </svg>
+  );
+
+  /* Kiwi rodaja — esquina superior derecha */
+  const Kiwi = ({ className, style }: P) => (
+    <svg className={className} style={style} viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="80" cy="80" r="72" fill="#5a8a2a"/>
+      <circle cx="80" cy="80" r="58" fill="#d4e87a"/>
+      <circle cx="80" cy="80" r="14" fill="white"/>
+      {[0,30,60,90,120,150,180,210,240,270,300,330].map((a, i) => {
+        const rad = (Math.PI * a) / 180;
+        const x2 = 80 + 56 * Math.cos(rad);
+        const y2 = 80 + 56 * Math.sin(rad);
+        const sx = 80 + 14 * Math.cos(rad);
+        const sy = 80 + 14 * Math.sin(rad);
+        const ex = 80 + 40 * Math.cos(rad);
+        const ey = 80 + 40 * Math.sin(rad);
+        return (
+          <g key={i}>
+            <line x1={sx} y1={sy} x2={x2} y2={y2} stroke="white" strokeWidth="1.2" opacity="0.6"/>
+            <ellipse cx={ex} cy={ey} rx="5" ry="9"
+              transform={`rotate(${a} ${ex} ${ey})`}
+              fill="#2d4a10"/>
+          </g>
+        );
+      })}
+    </svg>
+  );
+
+  /* Limón rodaja — derecha medio */
+  const Lime = ({ className, style }: P) => (
+    <svg className={className} style={style} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="56" fill="#8fcc3a"/>
+      <circle cx="60" cy="60" r="56" fill="#a8d840"/>
+      <circle cx="60" cy="60" r="44" fill="#c8ec60"/>
+      <circle cx="60" cy="60" r="10" fill="white" opacity="0.9"/>
+      {[0,45,90,135,180,225,270,315].map((a, i) => {
+        const rad = (Math.PI * a) / 180;
+        return (
+          <line key={i}
+            x1={60 + 10 * Math.cos(rad)} y1={60 + 10 * Math.sin(rad)}
+            x2={60 + 43 * Math.cos(rad)} y2={60 + 43 * Math.sin(rad)}
+            stroke="white" strokeWidth="1.5" opacity="0.7"/>
+        );
+      })}
+    </svg>
+  );
+
+  /* Uvas — esquina inferior izquierda */
+  const Grapes = ({ className, style }: P) => (
+    <svg className={className} style={style} viewBox="0 0 140 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M70 40 Q75 18 80 12" stroke="#4a7a2a" strokeWidth="4" fill="none" strokeLinecap="round"/>
+      <path d="M80 12 Q96 4 100 18 Q85 22 80 12Z" fill="#4a7a2a"/>
+      {[
+        {x:45,y:110},{x:70,y:100},{x:95,y:110},
+        {x:32,y:85}, {x:57,y:75}, {x:82,y:75}, {x:107,y:85},
+        {x:45,y:60}, {x:70,y:50}, {x:95,y:60},
+                     {x:70,y:130}
+      ].map((g,i)=>(
+        <g key={i}>
+          <circle cx={g.x} cy={g.y} r="18" fill="#6b3d9a"/>
+          <circle cx={g.x-5} cy={g.y-5} r="5" fill="white" opacity="0.25"/>
+        </g>
+      ))}
+    </svg>
+  );
+
+  /* Brócoli — esquina inferior derecha */
+  const Broccoli = ({ className, style }: P) => (
+    <svg className={className} style={style} viewBox="0 0 160 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="68" y="110" width="24" height="60" rx="10" fill="#3d6e2a"/>
+      <rect x="72" y="110" width="8" height="60" rx="6" fill="#4d8a3a" opacity="0.5"/>
+      <circle cx="80" cy="80" r="38" fill="#3a8a3a"/>
+      <circle cx="48" cy="94" r="28" fill="#3a8a3a"/>
+      <circle cx="112" cy="94" r="28" fill="#3a8a3a"/>
+      <circle cx="62" cy="58" r="22" fill="#4aaa4a"/>
+      <circle cx="98" cy="58" r="22" fill="#4aaa4a"/>
+      <circle cx="80" cy="46" r="20" fill="#5aba5a"/>
+      <circle cx="48" cy="94" r="14" fill="#4aaa4a"/>
+      <circle cx="112" cy="94" r="14" fill="#4aaa4a"/>
+    </svg>
+  );
+
+  const fd = (dur: string, del: string) => ({"--fdur": dur, "--fdel": del} as React.CSSProperties);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+      {/* Esquina superior izquierda: smoothie */}
+      <Smoothie className="absolute -top-8 -left-14 w-32 md:w-40 opacity-85 food-d2" style={fd("7s","0s")} />
+      {/* Esquina superior derecha: kiwi grande */}
+      <Kiwi     className="absolute -top-8 -right-14 w-36 md:w-52 opacity-85 food-d1" style={fd("9s","0.5s")} />
+      {/* Pequeño kiwi justo debajo en la derecha */}
+      <Kiwi     className="absolute top-28 md:top-20 -right-10 w-20 md:w-28 opacity-70 food-d3" style={fd("8s","1.5s")} />
+      {/* Limón borde derecho centro */}
+      <Lime     className="absolute top-1/2 -translate-y-1/2 -right-10 w-20 md:w-24 opacity-75 food-d2" style={fd("7s","2s")} />
+      {/* Aguacate borde izquierdo centro */}
+      <Avocado  className="absolute top-1/3 -left-14 w-28 md:w-36 opacity-85 food-d1" style={fd("8s","1.2s")} />
+      {/* Uvas esquina inferior izquierda */}
+      <Grapes   className="absolute -bottom-6 -left-10 w-28 md:w-40 opacity-80 food-sw" style={fd("9s","0.8s")} />
+      {/* Brócoli esquina inferior derecha */}
+      <Broccoli className="absolute -bottom-8 -right-10 w-36 md:w-52 opacity-85 food-d3" style={fd("7s","2.5s")} />
+    </div>
   );
 }
 
@@ -43,14 +223,11 @@ function FloatingSparkles() {
   ];
 
   return (
-    <div
-      className="fixed inset-0 pointer-events-none z-10 overflow-hidden"
-      aria-hidden="true"
-    >
+    <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden" aria-hidden="true">
       {items.map((item, i) => (
         <span
           key={i}
-          className="absolute text-[var(--primrose)] sparkle-item"
+          className="absolute text-[var(--lime)] sparkle-item"
           style={{
             top: item.top,
             left: item.left,
@@ -71,19 +248,20 @@ function Navbar() {
   const [menuAbierto, setMenuAbierto] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 bg-[var(--verde-pastel)]/95 backdrop-blur-sm border-b border-[var(--borde-verde)]">
+    <nav className="sticky top-0 z-50 bg-[#f5f0e8]/95 backdrop-blur-sm border-b border-[var(--borde-verde)]">
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-3 md:py-4 flex items-center justify-between gap-2">
-        <Link href="/" className="font-playfair font-semibold tracking-tight text-[var(--texto-principal)] text-sm md:text-base">
-          <span className="hidden sm:inline">María Luisa </span><span className="shimmer-rose">Nutricionista</span>
+        <Link href="/" className="flex items-center gap-2 font-playfair font-bold tracking-tight text-[var(--texto-principal)] text-base md:text-lg">
+          <Image src="/images/iconoNutricion.png" alt="Logo" width={56} height={56} className="object-contain drop-shadow-sm" />
+          <span><span className="hidden sm:inline">María Luisa </span><span className="text-[var(--primrose)]">Nutricionista</span></span>
         </Link>
 
         {/* Menú desktop */}
-        <ul className="hidden md:flex gap-2 text-sm">
-          <li><a href="#libro" className="px-4 py-2 rounded-full bg-[#F2A0BC] text-white hover:bg-[var(--primrose)] transition-all duration-300">Libro</a></li>
-          <li><Link href="/productos" className="px-4 py-2 rounded-full bg-[#F2A0BC] text-white hover:bg-[var(--primrose)] transition-all duration-300">Tienda</Link></li>
-          <li><a href="#sobre-mi" className="px-4 py-2 rounded-full bg-[#F2A0BC] text-white hover:bg-[var(--primrose)] transition-all duration-300">Sobre mí</a></li>
-          <li><a href="#taller" className="px-4 py-2 rounded-full bg-[#F2A0BC] text-white hover:bg-[var(--primrose)] transition-all duration-300">Talleres</a></li>
-          <li><Link href="/empresas" className="px-4 py-2 rounded-full bg-[#F2A0BC] text-white hover:bg-[var(--primrose)] transition-all duration-300">Empresas</Link></li>
+        <ul className="hidden md:flex gap-2 text-sm font-medium">
+          <li><a href="#libro"    className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Libro</a></li>
+          <li><Link href="/productos" className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Tienda</Link></li>
+          <li><a href="#sobre-mi" className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Sobre mí</a></li>
+          <li><a href="#taller"   className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Talleres</a></li>
+          <li><Link href="/empresas"  className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Empresas</Link></li>
         </ul>
 
         <div className="flex items-center gap-2 md:gap-3">
@@ -177,13 +355,13 @@ function MenuUsuario() {
       <div className="flex items-center gap-2">
         <Link
           href="/login"
-          className="hidden sm:inline-block text-sm px-4 py-2 rounded-full bg-[#F2A0BC] text-white hover:bg-[var(--primrose)] transition-all duration-300"
+          className="hidden sm:inline-block text-sm px-4 py-2 rounded-full bg-[var(--texto-principal)] text-white hover:bg-[var(--lime-hover)] transition-all duration-300"
         >
           Iniciar sesión
         </Link>
         <Link
           href="/login?redirect=/comprar-libro"
-          className="text-xs sm:text-sm bg-[#F2A0BC] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:bg-[var(--primrose)] transition-all duration-300 shadow-md shadow-pink-200 whitespace-nowrap"
+          className="text-xs sm:text-sm bg-[var(--texto-principal)] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:bg-[var(--lime-hover)] transition-all duration-300 shadow-md shadow-green-200 whitespace-nowrap"
         >
           Reservar cita
         </Link>
@@ -273,7 +451,7 @@ function MenuUsuario() {
                     onClick={() => setAbierto(false)}
                     className="block px-4 py-2.5 text-sm font-semibold text-[var(--primrose)] hover:bg-[var(--pinktone-soft)] transition"
                   >
-                    🔧 Panel administrador
+                    Panel administrador
                   </Link>
                 </>
               )}
@@ -301,59 +479,62 @@ function MenuUsuario() {
 /* ---------- HERO: LIBRO DESTACADO ---------- */
 function HeroLibro() {
   return (
-    <section id="libro" className="relative overflow-hidden bg-[var(--verde-pastel)]">
-      <div className="max-w-7xl mx-auto px-6 py-14 md:py-20 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+    <section id="libro" className="relative overflow-hidden bg-[#f5f0e8]">
+      <FoodBg />
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-14 md:py-20 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
         {/* Texto */}
         <div className="order-2 md:order-1">
           <div className="mb-5">
-            <p className="font-playfair text-xl md:text-2xl text-[var(--lime)] font-semibold italic leading-snug mb-1">
+            <p className="font-playfair text-2xl md:text-3xl text-[var(--texto-principal)] font-semibold italic leading-snug mb-1">
               &ldquo;Vive la magia de la comida dietética&rdquo;
             </p>
-            <p className="text-sm text-[var(--texto-suave)]">
+            <p className="text-base text-[var(--texto-suave)]">
               María Luisa Nutricionista &nbsp;·&nbsp; <span className="font-medium text-[var(--texto-principal)]">Universidad de San Marcos</span>
             </p>
           </div>
 
           <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold flex items-center gap-2">
-            <span className="bow-animate">🎀</span> Nuevo lanzamiento
+            <IcoHeart cls="w-4 h-4 text-[var(--primrose)] bow-animate inline-block" /> Nuevo lanzamiento
           </p>
-          <h1 className="font-playfair text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light leading-[1.05] tracking-tight mb-6 text-[var(--texto-principal)]">
+          <h1 className="font-playfair text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-tight mb-6 text-[var(--texto-principal)]">
             Nutrición<br />
             <span className="font-semibold shimmer-rose">del Bebé.</span>
           </h1>
-          <p className="font-nunito text-base md:text-lg text-[var(--texto-suave)] leading-relaxed mb-6 max-w-lg">
+          <p className="font-nunito text-lg md:text-xl text-[var(--texto-suave)] leading-relaxed mb-6 max-w-lg">
             Una guía única en su tipo sobre nutrición infantil{" "}
             <span className="text-[var(--lime)] font-semibold">preventiva</span>, fruto
             de años de experiencia profesional recorriendo todo el Perú.
             Recientemente presentada en el Colegio de Nutricionistas del Perú.
           </p>
 
-          <ul className="space-y-1.5 mb-6 text-[var(--texto-principal)] text-base">
-            <li className="flex items-start gap-3">
-              <span className="text-[var(--primrose)] mt-0.5 font-bold">—</span>
-              <span>Guía práctica desde los 6 meses de edad hasta el año de vida</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="text-[var(--lime)] mt-0.5 font-bold">—</span>
-              <span>Recetas, planes alimentarios y consejos prácticos</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="text-[var(--primrose)] mt-0.5 font-bold">—</span>
-              <span>Basado en evidencia y experiencia profesional</span>
-            </li>
+          <ul className="space-y-3 mb-6">
+            {[
+              { t: "Guía práctica desde los 6 meses de edad hasta el año de vida", ac: "var(--primrose)" },
+              { t: "Recetas, planes alimentarios y consejos prácticos",             ac: "var(--lime)"    },
+              { t: "Basado en evidencia y experiencia profesional",                 ac: "var(--primrose)" },
+            ].map(({ t, ac }, i) => (
+              <li key={i} className="flex items-start gap-3">
+                <span className="mt-1 flex-shrink-0 font-bold text-lg leading-none" style={{ color: ac }}>—</span>
+                <span className="font-nunito text-base md:text-lg text-[var(--texto-suave)] leading-relaxed">{t}</span>
+              </li>
+            ))}
           </ul>
 
           <div className="flex flex-wrap items-center gap-3 mb-6">
-            <div className="bg-[var(--lime-soft)] border-2 border-[var(--lime)] rounded-2xl px-5 py-3 flex flex-col items-start">
-              <span className="text-xs uppercase tracking-widest text-[var(--lime)] font-semibold mb-0.5">Versión digital</span>
-              <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-semibold text-[var(--texto-principal)]">S/ 10</span>
-                <span className="text-xs bg-[var(--lime)] text-white px-2 py-0.5 rounded-full font-semibold">¡Oferta!</span>
+            {/* Digital — animado porque está de oferta */}
+            <div className="relative bg-[var(--lime-soft)] border-2 border-[var(--lime)] rounded-2xl px-5 py-3 flex flex-col items-start halo-animado overflow-hidden">
+              {/* brillo deslizante */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-[shimmer-slide_2.5s_ease-in-out_infinite]" style={{animation:"shimmer-slide 2.5s ease-in-out infinite"}}/>
+              <span className="text-xs uppercase tracking-widest text-[var(--lime)] font-bold mb-0.5 relative z-10">Versión digital</span>
+              <div className="flex items-baseline gap-2 relative z-10">
+                <span className="text-4xl font-bold text-[var(--texto-principal)]">S/ 10</span>
+                <span className="text-xs bg-[var(--primrose)] text-white px-2 py-0.5 rounded-full font-bold bow-animate">¡Oferta!</span>
               </div>
             </div>
-            <div className="flex flex-col items-start px-4 py-3">
+            {/* Físico — caja igual de estilo */}
+            <div className="bg-white border-2 border-[var(--borde-verde)] rounded-2xl px-5 py-3 flex flex-col items-start">
               <span className="text-xs uppercase tracking-widest text-[var(--texto-tenue)] font-semibold mb-0.5">Físico</span>
-              <span className="text-2xl font-light text-[var(--texto-tenue)]">S/ 20</span>
+              <span className="text-4xl font-semibold text-[var(--texto-principal)]">S/ 20</span>
             </div>
           </div>
 
@@ -362,13 +543,13 @@ function HeroLibro() {
               href="/comprar-libro"
               className="btn-coquette bg-[var(--primrose)] text-white px-5 py-3 md:px-8 md:py-4 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
             >
-              ✦ Adquirir el libro
+              Adquirir el libro
             </Link>
             <a
               href="#sobre-mi"
               className="btn-coquette border-2 border-[var(--primrose)] text-[var(--primrose)] px-6 py-3 rounded-full hover:bg-[var(--pinktone-soft)] transition font-medium"
             >
-              Conocer a la autora ♡
+              Conocer a la autora
             </a>
           </div>
         </div>
@@ -390,8 +571,8 @@ function HeroLibro() {
               <p className="text-xs text-[var(--primrose)] uppercase tracking-widest mb-1 font-semibold">
                 Por
               </p>
-              <p className="font-semibold text-sm text-[var(--texto-principal)]">Lic. María Luisa</p>
-              <p className="text-xs text-[var(--texto-suave)]">Nutricionista colegiada</p>
+              <p className="font-nunito font-semibold text-base text-[var(--texto-principal)]">Lic. María Luisa</p>
+              <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">Nutricionista colegiada</p>
             </div>
           </div>
         </div>
@@ -400,130 +581,198 @@ function HeroLibro() {
   );
 }
 
-/* ---------- CARRUSEL DE IMÁGENES ---------- */
+/* ---------- TRAYECTORIA: BENTO ANIMADO ---------- */
 function CarruselImagenes() {
-  const slides = [
-  {
-    imagen: "/images/conferencia-1.jpeg",
-    titulo: "Conferencia en el Colegio de Nutricionistas",
-    descripcion: "Presentación oficial del libro 'Nutrición del Bebé' ante colegas del sector.",
-    ajuste: "cover",
-    posicion: "center center",
-  },
-  {
-    imagen: "/images/conferencia-grupo.jpeg",
-    titulo: "Compartiendo conocimiento",
-    descripcion: "Profesionales y asistentes recibiendo el libro durante la conferencia.",
-    ajuste: "cover",
-    posicion: "center center",
-  },
-  {
-  imagen: "/images/ExperienciaLaboral.jpeg",
-  titulo: "Lonchera Saludable",
-  descripcion: "Guía práctica para preparar loncheras nutritivas y balanceadas para tus hijos, elaborada por la Nutri. Maria Luisa Peña.",
-  ajuste: "contain",
-  posicion: "center center",
-},
-{
-  imagen: "/images/CitasRealizadas.jpeg",
-  titulo: "Consultas Nutricionales",
-  descripcion: "Sesiones personalizadas donde evaluamos tus hábitos alimenticios y creamos un plan nutricional adaptado a tus necesidades.",
-  ajuste: "contain",
-  posicion: "center center",
-},
-{
-  imagen: "/images/ReunionConEscolares.jpeg",
-  titulo: "Talleres con Escolares",
-  descripcion: "Actividades educativas y dinámicas para enseñar a los niños la importancia de una alimentación saludable desde temprana edad.",
-  ajuste: "contain",
-  posicion: "center center",
-},
-];
+  type Foto = { src: string; titulo: string; desc: string; fit: "cover" | "contain" };
 
-  const [actual, setActual] = useState(0);
+  const slides: Foto[] = [
+    { src: "/images/conferencia-1.jpeg",      titulo: "Conferencia en el Colegio de Nutricionistas", desc: "Presentación oficial del libro 'Nutrición del Bebé' ante colegas del sector.",                                     fit: "cover"   },
+    { src: "/images/conferencia-grupo.jpeg",   titulo: "Compartiendo conocimiento",                   desc: "Profesionales y asistentes recibiendo el libro durante la conferencia.",                                           fit: "cover"   },
+    { src: "/images/ExperienciaLaboral.jpeg",  titulo: "Lonchera Saludable",                          desc: "Guía práctica para preparar loncheras nutritivas y balanceadas para tus hijos.",                                   fit: "contain" },
+    { src: "/images/CitasRealizadas.jpeg",     titulo: "Consultas Nutricionales",                     desc: "Sesiones personalizadas donde evaluamos tus hábitos alimenticios y creamos un plan adaptado.",                    fit: "cover"   },
+    { src: "/images/ReunionConEscolares.jpeg", titulo: "Talleres con Escolares",                      desc: "Actividades educativas para enseñar a los niños la importancia de una alimentación saludable.",                   fit: "cover"   },
+  ];
+
+  const total = slides.length;
+  const [destacado, setDestacado] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setActual((prev) => (prev + 1) % slides.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [slides.length]);
+    const t = setInterval(() => setDestacado((d) => (d + 1) % total), 4500);
+    return () => clearInterval(t);
+  }, [total]);
+
+  /*
+   * Bento layout: 1 grande (izquierda) + 4 pequeñas (2×2 derecha).
+   * Cada slot tiene posición en % dentro del contenedor.
+   * Cuando cambia `destacado`, cada imagen vuela suavemente a su nuevo slot.
+   */
+  const slots = [
+    { top: 0,   left: 0,    w: 57,   h: 100  }, // slot 0 → DESTACADA (grande)
+    { top: 0,   left: 58.5, w: 19.5, h: 48.5 }, // slot 1 → pequeña arriba-izq
+    { top: 0,   left: 79,   w: 21,   h: 48.5 }, // slot 2 → pequeña arriba-der
+    { top: 51.5,left: 58.5, w: 19.5, h: 48.5 }, // slot 3 → pequeña abajo-izq
+    { top: 51.5,left: 79,   w: 21,   h: 48.5 }, // slot 4 → pequeña abajo-der
+  ];
+
+  const burbujas = [
+    { w:70,  top:"6%",  left:"0%",  op:0.10, dur:"7s", del:"0s"   },
+    { w:35,  top:"28%", left:"4%",  op:0.08, dur:"5s", del:"1.2s" },
+    { w:110, top:"62%", left:"0%",  op:0.08, dur:"9s", del:"2s"   },
+    { w:45,  top:"82%", left:"5%",  op:0.11, dur:"6s", del:"0.6s" },
+    { w:28,  top:"12%", left:"93%", op:0.10, dur:"5s", del:"3s"   },
+    { w:90,  top:"44%", left:"95%", op:0.08, dur:"9s", del:"1s"   },
+    { w:55,  top:"72%", left:"91%", op:0.10, dur:"6s", del:"2.5s" },
+    { w:40,  top:"90%", left:"96%", op:0.08, dur:"7s", del:"0.4s" },
+  ];
+
+  /* SVG de cohete pequeño reutilizable */
+  const RocketSvg = ({ size = 28, color = "white" }: { size?: number; color?: string }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2C12 2 7 7 7 13c0 2.5 1.5 4.5 5 6 3.5-1.5 5-3.5 5-6 0-6-5-11-5-11z" fill={color} opacity="0.9"/>
+      <path d="M10 14c0 0-3 1-3 4l2-1 1 2c0-2 2-3 2-5" fill={color} opacity="0.7"/>
+      <path d="M14 14c0 0 3 1 3 4l-2-1-1 2c0-2-2-3-2-5" fill={color} opacity="0.7"/>
+      <circle cx="12" cy="10" r="2.5" fill={color} opacity="0.5"/>
+      <path d="M10 18c0 2 .5 3 2 4 1.5-1 2-2 2-4" fill={color} opacity="0.6"/>
+    </svg>
+  );
+
+  const cohetes: { top: string; left: string; size: number; cls: string; dur: string; del: string; color: string }[] = [
+    { top:"80%", left:"3%",   size:22, cls:"rocket-up",   dur:"5.5s", del:"0s",    color:"rgba(255,255,255,0.7)" },
+    { top:"70%", left:"15%",  size:16, cls:"rocket-fast",  dur:"3.8s", del:"1.4s",  color:"rgba(255,255,255,0.5)" },
+    { top:"85%", left:"30%",  size:26, cls:"rocket-up",   dur:"6.2s", del:"2.8s",  color:"rgba(200,240,180,0.7)" },
+    { top:"75%", left:"52%",  size:18, cls:"rocket-fast",  dur:"4s",   del:"0.6s",  color:"rgba(255,255,255,0.5)" },
+    { top:"82%", left:"68%",  size:24, cls:"rocket-up",   dur:"5s",   del:"3.5s",  color:"rgba(255,255,255,0.65)"},
+    { top:"78%", left:"83%",  size:20, cls:"rocket-fast",  dur:"3.5s", del:"1.8s",  color:"rgba(200,240,180,0.6)" },
+    { top:"10%", left:"8%",   size:18, cls:"rocket-down", dur:"6s",   del:"0.9s",  color:"rgba(255,255,255,0.45)"},
+    { top:"5%",  left:"60%",  size:22, cls:"rocket-down", dur:"7s",   del:"2.2s",  color:"rgba(200,240,180,0.5)" },
+    { top:"8%",  left:"88%",  size:16, cls:"rocket-down", dur:"5.5s", del:"4s",    color:"rgba(255,255,255,0.4)" },
+  ];
 
   return (
-    <section className="bg-[var(--verde-fuerte)] py-14 md:py-16">
-      <div className="w-full px-4 md:px-8">
-        <div className="max-w-6xl mx-auto mb-8">
+    <section className="bg-[var(--verde-fuerte)] py-14 md:py-16 relative overflow-hidden">
+      {/* Burbujas */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        {burbujas.map((b, i) => (
+          <span
+            key={i}
+            className={`absolute rounded-full food-d${(i % 3) + 1}`}
+            style={{
+              width: b.w, height: b.w, top: b.top, left: b.left, opacity: b.op,
+              backgroundColor: i % 2 === 0 ? "white" : "#a8d890",
+              border: i % 3 === 2 ? "2px solid rgba(255,255,255,0.35)" : "none",
+              ["--fdur" as string]: b.dur, ["--fdel" as string]: b.del,
+            }}
+          />
+        ))}
+
+        {/* Cohetes animados */}
+        {cohetes.map((c, i) => (
+          <div
+            key={`r${i}`}
+            className={`absolute pointer-events-none ${c.cls}`}
+            style={{
+              top: c.top, left: c.left,
+              ["--rdur" as string]: c.dur,
+              ["--rdel" as string]: c.del,
+            }}
+          >
+            <RocketSvg size={c.size} color={c.color} />
+          </div>
+        ))}
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 md:px-8 relative z-10">
+        {/* Cabecera */}
+        <div className="mb-8">
           <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
-            <span className="bow-animate">🎀</span> Trayectoria reciente
+            <IcoLeaf cls="w-4 h-4 inline-block" /> Trayectoria reciente
           </p>
           <h2 className="font-playfair text-3xl md:text-5xl font-bold text-white">
-            Momentos que marcan <span className="font-semibold shimmer-white">una carrera.</span>
+            Momentos que marcan <span className="font-semibold text-[var(--primrose)]">una carrera.</span>
           </h2>
         </div>
 
-        {/* Carrusel SIN overlay opaco - fotos nítidas */}
-        <div className="relative overflow-hidden rounded-3xl bg-black h-[300px] sm:h-[400px] md:h-[450px] shadow-xl shadow-pink-200 border-4 border-white">
-          {slides.map((slide, i) => (
-            <div
-              key={i}
-              className={`absolute inset-0 transition-opacity duration-1000 ${
-                i === actual ? "opacity-100" : "opacity-0 pointer-events-none"
-              }`}
-            >
-              <Image
-  src={slide.imagen}
-  alt={slide.titulo}
-  fill
-  className={slide.ajuste === "contain" ? "object-contain" : "object-cover"}
-  style={{ objectPosition: slide.posicion ?? "center center" }}
-  priority={i === 0}
-/>
-              {/* Overlay solo abajo para el texto, mucho más sutil */}
-              <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/85 via-black/40 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 text-white">
-                <h3 className="text-2xl md:text-3xl font-semibold mb-1 drop-shadow-lg">
-                  {slide.titulo}
-                </h3>
-                <p className="text-sm md:text-base text-white/90 max-w-2xl drop-shadow-md">
-                  {slide.descripcion}
-                </p>
-              </div>
-            </div>
-          ))}
+        {/* BENTO — contenedor con altura fija, posicionamiento absoluto */}
+        <div className="relative w-full h-[340px] sm:h-[400px] md:h-[440px]">
+          {slides.map((slide, i) => {
+            const slotIdx = (i - destacado + total) % total;
+            const s = slots[slotIdx];
+            const esFeatured = slotIdx === 0;
 
-          <button
-            onClick={() => setActual((actual - 1 + slides.length) % slides.length)}
-            className="absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/90 hover:bg-[var(--primrose)] text-[var(--texto-principal)] hover:text-white flex items-center justify-center transition shadow-lg"
-            aria-label="Anterior"
-          >
-            ←
-          </button>
-          <button
-            onClick={() => setActual((actual + 1) % slides.length)}
-            className="absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/90 hover:bg-[var(--primrose)] text-[var(--texto-principal)] hover:text-white flex items-center justify-center transition shadow-lg"
-            aria-label="Siguiente"
-          >
-            →
-          </button>
-
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 flex gap-2">
-            {slides.map((_, i) => (
-              <button
+            return (
+              <div
                 key={i}
-                onClick={() => setActual(i)}
-                className={`h-1.5 rounded-full transition-all ${
-                  i === actual ? "w-8 bg-[var(--primrose)]" : "w-4 bg-white/70"
-                }`}
-                aria-label={`Ir al slide ${i + 1}`}
-              />
-            ))}
-          </div>
+                onClick={() => setDestacado(i)}
+                className="absolute cursor-pointer"
+                style={{
+                  top: `${s.top}%`,
+                  left: `${s.left}%`,
+                  width: `${s.w}%`,
+                  height: `${s.h}%`,
+                  transition: "top 0.7s cubic-bezier(0.4,0,0.2,1), left 0.7s cubic-bezier(0.4,0,0.2,1), width 0.7s cubic-bezier(0.4,0,0.2,1), height 0.7s cubic-bezier(0.4,0,0.2,1)",
+                  zIndex: esFeatured ? 3 : 1,
+                  padding: "4px",
+                }}
+              >
+                <div className="relative w-full h-full rounded-xl overflow-hidden bg-[#2d5016] group shadow-xl">
+                  <Image
+                    src={slide.src}
+                    alt={slide.titulo}
+                    fill
+                    className={`transition-transform duration-700 group-hover:scale-105 ${
+                      slide.fit === "contain" ? "object-contain p-2" : "object-cover"
+                    }`}
+                    style={{ objectPosition: "center center" }}
+                    priority={i === 0}
+                  />
+
+                  {/* Overlay siempre */}
+                  <div className={`absolute inset-0 transition-all duration-700 ${
+                    esFeatured
+                      ? "bg-gradient-to-t from-black/70 via-black/10 to-transparent"
+                      : "bg-black/30 group-hover:bg-black/15"
+                  }`} />
+
+                  {/* Texto solo en la destacada */}
+                  {esFeatured && (
+                    <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
+                      <h3 className="text-base md:text-xl font-bold mb-1 drop-shadow-lg leading-snug">
+                        {slide.titulo}
+                      </h3>
+                      <p className="text-xs md:text-sm text-white/80 leading-relaxed line-clamp-2 drop-shadow">
+                        {slide.desc}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Ícono "expandir" en pequeñas al hover */}
+                  {!esFeatured && (
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <span className="bg-white/80 text-[var(--texto-principal)] text-xs font-semibold px-3 py-1 rounded-full shadow">
+                        Ver
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
-        <div className="max-w-6xl mx-auto">
-          <p className="text-xs text-[var(--texto-suave)] mt-3 text-right">
-            {String(actual + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
-          </p>
+        {/* Puntos de navegación */}
+        <div className="flex justify-center gap-2 mt-6">
+          {slides.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setDestacado(i)}
+              className={`rounded-full transition-all duration-300 ${
+                i === destacado
+                  ? "w-8 h-2 bg-[var(--primrose)]"
+                  : "w-2 h-2 bg-white/40 hover:bg-white/70"
+              }`}
+              aria-label={`Imagen ${i + 1}`}
+            />
+          ))}
         </div>
       </div>
     </section>
@@ -532,50 +781,32 @@ function CarruselImagenes() {
 
 /* ---------- FILOSOFÍA + SERVICIOS ---------- */
 function FilosofiaYServicios() {
-  const secciones = [
-    {
-      titulo: "Visión",
-      contenido:
-        <>Promover y vender servicios y productos nutricionales dedicados a la nutrición <span className="text-[var(--lime)] font-semibold">preventiva</span> en todas las etapas de la vida.</>,
-      color: "primrose",
-    },
-    {
-      titulo: "Misión",
-      contenido:
-        "Cuidar el cuerpo humano con dietas María Luisa, escritas, cocinadas o envasadas, llegando a más familias cada día.",
-      color: "lime",
-    },
-    {
-      titulo: "Objetivo en los niños",
-      contenido:
-        "Elevar la estatura promedio de los peruanos con la dieta María Luisa y vencer a la genética tradicional con el poder de la ciencia de la nutrición, como lo han logrado países avanzados en nutrición.",
-      color: "primrose",
-    },
-    {
-      titulo: "Objetivo en los adultos",
-      contenido:
-        "Mejorar la calidad de vida saludable de la población económicamente activa del Perú y Latinoamérica.",
-      color: "lime",
-    },
+  const secciones: { titulo: string; Ico: (p:{cls?:string})=>React.JSX.Element; contenido: React.ReactNode }[] = [
+    { titulo: "Visión",               Ico: IcoEye,    contenido: <>Promover y vender servicios y productos nutricionales dedicados a la nutrición <span className="text-[var(--lime)] font-semibold">preventiva</span> en todas las etapas de la vida.</> },
+    { titulo: "Misión",               Ico: IcoTarget,  contenido: "Cuidar el cuerpo humano con dietas María Luisa, escritas, cocinadas o envasadas, llegando a más familias cada día." },
+    { titulo: "Objetivo en los niños", Ico: IcoChild,  contenido: "Elevar la estatura promedio de los peruanos con la dieta María Luisa y vencer a la genética tradicional con el poder de la ciencia de la nutrición." },
+    { titulo: "Objetivo en los adultos", Ico: IcoPerson, contenido: "Mejorar la calidad de vida saludable de la población económicamente activa del Perú y Latinoamérica." },
   ];
 
-  const servicios = [
-    { n: "01", titulo: "Libros", desc: <>Guías prácticas de nutrición <span className="text-[var(--lime)] font-semibold">preventiva</span>.</>, color: "primrose" },
-    { n: "02", titulo: "Talleres", desc: "Comida dietética, fácil y saciadora.", color: "lime" },
-    { n: "03", titulo: "Productos", desc: "Cúrcuma, sacha inchi, cacao, estevia.", color: "lime" },
-    { n: "04", titulo: "Consultorías", desc: "Asesorías personalizadas.", color: "primrose" },
+  const servicios: { n: string; titulo: string; Ico: (p:{cls?:string})=>React.JSX.Element; desc: React.ReactNode }[] = [
+    { n: "01", titulo: "Libros",       Ico: IcoBook,    desc: <>Guías prácticas de nutrición <span className="text-[var(--lime)] font-semibold">preventiva</span>.</> },
+    { n: "02", titulo: "Talleres",     Ico: IcoBlender, desc: "Comida dietética, fácil y saciadora." },
+    { n: "03", titulo: "Productos",    Ico: IcoBowl,    desc: "Cúrcuma, sacha inchi, cacao, estevia." },
+    { n: "04", titulo: "Consultorías", Ico: IcoChat,    desc: "Asesorías personalizadas." },
   ];
 
   const [abierto, setAbierto] = useState<number | null>(0);
 
   return (
-    <section id="sobre-mi" className="py-14 md:py-16 bg-[var(--verde-pastel)]">
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="sobre-mi" className="bg-[#f5f0e8] relative overflow-hidden">
+      <FoodBg />
+      <div className="max-w-6xl mx-auto px-6 py-14 md:py-16 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 md:gap-16">
-          {/* IZQUIERDA: Filosofía con acordeón alternando colores */}
+
+          {/* IZQUIERDA: Filosofía */}
           <div>
-            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center gap-2">
-              <span className="bow-animate">🎀</span> Nuestra propuesta
+            <p className="text-sm uppercase tracking-widest text-[var(--texto-principal)] mb-2 font-semibold flex items-center gap-2">
+              <span className="text-[var(--lime)]">♥</span> Nuestra propuesta
             </p>
             <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-6 text-[var(--texto-principal)]">
               Filosofía <span className="font-semibold text-[var(--lime)]">profesional.</span>
@@ -583,47 +814,37 @@ function FilosofiaYServicios() {
 
             <div className="space-y-2">
               {secciones.map((s, i) => {
-                const esRosa = s.color === "primrose";
-                const colorActivo = abierto === i;
+                const activo = abierto === i;
                 return (
                   <div
                     key={i}
                     className={`rounded-2xl overflow-hidden transition-all border-2 ${
-                      colorActivo
-                        ? esRosa
-                          ? "bg-[var(--pinktone-soft)] border-[var(--primrose)]"
-                          : "bg-[var(--lime-soft)] border-[var(--lime)]"
+                      activo
+                        ? "bg-[var(--lime-soft)] border-[var(--lime)]"
                         : "bg-white border-[var(--borde-suave)]"
                     }`}
                   >
                     <button
                       onClick={() => setAbierto(abierto === i ? null : i)}
-                      className="w-full px-5 py-4 flex items-center justify-between text-left transition group"
+                      className="w-full px-5 py-4 flex items-center gap-3 text-left transition"
                     >
-                      <span className={`text-base md:text-lg font-medium transition ${
-                        colorActivo
-                          ? esRosa ? "text-[var(--primrose)]" : "text-[var(--lime)]"
-                          : "text-[var(--texto-principal)]"
+                      <span className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition ${
+                        activo ? "bg-[var(--lime)] text-white" : "bg-[var(--lime-soft)] text-[var(--lime)]"
                       }`}>
+                        <s.Ico cls="w-5 h-5" />
+                      </span>
+                      <span className="flex-1 text-base md:text-lg font-medium text-[var(--texto-principal)]">
                         {s.titulo}
                       </span>
-                      <span
-                        className={`text-2xl transition-transform duration-300 ${
-                          colorActivo ? "rotate-45" : ""
-                        } ${esRosa ? "text-[var(--primrose)]" : "text-[var(--lime)]"}`}
-                      >
+                      <span className={`text-2xl transition-transform duration-300 text-[var(--lime)] ${activo ? "rotate-45" : ""}`}>
                         +
                       </span>
                     </button>
-                    <div
-                      className={`grid transition-all duration-500 ease-in-out ${
-                        colorActivo
-                          ? "grid-rows-[1fr] opacity-100 px-5 pb-4"
-                          : "grid-rows-[0fr] opacity-0"
-                      }`}
-                    >
+                    <div className={`grid transition-all duration-500 ease-in-out ${
+                      activo ? "grid-rows-[1fr] opacity-100 px-5 pb-4" : "grid-rows-[0fr] opacity-0"
+                    }`}>
                       <div className="overflow-hidden">
-                        <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">
+                        <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed pl-[52px]">
                           {s.contenido}
                         </p>
                       </div>
@@ -636,26 +857,23 @@ function FilosofiaYServicios() {
 
           {/* DERECHA: Servicios */}
           <div id="servicios">
-            <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold">
+            <p className="text-sm uppercase tracking-widest text-[var(--texto-principal)] mb-2 font-semibold">
               Lo que ofrezco
             </p>
             <h2 className="text-3xl md:text-5xl font-bold mb-6 text-[var(--texto-principal)]">
-              Cuatro <span className="font-semibold text-[var(--primrose)]">pilares.</span>
+              Cuatro <span className="font-semibold text-[var(--lime)]">pilares.</span>
             </h2>
 
             <div className="grid grid-cols-2 gap-3">
               {servicios.map((item) => (
                 <div
                   key={item.n}
-                  className={`p-5 rounded-2xl border-2 transition cursor-default hover:scale-[1.02] ${
-                    item.color === "primrose"
-                      ? "bg-[var(--pinktone-soft)] border-[var(--borde-rosa)] hover:bg-[var(--pinktone)] hover:border-[var(--primrose)]"
-                      : "bg-[var(--lime-soft)] border-[var(--borde-verde)] hover:border-[var(--lime)]"
-                  }`}
+                  className="p-5 rounded-2xl bg-white border-2 border-[var(--borde-verde)] transition cursor-default hover:scale-[1.02] hover:border-[var(--lime)] hover:shadow-md"
                 >
-                  <p className={`text-xs mb-3 font-semibold ${
-                    item.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
-                  }`}>{item.n}</p>
+                  <p className="text-xs mb-2 font-semibold text-[var(--lime)]">{item.n}</p>
+                  <div className="w-11 h-11 rounded-full bg-[var(--lime-soft)] flex items-center justify-center mb-3">
+                    <item.Ico cls="w-5 h-5 text-[var(--lime)]" />
+                  </div>
                   <h3 className="font-semibold mb-1.5 text-[var(--texto-principal)]">{item.titulo}</h3>
                   <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed">{item.desc}</p>
                 </div>
@@ -664,69 +882,195 @@ function FilosofiaYServicios() {
           </div>
         </div>
       </div>
+
+      {/* Barra inferior */}
+      <div className="bg-[var(--verde-fuerte)] text-white py-4 px-8 flex items-center justify-between relative">
+        <p className="font-nunito text-sm">
+          Nutrición que <strong>transforma</strong>. Bienestar que <strong>se nota</strong>.
+        </p>
+        <div className="absolute left-1/2 -translate-x-1/2 -top-6 w-12 h-12 rounded-full bg-white border-4 border-[var(--verde-fuerte)] flex items-center justify-center shadow-md">
+          <IcoLeaf cls="w-6 h-6 text-[var(--verde-fuerte)]" />
+        </div>
+        <p className="font-nunito text-sm">
+          Salud · Equilibrio · Bienestar <span className="text-white">♥</span>
+        </p>
+      </div>
     </section>
   );
 }
 
 /* ---------- PRÓXIMO TALLER ---------- */
 function ProximoTaller() {
+  const fd = (dur: string, del: string) => ({"--fdur": dur, "--fdel": del} as React.CSSProperties);
+  const sp = (dur: string, del: string) => ({"--dur": dur, "--delay": del} as React.CSSProperties);
+
+  /* SVG food corners */
+  const Smoothie2 = () => (
+    <svg viewBox="0 0 110 160" fill="none" className="w-full h-full">
+      <path d="M22 38 L30 138 Q55 150 80 138 L88 38 Z" fill="#7dbf6a"/>
+      <path d="M25 55 L32 136 Q55 146 78 136 L85 55 Z" fill="#5aaa5a"/>
+      <path d="M22 38 Q55 44 88 38 Q55 32 22 38Z" fill="#9acc80"/>
+      <rect x="50" y="4" width="9" height="50" rx="4" fill="white" opacity="0.85"/>
+      <ellipse cx="55" cy="38" rx="30" ry="7" fill="#a8d890" opacity="0.4"/>
+    </svg>
+  );
+  const Avocado2 = () => (
+    <svg viewBox="0 0 120 160" fill="none" className="w-full h-full">
+      <path d="M60 6 Q22 52 22 100 Q22 148 60 152 Q98 148 98 100 Q98 52 60 6Z" fill="#2d5016"/>
+      <path d="M60 20 Q38 62 38 100 Q38 140 60 144 Q82 140 82 100 Q82 62 60 20Z" fill="#c8e096"/>
+      <ellipse cx="60" cy="104" rx="18" ry="22" fill="#8B5E3C"/>
+      <ellipse cx="60" cy="100" rx="12" ry="15" fill="#6B4226"/>
+    </svg>
+  );
+  const Kiwi2 = () => (
+    <svg viewBox="0 0 130 130" fill="none" className="w-full h-full">
+      <circle cx="65" cy="65" r="62" fill="#5a8a2a"/>
+      <circle cx="65" cy="65" r="54" fill="#c8e870"/>
+      <circle cx="65" cy="65" r="10" fill="#f5f0c0"/>
+      {[0,45,90,135,180,225,270,315].map((a,i)=>{
+        const r=32, x=65+r*Math.cos(a*Math.PI/180), y=65+r*Math.sin(a*Math.PI/180);
+        return <ellipse key={i} cx={x} cy={y} rx="5" ry="9" fill="#3a6a1a" transform={`rotate(${a},${x},${y})`} opacity="0.7"/>;
+      })}
+    </svg>
+  );
+  const Leaves2 = () => (
+    <svg viewBox="0 0 150 120" fill="none" className="w-full h-full">
+      {[0,1,2,3,4,5].map(i=>(
+        <ellipse key={i} cx={20+i*18} cy={60-Math.abs(i-2.5)*10} rx="20" ry="11"
+          fill={i%2===0?"#4a9a3a":"#6aaa4a"} transform={`rotate(${-20+i*8},${20+i*18},${60-Math.abs(i-2.5)*10})`} opacity="0.85"/>
+      ))}
+    </svg>
+  );
+
   return (
-    <section id="taller" className="bg-[var(--verde-fuerte)] py-14 md:py-16 overflow-hidden">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="grid md:grid-cols-2 gap-10 items-center">
-          {/* Imagen con halo animado */}
-          <div className="relative max-w-sm mx-auto md:mx-0 w-full">
-            {/* Halo de fondo giratorio */}
-            <div className="halo-fondo" />
-            {/* Halo pulsante */}
-            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-white border-4 border-white shadow-2xl halo-animado">
-              <Image
-                src="/images/taller-dietetica.jpeg"
-                alt="Taller de Comida Dietética"
-                fill
-                className="object-contain"
-              />
+    <section id="taller" className="bg-[var(--verde-fuerte)] py-16 md:py-20 overflow-hidden relative">
+
+      {/* Decoraciones de fondo */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div className="absolute -top-4 -left-6 w-36 md:w-56 opacity-80 food-d2" style={fd("8s","0s")}><Smoothie2/></div>
+        <div className="absolute -top-6 -right-4 w-32 md:w-48 opacity-80 food-d1" style={fd("9s","1.2s")}><Avocado2/></div>
+        <div className="absolute -bottom-4 -left-4 w-28 md:w-44 opacity-75 food-d3" style={fd("7s","0.5s")}><Kiwi2/></div>
+        <div className="absolute -bottom-2 -right-4 w-36 md:w-52 opacity-75 food-sw" style={fd("6s","2s")}><Leaves2/></div>
+
+        {/* Bolitas */}
+        {[
+          {top:"18%",left:"18%",r:5},{top:"32%",left:"11%",r:4},{top:"48%",left:"19%",r:6},
+          {top:"65%",left:"14%",r:4},{top:"22%",left:"78%",r:5},{top:"40%",left:"85%",r:4},
+          {top:"58%",left:"80%",r:6},{top:"72%",left:"74%",r:4},{top:"82%",left:"42%",r:5},
+          {top:"12%",left:"54%",r:4},
+        ].map((d,i)=>(
+          <span key={i} className="absolute rounded-full sparkle-item"
+            style={{top:d.top,left:d.left,width:d.r*2,height:d.r*2,
+              background:i%3===0?"#a8d870":i%3===1?"#c8ec90":"rgba(255,255,255,0.5)",
+              opacity:0.55, ...sp(`${3+i*0.4}s`,`${i*0.6}s`)}}/>
+        ))}
+
+        {/* Cruces */}
+        {[{top:"25%",left:"40%"},{top:"60%",left:"63%"},{top:"72%",left:"30%"},{top:"15%",left:"65%"}].map((p,i)=>(
+          <svg key={i} className="absolute sparkle-item" style={{top:p.top,left:p.left,width:14,height:14,opacity:0.45,...sp(`${4+i*0.5}s`,`${i*0.8}s`)}} viewBox="0 0 14 14" fill="none">
+            <line x1="7" y1="0" x2="7" y2="14" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+            <line x1="0" y1="7" x2="14" y2="7" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+        ))}
+
+        {/* Corazones */}
+        {[{top:"48%",left:"6%"},{top:"85%",left:"58%"}].map((p,i)=>(
+          <svg key={i} className="absolute heart-float" style={{top:p.top,left:p.left,width:18,height:18,opacity:0.45,
+            ["--dur" as string]:`${4.5+i}s`,["--delay" as string]:`${i*1.2}s`}} viewBox="0 0 24 24" fill="white">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        ))}
+
+        {/* Círculos outline */}
+        {[{top:"35%",left:"48%",r:22},{top:"68%",left:"88%",r:15},{top:"8%",left:"30%",r:18}].map((c,i)=>(
+          <svg key={i} className="absolute food-d2" style={{top:c.top,left:c.left,width:c.r*2,height:c.r*2,opacity:0.25,...fd(`${6+i}s`,`${i*1.1}s`)}} viewBox={`0 0 ${c.r*2} ${c.r*2}`}>
+            <circle cx={c.r} cy={c.r} r={c.r-2} stroke="white" strokeWidth="2" fill="none"/>
+          </svg>
+        ))}
+
+        {/* Grid de puntos */}
+        <svg className="absolute food-d1 opacity-30" style={{top:"30%",right:"6%",...fd("10s","0.5s")}} width="50" height="50" viewBox="0 0 50 50">
+          {[0,1,2,3].flatMap(row=>[0,1,2,3].map(col=>(
+            <circle key={`${row}-${col}`} cx={6+col*13} cy={6+row*13} r="2.5" fill="white"/>
+          )))}
+        </svg>
+      </div>
+
+      {/* Contenido */}
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
+        <div className="grid md:grid-cols-[3fr_4fr] gap-1 md:gap-2 items-center">
+
+          {/* Mockup celular */}
+          <div className="relative max-w-[420px] md:max-w-[500px] mx-auto md:mx-0 w-full flotar">
+            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl shadow-black/30">
+              <Image src="/images/taller-dietetica.jpeg" alt="Taller de Comida Dietética" fill className="object-cover object-top"/>
             </div>
           </div>
 
+          {/* Info */}
           <div>
-            <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
-              <span className="bow-animate">🎀</span> Próximo evento
+            <p className="text-sm uppercase tracking-widest text-white/80 mb-3 font-semibold flex items-center gap-2">
+              <IcoLeaf cls="w-4 h-4 inline-block"/> Próximo evento
             </p>
-            <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-4 leading-tight text-white">
-              Taller de<br />
-              <span className="font-semibold shimmer-white">Comida Dietética.</span>
+            <h2 className="font-playfair text-4xl md:text-6xl font-bold mb-5 leading-tight">
+              <span className="text-white">Taller de</span><br/>
+              <span className="text-[var(--primrose)]">Comida Dietética.</span>
             </h2>
-            <p className="font-nunito text-white/80 leading-relaxed mb-6 text-sm md:text-base">
-              Aprende a cocinar rico y saludable. Un taller práctico donde
-              descubrirás cómo preparar comidas fáciles, saludables y saciadoras
-              que transformarán tu día a día.
+            <p className="font-nunito text-white/85 leading-relaxed mb-7 text-base">
+              Aprende a cocinar rico y saludable. Un taller práctico donde descubrirás
+              cómo preparar comidas fáciles, saludables y saciadoras que transformarán tu día a día.
             </p>
 
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-white/20 border-2 border-white/40 rounded-2xl p-4">
-                <p className="text-xs uppercase tracking-widest text-white/80 mb-1 font-semibold">Presencial</p>
-                <p className="text-2xl font-semibold text-white">S/ 80</p>
+            {/* Precios */}
+            <div className="grid grid-cols-2 gap-4 mb-7">
+              <div className="bg-white/20 border border-white/30 rounded-2xl p-4 flex items-center gap-3 hover:bg-white/30 transition">
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/>
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-white/70 font-semibold">Presencial</p>
+                  <p className="text-2xl md:text-3xl font-bold text-white leading-none">S/ 80</p>
+                </div>
               </div>
-              <div className="bg-white/20 border-2 border-white/40 rounded-2xl p-4">
-                <p className="text-xs uppercase tracking-widest text-white/80 mb-1 font-semibold">Virtual</p>
-                <p className="text-2xl font-semibold text-white">S/ 40</p>
+              <div className="bg-white/20 border border-white/30 rounded-2xl p-4 flex items-center gap-3 hover:bg-white/30 transition">
+                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+                  </svg>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-white/70 font-semibold">Virtual</p>
+                  <p className="text-2xl md:text-3xl font-bold text-white leading-none">S/ 40</p>
+                </div>
               </div>
             </div>
 
-            <ul className="text-base text-white/90 space-y-1.5 mb-6">
-              <li className="flex items-start gap-2"><span className="text-[var(--pinktone)] font-bold">—</span> Degustación incluida</li>
-              <li className="flex items-start gap-2"><span className="text-[var(--pinktone)] font-bold">—</span> Materiales: taper, cubiertos, jabón y toalla</li>
-              <li className="flex items-start gap-2"><span className="text-[var(--pinktone)] font-bold">—</span> Modalidad presencial y virtual</li>
+            {/* Checkmarks */}
+            <ul className="space-y-3 mb-8">
+              {["Degustación incluida","Materiales: taper, cubiertos, jabón y toalla","Modalidad presencial y virtual"].map((item,i)=>(
+                <li key={i} className="flex items-center gap-3 font-nunito text-base text-white/90">
+                  <span className="w-6 h-6 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </span>
+                  {item}
+                </li>
+              ))}
             </ul>
 
-            <Link
-              href="/reservar-taller"
-              className="inline-block bg-[var(--lime)] text-white px-6 py-3 rounded-full hover:bg-[var(--lime-hover)] transition font-medium shadow-lg shadow-green-200"
-            >
-              Reservar cupo
+            {/* Botón rosado grande */}
+            <Link href="/reservar-taller"
+              className="btn-coquette inline-flex items-center gap-3 bg-[var(--primrose)] hover:bg-[var(--primrose-hover)] text-white px-8 py-4 rounded-full font-semibold text-base transition shadow-xl shadow-pink-900/30">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+              Reservar cupo ahora
             </Link>
           </div>
+
         </div>
       </div>
     </section>
@@ -743,8 +1087,9 @@ function Trayectoria() {
   ];
 
   return (
-    <section className="py-14 md:py-16 bg-[var(--verde-pastel)]">
-      <div className="max-w-6xl mx-auto px-6">
+    <section className="py-14 md:py-16 bg-[#f5f0e8] relative overflow-hidden">
+      <FoodBg />
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
         <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
           Trayectoria
         </p>
@@ -766,7 +1111,7 @@ function Trayectoria() {
                 h.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
               }`}>{h.año}</p>
               <h3 className="font-semibold mb-1.5 text-[var(--texto-principal)]">{h.titulo}</h3>
-              <p className="text-base text-[var(--texto-suave)] leading-relaxed">{h.desc}</p>
+              <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">{h.desc}</p>
             </div>
           ))}
         </div>
@@ -777,134 +1122,175 @@ function Trayectoria() {
 
 /* ---------- FOOTER ---------- */
 function Footer() {
-  return (
-    <footer id="contacto" className="bg-[var(--texto-principal)] text-white py-12">
-      <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-10">
-        <div>
-          <h3 className="font-semibold mb-2">
-            María Luisa <span className="text-[var(--primrose)]">Nutricionista</span>
-          </h3>
-          <p className="text-sm text-pink-100/70 leading-relaxed">
-            Nutrición <span className="text-[var(--primrose)] font-semibold">preventiva</span> para todas las etapas de la vida.
-          </p>
-        </div>
-        <div>
-          <h4 className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-3 font-semibold">
-            Contacto
-          </h4>
-          <ul className="text-sm space-y-1.5 text-pink-50">
-            <li>
-              <a href="https://wa.me/51985577017" target="_blank">
-                  WhatsApp: 985 577 017
-              </a>
-              </li>
-            <li>
-              <a
-                href="https://www.google.com/maps/place/Residencial+Mart%C3%ADn/@-12.1669714,-76.9685542,20z/data=!4m6!3m5!1s0x9105b96811cf226b:0x1e33f53b4d52f3d4!8m2!3d-12.1669142!4d-76.968644!16s%2Fg%2F11sdn55n89?hl=es&entry=ttu&g_ep=EgoyMDI2MDUxMy4wIKXMDSoASAFQAw%3D%3D"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[var(--primrose)] transition"
-              >
-                📍 Calle José del Carmen Verastegui 303<br />
-                San Juan de Miraflores, Lima
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="text-xs uppercase tracking-widest text-[var(--lime-mid)] mb-3 font-semibold">
-            Síguenos
-          </h4>
-          <ul className="text-sm space-y-1.5 text-pink-50">
-            <li>Facebook</li>
-            <li>
-              <a
-                href="https://www.tiktok.com/@maraluisanutricio?is_from_webapp=1&sender_device=pc"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[var(--primrose)] transition"
-              >
-                TikTok: MaríaLuisaNutricionista
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div className="max-w-6xl mx-auto px-6 mt-8 pt-6 border-t border-pink-100/20 text-xs text-pink-100/50">
-        © {new Date().getFullYear()} María Luisa Nutricionista. Todos los derechos reservados.
-      </div>
-    </footer>
-
-  );
-}
-/* ---------- SECCIÓN ENFERMEDADES PREVENIBLES ---------- */
-function SeccionEnfermedades() {
-  const enfermedades = [
+  const sociales = [
     {
-      nombre: "Anemia",
-      descripcion: "Una alimentación rica en hierro y vitamina C previene la deficiencia que afecta a millones de niños y mujeres en el Perú.",
-      icono: "🩸",
-      color: "lime",
+      label: "WhatsApp",
+      sub: "985 577 017",
+      href: "https://wa.me/51985577017",
+      bg: "#25D366",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.848L.057 23.885a.5.5 0 0 0 .612.612l6.037-1.475A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.87 0-3.618-.5-5.12-1.374l-.368-.214-3.814.932.95-3.718-.236-.385A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+        </svg>
+      ),
     },
     {
-      nombre: "Obesidad y sobrepeso",
-      descripcion: "Dietas equilibradas con alimentos naturales regulan el peso corporal y reducen el riesgo de enfermedades asociadas.",
-      icono: "⚖️",
-      color: "primrose",
+      label: "Facebook",
+      sub: "MaríaLuisaNutricionista",
+      href: "https://www.facebook.com",
+      bg: "#1877F2",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+          <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.514c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/>
+        </svg>
+      ),
     },
     {
-      nombre: "Diabetes tipo 2",
-      descripcion: "Controlar el consumo de azúcares refinados y elegir alimentos de bajo índice glucémico reduce significativamente el riesgo.",
-      icono: "🍃",
-      color: "lime",
+      label: "TikTok",
+      sub: "@MaríaLuisaNutri",
+      href: "https://www.tiktok.com/@maraluisanutricio?is_from_webapp=1&sender_device=pc",
+      bg: "#010101",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.95a8.2 8.2 0 0 0 4.79 1.52V7.03a4.85 4.85 0 0 1-1.02-.34z"/>
+        </svg>
+      ),
     },
     {
-      nombre: "Hipertensión arterial",
-      descripcion: "Reducir el sodio e incorporar potasio, magnesio y fibra ayuda a mantener la presión arterial en niveles saludables.",
-      icono: "❤️",
-      color: "primrose",
-    },
-    {
-      nombre: "Osteoporosis",
-      descripcion: "El calcio, la vitamina D y el fósforo desde la infancia construyen huesos fuertes que protegen en la adultez y vejez.",
-      icono: "🦴",
-      color: "lime",
-    },
-    {
-      nombre: "Enfermedades cardiovasculares",
-      descripcion: "Omega-3, fibra y antioxidantes reducen el colesterol malo y protegen el corazón a largo plazo.",
-      icono: "🫀",
-      color: "primrose",
-    },
-    {
-      nombre: "Desnutrición infantil",
-      descripcion: "Una nutrición adecuada desde la gestación y los primeros años garantiza el desarrollo físico e intelectual del niño.",
-      icono: "👶",
-      color: "lime",
-    },
-    {
-      nombre: "Gastritis y problemas digestivos",
-      descripcion: "Alimentos naturales, fibra y hábitos alimenticios ordenados protegen la mucosa gástrica y mejoran el tránsito intestinal.",
-      icono: "🌿",
-      color: "primrose",
-    },
-    {
-      nombre: "Colesterol alto",
-      descripcion: "Superalimentos como la sacha inchi y el cacao orgánico aportan grasas saludables que equilibran los niveles de colesterol.",
-      icono: "🥗",
-      color: "lime",
+      label: "Google Maps",
+      sub: "Ver ubicación",
+      href: "https://www.google.com/maps/place/Residencial+Mart%C3%ADn/@-12.1669714,-76.9685542,20z/data=!4m6!3m5!1s0x9105b96811cf226b:0x1e33f53b4d52f3d4!8m2!3d-12.1669142!4d-76.968644!16s%2Fg%2F11sdn55n89?hl=es&entry=ttu&g_ep=EgoyMDI2MDUxMy4wIKXMDSoASAFQAw%3D%3D",
+      bg: "#EA4335",
+      icon: (
+        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+        </svg>
+      ),
     },
   ];
 
   return (
-    <section className="py-14 md:py-20 bg-[var(--verde-pastel)]">
-      <div className="max-w-6xl mx-auto px-6">
+    <footer id="contacto" className="relative overflow-hidden bg-[var(--texto-principal)] text-white pt-14 pb-8">
+
+      {/* Burbujas de fondo animadas */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        {[
+          {w:120,top:"-10%",left:"-3%",dur:"9s",del:"0s"},
+          {w:80, top:"60%", left:"-2%",dur:"7s",del:"1.5s"},
+          {w:150,top:"30%", left:"95%",dur:"10s",del:"0.8s"},
+          {w:60, top:"80%", left:"92%",dur:"6s",del:"2.2s"},
+          {w:40, top:"20%", left:"50%",dur:"8s",del:"1s"},
+        ].map((b,i)=>(
+          <span key={i} className={`absolute rounded-full ${i%2===0?"food-d1":"food-d2"}`}
+            style={{width:b.w,height:b.w,top:b.top,left:b.left,opacity:0.07,
+              background:"radial-gradient(circle,#a8d890,#5a9a5a)",
+              ["--fdur" as string]:b.dur,["--fdel" as string]:b.del}}/>
+        ))}
+        {/* Destellos */}
+        {[{top:"15%",left:"20%"},{top:"70%",left:"60%"},{top:"40%",left:"80%"},{top:"85%",left:"30%"}].map((d,i)=>(
+          <span key={i} className="absolute rounded-full sparkle-item"
+            style={{top:d.top,left:d.left,width:5,height:5,
+              background:i%2===0?"var(--primrose)":"var(--lime-mid)",opacity:0.4,
+              ["--dur" as string]:`${3+i*0.7}s`,["--delay" as string]:`${i*0.9}s`}}/>
+        ))}
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
+
+        {/* Columnas info */}
+        <div className="grid md:grid-cols-3 gap-8 mb-10">
+          <div>
+            <h4 className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold flex items-center gap-2">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.9a16 16 0 0 0 6.09 6.09l.95-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2.04z"/></svg>
+              Contacto directo
+            </h4>
+            <a href="https://wa.me/51985577017" target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-3 group mb-4">
+              <span className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-[#25D366]/20 group-hover:bg-[#25D366]/40 transition">
+                <svg viewBox="0 0 24 24" fill="#25D366" className="w-4 h-4"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.848L.057 23.885a.5.5 0 0 0 .612.612l6.037-1.475A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.87 0-3.618-.5-5.12-1.374l-.368-.214-3.814.932.95-3.718-.236-.385A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+              </span>
+              <div>
+                <p className="text-xs text-white/50 font-nunito">WhatsApp</p>
+                <p className="font-semibold text-white group-hover:text-[#25D366] transition text-sm">985 577 017</p>
+              </div>
+            </a>
+          </div>
+
+          <div>
+            <h4 className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold flex items-center gap-2">
+              <IcoPin cls="w-3.5 h-3.5" /> Ubicación
+            </h4>
+            <a href="https://www.google.com/maps/place/Residencial+Mart%C3%ADn/@-12.1669714,-76.9685542,20z/data=!4m6!3m5!1s0x9105b96811cf226b:0x1e33f53b4d52f3d4!8m2!3d-12.1669142!4d-76.968644!16s%2Fg%2F11sdn55n89?hl=es&entry=ttu&g_ep=EgoyMDI2MDUxMy4wIKXMDSoASAFQAw%3D%3D"
+              target="_blank" rel="noopener noreferrer"
+              className="flex items-start gap-3 group">
+              <span className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-[#EA4335]/20 group-hover:bg-[#EA4335]/40 transition mt-0.5">
+                <svg viewBox="0 0 24 24" fill="#EA4335" className="w-4 h-4"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              </span>
+              <div>
+                <p className="text-xs text-white/50 font-nunito">Dirección</p>
+                <p className="font-nunito text-sm text-white/80 group-hover:text-white transition leading-relaxed">
+                  Calle José del Carmen Verastegui 303<br/>San Juan de Miraflores, Lima
+                </p>
+              </div>
+            </a>
+          </div>
+
+          <div>
+            <h4 className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold flex items-center gap-2">
+              <IcoLeaf cls="w-3.5 h-3.5" /> Redes sociales
+            </h4>
+            <div className="space-y-3">
+              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-3 group">
+                <span className="w-9 h-9 rounded-xl bg-[#1877F2]/20 group-hover:bg-[#1877F2]/40 flex items-center justify-center transition">
+                  <svg viewBox="0 0 24 24" fill="#1877F2" className="w-4 h-4"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.514c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+                </span>
+                <span className="font-nunito text-sm text-white/80 group-hover:text-white transition">MaríaLuisaNutricionista</span>
+              </a>
+              <a href="https://www.tiktok.com/@maraluisanutricio?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-3 group">
+                <span className="w-9 h-9 rounded-xl bg-white/10 group-hover:bg-white/20 flex items-center justify-center transition">
+                  <svg viewBox="0 0 24 24" fill="white" className="w-4 h-4"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.95a8.2 8.2 0 0 0 4.79 1.52V7.03a4.85 4.85 0 0 1-1.02-.34z"/></svg>
+                </span>
+                <span className="font-nunito text-sm text-white/80 group-hover:text-white transition">@MaríaLuisaNutri</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="pt-6 border-t border-white/10 text-center text-xs text-white font-nunito">
+          <p>© {new Date().getFullYear()} María Luisa Nutricionista. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+/* ---------- SECCIÓN ENFERMEDADES PREVENIBLES ---------- */
+function SeccionEnfermedades() {
+  const enfermedades: { nombre: string; descripcion: string; Ico: (p:{cls?:string})=>React.JSX.Element }[] = [
+    { nombre: "Anemia",                       descripcion: "Una alimentación rica en hierro y vitamina C previene la deficiencia que afecta a millones de niños y mujeres en el Perú.",                                                                       Ico: IcoDrop   },
+    { nombre: "Obesidad y sobrepeso",          descripcion: "Dietas equilibradas con alimentos naturales regulan el peso corporal y reducen el riesgo de enfermedades asociadas.",                                                                            Ico: IcoScale  },
+    { nombre: "Diabetes tipo 2",               descripcion: "Controlar el consumo de azúcares refinados y elegir alimentos de bajo índice glucémico reduce significativamente el riesgo.",                                                                    Ico: IcoLeaf   },
+    { nombre: "Hipertensión arterial",         descripcion: "Reducir el sodio e incorporar potasio, magnesio y fibra ayuda a mantener la presión arterial en niveles saludables.",                                                                           Ico: IcoHeart  },
+    { nombre: "Osteoporosis",                  descripcion: "El calcio, la vitamina D y el fósforo desde la infancia construyen huesos fuertes que protegen en la adultez y vejez.",                                                                          Ico: IcoBone   },
+    { nombre: "Enfermedades cardiovasculares", descripcion: "Omega-3, fibra y antioxidantes reducen el colesterol malo y protegen el corazón a largo plazo.",                                                                                                Ico: IcoWave   },
+    { nombre: "Desnutrición infantil",         descripcion: "Una nutrición adecuada desde la gestación y los primeros años garantiza el desarrollo físico e intelectual del niño.",                                                                           Ico: IcoChild  },
+    { nombre: "Gastritis y problemas digestivos", descripcion: "Alimentos naturales, fibra y hábitos alimenticios ordenados protegen la mucosa gástrica y mejoran el tránsito intestinal.",                                                                   Ico: IcoStomach},
+    { nombre: "Colesterol alto",               descripcion: "Superalimentos como la sacha inchi y el cacao orgánico aportan grasas saludables que equilibran los niveles de colesterol.",                                                                    Ico: IcoBowl   },
+  ];
+
+  return (
+    <section className="py-14 md:py-20 bg-[#f5f0e8] relative overflow-hidden">
+      <FoodBg />
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="text-center mb-12">
-          <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold flex items-center justify-center gap-2">
-            <span className="bow-animate">🎀</span> Nutrición preventiva
+          <p className="text-sm uppercase tracking-widest text-[var(--texto-principal)] mb-2 font-semibold flex items-center justify-center gap-2">
+            <IcoLeaf cls="w-4 h-4 text-[var(--lime)]" /> Nutrición preventiva
           </p>
           <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-4 text-[var(--texto-principal)]">
-            Enfermedades que se <span className="font-semibold text-[var(--lime)]">pueden prevenir.</span>
+            Enfermedades que se pueden <span className="font-semibold text-[var(--primrose)]">prevenir.</span>
           </h2>
           <p className="font-nunito text-[var(--texto-suave)] max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
             Una buena nutrición es la mejor medicina preventiva. Estos son algunos de los problemas de salud
@@ -916,27 +1302,28 @@ function SeccionEnfermedades() {
           {enfermedades.map((e, i) => (
             <div
               key={i}
-              className={`rounded-2xl p-5 border-2 transition hover:-translate-y-1 hover:shadow-lg ${
-                e.color === "lime"
-                  ? "bg-[var(--lime-soft)] border-[var(--borde-verde)] hover:border-[var(--lime)] hover:shadow-green-100"
-                  : "bg-white border-[var(--borde-suave)] hover:border-[var(--lime)] hover:shadow-green-100"
-              }`}
+              className="bg-white rounded-2xl p-5 border-2 border-[var(--borde-verde)] transition hover:-translate-y-1 hover:shadow-lg hover:border-[var(--lime)] hover:shadow-green-100"
             >
               <div className="flex items-start gap-3 mb-3">
-                <span className="text-2xl">{e.icono}</span>
-                <h3 className="font-semibold text-[var(--texto-principal)] leading-tight pt-0.5">{e.nombre}</h3>
+                <span className="w-10 h-10 rounded-full bg-[var(--lime-soft)] flex items-center justify-center flex-shrink-0">
+                  <e.Ico cls="w-5 h-5 text-[var(--lime)]" />
+                </span>
+                <h3 className="font-semibold text-[var(--texto-principal)] leading-tight pt-2">{e.nombre}</h3>
               </div>
-              <p className="font-nunito text-xs text-[var(--texto-suave)] leading-relaxed">{e.descripcion}</p>
+              <p className="font-nunito text-sm md:text-base text-[var(--texto-suave)] leading-relaxed pl-[52px]">{e.descripcion}</p>
             </div>
           ))}
         </div>
 
-        <div className="mt-10 text-center">
-          <div className="inline-block bg-[var(--verde-fuerte)] text-white rounded-2xl px-8 py-5 max-w-2xl">
-            <p className="font-nunito text-sm leading-relaxed text-white/90">
+        <div className="mt-10 flex justify-center">
+          <div className="bg-[var(--verde-fuerte)] text-white rounded-2xl px-8 py-5 max-w-2xl flex items-start gap-4">
+            <span className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <IcoHeart cls="w-5 h-5 text-white" />
+            </span>
+            <p className="font-nunito text-base md:text-lg leading-relaxed text-white/90">
               <span className="font-semibold text-white">Recuerda:</span> la prevención siempre es más efectiva
               y menos costosa que el tratamiento. Con la orientación profesional adecuada, cada familia puede
-              construir una base nutricional sólida para toda la vida.
+              construir una base nutricional sólida para una vida más saludable.
             </p>
           </div>
         </div>
@@ -978,13 +1365,51 @@ function SeccionProductos() {
     },
   ];
 
+  const burbujas = [
+    { w: 90,  top: "8%",   left: "3%",   op: 0.12, dur: "7s",  del: "0s"   },
+    { w: 50,  top: "20%",  left: "8%",   op: 0.08, dur: "5s",  del: "1s"   },
+    { w: 130, top: "55%",  left: "1%",   op: 0.10, dur: "9s",  del: "2s"   },
+    { w: 40,  top: "75%",  left: "10%",  op: 0.14, dur: "6s",  del: "0.5s" },
+    { w: 70,  top: "5%",   left: "18%",  op: 0.07, dur: "8s",  del: "3s"   },
+    { w: 110, top: "40%",  left: "88%",  op: 0.11, dur: "7s",  del: "1.5s" },
+    { w: 60,  top: "10%",  left: "80%",  op: 0.09, dur: "6s",  del: "2.5s" },
+    { w: 85,  top: "70%",  left: "92%",  op: 0.13, dur: "8s",  del: "0.8s" },
+    { w: 45,  top: "85%",  left: "75%",  op: 0.08, dur: "5s",  del: "1.8s" },
+    { w: 120, top: "25%",  left: "93%",  op: 0.10, dur: "9s",  del: "3.5s" },
+    { w: 55,  top: "50%",  left: "5%",   op: 0.09, dur: "6.5s",del: "4s"   },
+    { w: 35,  top: "90%",  left: "20%",  op: 0.12, dur: "5.5s",del: "2.2s" },
+    { w: 75,  top: "60%",  left: "97%",  op: 0.07, dur: "7.5s",del: "0.3s" },
+    { w: 95,  top: "15%",  left: "96%",  op: 0.11, dur: "8.5s",del: "1.2s" },
+    { w: 48,  top: "35%",  left: "2%",   op: 0.08, dur: "6s",  del: "3.8s" },
+  ];
+
   return (
-    <section id="tienda" className="py-14 md:py-16 bg-[var(--verde-fuerte)]">
-      <div className="max-w-6xl mx-auto px-6">
+    <section id="tienda" className="py-14 md:py-16 bg-[var(--verde-fuerte)] relative overflow-hidden">
+      {/* Burbujas animadas */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        {burbujas.map((b, i) => (
+          <span
+            key={i}
+            className="absolute rounded-full border-2 border-white food-d1"
+            style={{
+              width: b.w,
+              height: b.w,
+              top: b.top,
+              left: b.left,
+              opacity: b.op,
+              backgroundColor: i % 3 === 0 ? "#ffffff" : i % 3 === 1 ? "#a8d890" : "transparent",
+              ["--fdur" as string]: b.dur,
+              ["--fdel" as string]: b.del,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-4">
           <div>
             <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
-              <span className="bow-animate">🎀</span> Nuestra tienda
+              <IcoLeaf cls="w-4 h-4 inline-block" /> Nuestra tienda
             </p>
             <h2 className="font-playfair text-3xl md:text-5xl font-bold text-white">
               Productos <span className="font-semibold shimmer-white">naturales.</span>
@@ -1022,7 +1447,7 @@ function SeccionProductos() {
                 Destacado
               </p>
               <h3 className="font-semibold text-[var(--texto-principal)] mb-1 text-sm">{p.nombre}</h3>
-              <p className="text-xs text-[var(--texto-suave)] mb-3 leading-relaxed">{p.descripcion}</p>
+              <p className="font-nunito text-sm text-[var(--texto-suave)] mb-3 leading-relaxed">{p.descripcion}</p>
               <p className="text-lg font-semibold text-[var(--texto-principal)]">S/ {p.precio}</p>
             </Link>
           ))}
@@ -1033,9 +1458,65 @@ function SeccionProductos() {
 }
 /* ---------- ASESORÍAS PARA PROYECTOS ---------- */
 function AsesoriasProyectos() {
+  const orbs = [
+    { w:130, top:"2%",  left:"-4%",  op:0.20, dur:"9s",  del:"0s",   g:"#a8d870,#7bbf50" },
+    { w:80,  top:"42%", left:"-3%",  op:0.16, dur:"7s",  del:"1.8s", g:"#c8ec90,#9dd060" },
+    { w:170, top:"74%", left:"-5%",  op:0.14, dur:"11s", del:"0.5s", g:"#b4e07a,#8ac850" },
+    { w:110, top:"5%",  left:"96%",  op:0.18, dur:"8s",  del:"2.3s", g:"#a8d870,#7bbf50" },
+    { w:150, top:"52%", left:"97%",  op:0.15, dur:"10s", del:"0.8s", g:"#c0e882,#92cc55" },
+    { w:65,  top:"85%", left:"93%",  op:0.19, dur:"6s",  del:"3.2s", g:"#c8ec90,#9dd060" },
+    { w:55,  top:"28%", left:"46%",  op:0.09, dur:"7.5s",del:"1.2s", g:"#b4e07a,#8ac850" },
+    { w:90,  top:"78%", left:"32%",  op:0.10, dur:"9.5s",del:"2.8s", g:"#a8d870,#7bbf50" },
+    { w:42,  top:"55%", left:"68%",  op:0.11, dur:"6.5s",del:"0.4s", g:"#c8ec90,#9dd060" },
+  ];
+
+  const destellos = [
+    { top:"18%", left:"22%", size:7,  dur:"3.5s", del:"0s"   },
+    { top:"38%", left:"78%", size:5,  dur:"4.2s", del:"0.9s" },
+    { top:"62%", left:"12%", size:9,  dur:"3.8s", del:"1.7s" },
+    { top:"82%", left:"58%", size:6,  dur:"5s",   del:"2.3s" },
+    { top:"28%", left:"90%", size:7,  dur:"4s",   del:"0.5s" },
+    { top:"72%", left:"48%", size:5,  dur:"3.2s", del:"3.1s" },
+    { top:"12%", left:"60%", size:8,  dur:"4.5s", del:"1.4s" },
+    { top:"90%", left:"82%", size:6,  dur:"3.8s", del:"0.2s" },
+  ];
+
   return (
-    <section className="py-14 md:py-16 bg-[var(--yucca-soft)] overflow-hidden">
-      <div className="max-w-6xl mx-auto px-6">
+    <section
+      className="py-14 md:py-16 overflow-hidden relative"
+      style={{ background: "linear-gradient(135deg, #e2f4ce 0%, #cce9b0 40%, #daf2c4 70%, #c8e8a8 100%)" }}
+    >
+      {/* Orbes animados */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+        {orbs.map((b, i) => (
+          <span
+            key={i}
+            className={`absolute rounded-full ${i % 2 === 0 ? "food-d1" : "food-d2"}`}
+            style={{
+              width: b.w, height: b.w, top: b.top, left: b.left, opacity: b.op,
+              background: `radial-gradient(circle, ${b.g})`,
+              filter: "blur(3px)",
+              ["--fdur" as string]: b.dur, ["--fdel" as string]: b.del,
+            }}
+          />
+        ))}
+        {destellos.map((d, i) => (
+          <span
+            key={`ds${i}`}
+            className="absolute rounded-full sparkle-item"
+            style={{
+              width: d.size, height: d.size, top: d.top, left: d.left,
+              background: i % 2 === 0 ? "var(--primrose)" : "#7bbf50",
+              opacity: 0.50,
+              ["--dur" as string]: d.dur,
+              ["--delay" as string]: d.del,
+            }}
+          />
+        ))}
+      </div>
+
+      <FoodBg />
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           {/* Foto izquierda — mobile: arriba, desktop: izquierda */}
           <div className="relative">
@@ -1068,23 +1549,18 @@ function AsesoriasProyectos() {
               impacto real, conversemos.
             </p>
 
-            <ul className="text-base text-[var(--texto-principal)] space-y-2 mb-6">
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--primrose)] font-bold">—</span>
-                Diagnóstico nutricional poblacional
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--lime)] font-bold">—</span>
-                Diseño de programas de intervención
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--primrose)] font-bold">—</span>
-                Capacitación a personal y equipos de salud
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--lime)] font-bold">—</span>
-                Evaluación de impacto y seguimiento
-              </li>
+            <ul className="space-y-3 mb-8">
+              {[
+                { t: "Diagnóstico nutricional poblacional",        ac: "var(--primrose)" },
+                { t: "Diseño de programas de intervención",        ac: "#7bbf50"         },
+                { t: "Capacitación a personal y equipos de salud", ac: "var(--primrose)" },
+                { t: "Evaluación de impacto y seguimiento",        ac: "#7bbf50"         },
+              ].map(({ t, ac }, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="mt-[3px] flex-shrink-0 font-bold text-lg leading-none" style={{ color: ac }}>—</span>
+                  <span className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">{t}</span>
+                </li>
+              ))}
             </ul>
 
             <Link
@@ -1097,27 +1573,83 @@ function AsesoriasProyectos() {
         </div>
 
         {/* Card con cita y stats */}
-        <div className="mt-12 bg-white rounded-2xl p-8 shadow-xl shadow-pink-100 border-2 border-[var(--borde-rosa)]">
-          <p className="text-2xl font-light text-[var(--texto-principal)] leading-relaxed max-w-3xl">
-            &quot;Mi fuerte es la nutrición a escala. Si quieres impactar a tu comunidad, escuela o equipo,{" "}
-            <span className="font-semibold text-[var(--primrose)]">te ayudo a diseñarlo bien.</span>&quot;
-          </p>
-          <p className="text-sm text-[var(--texto-suave)] mt-4 mb-8">
-            — Lic. María Luisa Peña Valdivia
-          </p>
+        <div className="mt-12 relative overflow-hidden rounded-2xl border-2 border-[var(--borde-rosa)] shadow-xl shadow-pink-100">
 
-          <div className="grid grid-cols-3 gap-2 md:gap-4 pt-6 border-t border-[var(--borde-rosa)]">
-            <div>
-              <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">20+</p>
-              <p className="text-xs text-[var(--texto-suave)]">Años en MINSA</p>
-            </div>
-            <div>
-              <p className="text-lg md:text-2xl font-semibold text-[var(--lime)]">Nacional</p>
-              <p className="text-xs text-[var(--texto-suave)]">Proyectos en todo el Perú</p>
-            </div>
-            <div>
-              <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">Experta</p>
-              <p className="text-xs text-[var(--texto-suave)]">Asesoría especializada</p>
+          {/* Fondo animado de la card */}
+          <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+            {/* Orbes de fondo */}
+            {[
+              { w:120, top:"-20%", left:"-5%", g:"#f8d5e0,#f0b8cc", dur:"8s", del:"0s"   },
+              { w:90,  top:"60%",  left:"90%", g:"#d4f0b8,#b8e890", dur:"7s", del:"1.5s" },
+              { w:70,  top:"80%",  left:"5%",  g:"#f8d5e0,#f0c0d0", dur:"6s", del:"2.8s" },
+              { w:50,  top:"10%",  left:"85%", g:"#d4f0b8,#c0e898", dur:"9s", del:"0.8s" },
+            ].map((b, i) => (
+              <span
+                key={i}
+                className={`absolute rounded-full ${i % 2 === 0 ? "food-d1" : "food-d2"}`}
+                style={{
+                  width: b.w, height: b.w, top: b.top, left: b.left, opacity: 0.40,
+                  background: `radial-gradient(circle, ${b.g})`,
+                  filter: "blur(18px)",
+                  ["--fdur" as string]: b.dur, ["--fdel" as string]: b.del,
+                }}
+              />
+            ))}
+            {/* Destellos */}
+            {[
+              { top:"15%", left:"20%", size:5, dur:"3s",   del:"0s"   },
+              { top:"70%", left:"70%", size:4, dur:"4.2s", del:"1.1s" },
+              { top:"50%", left:"50%", size:6, dur:"3.8s", del:"2s"   },
+              { top:"25%", left:"80%", size:4, dur:"5s",   del:"0.6s" },
+              { top:"80%", left:"25%", size:5, dur:"3.5s", del:"1.8s" },
+            ].map((d, i) => (
+              <span
+                key={`dsc${i}`}
+                className="absolute rounded-full sparkle-item"
+                style={{
+                  width: d.size, height: d.size, top: d.top, left: d.left,
+                  background: i % 2 === 0 ? "var(--primrose)" : "#7bbf50",
+                  opacity: 0.55,
+                  ["--dur" as string]: d.dur,
+                  ["--delay" as string]: d.del,
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Contenido */}
+          <div className="relative z-10 bg-white/80 backdrop-blur-sm p-8">
+            {/* Comillas decorativas */}
+            <span className="absolute top-4 left-6 text-7xl font-playfair text-[var(--primrose)] opacity-10 leading-none select-none">&ldquo;</span>
+
+            <p className="font-playfair text-xl md:text-2xl font-light text-[var(--texto-principal)] leading-relaxed max-w-3xl relative z-10">
+              &quot;Mi fuerte es la nutrición a escala. Si quieres impactar a tu comunidad, escuela o equipo,{" "}
+              <span className="font-semibold text-[var(--primrose)]">te ayudo a diseñarlo bien.</span>&quot;
+            </p>
+            <p className="font-nunito text-sm text-[var(--texto-suave)] mt-3 mb-8 italic">
+              — Lic. María Luisa Peña Valdivia
+            </p>
+
+            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-[var(--borde-rosa)]">
+              {[
+                { val: "20+",      sub: "Años en MINSA",           color: "var(--primrose)", bg: "var(--pinktone)"  },
+                { val: "Nacional", sub: "Proyectos en todo el Perú", color: "#5a9a3a",         bg: "var(--lime-soft)" },
+                { val: "Experta",  sub: "Asesoría especializada",   color: "var(--primrose)", bg: "var(--pinktone)"  },
+              ].map(({ val, sub, color, bg }, i) => (
+                <div
+                  key={i}
+                  className="group flex flex-col items-center text-center rounded-xl p-4 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-default"
+                  style={{ background: bg }}
+                >
+                  <p
+                    className="font-playfair text-2xl md:text-3xl font-bold mb-1 halo-animado rounded-full"
+                    style={{ color }}
+                  >
+                    {val}
+                  </p>
+                  <p className="font-nunito text-xs text-[var(--texto-suave)] leading-snug">{sub}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -1129,8 +1661,9 @@ function AsesoriasProyectos() {
 /* ---------- SECCIÓN EMPRESAS ---------- */
 function SeccionEmpresas() {
   return (
-    <section className="py-14 md:py-16 bg-[var(--verde-pastel)]">
-      <div className="max-w-6xl mx-auto px-6">
+    <section className="py-14 md:py-16 bg-[#f5f0e8] relative overflow-hidden">
+      <FoodBg />
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div>
             <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold">
@@ -1147,24 +1680,22 @@ function SeccionEmpresas() {
               Mejora el rendimiento, reduce el ausentismo y cuida a tu equipo.
             </p>
 
-            <ul className="text-sm text-[var(--texto-principal)] space-y-2 mb-6">
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--primrose)] font-bold">—</span>
-                Evaluación individual a cada colaborador
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--lime)] font-bold">—</span>
-                Charlas y talleres in-company
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-[var(--primrose)] font-bold">—</span>
-                Profesional colegiada con experiencia
-              </li>
+            <ul className="space-y-3 mb-6">
+              {[
+                { t: "Evaluación individual a cada colaborador", ac: "var(--primrose)" },
+                { t: "Charlas y talleres in-company",            ac: "var(--lime)"     },
+                { t: "Profesional colegiada con experiencia",    ac: "var(--primrose)" },
+              ].map(({ t, ac }, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="mt-1 flex-shrink-0 font-bold text-lg leading-none" style={{ color: ac }}>—</span>
+                  <span className="font-nunito text-base md:text-lg text-[var(--texto-suave)] leading-relaxed">{t}</span>
+                </li>
+              ))}
             </ul>
 
             <Link
               href="/empresas"
-              className="inline-block bg-[var(--lime)] text-white px-6 py-3 rounded-full hover:bg-[var(--lime-hover)] transition font-medium shadow-lg shadow-green-200"
+              className="inline-block bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
             >
               Conocer el programa
             </Link>
@@ -1175,26 +1706,26 @@ function SeccionEmpresas() {
               <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold">
                 Empresas que confían
               </p>
-              <p className="text-2xl font-light text-[var(--texto-principal)] mb-2 leading-relaxed">
+              <p className="font-nunito text-base md:text-lg font-light text-[var(--texto-principal)] mb-2 leading-relaxed">
                 &quot;Más de <span className="font-semibold text-[var(--lime)]">20 años</span> recorriendo
                 el Perú evaluando nutricionalmente a familias y trabajadores.&quot;
               </p>
-              <p className="text-sm text-[var(--texto-suave)] mt-4">
+              <p className="font-nunito text-base md:text-lg text-[var(--texto-suave)] leading-relaxed mt-4">
                 — Lic. María Luisa Peña Valdivia, Nutricionista colegiada
               </p>
 
               <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8 pt-6 border-t border-[var(--borde-rosa)]">
                 <div>
                   <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">20+</p>
-                  <p className="text-xs text-[var(--texto-suave)]">Años de experiencia</p>
+                  <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">Años de experiencia</p>
                 </div>
                 <div>
                   <p className="text-lg md:text-2xl font-semibold text-[var(--lime)]">100%</p>
-                  <p className="text-xs text-[var(--texto-suave)]">Personalizado</p>
+                  <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">Personalizado</p>
                 </div>
                 <div>
                   <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">B2B</p>
-                  <p className="text-xs text-[var(--texto-suave)]">Servicio empresarial</p>
+                  <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">Servicio empresarial</p>
                 </div>
               </div>
             </div>

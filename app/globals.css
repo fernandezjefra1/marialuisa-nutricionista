@@ -76,7 +76,7 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 20px; /* accesibilidad adultos mayores — escala todo el sitio vía rem */
+  font-size: 22px; /* accesibilidad adultos mayores — escala todo el sitio vía rem */
   overflow-x: hidden;
 }
 
@@ -154,6 +154,12 @@ body {
 @keyframes shimmer-move {
   0% { background-position: -300% center; }
   100% { background-position: 300% center; }
+}
+
+@keyframes shimmer-slide {
+  0%   { transform: translateX(-100%); }
+  60%  { transform: translateX(300%); }
+  100% { transform: translateX(300%); }
 }
 
 .shimmer-rose {
@@ -569,8 +575,70 @@ body {
    ========================================= */
 
 .footer-soft {
-
   background: #6a9a6a;
-
   color: white;
 }
+
+
+
+/* =========================================
+   FONDO FRUTAS / VERDURAS ANIMADO
+   ========================================= */
+
+@keyframes food-drift-1 {
+  0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+  40%       { transform: translateY(-22px) rotate(7deg) scale(1.04); }
+  70%       { transform: translateY(-10px) rotate(-4deg) scale(0.97); }
+}
+
+@keyframes food-drift-2 {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50%       { transform: translateY(-18px) rotate(-8deg); }
+}
+
+@keyframes food-drift-3 {
+  0%, 100% { transform: translateY(0px) rotate(0deg) scale(1); }
+  33%       { transform: translateY(-14px) rotate(5deg) scale(1.06); }
+  66%       { transform: translateY(-6px) rotate(-3deg) scale(0.96); }
+}
+
+@keyframes food-sway {
+  0%, 100% { transform: rotate(-6deg) scale(1); }
+  50%       { transform: rotate(6deg) scale(1.05); }
+}
+
+.food-d1 { animation: food-drift-1 var(--fdur, 6s) ease-in-out infinite; animation-delay: var(--fdel, 0s); }
+.food-d2 { animation: food-drift-2 var(--fdur, 7s) ease-in-out infinite; animation-delay: var(--fdel, 0s); }
+.food-d3 { animation: food-drift-3 var(--fdur, 8s) ease-in-out infinite; animation-delay: var(--fdel, 0s); }
+.food-sw { animation: food-sway     var(--fdur, 5s) ease-in-out infinite; animation-delay: var(--fdel, 0s); }
+
+
+
+/* =========================================
+   COHETES ANIMADOS — SECCIÓN TRAYECTORIA
+   ========================================= */
+
+@keyframes rocket-launch {
+  0%   { transform: translate(0, 0)      rotate(-45deg) scale(1);    opacity: 0;   }
+  8%   { opacity: 0.9; }
+  90%  { opacity: 0.7; }
+  100% { transform: translate(220px, -340px) rotate(-45deg) scale(0.6); opacity: 0; }
+}
+
+@keyframes rocket-fall {
+  0%   { transform: translate(0, 0)      rotate(35deg)  scale(1);    opacity: 0;   }
+  8%   { opacity: 0.85; }
+  90%  { opacity: 0.6; }
+  100% { transform: translate(-180px, 300px) rotate(35deg) scale(0.5); opacity: 0; }
+}
+
+@keyframes rocket-streak {
+  0%   { transform: translate(0, 0)      rotate(-60deg) scale(1);    opacity: 0;   }
+  10%  { opacity: 1; }
+  85%  { opacity: 0.8; }
+  100% { transform: translate(300px, -200px) rotate(-60deg) scale(0.4); opacity: 0; }
+}
+
+.rocket-up   { animation: rocket-launch var(--rdur, 5s) ease-in     infinite; animation-delay: var(--rdel, 0s); }
+.rocket-down { animation: rocket-fall   var(--rdur, 6s) ease-in     infinite; animation-delay: var(--rdel, 0s); }
+.rocket-fast { animation: rocket-streak var(--rdur, 3.5s) ease-in   infinite; animation-delay: var(--rdel, 0s); }

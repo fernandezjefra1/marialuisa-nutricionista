@@ -75,7 +75,7 @@ export default function LoginPage() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 mb-6">
-            <span className="text-2xl bow-animate">🌿</span>
+            <Image src="/images/iconoNutricion.png" alt="Logo" width={60} height={60} className="object-contain drop-shadow-sm" />
             <div>
               <p className="font-playfair font-bold text-[#31543d] text-lg leading-tight">María Luisa</p>
               <p className="text-[10px] uppercase tracking-widest text-[#5a7255]">Nutricionista</p>
@@ -185,7 +185,7 @@ export default function LoginPage() {
           {/* Registro */}
           <div className="mt-4 bg-[#f0f8ec] rounded-2xl p-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-lg">🌿</span>
+              <Image src="/images/iconoNutricion.png" alt="Logo" width={42} height={42} className="object-contain" />
               <div>
                 <p className="text-xs text-[#5a7255] font-nunito">¿No tienes cuenta?</p>
                 <Link href="/registro" className="text-sm font-semibold text-[#C4607A] hover:underline font-nunito">

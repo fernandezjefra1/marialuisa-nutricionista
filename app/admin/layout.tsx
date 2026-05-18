@@ -87,14 +87,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         {/* Navegación */}
-        <nav
-          className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto"
-          style={{
-            backgroundImage: "url(/images/fondolateral.png)",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
+        <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
           {navItems.map((item) => {
             const activa = pathname === item.href;
             return (

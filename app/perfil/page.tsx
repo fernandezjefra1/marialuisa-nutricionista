@@ -403,53 +403,152 @@ function CompraCard({ compra }: { compra: any }) {
   );
 }
 
+/* ---------- ICONOS DE NIVELES ---------- */
+function IcoLeaf({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/>
+      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+    </svg>
+  );
+}
+function IcoStar({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+    </svg>
+  );
+}
+function IcoDiamond({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <polygon points="6 3 18 3 22 9 12 22 2 9"/>
+      <line x1="2" y1="9" x2="22" y2="9"/>
+      <polyline points="6 3 12 9 18 3"/>
+    </svg>
+  );
+}
+function IcoCrown({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M2 4l3 12h14l3-12-6 7-4-7-4 7-6-7z"/>
+      <line x1="2" y1="20" x2="22" y2="20"/>
+    </svg>
+  );
+}
+
+const NIVEL_ICON: Record<string, React.ReactNode> = {
+  "Bienvenida":        <IcoLeaf    className="w-full h-full" />,
+  "Cliente Frecuente": <IcoStar    className="w-full h-full" />,
+  "Cliente VIP":       <IcoDiamond className="w-full h-full" />,
+  "Cliente Elite":     <IcoCrown   className="w-full h-full" />,
+};
+
 /* ---------- TAB 3: FIDELIZACIÓN ---------- */
 function TabFidelizacion({ numCompras, nivel, proximoNivel }: { numCompras: number; nivel: any; proximoNivel: any }) {
+  const [progreso, setProgreso] = useState(0);
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setProgreso(proximoNivel
+        ? Math.min(100, (numCompras / proximoNivel.comprasMinimas) * 100)
+        : 100
+      );
+    }, 350);
+    return () => clearTimeout(t);
+  }, [numCompras, proximoNivel]);
+
   return (
     <div className="space-y-6">
-      {/* Card principal con nivel actual */}
-      <div className="bg-gradient-to-br from-neutral-900 to-neutral-700 text-white rounded-2xl p-8">
-        <p className="text-xs uppercase tracking-widest text-neutral-400 mb-3">Tu nivel actual</p>
-        <div className="flex items-center gap-4 mb-6">
-          <span className="text-5xl">{nivel.emoji}</span>
-          <div>
-            <h2 className="text-2xl font-semibold">{nivel.nombre}</h2>
-            <p className="text-sm text-neutral-300">{numCompras} compra{numCompras !== 1 ? "s" : ""} realizadas</p>
-          </div>
+
+      {/* ===== CARD PRINCIPAL ===== */}
+      <div
+        className="relative rounded-3xl overflow-hidden p-8"
+        style={{ background: "linear-gradient(135deg, #3d8b3d 0%, #2a6b2a 45%, #163016 100%)" }}
+      >
+        {/* Hojas flotantes decorativas */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+          {[
+            { top:"8%",  left:"4%",  w:22, anim:"food-d1", dur:"5s",   del:"0s"   },
+            { top:"18%", right:"6%", w:16, anim:"food-d2", dur:"6.5s", del:"0.8s" },
+            { top:"55%", left:"2%",  w:14, anim:"food-d3", dur:"4.5s", del:"1.5s" },
+            { top:"65%", right:"4%", w:19, anim:"food-d1", dur:"7s",   del:"0.4s" },
+            { top:"38%", left:"48%", w:11, anim:"food-d2", dur:"5.5s", del:"2.1s" },
+          ].map((p, i) => (
+            <div
+              key={i}
+              className={`absolute ${p.anim} opacity-[0.18]`}
+              style={{
+                top: p.top,
+                ...("left" in p ? { left: (p as any).left } : { right: (p as any).right }),
+                width: p.w, height: p.w,
+                ["--fdur" as string]: p.dur, ["--fdel" as string]: p.del,
+              }}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="w-full h-full">
+                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/>
+              </svg>
+            </div>
+          ))}
         </div>
 
-        <div className="border-t border-neutral-700 pt-5">
-          <p className="text-xs uppercase tracking-widest text-neutral-400 mb-1">Tu beneficio</p>
-          <p className="text-base">{nivel.beneficio}</p>
-        </div>
+        {/* Contenido */}
+        <div className="relative z-10">
+          <p className="font-nunito text-xs uppercase tracking-widest text-green-300 mb-5">Tu nivel actual</p>
 
-        {proximoNivel && (
-          <div className="border-t border-neutral-700 pt-5 mt-5">
-            <p className="text-xs uppercase tracking-widest text-neutral-400 mb-2">Próximo nivel</p>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm">{proximoNivel.emoji} {proximoNivel.nombre}</span>
-              <span className="text-xs text-neutral-400">
-                {proximoNivel.comprasFaltantes} compra{proximoNivel.comprasFaltantes !== 1 ? "s" : ""} más
-              </span>
+          <div className="flex items-center gap-5 mb-6">
+            <div
+              className="w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 flotar"
+              style={{ background: "rgba(168,216,112,0.2)", color: "#a8d870", border: "1.5px solid rgba(168,216,112,0.35)" }}
+            >
+              <div className="w-9 h-9">{NIVEL_ICON[nivel.nombre] ?? <IcoLeaf className="w-full h-full"/>}</div>
             </div>
-            {/* Barra de progreso */}
-            <div className="h-2 bg-neutral-700 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-white transition-all"
-                style={{
-                  width: `${Math.min(100, (numCompras / proximoNivel.comprasMinimas) * 100)}%`,
-                }}
-              />
+            <div>
+              <h2 className="font-playfair text-2xl font-bold text-white leading-tight">{nivel.nombre}</h2>
+              <p className="font-nunito text-sm text-green-300 mt-0.5">
+                {numCompras} compra{numCompras !== 1 ? "s" : ""} realizadas
+              </p>
             </div>
-            <p className="text-xs text-neutral-400 italic mt-2">{proximoNivel.beneficio}</p>
           </div>
-        )}
+
+          {/* Beneficio actual */}
+          <div className="rounded-2xl px-5 py-4 mb-5" style={{ background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)" }}>
+            <p className="font-nunito text-xs text-green-300 uppercase tracking-widest mb-1.5">Tu beneficio</p>
+            <p className="font-nunito text-base text-white font-medium">{nivel.beneficio}</p>
+          </div>
+
+          {/* Próximo nivel + barra */}
+          {proximoNivel && (
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2 text-white">
+                  <div className="w-4 h-4 text-green-300">{NIVEL_ICON[proximoNivel.nombre] ?? <IcoStar className="w-full h-full"/>}</div>
+                  <p className="font-nunito text-sm font-semibold">{proximoNivel.nombre}</p>
+                </div>
+                <p className="font-nunito text-xs text-green-300">
+                  {proximoNivel.comprasFaltantes} compra{proximoNivel.comprasFaltantes !== 1 ? "s" : ""} más
+                </p>
+              </div>
+              <div className="h-2.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.15)" }}>
+                <div
+                  className="h-full rounded-full transition-all duration-1000 ease-out"
+                  style={{
+                    width: `${progreso}%`,
+                    background: "linear-gradient(90deg, #a8d870, #6daa6d)",
+                    boxShadow: "0 0 10px rgba(168,216,112,0.55)",
+                  }}
+                />
+              </div>
+              <p className="font-nunito text-xs text-green-400 italic mt-2">{proximoNivel.beneficio}</p>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Lista de todos los niveles */}
-      <div className="bg-white rounded-2xl border border-neutral-200 p-6 md:p-8">
-        <h2 className="text-lg font-semibold mb-2">Todos los niveles</h2>
-        <p className="text-sm text-neutral-600 mb-6">
+      {/* ===== TODOS LOS NIVELES ===== */}
+      <div className="bg-white rounded-3xl border border-[var(--borde-verde)] p-6 md:p-8 shadow-sm">
+        <h2 className="font-nunito font-semibold text-lg text-[var(--texto-principal)] mb-1">Todos los niveles</h2>
+        <p className="font-nunito text-sm text-[var(--texto-suave)] mb-6 leading-relaxed">
           Sigue comprando libros y participando en talleres para subir de nivel y obtener mejores beneficios.
         </p>
 
@@ -460,34 +559,49 @@ function TabFidelizacion({ numCompras, nivel, proximoNivel }: { numCompras: numb
             return (
               <div
                 key={i}
-                className={`p-5 rounded-xl border-2 transition ${
+                className={`p-5 rounded-2xl border-2 transition-all duration-300 ${
                   esActual
-                    ? "border-neutral-900 bg-neutral-50"
+                    ? "border-[var(--lime)] bg-[var(--lime-soft)]"
                     : desbloqueado
                     ? "border-green-200 bg-green-50"
-                    : "border-neutral-200 bg-white"
+                    : "border-neutral-100 bg-white opacity-55"
                 }`}
+                style={esActual ? { boxShadow: "0 0 18px rgba(109,170,109,0.25)" } : {}}
               >
                 <div className="flex items-start gap-4">
-                  <span className={`text-3xl ${!desbloqueado ? "grayscale opacity-40" : ""}`}>
-                    {n.emoji}
-                  </span>
+                  <div
+                    className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 ${
+                      esActual
+                        ? "bg-[var(--lime)] text-white flotar"
+                        : desbloqueado
+                        ? "bg-green-100 text-green-600"
+                        : "bg-neutral-100 text-neutral-400"
+                    }`}
+                  >
+                    <div className="w-5 h-5">{NIVEL_ICON[n.nombre] ?? <IcoLeaf className="w-full h-full"/>}</div>
+                  </div>
+
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <h3 className="font-semibold">{n.nombre}</h3>
+                      <h3 className="font-nunito font-semibold text-[var(--texto-principal)]">{n.nombre}</h3>
                       {esActual && (
-                        <span className="text-xs bg-neutral-900 text-white px-2 py-0.5 rounded-full font-medium">
+                        <span className="font-nunito text-xs bg-[var(--lime)] text-white px-2.5 py-0.5 rounded-full font-semibold">
                           Tu nivel
                         </span>
                       )}
                       {desbloqueado && !esActual && (
-                        <span className="text-xs text-green-700">✓ Desbloqueado</span>
+                        <span className="font-nunito text-xs text-green-600 font-medium flex items-center gap-1">
+                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                            <polyline points="20 6 9 17 4 12"/>
+                          </svg>
+                          Desbloqueado
+                        </span>
                       )}
                     </div>
-                    <p className="text-xs text-neutral-500 mb-1">
+                    <p className="font-nunito text-xs text-[var(--texto-suave)] mb-1.5">
                       {n.comprasMinimas === 0 ? "Desde tu registro" : `Desde la compra #${n.comprasMinimas}`}
                     </p>
-                    <p className="text-sm text-neutral-700">{n.beneficio}</p>
+                    <p className="font-nunito text-sm text-[var(--texto-suave)]">{n.beneficio}</p>
                   </div>
                 </div>
               </div>

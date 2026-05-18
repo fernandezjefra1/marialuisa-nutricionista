@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Playfair_Display, Nunito } from "next/font/google";
 import "./globals.css";
 
@@ -23,9 +23,14 @@ const nunito = Nunito({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "María Luisa Nutricionista",
-description: "Nutrición preventiva para todas las etapas de la vida.",
+  description: "Nutrición preventiva para todas las etapas de la vida.",
 };
 
 export default function RootLayout({
@@ -38,7 +43,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${nunito.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col overflow-x-hidden">{children}</body>
     </html>
   );
 }

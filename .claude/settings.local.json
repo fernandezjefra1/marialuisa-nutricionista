@@ -5,7 +5,9 @@
       "Bash(Select-Object Name, PSIsContainer)",
       "Bash(npx tsc *)",
       "Bash(git push *)",
-      "Bash(git revert *)"
+      "Bash(git revert *)",
+      "Bash(cat tailwind.config.js)",
+      "Bash(cat tailwind.config.ts)"
     ]
   }
 }

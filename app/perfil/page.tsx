@@ -99,30 +99,37 @@ function PerfilContent() {
 
       <div className="max-w-5xl mx-auto px-6 py-8 md:py-12">
         {/* Sección de bienvenida con avatar */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-5 mb-10">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-5 mb-10 animate-fade-in">
           {avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={avatarUrl}
               alt={nombre}
-              className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md"
+              className="w-20 h-20 rounded-full object-cover shadow-xl flotar"
+              style={{ border: "4px solid rgba(255,255,255,0.85)" }}
               referrerPolicy="no-referrer"
             />
           ) : (
-            <div className="w-20 h-20 rounded-full bg-neutral-900 text-white text-2xl font-semibold flex items-center justify-center shadow-md">
+            <div
+              className="w-20 h-20 rounded-full text-white text-2xl font-bold flex items-center justify-center shadow-xl flotar shrink-0"
+              style={{ background: "var(--lime)", border: "4px solid rgba(255,255,255,0.85)" }}
+            >
               {iniciales}
             </div>
           )}
           <div>
-            <p className="text-sm uppercase tracking-widest text-neutral-500 mb-1">Mi cuenta</p>
-            <h1 className="text-3xl md:text-4xl font-light">
-              Hola, <span className="font-semibold">{nombre.split(" ")[0]}</span>
+            <p className="font-nunito text-xs uppercase tracking-widest text-neutral-600 mb-1 drop-shadow-sm">Mi cuenta</p>
+            <h1
+              className="font-playfair text-3xl md:text-4xl drop-shadow-sm flotar"
+              style={{ animationDelay: "0.4s", color: "#1a3a1a" }}
+            >
+              Hola, <span style={{ color: "var(--lime)", fontWeight: 800 }}>{nombre.split(" ")[0]}</span>
             </h1>
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="border-b border-neutral-200 mb-8">
+        <div className="mb-8" style={{ borderBottom: "2px solid rgba(255,255,255,0.5)" }}>
           <div className="flex gap-1 overflow-x-auto">
             <BotonTab activa={tabActiva === "info"} onClick={() => cambiarTab("info")} label="Mi información" />
             <BotonTab activa={tabActiva === "compras"} onClick={() => cambiarTab("compras")} label="Mis compras" badge={numCompras > 0 ? numCompras : undefined} />
@@ -144,16 +151,17 @@ function BotonTab({ activa, onClick, label, badge }: { activa: boolean; onClick:
   return (
     <button
       onClick={onClick}
-      className={`px-5 py-3 text-sm font-medium transition relative whitespace-nowrap ${
+      className={`font-nunito px-5 py-3 text-sm font-semibold transition-all duration-200 relative whitespace-nowrap ${
         activa
-          ? "text-neutral-900 border-b-2 border-neutral-900 -mb-px"
-          : "text-neutral-500 hover:text-neutral-900"
+          ? "text-[var(--lime)] border-b-2 -mb-px"
+          : "text-neutral-600 hover:text-[var(--texto-principal)]"
       }`}
+      style={activa ? { borderBottomColor: "var(--lime)" } : {}}
     >
       {label}
       {badge !== undefined && (
-        <span className={`ml-2 text-xs px-2 py-0.5 rounded-full ${
-          activa ? "bg-neutral-900 text-white" : "bg-neutral-200 text-neutral-700"
+        <span className={`ml-2 text-xs px-2 py-0.5 rounded-full font-medium ${
+          activa ? "bg-[var(--lime)] text-white" : "bg-white/70 text-neutral-600"
         }`}>
           {badge}
         </span>
@@ -167,51 +175,81 @@ function TabMiInfo({ user, nombre, correo, onSignOut }: { user: any; nombre: str
   const proveedor = user.app_metadata?.provider || "email";
   const proveedorTexto = proveedor === "google" ? "Google" : "Correo y contraseña";
   const fechaRegistro = new Date(user.created_at).toLocaleDateString("es-PE", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+    year: "numeric", month: "long", day: "numeric",
   });
 
-  return (
-    <div className="space-y-6">
-      {/* Datos personales */}
-      <div className="bg-white rounded-2xl border border-neutral-200 p-6 md:p-8">
-        <h2 className="text-lg font-semibold mb-5">Datos personales</h2>
+  const campos = [
+    {
+      label: "Nombre completo", valor: nombre,
+      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+    },
+    {
+      label: "Correo electrónico", valor: correo,
+      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>,
+    },
+    {
+      label: "Método de acceso", valor: proveedorTexto,
+      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>,
+    },
+    {
+      label: "Miembro desde", valor: fechaRegistro,
+      icon: <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
+    },
+  ];
 
-        <div className="grid sm:grid-cols-2 gap-5">
-          <Campo label="Nombre completo" valor={nombre} />
-          <Campo label="Correo electrónico" valor={correo} />
-          <Campo label="Método de acceso" valor={proveedorTexto} />
-          <Campo label="Miembro desde" valor={fechaRegistro} />
+  return (
+    <div className="space-y-6 animate-fade-in">
+      {/* Datos personales */}
+      <div className="bg-white/90 backdrop-blur-sm rounded-3xl border border-[var(--borde-verde)] p-6 md:p-8 shadow-sm">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-9 h-9 rounded-xl bg-[var(--lime-soft)] flex items-center justify-center text-[var(--lime)]">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <h2 className="font-nunito font-semibold text-lg text-[var(--texto-principal)]">Datos personales</h2>
         </div>
 
-        <p className="text-xs text-neutral-500 mt-6 leading-relaxed">
+        <div className="grid sm:grid-cols-2 gap-4">
+          {campos.map((c, i) => (
+            <div
+              key={i}
+              className="flex items-start gap-3 p-4 rounded-2xl bg-[var(--lime-soft)] border border-[var(--borde-verde)] transition-all duration-200 hover:shadow-sm hover:-translate-y-0.5"
+              style={{ animationDelay: `${i * 80}ms` }}
+            >
+              <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-[var(--lime)] shrink-0 shadow-sm">
+                {c.icon}
+              </div>
+              <div className="min-w-0">
+                <p className="font-nunito text-xs uppercase tracking-widest text-[var(--texto-suave)] mb-0.5">{c.label}</p>
+                <p className="font-nunito text-sm font-semibold text-[var(--texto-principal)] truncate">{c.valor}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <p className="font-nunito text-xs text-[var(--texto-suave)] mt-5 leading-relaxed">
           Si necesitas actualizar alguno de estos datos, por favor contacta a María Luisa por WhatsApp.
         </p>
       </div>
 
-      {/* Acciones */}
-      <div className="bg-white rounded-2xl border border-neutral-200 p-6 md:p-8">
-        <h2 className="text-lg font-semibold mb-2">Sesión</h2>
-        <p className="text-sm text-neutral-600 mb-5">
+      {/* Sesión */}
+      <div className="bg-white/90 backdrop-blur-sm rounded-3xl border border-[var(--borde-verde)] p-6 md:p-8 shadow-sm">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-9 h-9 rounded-xl bg-red-50 flex items-center justify-center text-red-500">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </div>
+          <h2 className="font-nunito font-semibold text-lg text-[var(--texto-principal)]">Sesión</h2>
+        </div>
+        <p className="font-nunito text-sm text-[var(--texto-suave)] mb-5 leading-relaxed">
           Al cerrar sesión tendrás que volver a iniciar sesión para acceder a tu cuenta.
         </p>
         <button
           onClick={onSignOut}
-          className="text-sm text-red-600 border border-red-200 px-5 py-2.5 rounded-full hover:bg-red-50 transition"
+          className="font-nunito text-sm text-red-600 border border-red-200 px-5 py-2.5 rounded-full hover:bg-red-50 transition-all duration-200 hover:scale-105 flex items-center gap-2"
         >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           Cerrar sesión
         </button>
       </div>
-    </div>
-  );
-}
-
-function Campo({ label, valor }: { label: string; valor: string }) {
-  return (
-    <div>
-      <p className="text-xs uppercase tracking-widest text-neutral-500 mb-1.5">{label}</p>
-      <p className="text-sm font-medium">{valor}</p>
     </div>
   );
 }
@@ -284,8 +322,8 @@ function TabMisCompras() {
     <div>
       {mostrarBanner && (
         <div className="mb-6 bg-green-50 border-2 border-green-200 rounded-2xl p-5 flex items-start gap-4 animate-fade-in">
-          <div className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0 text-xl font-bold">
-            ✓
+          <div className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center flex-shrink-0">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
           <div className="flex-1">
             <h3 className="font-semibold text-green-900 mb-1">¡Pedido enviado correctamente!</h3>
@@ -305,15 +343,17 @@ function TabMisCompras() {
       )}
 
       {compras.length === 0 ? (
-        <div className="bg-white rounded-2xl border border-neutral-200 p-12 text-center">
-          <div className="text-5xl mb-4">📚</div>
-          <h3 className="text-lg font-semibold mb-2">Aún no tienes compras</h3>
-          <p className="text-sm text-neutral-600 mb-6 max-w-sm mx-auto">
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl border border-[var(--borde-verde)] p-12 text-center shadow-sm">
+          <div className="w-16 h-16 rounded-2xl bg-[var(--lime-soft)] flex items-center justify-center mx-auto mb-4 flotar text-[var(--lime)]">
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </div>
+          <h3 className="font-nunito text-lg font-semibold text-[var(--texto-principal)] mb-2">Aún no tienes compras</h3>
+          <p className="font-nunito text-sm text-[var(--texto-suave)] mb-6 max-w-sm mx-auto leading-relaxed">
             Cuando hagas tu primera compra aparecerá aquí con todos los detalles.
           </p>
           <Link
             href="/productos"
-            className="inline-block bg-neutral-900 text-white px-6 py-3 rounded-full hover:bg-neutral-700 transition text-sm font-medium"
+            className="font-nunito inline-block bg-[var(--lime)] text-white px-6 py-3 rounded-full hover:opacity-90 transition-all duration-200 hover:scale-105 text-sm font-semibold shadow-md"
           >
             Explorar la tienda
           </Link>
@@ -331,60 +371,59 @@ function TabMisCompras() {
 
 function CompraCard({ compra }: { compra: any }) {
   const estadoColor = {
-    pendiente: "bg-amber-50 text-amber-700 border-amber-200",
-    pagado: "bg-blue-50 text-blue-700 border-blue-200",
-    enviado: "bg-purple-50 text-purple-700 border-purple-200",
+    pendiente:  "bg-amber-50 text-amber-700 border-amber-200",
+    pagado:     "bg-blue-50 text-blue-700 border-blue-200",
+    enviado:    "bg-purple-50 text-purple-700 border-purple-200",
     completado: "bg-green-50 text-green-700 border-green-200",
-    cancelado: "bg-neutral-100 text-neutral-600 border-neutral-200",
+    cancelado:  "bg-neutral-100 text-neutral-600 border-neutral-200",
   }[compra.estado as string] || "bg-neutral-100 text-neutral-600 border-neutral-200";
 
   const estadoTexto = {
-    pendiente: "Pendiente de pago",
-    pagado: "Pago confirmado",
-    enviado: "En camino",
-    completado: "Entregado",
-    cancelado: "Cancelado",
+    pendiente: "Pendiente de pago", pagado: "Pago confirmado",
+    enviado: "En camino", completado: "Entregado", cancelado: "Cancelado",
   }[compra.estado as string] || compra.estado;
 
   const fecha = new Date(compra.created_at).toLocaleDateString("es-PE", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
+    day: "numeric", month: "short", year: "numeric",
   });
 
   const esCarrito = compra.tipo_compra === "carrito";
 
+  const tipoIcon = esCarrito
+    ? <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-2.3 2.3c-.6.6-.2 1.7.7 1.7H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+    : compra.formato === "virtual"
+    ? <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+    : <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>;
+
+  const tipoLabel = esCarrito ? "Pedido de productos" : compra.formato === "virtual" ? "Libro Digital" : "Libro Físico";
+
   return (
-    <div className="bg-white rounded-2xl border border-neutral-200 p-5 md:p-6">
+    <div className="bg-white/90 backdrop-blur-sm rounded-2xl border border-[var(--borde-verde)] p-5 md:p-6 shadow-sm hover:-translate-y-0.5 transition-all duration-200">
       <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
         <div>
-          <p className="font-semibold">{compra.producto}</p>
-          <p className="text-xs text-neutral-500 mt-0.5">
-            {esCarrito
-              ? `🛒 Pedido de productos · ${fecha}`
-              : compra.formato === "virtual"
-              ? `📱 Libro Digital · ${fecha}`
-              : `📚 Libro Físico · ${fecha}`}
+          <p className="font-nunito font-semibold text-[var(--texto-principal)]">{compra.producto}</p>
+          <p className="font-nunito text-xs text-[var(--texto-suave)] mt-0.5 flex items-center gap-1.5">
+            <span className="text-[var(--lime)]">{tipoIcon}</span>
+            {tipoLabel} · {fecha}
           </p>
         </div>
-        <span className={`text-xs px-3 py-1 rounded-full border ${estadoColor} font-medium`}>
+        <span className={`font-nunito text-xs px-3 py-1 rounded-full border font-medium ${estadoColor}`}>
           {estadoTexto}
         </span>
       </div>
 
-      {/* Si es pedido de carrito, mostrar lista de items */}
       {esCarrito && compra.items && compra.items.length > 0 && (
-        <div className="mb-3 p-3 bg-neutral-50 rounded-lg">
-          <p className="text-xs text-neutral-500 mb-2 uppercase tracking-widest">Productos</p>
+        <div className="mb-3 p-3 bg-[var(--lime-soft)] rounded-xl border border-[var(--borde-verde)]">
+          <p className="font-nunito text-xs text-[var(--texto-suave)] mb-2 uppercase tracking-widest">Productos</p>
           <ul className="space-y-1 text-sm">
             {compra.items.slice(0, 3).map((item: any, i: number) => (
-              <li key={i} className="flex justify-between text-neutral-700">
+              <li key={i} className="font-nunito flex justify-between text-[var(--texto-suave)]">
                 <span>{item.cantidad}× {item.nombre}</span>
-                <span className="text-neutral-500">S/ {item.subtotal?.toFixed(2)}</span>
+                <span>S/ {item.subtotal?.toFixed(2)}</span>
               </li>
             ))}
             {compra.items.length > 3 && (
-              <li className="text-xs text-neutral-500 italic">
+              <li className="font-nunito text-xs text-[var(--texto-tenue)] italic">
                 ... y {compra.items.length - 3} más
               </li>
             )}
@@ -392,12 +431,12 @@ function CompraCard({ compra }: { compra: any }) {
         </div>
       )}
 
-      <div className="flex flex-wrap items-end justify-between gap-3 pt-3 border-t border-neutral-100">
-        <div className="text-xs text-neutral-500">
+      <div className="flex flex-wrap items-end justify-between gap-3 pt-3 border-t border-[var(--borde-verde)]">
+        <div className="font-nunito text-xs text-[var(--texto-suave)]">
           <span className="capitalize">{compra.metodo_pago}</span>
           {compra.direccion && <> · {compra.direccion}</>}
         </div>
-        <p className="text-lg font-semibold">S/ {compra.total_display}</p>
+        <p className="font-playfair text-lg font-bold text-[var(--texto-principal)]">S/ {compra.total_display}</p>
       </div>
     </div>
   );

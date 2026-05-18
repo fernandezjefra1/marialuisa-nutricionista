@@ -87,7 +87,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
 
         {/* Navegación */}
-        <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+        <nav
+          className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto"
+          style={{
+            backgroundImage: "url(/images/fondolateral.png)",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
           {navItems.map((item) => {
             const activa = pathname === item.href;
             return (
@@ -109,33 +116,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* Usuario + cerrar sesión */}
-        <div
-          className="relative overflow-hidden"
-          style={{
-            backgroundImage: "url(/images/fondolateral.png)",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-          }}
-        >
-          <div className="absolute inset-0 bg-white/30" />
-          <div className="relative z-10 px-3 py-4 border-t border-white/40">
-            <div className="flex items-center gap-3 px-3 mb-3">
-              <div className="w-9 h-9 rounded-full bg-[var(--lime)] flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-md">
-                {initials}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-[var(--texto-principal)] truncate">{nombre}</p>
-                <p className="text-xs text-[var(--texto-suave)]">Nutricionista</p>
-              </div>
+        <div className="px-3 py-4 border-t border-[var(--borde-verde)]">
+          <div className="flex items-center gap-3 px-3 mb-3">
+            <div className="w-9 h-9 rounded-full bg-[var(--lime)] flex items-center justify-center text-white font-bold text-sm shrink-0">
+              {initials}
             </div>
-            <button
-              onClick={handleSignOut}
-              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-[var(--texto-suave)] hover:bg-white/60 hover:text-[var(--primrose)] transition"
-            >
-              <IcoLogout />
-              Cerrar sesión
-            </button>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-[var(--texto-principal)] truncate">{nombre}</p>
+              <p className="text-xs text-[var(--texto-suave)]">Nutricionista</p>
+            </div>
           </div>
+          <button
+            onClick={handleSignOut}
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-[var(--texto-suave)] hover:bg-[var(--pinktone-soft)] hover:text-[var(--primrose)] transition"
+          >
+            <IcoLogout />
+            Cerrar sesión
+          </button>
         </div>
       </aside>
 

@@ -76,8 +76,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Logo */}
         <div className="px-6 py-6 border-b border-[var(--borde-verde)]">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[var(--lime-soft)] border border-[var(--borde-verde)] flex items-center justify-center">
-              <IcoHeart />
+            <div className="w-9 h-9 rounded-full overflow-hidden border border-[var(--borde-verde)] shrink-0">
+              <img src="/images/iconoNutricion.png" alt="Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <p className="font-playfair font-bold text-[var(--texto-principal)] text-sm leading-tight">María Luisa</p>
@@ -109,23 +109,33 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* Usuario + cerrar sesión */}
-        <div className="px-3 py-4 border-t border-[var(--borde-verde)]">
-          <div className="flex items-center gap-3 px-3 mb-3">
-            <div className="w-9 h-9 rounded-full bg-[var(--lime)] flex items-center justify-center text-white font-bold text-sm shrink-0">
-              {initials}
+        <div
+          className="relative overflow-hidden"
+          style={{
+            backgroundImage: "url(/images/fondolateral.png)",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="absolute inset-0 bg-white/30" />
+          <div className="relative z-10 px-3 py-4 border-t border-white/40">
+            <div className="flex items-center gap-3 px-3 mb-3">
+              <div className="w-9 h-9 rounded-full bg-[var(--lime)] flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-md">
+                {initials}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-[var(--texto-principal)] truncate">{nombre}</p>
+                <p className="text-xs text-[var(--texto-suave)]">Nutricionista</p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-[var(--texto-principal)] truncate">{nombre}</p>
-              <p className="text-xs text-[var(--texto-suave)]">Nutricionista</p>
-            </div>
+            <button
+              onClick={handleSignOut}
+              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-[var(--texto-suave)] hover:bg-white/60 hover:text-[var(--primrose)] transition"
+            >
+              <IcoLogout />
+              Cerrar sesión
+            </button>
           </div>
-          <button
-            onClick={handleSignOut}
-            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-[var(--texto-suave)] hover:bg-[var(--pinktone-soft)] hover:text-[var(--primrose)] transition"
-          >
-            <IcoLogout />
-            Cerrar sesión
-          </button>
         </div>
       </aside>
 

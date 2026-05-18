@@ -19,7 +19,7 @@ export default function PerfilPage() {
 
 function LoadingScreen() {
   return (
-    <main className="min-h-screen bg-neutral-50 flex items-center justify-center">
+    <main className="min-h-screen flex items-center justify-center" style={{ backgroundImage: "url(/images/fondoperfil.png)", backgroundSize: "cover", backgroundPosition: "center" }}>
       <p className="text-sm text-neutral-500">Cargando...</p>
     </main>
   );
@@ -78,7 +78,15 @@ function PerfilContent() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-50">
+    <main
+      className="min-h-screen"
+      style={{
+        backgroundImage: "url(/images/fondoperfil.png)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
       {/* Header */}
       <header className="bg-white border-b border-neutral-200">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">

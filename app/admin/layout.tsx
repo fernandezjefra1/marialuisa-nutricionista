@@ -95,10 +95,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 key={item.href}
                 href={item.href}
                 onClick={() => setSidebarMobile(false)}
-                className={`group flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition ${
                   activa
-                    ? "bg-[var(--primrose)] text-white shadow-md shadow-pink-200 scale-[1.02]"
-                    : "text-[var(--texto-suave)] hover:bg-[var(--lime-soft)] hover:text-[var(--texto-principal)] hover:scale-[1.02] hover:shadow-sm hover:pl-5 active:scale-[0.98]"
+                    ? "bg-[var(--primrose)] text-white shadow-md shadow-pink-200"
+                    : "text-[var(--texto-suave)] hover:bg-[var(--lime-soft)] hover:text-[var(--texto-principal)]"
                 }`}
               >
                 {item.icon}
@@ -109,37 +109,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* Usuario + cerrar sesión */}
-        <div className="relative overflow-hidden rounded-b-xl">
-          {/* Fondo foto con overlay */}
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: "url(/images/taller-dietetica.jpeg)",
-              backgroundSize: "cover",
-              backgroundPosition: "center top",
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1a3a1a]/80 via-[#1a3a1a]/60 to-[#1a3a1a]/40" />
-
-          {/* Contenido sobre el fondo */}
-          <div className="relative z-10 px-3 py-4 border-t border-white/10">
-            <div className="flex items-center gap-3 px-3 mb-3">
-              <div className="w-10 h-10 rounded-full bg-[var(--primrose)] flex items-center justify-center text-white font-bold text-sm shrink-0 ring-2 ring-white/40 shadow-lg">
-                {initials}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-white truncate">{nombre}</p>
-                <p className="text-xs text-green-200">Nutricionista</p>
-              </div>
+        <div className="px-3 py-4 border-t border-[var(--borde-verde)]">
+          <div className="flex items-center gap-3 px-3 mb-3">
+            <div className="w-9 h-9 rounded-full bg-[var(--lime)] flex items-center justify-center text-white font-bold text-sm shrink-0">
+              {initials}
             </div>
-            <button
-              onClick={handleSignOut}
-              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-white/80 hover:bg-white/15 hover:text-white transition-all duration-200 active:scale-95"
-            >
-              <IcoLogout />
-              Cerrar sesión
-            </button>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-[var(--texto-principal)] truncate">{nombre}</p>
+              <p className="text-xs text-[var(--texto-suave)]">Nutricionista</p>
+            </div>
           </div>
+          <button
+            onClick={handleSignOut}
+            className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm text-[var(--texto-suave)] hover:bg-[var(--pinktone-soft)] hover:text-[var(--primrose)] transition"
+          >
+            <IcoLogout />
+            Cerrar sesión
+          </button>
         </div>
       </aside>
 

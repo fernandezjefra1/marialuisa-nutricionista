@@ -116,14 +116,14 @@ function KawaiiApple({ className }: { className?: string }) {
 /* Fondo kawaii decorativo */
 function KawaiiBackground() {
   const items = [
-    { comp: <KawaiiAvocado className="w-full h-full"/>, top:"3%",   left:"1%",   w:100, anim:"food-d1", dur:"6s",   del:"0s"   },
-    { comp: <KawaiiLime    className="w-full h-full"/>, top:"12%",  right:"2%",  w:90,  anim:"food-d2", dur:"5s",   del:"1s"   },
-    { comp: <KawaiiLeaf    className="w-full h-full"/>, top:"38%",  left:"1%",   w:80,  anim:"food-d3", dur:"7s",   del:"0.5s" },
-    { comp: <KawaiiCarrot  className="w-full h-full"/>, top:"58%",  right:"1%",  w:85,  anim:"food-d1", dur:"8s",   del:"1.5s" },
-    { comp: <KawaiiStar    className="w-full h-full"/>, top:"72%",  left:"2%",   w:70,  anim:"food-d2", dur:"5.5s", del:"2s"   },
-    { comp: <KawaiiApple   className="w-full h-full"/>, top:"78%",  right:"2%",  w:95,  anim:"food-d3", dur:"6.5s", del:"0.8s" },
-    { comp: <KawaiiLime    className="w-full h-full"/>, top:"27%",  right:"0%",  w:65,  anim:"food-d1", dur:"4.5s", del:"3s"   },
-    { comp: <KawaiiLeaf    className="w-full h-full"/>, top:"50%",  left:"0%",   w:60,  anim:"food-d2", dur:"6s",   del:"1.2s" },
+    { comp: <KawaiiAvocado className="w-full h-full"/>, top:"5%",   left:"2%",   w:70,  anim:"food-d1", dur:"6s",   del:"0s"   },
+    { comp: <KawaiiLime    className="w-full h-full"/>, top:"15%",  right:"3%",  w:60,  anim:"food-d2", dur:"5s",   del:"1s"   },
+    { comp: <KawaiiLeaf    className="w-full h-full"/>, top:"40%",  left:"1%",   w:50,  anim:"food-d3", dur:"7s",   del:"0.5s" },
+    { comp: <KawaiiCarrot  className="w-full h-full"/>, top:"60%",  right:"2%",  w:55,  anim:"food-d1", dur:"8s",   del:"1.5s" },
+    { comp: <KawaiiStar    className="w-full h-full"/>, top:"75%",  left:"3%",   w:45,  anim:"food-d2", dur:"5.5s", del:"2s"   },
+    { comp: <KawaiiApple   className="w-full h-full"/>, top:"80%",  right:"3%",  w:65,  anim:"food-d3", dur:"6.5s", del:"0.8s" },
+    { comp: <KawaiiLime    className="w-full h-full"/>, top:"30%",  right:"1%",  w:40,  anim:"food-d1", dur:"4.5s", del:"3s"   },
+    { comp: <KawaiiLeaf    className="w-full h-full"/>, top:"55%",  left:"2%",   w:38,  anim:"food-d2", dur:"6s",   del:"1.2s" },
   ] as const;
 
   return (
@@ -131,7 +131,7 @@ function KawaiiBackground() {
       {items.map((item, i) => (
         <div
           key={i}
-          className={`absolute ${item.anim} opacity-[0.38]`}
+          className={`absolute ${item.anim} opacity-[0.12]`}
           style={{
             top: item.top,
             ...(("left" in item) ? { left: (item as any).left } : { right: (item as any).right }),
@@ -139,7 +139,6 @@ function KawaiiBackground() {
             height: item.w,
             ["--fdur" as string]: item.dur,
             ["--fdel" as string]: item.del,
-            filter: "drop-shadow(0 4px 12px rgba(109,170,109,0.3))",
           }}
         >
           {item.comp}
@@ -298,13 +297,13 @@ export default function AdminDashboard() {
         {/* Pedidos recientes */}
         <div className="bg-white rounded-2xl border border-[var(--borde-verde)] p-6 shadow-sm">
           <div className="flex items-center justify-between mb-5">
-            <h2 className="font-nunito font-semibold text-lg text-[var(--texto-principal)]">Pedidos recientes</h2>
+            <h2 className="font-semibold text-lg text-[var(--texto-principal)]">Pedidos recientes</h2>
             <Link href="/admin/pedidos-libro" className="font-nunito text-sm text-[var(--lime)] hover:underline font-medium">
               Ver todos
             </Link>
           </div>
           {actividadReciente.length === 0 ? (
-            <p className="font-nunito text-sm text-[var(--texto-suave)] text-center py-8">Aún no hay pedidos.</p>
+            <p className="text-sm text-[var(--texto-suave)] text-center py-8">Aún no hay pedidos.</p>
           ) : (
             <div className="space-y-3">
               {actividadReciente.map((item, i) => (
@@ -317,7 +316,7 @@ export default function AdminDashboard() {
         {/* Resumen de ventas */}
         <div className="bg-white rounded-2xl border border-[var(--borde-verde)] p-6 shadow-sm relative overflow-hidden">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-nunito font-semibold text-lg text-[var(--texto-principal)]">Resumen de ventas</h2>
+            <h2 className="font-semibold text-lg text-[var(--texto-principal)]">Resumen de ventas</h2>
             <Link href="/admin/pedidos-productos" className="font-nunito text-sm text-[var(--lime)] hover:underline font-medium">
               Ver reporte completo &rsaquo;
             </Link>

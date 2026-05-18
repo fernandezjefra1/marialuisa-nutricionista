@@ -692,8 +692,32 @@ function CarruselImagenes() {
           </h2>
         </div>
 
-        {/* BENTO — contenedor con altura fija, posicionamiento absoluto */}
-        <div className="relative w-full h-[340px] sm:h-[400px] md:h-[440px]">
+        {/* Mobile: imagen única a pantalla completa */}
+        <div className="sm:hidden">
+          <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-[#2d5016] shadow-xl">
+            <Image
+              src={slides[destacado].src}
+              alt={slides[destacado].titulo}
+              fill
+              className={`transition-transform duration-700 ${
+                slides[destacado].fit === "contain" ? "object-contain p-2" : "object-cover"
+              }`}
+              style={{ objectPosition: "center center" }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+              <h3 className="text-base font-bold mb-1 drop-shadow-lg leading-snug">
+                {slides[destacado].titulo}
+              </h3>
+              <p className="text-xs text-white/80 leading-relaxed line-clamp-2 drop-shadow">
+                {slides[destacado].desc}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop: BENTO — contenedor con altura fija, posicionamiento absoluto */}
+        <div className="hidden sm:block relative w-full h-[400px] md:h-[440px]">
           {slides.map((slide, i) => {
             const slotIdx = (i - destacado + total) % total;
             const s = slots[slotIdx];
@@ -868,7 +892,7 @@ function FilosofiaYServicios() {
               {servicios.map((item) => (
                 <div
                   key={item.n}
-                  className="p-5 rounded-2xl bg-white border-2 border-[var(--borde-verde)] transition cursor-default hover:scale-[1.02] hover:border-[var(--lime)] hover:shadow-md"
+                  className="p-3 sm:p-5 rounded-2xl bg-white border-2 border-[var(--borde-verde)] transition cursor-default hover:scale-[1.02] hover:border-[var(--lime)] hover:shadow-md"
                 >
                   <p className="text-xs mb-2 font-semibold text-[var(--lime)]">{item.n}</p>
                   <div className="w-11 h-11 rounded-full bg-[var(--lime-soft)] flex items-center justify-center mb-3">
@@ -884,11 +908,11 @@ function FilosofiaYServicios() {
       </div>
 
       {/* Barra inferior */}
-      <div className="bg-[var(--verde-fuerte)] text-white py-4 px-8 flex items-center justify-between relative">
+      <div className="bg-[var(--verde-fuerte)] text-white py-4 px-8 flex flex-col sm:flex-row items-center justify-between gap-3 relative text-center sm:text-left">
         <p className="font-nunito text-sm">
           Nutrición que <strong>transforma</strong>. Bienestar que <strong>se nota</strong>.
         </p>
-        <div className="absolute left-1/2 -translate-x-1/2 -top-6 w-12 h-12 rounded-full bg-white border-4 border-[var(--verde-fuerte)] flex items-center justify-center shadow-md">
+        <div className="hidden sm:flex absolute left-1/2 -translate-x-1/2 -top-6 w-12 h-12 rounded-full bg-white border-4 border-[var(--verde-fuerte)] items-center justify-center shadow-md">
           <IcoLeaf cls="w-6 h-6 text-[var(--verde-fuerte)]" />
         </div>
         <p className="font-nunito text-sm">
@@ -1426,12 +1450,12 @@ function SeccionProductos() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           {productos.map((p, i) => (
             <Link
               key={i}
               href="/productos"
-              className="bg-white rounded-2xl border-2 border-[var(--borde-rosa)] p-5 hover:border-[var(--primrose)] hover:shadow-lg hover:shadow-pink-200 hover:-translate-y-1 transition group"
+              className="bg-white rounded-2xl border-2 border-[var(--borde-rosa)] p-3 sm:p-5 hover:border-[var(--primrose)] hover:shadow-lg hover:shadow-pink-200 hover:-translate-y-1 transition group"
             >
               <div className="aspect-square rounded-xl mb-4 overflow-hidden relative">
                <Image
@@ -1618,36 +1642,36 @@ function AsesoriasProyectos() {
           </div>
 
           {/* Contenido */}
-          <div className="relative z-10 bg-white/80 backdrop-blur-sm p-8">
+          <div className="relative z-10 bg-white/80 backdrop-blur-sm p-5 md:p-8">
             {/* Comillas decorativas */}
             <span className="absolute top-4 left-6 text-7xl font-playfair text-[var(--primrose)] opacity-10 leading-none select-none">&ldquo;</span>
 
-            <p className="font-playfair text-xl md:text-2xl font-light text-[var(--texto-principal)] leading-relaxed max-w-3xl relative z-10">
+            <p className="font-playfair text-lg md:text-2xl font-light text-[var(--texto-principal)] leading-relaxed max-w-3xl relative z-10">
               &quot;Mi fuerte es la nutrición a escala. Si quieres impactar a tu comunidad, escuela o equipo,{" "}
               <span className="font-semibold text-[var(--primrose)]">te ayudo a diseñarlo bien.</span>&quot;
             </p>
-            <p className="font-nunito text-sm text-[var(--texto-suave)] mt-3 mb-8 italic">
+            <p className="font-nunito text-sm text-[var(--texto-suave)] mt-3 mb-6 md:mb-8 italic">
               — Lic. María Luisa Peña Valdivia
             </p>
 
-            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-[var(--borde-rosa)]">
+            <div className="grid grid-cols-3 gap-2 md:gap-4 pt-5 md:pt-6 border-t border-[var(--borde-rosa)]">
               {[
                 { val: "20+",      sub: "Años en MINSA",           color: "var(--primrose)", bg: "var(--pinktone)"  },
-                { val: "Nacional", sub: "Proyectos en todo el Perú", color: "#5a9a3a",         bg: "var(--lime-soft)" },
-                { val: "Experta",  sub: "Asesoría especializada",   color: "var(--primrose)", bg: "var(--pinktone)"  },
+                { val: "Nacional", sub: "Proyectos en el Perú",    color: "#5a9a3a",         bg: "var(--lime-soft)" },
+                { val: "Experta",  sub: "Asesoría especializada",  color: "var(--primrose)", bg: "var(--pinktone)"  },
               ].map(({ val, sub, color, bg }, i) => (
                 <div
                   key={i}
-                  className="group flex flex-col items-center text-center rounded-xl p-4 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-default"
+                  className="group flex flex-col items-center text-center rounded-xl p-2 md:p-4 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-default"
                   style={{ background: bg }}
                 >
                   <p
-                    className="font-playfair text-2xl md:text-3xl font-bold mb-1 halo-animado rounded-full"
+                    className="font-playfair text-xl md:text-3xl font-bold mb-1 halo-animado rounded-full"
                     style={{ color }}
                   >
                     {val}
                   </p>
-                  <p className="font-nunito text-xs text-[var(--texto-suave)] leading-snug">{sub}</p>
+                  <p className="font-nunito text-[10px] md:text-xs text-[var(--texto-suave)] leading-snug">{sub}</p>
                 </div>
               ))}
             </div>
@@ -1702,7 +1726,7 @@ function SeccionEmpresas() {
           </div>
 
           <div className="relative">
-            <div className="bg-white rounded-2xl p-8 shadow-xl shadow-green-100 border-2 border-[var(--borde-verde)]">
+            <div className="bg-white rounded-2xl p-5 md:p-8 shadow-xl shadow-green-100 border-2 border-[var(--borde-verde)]">
               <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold">
                 Empresas que confían
               </p>
@@ -1717,15 +1741,15 @@ function SeccionEmpresas() {
               <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8 pt-6 border-t border-[var(--borde-rosa)]">
                 <div>
                   <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">20+</p>
-                  <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">Años de experiencia</p>
+                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Años de experiencia</p>
                 </div>
                 <div>
                   <p className="text-lg md:text-2xl font-semibold text-[var(--lime)]">100%</p>
-                  <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">Personalizado</p>
+                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Personalizado</p>
                 </div>
                 <div>
                   <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">B2B</p>
-                  <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">Servicio empresarial</p>
+                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Empresarial</p>
                 </div>
               </div>
             </div>

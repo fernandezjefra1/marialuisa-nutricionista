@@ -515,7 +515,7 @@ function HeroLibro() {
             ].map(({ t, ac }, i) => (
               <li key={i} className="flex items-start gap-3">
                 <span className="mt-1 flex-shrink-0 font-bold text-lg leading-none" style={{ color: ac }}>—</span>
-                <span className="font-nunito text-base md:text-lg text-[var(--texto-suave)] leading-relaxed">{t}</span>
+                <span className="font-nunito text-sm md:text-base text-[var(--texto-suave)] leading-relaxed">{t}</span>
               </li>
             ))}
           </ul>
@@ -692,8 +692,32 @@ function CarruselImagenes() {
           </h2>
         </div>
 
-        {/* BENTO — contenedor con altura fija, posicionamiento absoluto */}
-        <div className="relative w-full h-[340px] sm:h-[400px] md:h-[440px]">
+        {/* Mobile: imagen única a pantalla completa */}
+        <div className="sm:hidden">
+          <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-[#2d5016] shadow-xl">
+            <Image
+              src={slides[destacado].src}
+              alt={slides[destacado].titulo}
+              fill
+              className={`transition-transform duration-700 ${
+                slides[destacado].fit === "contain" ? "object-contain p-2" : "object-cover"
+              }`}
+              style={{ objectPosition: "center center" }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+              <h3 className="text-base font-bold mb-1 drop-shadow-lg leading-snug">
+                {slides[destacado].titulo}
+              </h3>
+              <p className="text-xs text-white/80 leading-relaxed line-clamp-2 drop-shadow">
+                {slides[destacado].desc}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Desktop: BENTO — contenedor con altura fija, posicionamiento absoluto */}
+        <div className="hidden sm:block relative w-full h-[400px] md:h-[440px]">
           {slides.map((slide, i) => {
             const slotIdx = (i - destacado + total) % total;
             const s = slots[slotIdx];
@@ -868,7 +892,7 @@ function FilosofiaYServicios() {
               {servicios.map((item) => (
                 <div
                   key={item.n}
-                  className="p-5 rounded-2xl bg-white border-2 border-[var(--borde-verde)] transition cursor-default hover:scale-[1.02] hover:border-[var(--lime)] hover:shadow-md"
+                  className="p-3 sm:p-5 rounded-2xl bg-white border-2 border-[var(--borde-verde)] transition cursor-default hover:scale-[1.02] hover:border-[var(--lime)] hover:shadow-md"
                 >
                   <p className="text-xs mb-2 font-semibold text-[var(--lime)]">{item.n}</p>
                   <div className="w-11 h-11 rounded-full bg-[var(--lime-soft)] flex items-center justify-center mb-3">
@@ -884,11 +908,11 @@ function FilosofiaYServicios() {
       </div>
 
       {/* Barra inferior */}
-      <div className="bg-[var(--verde-fuerte)] text-white py-4 px-8 flex items-center justify-between relative">
+      <div className="bg-[var(--verde-fuerte)] text-white py-4 px-8 flex flex-col sm:flex-row items-center justify-between gap-3 relative text-center sm:text-left">
         <p className="font-nunito text-sm">
           Nutrición que <strong>transforma</strong>. Bienestar que <strong>se nota</strong>.
         </p>
-        <div className="absolute left-1/2 -translate-x-1/2 -top-6 w-12 h-12 rounded-full bg-white border-4 border-[var(--verde-fuerte)] flex items-center justify-center shadow-md">
+        <div className="hidden sm:flex absolute left-1/2 -translate-x-1/2 -top-6 w-12 h-12 rounded-full bg-white border-4 border-[var(--verde-fuerte)] items-center justify-center shadow-md">
           <IcoLeaf cls="w-6 h-6 text-[var(--verde-fuerte)]" />
         </div>
         <p className="font-nunito text-sm">
@@ -1016,7 +1040,7 @@ function ProximoTaller() {
               <span className="text-white">Taller de</span><br/>
               <span className="text-[var(--primrose)]">Comida Dietética.</span>
             </h2>
-            <p className="font-nunito text-white/85 leading-relaxed mb-7 text-base">
+            <p className="font-nunito text-white/85 leading-relaxed mb-7 text-sm md:text-base">
               Aprende a cocinar rico y saludable. Un taller práctico donde descubrirás
               cómo preparar comidas fáciles, saludables y saciadoras que transformarán tu día a día.
             </p>
@@ -1050,7 +1074,7 @@ function ProximoTaller() {
             {/* Checkmarks */}
             <ul className="space-y-3 mb-8">
               {["Degustación incluida","Materiales: taper, cubiertos, jabón y toalla","Modalidad presencial y virtual"].map((item,i)=>(
-                <li key={i} className="flex items-center gap-3 font-nunito text-base text-white/90">
+                <li key={i} className="flex items-center gap-3 font-nunito text-sm md:text-base text-white/90">
                   <span className="w-6 h-6 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0">
                     <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                       <polyline points="20 6 9 17 4 12"/>
@@ -1111,7 +1135,7 @@ function Trayectoria() {
                 h.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
               }`}>{h.año}</p>
               <h3 className="font-semibold mb-1.5 text-[var(--texto-principal)]">{h.titulo}</h3>
-              <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">{h.desc}</p>
+              <p className="font-nunito text-xs md:text-sm text-[var(--texto-suave)] leading-relaxed">{h.desc}</p>
             </div>
           ))}
         </div>
@@ -1316,11 +1340,11 @@ function SeccionEnfermedades() {
         </div>
 
         <div className="mt-10 flex justify-center">
-          <div className="bg-[var(--verde-fuerte)] text-white rounded-2xl px-8 py-5 max-w-2xl flex items-start gap-4">
-            <span className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <IcoHeart cls="w-5 h-5 text-white" />
+          <div className="bg-[var(--verde-fuerte)] text-white rounded-2xl px-4 md:px-8 py-5 max-w-2xl flex items-start gap-3 md:gap-4">
+            <span className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <IcoHeart cls="w-4 h-4 md:w-5 md:h-5 text-white" />
             </span>
-            <p className="font-nunito text-base md:text-lg leading-relaxed text-white/90">
+            <p className="font-nunito text-sm md:text-base leading-relaxed text-white/90">
               <span className="font-semibold text-white">Recuerda:</span> la prevención siempre es más efectiva
               y menos costosa que el tratamiento. Con la orientación profesional adecuada, cada familia puede
               construir una base nutricional sólida para una vida más saludable.
@@ -1426,12 +1450,12 @@ function SeccionProductos() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
           {productos.map((p, i) => (
             <Link
               key={i}
               href="/productos"
-              className="bg-white rounded-2xl border-2 border-[var(--borde-rosa)] p-5 hover:border-[var(--primrose)] hover:shadow-lg hover:shadow-pink-200 hover:-translate-y-1 transition group"
+              className="bg-white rounded-2xl border-2 border-[var(--borde-rosa)] p-3 sm:p-5 hover:border-[var(--primrose)] hover:shadow-lg hover:shadow-pink-200 hover:-translate-y-1 transition group"
             >
               <div className="aspect-square rounded-xl mb-4 overflow-hidden relative">
                <Image
@@ -1618,31 +1642,31 @@ function AsesoriasProyectos() {
           </div>
 
           {/* Contenido */}
-          <div className="relative z-10 bg-white/80 backdrop-blur-sm p-8">
+          <div className="relative z-10 bg-white/80 backdrop-blur-sm p-5 md:p-8">
             {/* Comillas decorativas */}
             <span className="absolute top-4 left-6 text-7xl font-playfair text-[var(--primrose)] opacity-10 leading-none select-none">&ldquo;</span>
 
-            <p className="font-playfair text-xl md:text-2xl font-light text-[var(--texto-principal)] leading-relaxed max-w-3xl relative z-10">
+            <p className="font-playfair text-lg md:text-2xl font-light text-[var(--texto-principal)] leading-relaxed max-w-3xl relative z-10">
               &quot;Mi fuerte es la nutrición a escala. Si quieres impactar a tu comunidad, escuela o equipo,{" "}
               <span className="font-semibold text-[var(--primrose)]">te ayudo a diseñarlo bien.</span>&quot;
             </p>
-            <p className="font-nunito text-sm text-[var(--texto-suave)] mt-3 mb-8 italic">
+            <p className="font-nunito text-sm text-[var(--texto-suave)] mt-3 mb-6 md:mb-8 italic">
               — Lic. María Luisa Peña Valdivia
             </p>
 
-            <div className="grid grid-cols-3 gap-4 pt-6 border-t border-[var(--borde-rosa)]">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 md:gap-4 pt-5 md:pt-6 border-t border-[var(--borde-rosa)]">
               {[
                 { val: "20+",      sub: "Años en MINSA",           color: "var(--primrose)", bg: "var(--pinktone)"  },
-                { val: "Nacional", sub: "Proyectos en todo el Perú", color: "#5a9a3a",         bg: "var(--lime-soft)" },
-                { val: "Experta",  sub: "Asesoría especializada",   color: "var(--primrose)", bg: "var(--pinktone)"  },
+                { val: "Nacional", sub: "Proyectos en el Perú",    color: "#5a9a3a",         bg: "var(--lime-soft)" },
+                { val: "Experta",  sub: "Asesoría especializada",  color: "var(--primrose)", bg: "var(--pinktone)"  },
               ].map(({ val, sub, color, bg }, i) => (
                 <div
                   key={i}
-                  className="group flex flex-col items-center text-center rounded-xl p-4 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-default"
+                  className="group flex sm:flex-col items-center gap-3 sm:gap-0 sm:items-center text-left sm:text-center rounded-xl px-4 py-3 sm:p-2 md:p-4 transition-all duration-300 hover:scale-105 hover:shadow-md cursor-default"
                   style={{ background: bg }}
                 >
                   <p
-                    className="font-playfair text-2xl md:text-3xl font-bold mb-1 halo-animado rounded-full"
+                    className="font-playfair text-2xl md:text-3xl font-bold sm:mb-1 halo-animado rounded-full"
                     style={{ color }}
                   >
                     {val}
@@ -1688,7 +1712,7 @@ function SeccionEmpresas() {
               ].map(({ t, ac }, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className="mt-1 flex-shrink-0 font-bold text-lg leading-none" style={{ color: ac }}>—</span>
-                  <span className="font-nunito text-base md:text-lg text-[var(--texto-suave)] leading-relaxed">{t}</span>
+                  <span className="font-nunito text-sm md:text-base text-[var(--texto-suave)] leading-relaxed">{t}</span>
                 </li>
               ))}
             </ul>
@@ -1702,30 +1726,30 @@ function SeccionEmpresas() {
           </div>
 
           <div className="relative">
-            <div className="bg-white rounded-2xl p-8 shadow-xl shadow-green-100 border-2 border-[var(--borde-verde)]">
+            <div className="bg-white rounded-2xl p-5 md:p-8 shadow-xl shadow-green-100 border-2 border-[var(--borde-verde)]">
               <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold">
                 Empresas que confían
               </p>
-              <p className="font-nunito text-base md:text-lg font-light text-[var(--texto-principal)] mb-2 leading-relaxed">
+              <p className="font-nunito text-sm md:text-lg font-light text-[var(--texto-principal)] mb-2 leading-relaxed">
                 &quot;Más de <span className="font-semibold text-[var(--lime)]">20 años</span> recorriendo
                 el Perú evaluando nutricionalmente a familias y trabajadores.&quot;
               </p>
-              <p className="font-nunito text-base md:text-lg text-[var(--texto-suave)] leading-relaxed mt-4">
+              <p className="font-nunito text-sm md:text-base text-[var(--texto-suave)] leading-relaxed mt-4">
                 — Lic. María Luisa Peña Valdivia, Nutricionista colegiada
               </p>
 
               <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8 pt-6 border-t border-[var(--borde-rosa)]">
                 <div>
                   <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">20+</p>
-                  <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">Años de experiencia</p>
+                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Años de experiencia</p>
                 </div>
                 <div>
                   <p className="text-lg md:text-2xl font-semibold text-[var(--lime)]">100%</p>
-                  <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">Personalizado</p>
+                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Personalizado</p>
                 </div>
                 <div>
                   <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">B2B</p>
-                  <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">Servicio empresarial</p>
+                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Empresarial</p>
                 </div>
               </div>
             </div>

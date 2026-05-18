@@ -10,6 +10,144 @@ type ProductoAlerta = { id: number; nombre: string; stock: number; imagen_url?: 
 const UMBRAL_CRITICO    = 5;
 const UMBRAL_ADVERTENCIA = 10;
 
+/* ---- KAWAII SVGs ---- */
+function KawaiiAvocado({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 80 110" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <ellipse cx="40" cy="68" rx="30" ry="40" fill="#6daa6d"/>
+      <ellipse cx="40" cy="62" rx="20" ry="30" fill="#c8e8a8"/>
+      <ellipse cx="40" cy="70" rx="11" ry="14" fill="#8B5E3C"/>
+      <ellipse cx="40" cy="22" rx="17" ry="20" fill="#4a8a4a"/>
+      {/* cara kawaii */}
+      <circle cx="34" cy="65" r="2.5" fill="#5a7255"/>
+      <circle cx="46" cy="65" r="2.5" fill="#5a7255"/>
+      <path d="M36 71 Q40 74 44 71" stroke="#5a7255" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      {/* mejillas */}
+      <circle cx="30" cy="68" r="3" fill="#f0a0b8" opacity="0.5"/>
+      <circle cx="50" cy="68" r="3" fill="#f0a0b8" opacity="0.5"/>
+    </svg>
+  );
+}
+function KawaiiLeaf({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M30 75 C8 55 5 28 18 12 C28 2 52 8 56 28 C60 48 45 65 30 75Z" fill="#5a9a5a"/>
+      <path d="M30 75 C8 55 5 28 18 12 C28 2 52 8 56 28 C60 48 45 65 30 75Z" fill="#7aba7a" opacity="0.5"/>
+      <line x1="30" y1="75" x2="30" y2="18" stroke="#4a8a4a" strokeWidth="1.5"/>
+      <line x1="30" y1="50" x2="44" y2="40" stroke="#4a8a4a" strokeWidth="1"/>
+      <line x1="30" y1="60" x2="18" y2="50" stroke="#4a8a4a" strokeWidth="1"/>
+      <line x1="30" y1="38" x2="42" y2="30" stroke="#4a8a4a" strokeWidth="1"/>
+      {/* cara */}
+      <circle cx="34" cy="35" r="2" fill="#3a7a3a"/>
+      <circle cx="42" cy="32" r="2" fill="#3a7a3a"/>
+      <path d="M35 39 Q38 41 42 38" stroke="#3a7a3a" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+    </svg>
+  );
+}
+function KawaiiLime({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <circle cx="40" cy="40" r="35" fill="#a8d870"/>
+      <circle cx="40" cy="40" r="27" fill="#c8f090"/>
+      {[0,60,120,180,240,300].map((deg, i) => (
+        <line key={i} x1="40" y1="40"
+          x2={40 + 22*Math.cos((deg*Math.PI)/180)}
+          y2={40 + 22*Math.sin((deg*Math.PI)/180)}
+          stroke="#8abe50" strokeWidth="1.5"/>
+      ))}
+      <circle cx="40" cy="40" r="4" fill="#8abe50"/>
+      {/* cara */}
+      <circle cx="33" cy="35" r="2.5" fill="#5a8a20"/>
+      <circle cx="47" cy="35" r="2.5" fill="#5a8a20"/>
+      <path d="M34 42 Q40 46 46 42" stroke="#5a8a20" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <circle cx="30" cy="40" r="3.5" fill="#f0a0b8" opacity="0.45"/>
+      <circle cx="50" cy="40" r="3.5" fill="#f0a0b8" opacity="0.45"/>
+    </svg>
+  );
+}
+function KawaiiCarrot({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      {/* hojas */}
+      <path d="M30 10 C20 0 10 5 15 15 C18 20 26 18 30 10Z" fill="#5a9a5a"/>
+      <path d="M30 10 C40 0 50 5 45 15 C42 20 34 18 30 10Z" fill="#6aaa6a"/>
+      <path d="M30 10 C25 2 28 8 30 10Z" fill="#4a8a4a"/>
+      {/* cuerpo zanahoria */}
+      <path d="M22 15 Q18 55 30 90 Q42 55 38 15 Z" fill="#7aba7a"/>
+      <path d="M22 15 Q18 55 30 90 Q42 55 38 15 Z" fill="#6daa6d" opacity="0.7"/>
+      {/* líneas */}
+      <path d="M24 30 Q30 28 36 30" stroke="#5a9a5a" strokeWidth="1" fill="none"/>
+      <path d="M23 42 Q30 40 37 42" stroke="#5a9a5a" strokeWidth="1" fill="none"/>
+      <path d="M24 54 Q30 52 36 54" stroke="#5a9a5a" strokeWidth="1" fill="none"/>
+      {/* cara */}
+      <circle cx="27" cy="45" r="2" fill="#3a7a3a"/>
+      <circle cx="33" cy="45" r="2" fill="#3a7a3a"/>
+      <path d="M27 50 Q30 53 33 50" stroke="#3a7a3a" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+    </svg>
+  );
+}
+function KawaiiStar({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M25 5 L28 20 L43 20 L31 29 L35 44 L25 36 L15 44 L19 29 L7 20 L22 20 Z" fill="#c8e8a8" stroke="#6daa6d" strokeWidth="1.5"/>
+      <circle cx="22" cy="24" r="2" fill="#5a7255"/>
+      <circle cx="28" cy="24" r="2" fill="#5a7255"/>
+      <path d="M22 29 Q25 32 28 29" stroke="#5a7255" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+    </svg>
+  );
+}
+function KawaiiApple({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 80 90" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M38 12 C38 12 32 4 38 2 C44 0 42 8 42 12" fill="#5a9a5a"/>
+      <path d="M42 10 C42 10 50 6 52 12 C54 18 46 16 42 10" fill="#6aaa6a"/>
+      <path d="M15 30 Q12 55 20 70 Q28 82 40 82 Q52 82 60 70 Q68 55 65 30 Q58 20 50 18 Q44 16 40 18 Q36 16 30 18 Q22 20 15 30Z" fill="#6daa6d"/>
+      <path d="M15 30 Q12 55 20 70 Q28 82 40 82 Q52 82 60 70 Q68 55 65 30 Q58 20 50 18 Q44 16 40 18 Q36 16 30 18 Q22 20 15 30Z" fill="#8aca8a" opacity="0.4"/>
+      {/* cara */}
+      <circle cx="33" cy="52" r="2.5" fill="#4a7a4a"/>
+      <circle cx="47" cy="52" r="2.5" fill="#4a7a4a"/>
+      <path d="M34 59 Q40 63 46 59" stroke="#4a7a4a" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+      <circle cx="28" cy="56" r="4" fill="#f0a0b8" opacity="0.4"/>
+      <circle cx="52" cy="56" r="4" fill="#f0a0b8" opacity="0.4"/>
+    </svg>
+  );
+}
+
+/* Fondo kawaii decorativo */
+function KawaiiBackground() {
+  const items = [
+    { comp: <KawaiiAvocado className="w-full h-full"/>, top:"5%",   left:"2%",   w:70,  anim:"food-d1", dur:"6s",   del:"0s"   },
+    { comp: <KawaiiLime    className="w-full h-full"/>, top:"15%",  right:"3%",  w:60,  anim:"food-d2", dur:"5s",   del:"1s"   },
+    { comp: <KawaiiLeaf    className="w-full h-full"/>, top:"40%",  left:"1%",   w:50,  anim:"food-d3", dur:"7s",   del:"0.5s" },
+    { comp: <KawaiiCarrot  className="w-full h-full"/>, top:"60%",  right:"2%",  w:55,  anim:"food-d1", dur:"8s",   del:"1.5s" },
+    { comp: <KawaiiStar    className="w-full h-full"/>, top:"75%",  left:"3%",   w:45,  anim:"food-d2", dur:"5.5s", del:"2s"   },
+    { comp: <KawaiiApple   className="w-full h-full"/>, top:"80%",  right:"3%",  w:65,  anim:"food-d3", dur:"6.5s", del:"0.8s" },
+    { comp: <KawaiiLime    className="w-full h-full"/>, top:"30%",  right:"1%",  w:40,  anim:"food-d1", dur:"4.5s", del:"3s"   },
+    { comp: <KawaiiLeaf    className="w-full h-full"/>, top:"55%",  left:"2%",   w:38,  anim:"food-d2", dur:"6s",   del:"1.2s" },
+  ] as const;
+
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true" style={{zIndex:0}}>
+      {items.map((item, i) => (
+        <div
+          key={i}
+          className={`absolute ${item.anim} opacity-[0.12]`}
+          style={{
+            top: item.top,
+            ...(("left" in item) ? { left: (item as any).left } : { right: (item as any).right }),
+            width: item.w,
+            height: item.w,
+            ["--fdur" as string]: item.dur,
+            ["--fdel" as string]: item.del,
+          }}
+        >
+          {item.comp}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /* ---- ICONOS ---- */
 const IcoDollar  = () => <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>;
 const IcoBag     = () => <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>;
@@ -102,6 +240,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="relative">
+      <KawaiiBackground />
 
       {/* ===== ENCABEZADO ===== */}
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-8">

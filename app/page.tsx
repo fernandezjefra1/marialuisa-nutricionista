@@ -251,8 +251,8 @@ function Navbar() {
     <nav className="sticky top-0 z-50 bg-[#f5f0e8]/95 backdrop-blur-sm border-b border-[var(--borde-verde)]">
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-3 md:py-4 flex items-center justify-between gap-2">
         <Link href="/" className="flex items-center gap-2 font-playfair font-bold tracking-tight text-[var(--texto-principal)] text-base md:text-lg">
-          <Image src="/images/iconoNutricion.png" alt="Logo" width={56} height={56} className="object-contain drop-shadow-sm" />
-          <span><span className="hidden sm:inline">María Luisa </span><span className="text-[var(--primrose)]">Nutricionista</span></span>
+          <Image src="/images/iconoNutricion.png" alt="Logo" width={56} height={56} className="object-contain drop-shadow-sm w-10 h-10 sm:w-14 sm:h-14" />
+          <span className="truncate"><span className="hidden sm:inline">María Luisa </span><span className="text-[var(--primrose)]">Nutricionista</span></span>
         </Link>
 
         {/* Menú desktop */}
@@ -363,7 +363,8 @@ function MenuUsuario() {
           href="/login?redirect=/comprar-libro"
           className="text-xs sm:text-sm bg-[var(--texto-principal)] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:bg-[var(--lime-hover)] transition-all duration-300 shadow-md shadow-green-200 whitespace-nowrap"
         >
-          Reservar cita
+          <span className="sm:hidden">Cita</span>
+          <span className="hidden sm:inline">Reservar cita</span>
         </Link>
       </div>
     );
@@ -895,11 +896,11 @@ function FilosofiaYServicios() {
                   className="p-3 sm:p-5 rounded-2xl bg-white border-2 border-[var(--borde-verde)] transition cursor-default hover:scale-[1.02] hover:border-[var(--lime)] hover:shadow-md"
                 >
                   <p className="text-xs mb-2 font-semibold text-[var(--lime)]">{item.n}</p>
-                  <div className="w-11 h-11 rounded-full bg-[var(--lime-soft)] flex items-center justify-center mb-3">
-                    <item.Ico cls="w-5 h-5 text-[var(--lime)]" />
+                  <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[var(--lime-soft)] flex items-center justify-center mb-2 sm:mb-3">
+                    <item.Ico cls="w-4 h-4 sm:w-5 sm:h-5 text-[var(--lime)]" />
                   </div>
-                  <h3 className="font-semibold mb-1.5 text-[var(--texto-principal)]">{item.titulo}</h3>
-                  <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed">{item.desc}</p>
+                  <h3 className="font-semibold mb-1 text-sm md:text-base text-[var(--texto-principal)]">{item.titulo}</h3>
+                  <p className="font-nunito text-xs sm:text-sm text-[var(--texto-suave)] leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -1121,21 +1122,21 @@ function Trayectoria() {
           Más de dos décadas <span className="font-semibold text-[var(--lime)]">construyendo experiencia.</span>
         </h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
           {hitos.map((h, i) => (
             <div
               key={i}
-              className={`bg-white rounded-2xl p-5 shadow-md border-t-4 transition hover:-translate-y-1 ${
+              className={`bg-white rounded-2xl p-3 sm:p-5 shadow-md border-t-4 transition hover:-translate-y-1 ${
                 h.color === "primrose"
                   ? "border-[var(--primrose)] shadow-pink-100"
                   : "border-[var(--lime)] shadow-green-100"
               }`}
             >
-              <p className={`text-xs mb-2 uppercase tracking-widest font-semibold ${
+              <p className={`text-[10px] mb-1.5 uppercase tracking-widest font-semibold ${
                 h.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
               }`}>{h.año}</p>
-              <h3 className="font-semibold mb-1.5 text-[var(--texto-principal)]">{h.titulo}</h3>
-              <p className="font-nunito text-xs md:text-sm text-[var(--texto-suave)] leading-relaxed">{h.desc}</p>
+              <h3 className="font-semibold mb-1.5 text-sm md:text-base text-[var(--texto-principal)]">{h.titulo}</h3>
+              <p className="font-nunito text-xs text-[var(--texto-suave)] leading-relaxed">{h.desc}</p>
             </div>
           ))}
         </div>

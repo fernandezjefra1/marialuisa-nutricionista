@@ -5,8 +5,10 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase";
 import { useUser, NIVELES_FIDELIZACION } from "@/lib/use-user";
+import { logEvent } from "@/lib/audit-log";
+import QRCode from "qrcode";
 
-type Tab = "info" | "compras" | "fidelizacion";
+type Tab = "info" | "compras" | "fidelizacion" | "seguridad";
 
 // Wrapper con Suspense (requerido por useSearchParams en Next.js 14+)
 export default function PerfilPage() {
@@ -36,7 +38,7 @@ function PerfilContent() {
 
   // Si cambia la URL, actualizar la tab
   useEffect(() => {
-    if (tabUrl && ["info", "compras", "fidelizacion"].includes(tabUrl)) {
+    if (tabUrl && ["info", "compras", "fidelizacion", "seguridad"].includes(tabUrl)) {
       setTabActiva(tabUrl);
     }
   }, [tabUrl]);
@@ -67,7 +69,6 @@ function PerfilContent() {
 
   function cambiarTab(nueva: Tab) {
     setTabActiva(nueva);
-    // Actualizar URL sin recargar
     const url = new URL(window.location.href);
     if (nueva === "info") {
       url.searchParams.delete("tab");
@@ -134,6 +135,7 @@ function PerfilContent() {
             <BotonTab activa={tabActiva === "info"} onClick={() => cambiarTab("info")} label="Mi información" />
             <BotonTab activa={tabActiva === "compras"} onClick={() => cambiarTab("compras")} label="Mis compras" badge={numCompras > 0 ? numCompras : undefined} />
             <BotonTab activa={tabActiva === "fidelizacion"} onClick={() => cambiarTab("fidelizacion")} label="Fidelización" />
+            <BotonTab activa={tabActiva === "seguridad"} onClick={() => cambiarTab("seguridad")} label="Seguridad" />
           </div>
         </div>
 
@@ -141,6 +143,7 @@ function PerfilContent() {
         {tabActiva === "info" && <TabMiInfo user={user} nombre={nombre} correo={correo} onSignOut={handleSignOut} />}
         {tabActiva === "compras" && <TabMisCompras />}
         {tabActiva === "fidelizacion" && <TabFidelizacion numCompras={numCompras} nivel={nivel} proximoNivel={proximoNivel} />}
+        {tabActiva === "seguridad" && <TabSeguridad user={user} correo={correo} />}
       </div>
     </main>
   );
@@ -648,6 +651,297 @@ function TabFidelizacion({ numCompras, nivel, proximoNivel }: { numCompras: numb
           })}
         </div>
       </div>
+    </div>
+  );
+}
+
+/* ---------- TAB 4: SEGURIDAD (MFA) ---------- */
+type MfaUiState = "idle" | "enrolling" | "verifying" | "enrolled";
+
+function TabSeguridad({ user, correo }: { user: any; correo: string }) {
+  const supabase = createClient();
+
+  const [mfaState, setMfaState]       = useState<MfaUiState>("idle");
+  const [hasMfa, setHasMfa]           = useState(false);
+  const [factorId, setFactorId]       = useState<string | null>(null);
+  const [qrDataUrl, setQrDataUrl]     = useState<string | null>(null);
+  const [totpSecret, setTotpSecret]   = useState<string | null>(null);
+  const [totpUri, setTotpUri]         = useState<string | null>(null);
+  const [code, setCode]               = useState("");
+  const [error, setError]             = useState<string | null>(null);
+  const [successMsg, setSuccessMsg]   = useState<string | null>(null);
+  const [loading, setLoading]         = useState(false);
+  const [checkingStatus, setCheckingStatus] = useState(true);
+
+  // Verificar si el usuario ya tiene MFA activado
+  useEffect(() => {
+    async function checkMfa() {
+      const { data } = await supabase.auth.mfa.listFactors();
+      const verified = data?.totp?.find((f) => f.status === "verified");
+      if (verified) {
+        setHasMfa(true);
+        setFactorId(verified.id);
+        setMfaState("enrolled");
+      }
+      setCheckingStatus(false);
+    }
+    checkMfa();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 1. Iniciar enrollment: obtener QR y secreto
+  async function handleStartEnroll() {
+    setError(null);
+    setLoading(true);
+
+    const { data, error: enrollError } = await supabase.auth.mfa.enroll({
+      factorType: "totp",
+      issuer: "María Luisa Nutricionista",
+      friendlyName: correo,
+    });
+
+    if (enrollError || !data) {
+      setError("No se pudo iniciar la configuración. Intenta de nuevo.");
+      setLoading(false);
+      return;
+    }
+
+    // Generar QR como data URL usando el paquete qrcode
+    const dataUrl = await QRCode.toDataURL(data.totp.uri, { width: 220, margin: 2 });
+
+    setFactorId(data.id);
+    setTotpSecret(data.totp.secret);
+    setTotpUri(data.totp.uri);
+    setQrDataUrl(dataUrl);
+    setMfaState("verifying");
+    setLoading(false);
+  }
+
+  // 2. Verificar el código del authenticator para completar el enrollment
+  async function handleVerifyEnroll(e: React.FormEvent) {
+    e.preventDefault();
+    if (!factorId) return;
+    setError(null);
+    setLoading(true);
+
+    const { error: verifyError } =
+      await supabase.auth.mfa.challengeAndVerify({
+        factorId,
+        code: code.replace(/\s/g, ""),
+      });
+
+    if (verifyError) {
+      setError("Código incorrecto. Asegúrate de haberlo escaneado correctamente.");
+      setLoading(false);
+      return;
+    }
+
+    await logEvent("mfa_enrolled", { userId: user.id, email: correo });
+    setHasMfa(true);
+    setMfaState("enrolled");
+    setSuccessMsg("¡Verificación en dos pasos activada correctamente!");
+    setLoading(false);
+  }
+
+  // 3. Desactivar MFA
+  async function handleUnenroll() {
+    if (!factorId) return;
+    if (!window.confirm("¿Segura que quieres desactivar la verificación en dos pasos? Tu cuenta quedará menos protegida.")) return;
+
+    setError(null);
+    setLoading(true);
+
+    const { error: unenrollError } = await supabase.auth.mfa.unenroll({ factorId });
+
+    if (unenrollError) {
+      setError("No se pudo desactivar. Intenta de nuevo.");
+      setLoading(false);
+      return;
+    }
+
+    await logEvent("mfa_unenrolled", { userId: user.id, email: correo });
+    setHasMfa(false);
+    setFactorId(null);
+    setMfaState("idle");
+    setSuccessMsg("Verificación en dos pasos desactivada.");
+    setLoading(false);
+  }
+
+  if (checkingStatus) {
+    return (
+      <div className="bg-white rounded-2xl border border-neutral-200 p-12 text-center">
+        <p className="text-sm text-neutral-500">Cargando configuración de seguridad...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6 max-w-2xl">
+
+      {/* Estado actual MFA */}
+      <div className="bg-white rounded-2xl border border-neutral-200 p-6 md:p-8">
+        <div className="flex items-start justify-between gap-4 mb-5">
+          <div>
+            <h2 className="text-lg font-semibold mb-1">Verificación en dos pasos (2FA)</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed">
+              Añade una capa extra de seguridad. Cada vez que inicies sesión necesitarás
+              el código de tu aplicación de autenticación.
+            </p>
+          </div>
+          <span className={`flex-shrink-0 text-xs px-3 py-1 rounded-full font-semibold border ${
+            hasMfa
+              ? "bg-green-50 text-green-700 border-green-200"
+              : "bg-neutral-100 text-neutral-500 border-neutral-200"
+          }`}>
+            {hasMfa ? "✓ Activo" : "Inactivo"}
+          </span>
+        </div>
+
+        {/* Mensajes de feedback */}
+        {successMsg && (
+          <div className="mb-5 p-4 rounded-xl bg-green-50 border border-green-200 text-sm text-green-800 flex items-center gap-2">
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            {successMsg}
+          </div>
+        )}
+        {error && (
+          <div className="mb-5 p-4 rounded-xl bg-red-50 border border-red-200 text-sm text-red-700 flex items-center gap-2">
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            {error}
+          </div>
+        )}
+
+        {/* ── Estado: sin MFA, sin flujo activo ── */}
+        {mfaState === "idle" && (
+          <button
+            onClick={handleStartEnroll}
+            disabled={loading}
+            className="inline-flex items-center gap-2 bg-neutral-900 text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-neutral-700 transition disabled:opacity-50"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+            Activar verificación en dos pasos
+          </button>
+        )}
+
+        {/* ── Estado: mostrando QR para escanear ── */}
+        {mfaState === "verifying" && (
+          <div className="space-y-6">
+            <div>
+              <p className="text-sm font-semibold text-neutral-700 mb-3">
+                Paso 1 — Escanea el código QR
+              </p>
+              <p className="text-sm text-neutral-600 mb-4 leading-relaxed">
+                Abre <strong>Google Authenticator</strong>, <strong>Authy</strong> u otra app compatible,
+                pulsa "Añadir cuenta" y escanea este código.
+              </p>
+
+              {qrDataUrl && (
+                <div className="inline-block p-3 bg-white border-2 border-neutral-200 rounded-2xl">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={qrDataUrl} alt="Código QR para autenticador" width={220} height={220} />
+                </div>
+              )}
+
+              {totpSecret && (
+                <div className="mt-4 p-4 bg-neutral-50 rounded-xl border border-neutral-200">
+                  <p className="text-xs text-neutral-500 uppercase tracking-widest mb-1">
+                    Clave manual (si no puedes escanear)
+                  </p>
+                  <p className="font-mono text-sm text-neutral-800 tracking-wider break-all select-all">
+                    {totpSecret}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <form onSubmit={handleVerifyEnroll} className="space-y-4">
+              <div>
+                <p className="text-sm font-semibold text-neutral-700 mb-2">
+                  Paso 2 — Ingresa el código de 6 dígitos
+                </p>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  pattern="\d{6}"
+                  maxLength={6}
+                  required
+                  value={code}
+                  onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
+                  placeholder="000000"
+                  className="w-full max-w-xs border border-neutral-300 rounded-xl px-4 py-3 text-center text-xl tracking-[0.4em] outline-none focus:border-neutral-900 focus:ring-2 focus:ring-neutral-200 transition font-mono"
+                  autoFocus
+                />
+              </div>
+
+              <div className="flex gap-3 flex-wrap">
+                <button
+                  type="submit"
+                  disabled={loading || code.length !== 6}
+                  className="bg-neutral-900 text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-neutral-700 transition disabled:opacity-50"
+                >
+                  {loading ? "Verificando..." : "Confirmar y activar"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setMfaState("idle"); setError(null); setCode(""); setQrDataUrl(null); setTotpSecret(null); }}
+                  className="text-sm text-neutral-500 hover:text-neutral-900 transition px-4 py-3"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* ── Estado: MFA ya activo ── */}
+        {mfaState === "enrolled" && (
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-200">
+              <div className="w-9 h-9 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                <svg className="w-5 h-5 text-green-700" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-green-900">Tu cuenta está protegida con 2FA</p>
+                <p className="text-xs text-green-700 mt-0.5">
+                  Se pedirá un código de autenticación en cada inicio de sesión.
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={handleUnenroll}
+              disabled={loading}
+              className="text-sm text-red-600 border border-red-200 px-5 py-2.5 rounded-full hover:bg-red-50 transition disabled:opacity-50"
+            >
+              {loading ? "Procesando..." : "Desactivar verificación en dos pasos"}
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Info ISO 27001 */}
+      <div className="bg-neutral-50 rounded-2xl border border-neutral-200 p-6">
+        <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+          <svg className="w-4 h-4 text-neutral-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          ¿Por qué es importante?
+        </h3>
+        <ul className="space-y-2 text-sm text-neutral-600 leading-relaxed">
+          <li>• La verificación en dos pasos protege tu cuenta aunque alguien conozca tu contraseña.</li>
+          <li>• Recomendada por el estándar ISO 27001 (control A.9.4.2 — Procedimientos de inicio de sesión).</li>
+          <li>• Compatible con Google Authenticator, Authy, Microsoft Authenticator y similares.</li>
+        </ul>
+      </div>
+
     </div>
   );
 }

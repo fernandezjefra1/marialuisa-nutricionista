@@ -5,13 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
-import {
-  checkRateLimit,
-  recordFailedAttempt,
-  clearAttempts,
-  getSecondsRemaining,
-} from "@/lib/rate-limit";
 import { logEvent } from "@/lib/audit-log";
+
+const MAX_ATTEMPTS = 5;
 
 type Step = "credentials" | "mfa";
 
@@ -39,107 +35,71 @@ export default function LoginPage() {
   const [factorId, setFactorId]     = useState<string | null>(null);
   const [challengeId, setChallengeId] = useState<string | null>(null);
 
-  // Inicializar estado de bloqueo al montar
-  useEffect(() => {
-    const rl = checkRateLimit();
-    setLocked(!rl.allowed);
-    setSecondsLeft(getSecondsRemaining(rl.lockedUntil));
-    setAttemptsLeft(rl.attemptsLeft);
-  }, []);
-
   // Cuenta regresiva del bloqueo
   useEffect(() => {
     if (!locked) return;
     const interval = setInterval(() => {
-      const rl = checkRateLimit();
-      if (rl.allowed) {
-        setLocked(false);
-        setSecondsLeft(0);
-        setAttemptsLeft(rl.attemptsLeft);
-        clearInterval(interval);
-      } else {
-        setSecondsLeft(getSecondsRemaining(rl.lockedUntil));
-      }
+      setSecondsLeft((prev) => {
+        if (prev <= 1) {
+          setLocked(false);
+          setAttemptsLeft(MAX_ATTEMPTS);
+          clearInterval(interval);
+          return 0;
+        }
+        return prev - 1;
+      });
     }, 1000);
     return () => clearInterval(interval);
   }, [locked]);
 
-  // ── Login con email/contraseña ─────────────────────────────────────
+  // ── Login con email/contraseña (rate limiting server-side) ───────────
   async function handleEmailLogin(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-
-    // 1. Verificar rate limit ANTES de llamar a Supabase
-    const rl = checkRateLimit();
-    if (!rl.allowed) {
-      setLocked(true);
-      setSecondsLeft(getSecondsRemaining(rl.lockedUntil));
-      await logEvent("login_rate_limited", { email });
-      return;
-    }
-
     setLoading(true);
-    const { data, error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
     });
 
-    if (signInError) {
-      recordFailedAttempt();
-      const rlAfter = checkRateLimit();
-      setAttemptsLeft(rlAfter.attemptsLeft);
-      if (!rlAfter.allowed) {
+    const data = await res.json();
+
+    if (!data.ok) {
+      if (data.reason === "rate_limited") {
         setLocked(true);
-        setSecondsLeft(getSecondsRemaining(rlAfter.lockedUntil));
+        setSecondsLeft(
+          Math.max(0, Math.ceil((data.lockedUntil - Date.now()) / 1000))
+        );
         setError("Demasiados intentos fallidos. Cuenta bloqueada temporalmente.");
-        await logEvent("login_rate_limited", { email });
-      } else {
+        setLoading(false);
+        return;
+      }
+      if (data.reason === "invalid_credentials") {
+        const left = data.attemptsLeft ?? 0;
+        setAttemptsLeft(left);
         setError(
-          rlAfter.attemptsLeft <= 2
-            ? `Correo o contraseña incorrectos. Te quedan ${rlAfter.attemptsLeft} intento${rlAfter.attemptsLeft === 1 ? "" : "s"}.`
+          left <= 2
+            ? `Correo o contraseña incorrectos. Te quedan ${left} intento${left === 1 ? "" : "s"}.`
             : "Correo o contraseña incorrectos."
         );
-        await logEvent("login_failed", { email });
+        setLoading(false);
+        return;
       }
+      setError("Error inesperado. Intenta de nuevo.");
       setLoading(false);
       return;
     }
 
-    // 2. Credenciales correctas: verificar si se requiere MFA
-    const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-
-    if (
-      aalData?.nextLevel === "aal2" &&
-      aalData?.currentLevel !== "aal2"
-    ) {
-      // El usuario tiene MFA activado — obtener factor y lanzar desafío
-      const { data: factorsData } = await supabase.auth.mfa.listFactors();
-      const totpFactor = factorsData?.totp?.[0];
-
-      if (totpFactor) {
-        const { data: challengeData, error: challengeError } =
-          await supabase.auth.mfa.challenge({ factorId: totpFactor.id });
-
-        if (challengeError) {
-          setError("Error al iniciar verificación MFA. Intenta de nuevo.");
-          setLoading(false);
-          return;
-        }
-
-        setFactorId(totpFactor.id);
-        setChallengeId(challengeData.id);
-        setStep("mfa");
-        setLoading(false);
-        return;
-      }
+    if (data.requiresMfa) {
+      setFactorId(data.factorId);
+      setChallengeId(data.challengeId);
+      setStep("mfa");
+      setLoading(false);
+      return;
     }
 
-    // 3. Sin MFA — login completo
-    clearAttempts();
-    await logEvent("login_success", {
-      email,
-      userId: data.user?.id,
-    });
     router.push("/");
     router.refresh();
   }
@@ -166,7 +126,6 @@ export default function LoginPage() {
         return;
       }
 
-      clearAttempts();
       await logEvent("login_mfa_success", {
         email,
         userId: verifyData.user?.id,

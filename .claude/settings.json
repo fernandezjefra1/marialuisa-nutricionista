@@ -3,7 +3,8 @@
     "allow": [
       "Bash(npm install *)",
       "Bash(cd \"/c/Users/jeffe/marialuisa-nutricionista\" *)",
-      "Read(//c/c/Users/jeffe/marialuisa-nutricionista/app/perfil/**)"
+      "Read(//c/c/Users/jeffe/marialuisa-nutricionista/app/perfil/**)",
+      "Bash(npx next *)"
     ]
   }
 }

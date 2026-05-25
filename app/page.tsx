@@ -360,7 +360,7 @@ function MenuUsuario() {
           Iniciar sesión
         </Link>
         <Link
-          href="/login?redirect=/comprar-libro"
+          href="/login?redirect=/reservar-cita"
           className="text-xs sm:text-sm bg-[var(--texto-principal)] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:bg-[var(--lime-hover)] transition-all duration-300 shadow-md shadow-green-200 whitespace-nowrap"
         >
           <span className="sm:hidden">Cita</span>

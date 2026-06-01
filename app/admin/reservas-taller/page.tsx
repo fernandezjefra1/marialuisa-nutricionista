@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { adminFetch } from "@/lib/admin-fetch";
 
 type Estado = "pendiente" | "confirmado" | "cancelado";
 type Modalidad = "presencial" | "virtual";
@@ -44,7 +43,7 @@ export default function ReservasTallerAdminPage() {
   async function cargarReservas() {
     setLoading(true);
     try {
-      const res = await adminFetch("/api/admin/reservas_taller");
+      const res = await fetch("/api/admin/reservas_taller");
       const { data } = await res.json();
       setReservas(data ?? []);
     } catch {
@@ -56,7 +55,7 @@ export default function ReservasTallerAdminPage() {
 
   async function cambiarEstado(id: number, nuevoEstado: Estado) {
     setActualizando(id);
-    await adminFetch(`/api/admin/reservas_taller/${id}`, {
+    await fetch(`/api/admin/reservas_taller/${id}`, {
       method: "PATCH",
       body: JSON.stringify({ estado: nuevoEstado }),
     });

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase"; // solo para Storage
-import { adminFetch } from "@/lib/admin-fetch";
 
 type Producto = {
   id: number;
@@ -69,7 +68,7 @@ export default function AdminProductos() {
   async function cargar() {
     setCargando(true);
     try {
-      const res = await adminFetch("/api/admin/productos");
+      const res = await fetch("/api/admin/productos");
       const { data } = await res.json();
       const sorted = (data || []).sort((a: Producto, b: Producto) =>
         a.categoria.localeCompare(b.categoria) || a.nombre.localeCompare(b.nombre)
@@ -120,14 +119,14 @@ export default function AdminProductos() {
     };
 
     if (editando) {
-      const res = await adminFetch(`/api/admin/productos/${editando.id}`, {
+      const res = await fetch(`/api/admin/productos/${editando.id}`, {
         method: "PATCH",
         body: JSON.stringify(payload),
       });
       if (!res.ok) { alert("Error al actualizar."); setGuardando(false); return; }
       setProductos((prev) => prev.map((p) => (p.id === editando.id ? { ...p, ...payload } : p)));
     } else {
-      const res = await adminFetch("/api/admin/productos", {
+      const res = await fetch("/api/admin/productos", {
         method: "POST",
         body: JSON.stringify(payload),
       });
@@ -149,7 +148,7 @@ export default function AdminProductos() {
     if (!modalReposicion || cantidadReponer <= 0) return;
     setReponiendo(true);
     const nuevoStock = modalReposicion.stock + cantidadReponer;
-    const res = await adminFetch(`/api/admin/productos/${modalReposicion.id}`, {
+    const res = await fetch(`/api/admin/productos/${modalReposicion.id}`, {
       method: "PATCH",
       body: JSON.stringify({ stock: nuevoStock }),
     });
@@ -200,7 +199,7 @@ export default function AdminProductos() {
   }
 
   async function confirmarEliminar(p: Producto) {
-    const res = await adminFetch(`/api/admin/productos/${p.id}`, { method: "DELETE" });
+    const res = await fetch(`/api/admin/productos/${p.id}`, { method: "DELETE" });
     if (!res.ok) { alert("Error al eliminar."); return; }
     setProductos((prev) => prev.filter((x) => x.id !== p.id));
     setConfirmEliminar(null);
@@ -208,7 +207,7 @@ export default function AdminProductos() {
 
   async function toggleActivo(p: Producto) {
     const nuevoActivo = !p.activo;
-    const res = await adminFetch(`/api/admin/productos/${p.id}`, {
+    const res = await fetch(`/api/admin/productos/${p.id}`, {
       method: "PATCH",
       body: JSON.stringify({ activo: nuevoActivo }),
     });

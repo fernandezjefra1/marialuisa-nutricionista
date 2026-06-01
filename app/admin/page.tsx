@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { adminFetch } from "@/lib/admin-fetch";
 
 type ProductoAlerta = { id: number; nombre: string; stock: number; imagen_url?: string | null };
 
@@ -179,10 +178,10 @@ export default function AdminDashboard() {
       inicioMes.setHours(0, 0, 0, 0);
 
       const [librosRes, pedidosRes, solicitudesRes, productosRes] = await Promise.all([
-        adminFetch("/api/admin/compras").then((r) => r.json()),
-        adminFetch("/api/admin/pedidos").then((r) => r.json()),
-        adminFetch("/api/admin/solicitudes_empresariales").then((r) => r.json()),
-        adminFetch("/api/admin/productos").then((r) => r.json()),
+        fetch("/api/admin/compras").then((r) => r.json()),
+        fetch("/api/admin/pedidos").then((r) => r.json()),
+        fetch("/api/admin/solicitudes_empresariales").then((r) => r.json()),
+        fetch("/api/admin/productos").then((r) => r.json()),
       ]);
 
       const librosArr: any[]      = librosRes.data || [];

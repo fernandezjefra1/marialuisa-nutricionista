@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { adminFetch } from "@/lib/admin-fetch";
 
 type Compra = {
   id: number;
@@ -43,7 +42,7 @@ export default function AdminPedidosLibro() {
   async function cargar() {
     setCargando(true);
     try {
-      const res = await adminFetch("/api/admin/compras");
+      const res = await fetch("/api/admin/compras");
       const { data } = await res.json();
       setCompras(data || []);
     } catch {
@@ -54,7 +53,7 @@ export default function AdminPedidosLibro() {
   }
 
   async function cambiarEstado(id: number, nuevoEstado: string) {
-    const res = await adminFetch(`/api/admin/compras/${id}`, {
+    const res = await fetch(`/api/admin/compras/${id}`, {
       method: "PATCH",
       body: JSON.stringify({ estado: nuevoEstado, updated_at: new Date().toISOString() }),
     });

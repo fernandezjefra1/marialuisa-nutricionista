@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { createServerClient } from "@supabase/ssr";
+import { cookies } from "next/headers";
 
 const ALLOWED_TABLES = [
   "compras",
@@ -18,15 +20,28 @@ function serviceClient() {
   );
 }
 
-async function verifyAdmin(req: NextRequest): Promise<boolean> {
-  const authHeader = req.headers.get("authorization");
-  const token = authHeader?.replace("Bearer ", "");
-  if (!token) return false;
+async function verifyAdmin(): Promise<boolean> {
+  const cookieStore = await cookies();
 
-  const admin = serviceClient();
-  const { data: { user }, error } = await admin.auth.getUser(token);
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() { return cookieStore.getAll(); },
+        setAll(list) {
+          try {
+            list.forEach(({ name, value, options }) => cookieStore.set(name, value, options));
+          } catch { /* ignore in route handlers */ }
+        },
+      },
+    }
+  );
+
+  const { data: { user }, error } = await supabase.auth.getUser();
   if (error || !user?.email) return false;
 
+  const admin = serviceClient();
   const { data } = await admin
     .from("admin_emails")
     .select("email")
@@ -45,7 +60,7 @@ export async function GET(
     return NextResponse.json({ error: "Tabla no permitida" }, { status: 400 });
   }
 
-  const ok = await verifyAdmin(req);
+  const ok = await verifyAdmin();
   if (!ok) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const admin = serviceClient();
@@ -67,7 +82,7 @@ export async function POST(
     return NextResponse.json({ error: "Tabla no permitida" }, { status: 400 });
   }
 
-  const ok = await verifyAdmin(req);
+  const ok = await verifyAdmin();
   if (!ok) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const body = await req.json();

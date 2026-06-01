@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { adminFetch } from "@/lib/admin-fetch";
 
 type Pedido = {
   id: number;
@@ -44,7 +43,7 @@ export default function AdminPedidosProductos() {
   async function cargar() {
     setCargando(true);
     try {
-      const res = await adminFetch("/api/admin/pedidos");
+      const res = await fetch("/api/admin/pedidos");
       const { data } = await res.json();
       setPedidos(data || []);
     } catch {
@@ -55,7 +54,7 @@ export default function AdminPedidosProductos() {
   }
 
   async function cambiarEstado(id: number, nuevoEstado: string) {
-    const res = await adminFetch(`/api/admin/pedidos/${id}`, {
+    const res = await fetch(`/api/admin/pedidos/${id}`, {
       method: "PATCH",
       body: JSON.stringify({ estado: nuevoEstado, updated_at: new Date().toISOString() }),
     });

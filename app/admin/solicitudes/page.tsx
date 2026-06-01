@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { adminFetch } from "@/lib/admin-fetch";
 
 type Solicitud = {
   id: number;
@@ -38,7 +37,7 @@ export default function AdminSolicitudes() {
   async function cargar() {
     setCargando(true);
     try {
-      const res = await adminFetch("/api/admin/solicitudes_empresariales");
+      const res = await fetch("/api/admin/solicitudes_empresariales");
       const { data } = await res.json();
       setSolicitudes(data || []);
     } catch {
@@ -49,7 +48,7 @@ export default function AdminSolicitudes() {
   }
 
   async function cambiarEstado(id: number, nuevoEstado: string) {
-    const res = await adminFetch(`/api/admin/solicitudes_empresariales/${id}`, {
+    const res = await fetch(`/api/admin/solicitudes_empresariales/${id}`, {
       method: "PATCH",
       body: JSON.stringify({ estado: nuevoEstado, updated_at: new Date().toISOString() }),
     });

@@ -255,9 +255,9 @@ export default function ComprarLibroPage() {
                     <input
                       type="tel"
                       value={whatsapp}
-                      maxLength={9}
+                      maxLength={10}
                       onChange={(e) => {
-                        const val = e.target.value.replace(/\D/g, "").slice(0, 9);
+                        const val = e.target.value.replace(/\D/g, "").slice(0, 10);
                         setWhatsapp(val);
                         if (errores.whatsapp) marcarError("whatsapp", val);
                       }}

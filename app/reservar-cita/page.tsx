@@ -207,7 +207,8 @@ export default function ReservarCitaPage() {
                 <input
                   type="tel"
                   value={whatsapp}
-                  onChange={(e) => setWhatsapp(e.target.value)}
+                  maxLength={10}
+                  onChange={(e) => setWhatsapp(e.target.value.replace(/\D/g, "").slice(0, 10))}
                   placeholder="999 888 777"
                   className="w-full border border-[var(--borde-rosa)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--primrose)] transition"
                 />

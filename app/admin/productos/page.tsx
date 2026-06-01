@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase"; // solo para Storage
+import { adminFetch } from "@/lib/admin-fetch";
 
 type Producto = {
   id: number;
@@ -67,13 +68,18 @@ export default function AdminProductos() {
 
   async function cargar() {
     setCargando(true);
-    const res = await fetch("/api/admin/productos");
-    const { data } = await res.json();
-    const sorted = (data || []).sort((a: Producto, b: Producto) =>
-      a.categoria.localeCompare(b.categoria) || a.nombre.localeCompare(b.nombre)
-    );
-    setProductos(sorted);
-    setCargando(false);
+    try {
+      const res = await adminFetch("/api/admin/productos");
+      const { data } = await res.json();
+      const sorted = (data || []).sort((a: Producto, b: Producto) =>
+        a.categoria.localeCompare(b.categoria) || a.nombre.localeCompare(b.nombre)
+      );
+      setProductos(sorted);
+    } catch {
+      setProductos([]);
+    } finally {
+      setCargando(false);
+    }
   }
 
   function abrirCrear() {
@@ -114,17 +120,15 @@ export default function AdminProductos() {
     };
 
     if (editando) {
-      const res = await fetch(`/api/admin/productos/${editando.id}`, {
+      const res = await adminFetch(`/api/admin/productos/${editando.id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
       if (!res.ok) { alert("Error al actualizar."); setGuardando(false); return; }
       setProductos((prev) => prev.map((p) => (p.id === editando.id ? { ...p, ...payload } : p)));
     } else {
-      const res = await fetch("/api/admin/productos", {
+      const res = await adminFetch("/api/admin/productos", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
       if (!res.ok) { alert("Error al crear el producto."); setGuardando(false); return; }
@@ -145,9 +149,8 @@ export default function AdminProductos() {
     if (!modalReposicion || cantidadReponer <= 0) return;
     setReponiendo(true);
     const nuevoStock = modalReposicion.stock + cantidadReponer;
-    const res = await fetch(`/api/admin/productos/${modalReposicion.id}`, {
+    const res = await adminFetch(`/api/admin/productos/${modalReposicion.id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ stock: nuevoStock }),
     });
     if (!res.ok) { alert("Error al reponer stock."); setReponiendo(false); return; }
@@ -197,7 +200,7 @@ export default function AdminProductos() {
   }
 
   async function confirmarEliminar(p: Producto) {
-    const res = await fetch(`/api/admin/productos/${p.id}`, { method: "DELETE" });
+    const res = await adminFetch(`/api/admin/productos/${p.id}`, { method: "DELETE" });
     if (!res.ok) { alert("Error al eliminar."); return; }
     setProductos((prev) => prev.filter((x) => x.id !== p.id));
     setConfirmEliminar(null);
@@ -205,9 +208,8 @@ export default function AdminProductos() {
 
   async function toggleActivo(p: Producto) {
     const nuevoActivo = !p.activo;
-    const res = await fetch(`/api/admin/productos/${p.id}`, {
+    const res = await adminFetch(`/api/admin/productos/${p.id}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ activo: nuevoActivo }),
     });
     if (!res.ok) { alert("Error al actualizar."); return; }

@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
-import { cookies } from "next/headers";
 
 const ALLOWED_TABLES = [
   "compras",
@@ -20,43 +18,35 @@ function serviceClient() {
   );
 }
 
-async function getAdminEmail(): Promise<string | null> {
-  const cookieStore = await cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll(); },
-        setAll(list) { list.forEach(({ name, value, options }) => cookieStore.set(name, value, options)); },
-      },
-    }
-  );
-
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user?.email) return null;
+async function verifyAdmin(req: NextRequest): Promise<boolean> {
+  const authHeader = req.headers.get("authorization");
+  const token = authHeader?.replace("Bearer ", "");
+  if (!token) return false;
 
   const admin = serviceClient();
+  const { data: { user }, error } = await admin.auth.getUser(token);
+  if (error || !user?.email) return false;
+
   const { data } = await admin
     .from("admin_emails")
     .select("email")
     .eq("email", user.email)
     .maybeSingle();
 
-  return data ? user.email : null;
+  return !!data;
 }
 
 export async function GET(
-  _req: NextRequest,
-  { params }: { params: Promise<{ table: string }> }
+  req: NextRequest,
+  { params }: { params: Promise<{ table: string }> | { table: string } }
 ) {
-  const { table } = await params;
+  const { table } = await Promise.resolve(params);
   if (!ALLOWED_TABLES.includes(table)) {
     return NextResponse.json({ error: "Tabla no permitida" }, { status: 400 });
   }
 
-  const email = await getAdminEmail();
-  if (!email) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  const ok = await verifyAdmin(req);
+  if (!ok) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const admin = serviceClient();
   const { data, error } = await admin
@@ -70,15 +60,15 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ table: string }> }
+  { params }: { params: Promise<{ table: string }> | { table: string } }
 ) {
-  const { table } = await params;
+  const { table } = await Promise.resolve(params);
   if (!ALLOWED_TABLES.includes(table)) {
     return NextResponse.json({ error: "Tabla no permitida" }, { status: 400 });
   }
 
-  const email = await getAdminEmail();
-  if (!email) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  const ok = await verifyAdmin(req);
+  if (!ok) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   const body = await req.json();
   const admin = serviceClient();

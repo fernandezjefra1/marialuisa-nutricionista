@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { adminFetch } from "@/lib/admin-fetch";
 
 type ProductoAlerta = { id: number; nombre: string; stock: number; imagen_url?: string | null };
 
@@ -172,15 +173,16 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     async function cargar() {
+      try {
       const inicioMes = new Date();
       inicioMes.setDate(1);
       inicioMes.setHours(0, 0, 0, 0);
 
       const [librosRes, pedidosRes, solicitudesRes, productosRes] = await Promise.all([
-        fetch("/api/admin/compras").then((r) => r.json()),
-        fetch("/api/admin/pedidos").then((r) => r.json()),
-        fetch("/api/admin/solicitudes_empresariales").then((r) => r.json()),
-        fetch("/api/admin/productos").then((r) => r.json()),
+        adminFetch("/api/admin/compras").then((r) => r.json()),
+        adminFetch("/api/admin/pedidos").then((r) => r.json()),
+        adminFetch("/api/admin/solicitudes_empresariales").then((r) => r.json()),
+        adminFetch("/api/admin/productos").then((r) => r.json()),
       ]);
 
       const librosArr: any[]      = librosRes.data || [];
@@ -221,7 +223,11 @@ export default function AdminDashboard() {
       setActividadReciente(recientes);
       setProductosAlerta(stockBajo);
       setProductosMasVendidos(productos);
-      setCargando(false);
+      } catch {
+        // silently fail — show empty dashboard rather than hanging forever
+      } finally {
+        setCargando(false);
+      }
     }
     cargar();
   }, []);

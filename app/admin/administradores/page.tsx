@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useUser } from "@/lib/use-user";
+import { adminFetch } from "@/lib/admin-fetch";
 
 type AdminEntry = {
   id: string;
@@ -20,13 +21,18 @@ export default function AdministradoresPage() {
   const [exito, setExito] = useState("");
 
   async function cargarAdmins() {
-    const res = await fetch("/api/admin/admin_emails");
-    const { data } = await res.json();
-    const sorted = (data ?? []).sort((a: AdminEntry, b: AdminEntry) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-    );
-    setAdmins(sorted);
-    setLoading(false);
+    try {
+      const res = await adminFetch("/api/admin/admin_emails");
+      const { data } = await res.json();
+      const sorted = (data ?? []).sort((a: AdminEntry, b: AdminEntry) =>
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+      );
+      setAdmins(sorted);
+    } catch {
+      setAdmins([]);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
@@ -42,9 +48,8 @@ export default function AdministradoresPage() {
     setError("");
     setExito("");
 
-    const res = await fetch("/api/admin/admin_emails", {
+    const res = await adminFetch("/api/admin/admin_emails", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, agregado_por: correo }),
     });
 
@@ -71,7 +76,7 @@ export default function AdministradoresPage() {
     }
     if (!confirm(`¿Eliminar a ${email} como administrador?`)) return;
 
-    const res = await fetch(`/api/admin/admin_emails/${id}`, { method: "DELETE" });
+    const res = await adminFetch(`/api/admin/admin_emails/${id}`, { method: "DELETE" });
 
     if (!res.ok) {
       setError("No se pudo eliminar el administrador.");

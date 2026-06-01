@@ -18,7 +18,6 @@ export default function Home() {
       <SeccionProductos />
       <SeccionEmpresas />
       <AsesoriasProyectos />
-      <ProximoTaller />
       <Trayectoria />
       <Footer />
     </main>
@@ -251,7 +250,7 @@ function Navbar() {
     <nav className="sticky top-0 z-50 bg-[#f5f0e8]/95 backdrop-blur-sm border-b border-[var(--borde-verde)]">
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-3 md:py-4 flex items-center justify-between gap-2">
         <Link href="/" className="flex items-center gap-2 font-playfair font-bold tracking-tight text-[var(--texto-principal)] text-base md:text-lg">
-          <Image src="/images/iconoNutricion.png" alt="Logo" width={56} height={56} className="object-contain drop-shadow-sm w-10 h-10 sm:w-14 sm:h-14" />
+          <Image src="/images/iconoNutricion.png" alt="Logo" width={80} height={80} className="object-contain drop-shadow-sm w-14 h-14 sm:w-20 sm:h-20" />
           <span className="truncate"><span className="hidden sm:inline">María Luisa </span><span className="text-[var(--primrose)]">Nutricionista</span></span>
         </Link>
 
@@ -477,105 +476,133 @@ function MenuUsuario() {
   );
 }
 
-/* ---------- HERO: LIBRO DESTACADO ---------- */
+/* ---------- HERO: LIBRO (izq) + TALLER (der) ---------- */
 function HeroLibro() {
   return (
     <section id="libro" className="relative overflow-hidden bg-[#f5f0e8]">
       <FoodBg />
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-14 md:py-20 grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
-        {/* Texto */}
-        <div className="order-2 md:order-1">
-          <div className="mb-5">
-            <p className="font-playfair text-2xl md:text-3xl text-[var(--texto-principal)] font-semibold italic leading-snug mb-1">
-              &ldquo;Vive la magia de la comida dietética&rdquo;
-            </p>
-            <p className="text-base text-[var(--texto-suave)]">
-              María Luisa Nutricionista &nbsp;·&nbsp; <span className="font-medium text-[var(--texto-principal)]">Universidad de San Marcos</span>
-            </p>
-          </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-14 md:py-20">
 
-          <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold flex items-center gap-2">
-            <IcoHeart cls="w-4 h-4 text-[var(--primrose)] bow-animate inline-block" /> Nuevo lanzamiento
+        {/* Cabecera centrada */}
+        <div className="text-center mb-10">
+          <p className="font-playfair text-xl md:text-2xl text-[var(--texto-principal)] font-semibold italic leading-snug mb-1">
+            &ldquo;Vive la magia de la comida dietética&rdquo;
           </p>
-          <h1 className="font-playfair text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-tight mb-6 text-[var(--texto-principal)]">
-            Nutrición<br />
-            <span className="font-semibold shimmer-rose">del Bebé.</span>
-          </h1>
-          <p className="font-nunito text-lg md:text-xl text-[var(--texto-suave)] leading-relaxed mb-6 max-w-lg">
-            Una guía única en su tipo sobre nutrición infantil{" "}
-            <span className="text-[var(--lime)] font-semibold">preventiva</span>, fruto
-            de años de experiencia profesional recorriendo todo el Perú.
-            Recientemente presentada en el Colegio de Nutricionistas del Perú.
+          <p className="text-sm text-[var(--texto-suave)]">
+            María Luisa Nutricionista &nbsp;·&nbsp; <span className="font-medium text-[var(--texto-principal)]">Universidad de San Marcos</span>
           </p>
+        </div>
 
-          <ul className="space-y-3 mb-6">
-            {[
-              { t: "Guía práctica desde los 6 meses de edad hasta el año de vida", ac: "var(--primrose)" },
-              { t: "Recetas, planes alimentarios y consejos prácticos",             ac: "var(--lime)"    },
-              { t: "Basado en evidencia y experiencia profesional",                 ac: "var(--primrose)" },
-            ].map(({ t, ac }, i) => (
-              <li key={i} className="flex items-start gap-3">
-                <span className="mt-1 flex-shrink-0 font-bold text-lg leading-none" style={{ color: ac }}>—</span>
-                <span className="font-nunito text-sm md:text-base text-[var(--texto-suave)] leading-relaxed">{t}</span>
-              </li>
-            ))}
-          </ul>
+        <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-start">
 
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            {/* Digital — animado porque está de oferta */}
-            <div className="relative bg-[var(--lime-soft)] border-2 border-[var(--lime)] rounded-2xl px-5 py-3 flex flex-col items-start halo-animado overflow-hidden">
-              {/* brillo deslizante */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-[shimmer-slide_2.5s_ease-in-out_infinite]" style={{animation:"shimmer-slide 2.5s ease-in-out infinite"}}/>
-              <span className="text-xs uppercase tracking-widest text-[var(--lime)] font-bold mb-0.5 relative z-10">Versión digital</span>
-              <div className="flex items-baseline gap-2 relative z-10">
-                <span className="text-4xl font-bold text-[var(--texto-principal)]">S/ 10</span>
-                <span className="text-xs bg-[var(--primrose)] text-white px-2 py-0.5 rounded-full font-bold bow-animate">¡Oferta!</span>
+          {/* ── IZQUIERDA: Libro ── */}
+          <div className="flex flex-col items-center">
+            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold flex items-center gap-2 self-start">
+              <IcoBook cls="w-4 h-4" /> Nuevo lanzamiento
+            </p>
+
+            {/* Portada */}
+            <div className="relative w-full max-w-sm mx-auto mb-6">
+              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl rotate-3" />
+              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
+                <Image
+                  src="/images/libro-portada.jpg"
+                  alt="Libro Nutrición del Bebé - Lic. María Luisa"
+                  fill
+                  className="object-cover"
+                  priority
+                />
               </div>
             </div>
-            {/* Físico — caja igual de estilo */}
-            <div className="bg-white border-2 border-[var(--borde-verde)] rounded-2xl px-5 py-3 flex flex-col items-start">
-              <span className="text-xs uppercase tracking-widest text-[var(--texto-tenue)] font-semibold mb-0.5">Físico</span>
-              <span className="text-4xl font-semibold text-[var(--texto-principal)]">S/ 20</span>
-            </div>
-          </div>
 
-          <div className="flex flex-wrap gap-3">
+            <h1 className="font-playfair text-3xl sm:text-4xl font-light leading-tight tracking-tight mb-3 text-[var(--texto-principal)] text-center">
+              Nutrición <span className="font-semibold shimmer-rose">del Bebé.</span>
+            </h1>
+
+            <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-5 text-center max-w-sm">
+              Guía de nutrición infantil <span className="text-[var(--lime)] font-semibold">preventiva</span> desde los 6 meses hasta el año de vida.
+              Recientemente presentada en el Colegio de Nutricionistas del Perú.
+            </p>
+
+            {/* Precios */}
+            <div className="flex items-center gap-3 mb-5">
+              <div className="relative bg-[var(--lime-soft)] border-2 border-[var(--lime)] rounded-2xl px-4 py-2.5 flex flex-col items-start halo-animado overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full" style={{animation:"shimmer-slide 2.5s ease-in-out infinite"}}/>
+                <span className="text-xs uppercase tracking-widest text-[var(--lime)] font-bold mb-0.5 relative z-10">Digital</span>
+                <div className="flex items-baseline gap-1.5 relative z-10">
+                  <span className="text-3xl font-bold text-[var(--texto-principal)]">S/ 10</span>
+                  <span className="text-xs bg-[var(--primrose)] text-white px-1.5 py-0.5 rounded-full font-bold bow-animate">¡Oferta!</span>
+                </div>
+              </div>
+              <div className="bg-white border-2 border-[var(--borde-verde)] rounded-2xl px-4 py-2.5 flex flex-col items-start">
+                <span className="text-xs uppercase tracking-widest text-[var(--texto-tenue)] font-semibold mb-0.5">Físico</span>
+                <span className="text-3xl font-semibold text-[var(--texto-principal)]">S/ 20</span>
+              </div>
+            </div>
+
             <Link
               href="/comprar-libro"
-              className="btn-coquette bg-[var(--primrose)] text-white px-5 py-3 md:px-8 md:py-4 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
+              className="btn-coquette bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200 w-full max-w-sm text-center"
             >
               Adquirir el libro
             </Link>
-            <a
-              href="#sobre-mi"
-              className="btn-coquette border-2 border-[var(--primrose)] text-[var(--primrose)] px-6 py-3 rounded-full hover:bg-[var(--pinktone-soft)] transition font-medium"
-            >
-              Conocer a la autora
-            </a>
           </div>
-        </div>
 
-        {/* Portada del libro */}
-        <div className="order-1 md:order-2 relative">
-          <div className="relative max-w-md mx-auto">
-            <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl rotate-3" />
-            <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
-              <Image
-                src="/images/libro-portada.jpg"
-                alt="Libro Nutrición del Bebé - Lic. María Luisa"
-                fill
-                className="object-cover"
-                priority
-              />
+          {/* ── DERECHA: Taller ── */}
+          <div id="taller" className="flex flex-col items-center">
+            <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-4 font-semibold flex items-center gap-2 self-start">
+              <IcoBlender cls="w-4 h-4" /> Próximo taller
+            </p>
+
+            {/* Imagen */}
+            <div className="relative w-full max-w-sm mx-auto mb-6">
+              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--lime-soft)] to-[var(--verde-fuerte)]/30 rounded-2xl -rotate-3" />
+              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-green-200 overflow-hidden border-4 border-white">
+                <Image src="/images/taller-dietetica.jpeg" alt="Taller de Comida Dietética" fill className="object-cover object-top"/>
+              </div>
             </div>
-            <div className="hidden md:block absolute -bottom-4 -left-4 bg-white border border-[var(--borde-rosa)] rounded-2xl p-4 shadow-lg shadow-pink-100 max-w-[200px]">
-              <p className="text-xs text-[var(--primrose)] uppercase tracking-widest mb-1 font-semibold">
-                Por
-              </p>
-              <p className="font-nunito font-semibold text-base text-[var(--texto-principal)]">Lic. María Luisa</p>
-              <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">Nutricionista colegiada</p>
+
+            <h2 className="font-playfair text-3xl sm:text-4xl font-bold leading-tight mb-3 text-[var(--texto-principal)] text-center">
+              Taller de <span className="text-[var(--lime)]">Comida Dietética.</span>
+            </h2>
+
+            <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-5 text-center max-w-sm">
+              Aprende a cocinar rico y saludable. Un taller práctico donde descubrirás
+              comidas fáciles, saludables y saciadoras que transformarán tu día a día.
+            </p>
+
+            {/* Precios */}
+            <div className="flex items-center gap-3 mb-5">
+              <div className="bg-[var(--verde-fuerte)] rounded-2xl px-4 py-2.5 flex flex-col items-start">
+                <span className="text-xs uppercase tracking-widest text-white/70 font-semibold mb-0.5">Presencial</span>
+                <span className="text-3xl font-bold text-white">S/ 80</span>
+              </div>
+              <div className="bg-[var(--verde-fuerte)]/80 border-2 border-[var(--borde-verde)] rounded-2xl px-4 py-2.5 flex flex-col items-start">
+                <span className="text-xs uppercase tracking-widest text-white/70 font-semibold mb-0.5">Virtual</span>
+                <span className="text-3xl font-bold text-white">S/ 40</span>
+              </div>
             </div>
+
+            {/* Beneficios */}
+            <ul className="space-y-2 mb-5 w-full max-w-sm">
+              {["Degustación incluida","Materiales: taper, cubiertos, jabón y toalla","Modalidad presencial y virtual"].map((item,i)=>(
+                <li key={i} className="flex items-center gap-2 font-nunito text-sm text-[var(--texto-suave)]">
+                  <span className="w-5 h-5 rounded-full bg-[var(--lime-soft)] flex items-center justify-center flex-shrink-0">
+                    <svg className="w-3 h-3 text-[var(--lime)]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <Link href="/reservar-taller"
+              className="btn-coquette bg-[var(--verde-fuerte)] text-white px-6 py-3 rounded-full hover:opacity-90 transition font-medium shadow-lg shadow-green-200 w-full max-w-sm text-center">
+              Reservar cupo ahora
+            </Link>
           </div>
+
         </div>
       </div>
     </section>
@@ -919,184 +946,6 @@ function FilosofiaYServicios() {
         <p className="font-nunito text-sm">
           Salud · Equilibrio · Bienestar <span className="text-white">♥</span>
         </p>
-      </div>
-    </section>
-  );
-}
-
-/* ---------- PRÓXIMO TALLER ---------- */
-function ProximoTaller() {
-  const fd = (dur: string, del: string) => ({"--fdur": dur, "--fdel": del} as React.CSSProperties);
-  const sp = (dur: string, del: string) => ({"--dur": dur, "--delay": del} as React.CSSProperties);
-
-  /* SVG food corners */
-  const Smoothie2 = () => (
-    <svg viewBox="0 0 110 160" fill="none" className="w-full h-full">
-      <path d="M22 38 L30 138 Q55 150 80 138 L88 38 Z" fill="#7dbf6a"/>
-      <path d="M25 55 L32 136 Q55 146 78 136 L85 55 Z" fill="#5aaa5a"/>
-      <path d="M22 38 Q55 44 88 38 Q55 32 22 38Z" fill="#9acc80"/>
-      <rect x="50" y="4" width="9" height="50" rx="4" fill="white" opacity="0.85"/>
-      <ellipse cx="55" cy="38" rx="30" ry="7" fill="#a8d890" opacity="0.4"/>
-    </svg>
-  );
-  const Avocado2 = () => (
-    <svg viewBox="0 0 120 160" fill="none" className="w-full h-full">
-      <path d="M60 6 Q22 52 22 100 Q22 148 60 152 Q98 148 98 100 Q98 52 60 6Z" fill="#2d5016"/>
-      <path d="M60 20 Q38 62 38 100 Q38 140 60 144 Q82 140 82 100 Q82 62 60 20Z" fill="#c8e096"/>
-      <ellipse cx="60" cy="104" rx="18" ry="22" fill="#8B5E3C"/>
-      <ellipse cx="60" cy="100" rx="12" ry="15" fill="#6B4226"/>
-    </svg>
-  );
-  const Kiwi2 = () => (
-    <svg viewBox="0 0 130 130" fill="none" className="w-full h-full">
-      <circle cx="65" cy="65" r="62" fill="#5a8a2a"/>
-      <circle cx="65" cy="65" r="54" fill="#c8e870"/>
-      <circle cx="65" cy="65" r="10" fill="#f5f0c0"/>
-      {[0,45,90,135,180,225,270,315].map((a,i)=>{
-        const r=32, x=65+r*Math.cos(a*Math.PI/180), y=65+r*Math.sin(a*Math.PI/180);
-        return <ellipse key={i} cx={x} cy={y} rx="5" ry="9" fill="#3a6a1a" transform={`rotate(${a},${x},${y})`} opacity="0.7"/>;
-      })}
-    </svg>
-  );
-  const Leaves2 = () => (
-    <svg viewBox="0 0 150 120" fill="none" className="w-full h-full">
-      {[0,1,2,3,4,5].map(i=>(
-        <ellipse key={i} cx={20+i*18} cy={60-Math.abs(i-2.5)*10} rx="20" ry="11"
-          fill={i%2===0?"#4a9a3a":"#6aaa4a"} transform={`rotate(${-20+i*8},${20+i*18},${60-Math.abs(i-2.5)*10})`} opacity="0.85"/>
-      ))}
-    </svg>
-  );
-
-  return (
-    <section id="taller" className="bg-[var(--verde-fuerte)] py-16 md:py-20 overflow-hidden relative">
-
-      {/* Decoraciones de fondo */}
-      <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute -top-4 -left-6 w-36 md:w-56 opacity-80 food-d2" style={fd("8s","0s")}><Smoothie2/></div>
-        <div className="absolute -top-6 -right-4 w-32 md:w-48 opacity-80 food-d1" style={fd("9s","1.2s")}><Avocado2/></div>
-        <div className="absolute -bottom-4 -left-4 w-28 md:w-44 opacity-75 food-d3" style={fd("7s","0.5s")}><Kiwi2/></div>
-        <div className="absolute -bottom-2 -right-4 w-36 md:w-52 opacity-75 food-sw" style={fd("6s","2s")}><Leaves2/></div>
-
-        {/* Bolitas */}
-        {[
-          {top:"18%",left:"18%",r:5},{top:"32%",left:"11%",r:4},{top:"48%",left:"19%",r:6},
-          {top:"65%",left:"14%",r:4},{top:"22%",left:"78%",r:5},{top:"40%",left:"85%",r:4},
-          {top:"58%",left:"80%",r:6},{top:"72%",left:"74%",r:4},{top:"82%",left:"42%",r:5},
-          {top:"12%",left:"54%",r:4},
-        ].map((d,i)=>(
-          <span key={i} className="absolute rounded-full sparkle-item"
-            style={{top:d.top,left:d.left,width:d.r*2,height:d.r*2,
-              background:i%3===0?"#a8d870":i%3===1?"#c8ec90":"rgba(255,255,255,0.5)",
-              opacity:0.55, ...sp(`${3+i*0.4}s`,`${i*0.6}s`)}}/>
-        ))}
-
-        {/* Cruces */}
-        {[{top:"25%",left:"40%"},{top:"60%",left:"63%"},{top:"72%",left:"30%"},{top:"15%",left:"65%"}].map((p,i)=>(
-          <svg key={i} className="absolute sparkle-item" style={{top:p.top,left:p.left,width:14,height:14,opacity:0.45,...sp(`${4+i*0.5}s`,`${i*0.8}s`)}} viewBox="0 0 14 14" fill="none">
-            <line x1="7" y1="0" x2="7" y2="14" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-            <line x1="0" y1="7" x2="14" y2="7" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-        ))}
-
-        {/* Corazones */}
-        {[{top:"48%",left:"6%"},{top:"85%",left:"58%"}].map((p,i)=>(
-          <svg key={i} className="absolute heart-float" style={{top:p.top,left:p.left,width:18,height:18,opacity:0.45,
-            ["--dur" as string]:`${4.5+i}s`,["--delay" as string]:`${i*1.2}s`}} viewBox="0 0 24 24" fill="white">
-            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-          </svg>
-        ))}
-
-        {/* Círculos outline */}
-        {[{top:"35%",left:"48%",r:22},{top:"68%",left:"88%",r:15},{top:"8%",left:"30%",r:18}].map((c,i)=>(
-          <svg key={i} className="absolute food-d2" style={{top:c.top,left:c.left,width:c.r*2,height:c.r*2,opacity:0.25,...fd(`${6+i}s`,`${i*1.1}s`)}} viewBox={`0 0 ${c.r*2} ${c.r*2}`}>
-            <circle cx={c.r} cy={c.r} r={c.r-2} stroke="white" strokeWidth="2" fill="none"/>
-          </svg>
-        ))}
-
-        {/* Grid de puntos */}
-        <svg className="absolute food-d1 opacity-30" style={{top:"30%",right:"6%",...fd("10s","0.5s")}} width="50" height="50" viewBox="0 0 50 50">
-          {[0,1,2,3].flatMap(row=>[0,1,2,3].map(col=>(
-            <circle key={`${row}-${col}`} cx={6+col*13} cy={6+row*13} r="2.5" fill="white"/>
-          )))}
-        </svg>
-      </div>
-
-      {/* Contenido */}
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <div className="grid md:grid-cols-[3fr_4fr] gap-1 md:gap-2 items-center">
-
-          {/* Mockup celular */}
-          <div className="relative max-w-[420px] md:max-w-[500px] mx-auto md:mx-0 w-full flotar">
-            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl shadow-black/30">
-              <Image src="/images/taller-dietetica.jpeg" alt="Taller de Comida Dietética" fill className="object-cover object-top"/>
-            </div>
-          </div>
-
-          {/* Info */}
-          <div>
-            <p className="text-sm uppercase tracking-widest text-white/80 mb-3 font-semibold flex items-center gap-2">
-              <IcoLeaf cls="w-4 h-4 inline-block"/> Próximo evento
-            </p>
-            <h2 className="font-playfair text-4xl md:text-6xl font-bold mb-5 leading-tight">
-              <span className="text-white">Taller de</span><br/>
-              <span className="text-[var(--primrose)]">Comida Dietética.</span>
-            </h2>
-            <p className="font-nunito text-white/85 leading-relaxed mb-7 text-sm md:text-base">
-              Aprende a cocinar rico y saludable. Un taller práctico donde descubrirás
-              cómo preparar comidas fáciles, saludables y saciadoras que transformarán tu día a día.
-            </p>
-
-            {/* Precios */}
-            <div className="grid grid-cols-2 gap-4 mb-7">
-              <div className="bg-white/20 border border-white/30 rounded-2xl p-4 flex items-center gap-3 hover:bg-white/30 transition">
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3zm0 0v7"/>
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-white/70 font-semibold">Presencial</p>
-                  <p className="text-2xl md:text-3xl font-bold text-white leading-none">S/ 80</p>
-                </div>
-              </div>
-              <div className="bg-white/20 border border-white/30 rounded-2xl p-4 flex items-center gap-3 hover:bg-white/30 transition">
-                <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
-                  </svg>
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-widest text-white/70 font-semibold">Virtual</p>
-                  <p className="text-2xl md:text-3xl font-bold text-white leading-none">S/ 40</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Checkmarks */}
-            <ul className="space-y-3 mb-8">
-              {["Degustación incluida","Materiales: taper, cubiertos, jabón y toalla","Modalidad presencial y virtual"].map((item,i)=>(
-                <li key={i} className="flex items-center gap-3 font-nunito text-sm md:text-base text-white/90">
-                  <span className="w-6 h-6 rounded-full bg-white/25 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-
-            {/* Botón rosado grande */}
-            <Link href="/reservar-taller"
-              className="btn-coquette inline-flex items-center gap-3 bg-[var(--primrose)] hover:bg-[var(--primrose-hover)] text-white px-8 py-4 rounded-full font-semibold text-base transition shadow-xl shadow-pink-900/30">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-              </svg>
-              Reservar cupo ahora
-            </Link>
-          </div>
-
-        </div>
       </div>
     </section>
   );

@@ -20,10 +20,7 @@ export function useAdmin() {
 
     const supabase = createClient();
     supabase
-      .from("admin_emails")
-      .select("email")
-      .eq("email", correo)
-      .maybeSingle()
+      .rpc("check_is_admin", { check_email: correo })
       .then(({ data }) => {
         setEsAdmin(!!data);
         setAdminLoading(false);

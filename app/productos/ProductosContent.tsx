@@ -156,16 +156,11 @@ export default function ProductosContent() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <button className="w-9 h-9 flex items-center justify-center rounded-full border border-[var(--borde-rosa)] hover:bg-[var(--pinktone-soft)] transition">
-              <svg className="w-4 h-4 text-[var(--primrose)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-              </svg>
-            </button>
-            <button className="w-9 h-9 flex items-center justify-center rounded-full border border-[var(--borde-rosa)] hover:bg-[var(--pinktone-soft)] transition">
+            <Link href="/perfil" className="w-9 h-9 flex items-center justify-center rounded-full border border-[var(--borde-rosa)] hover:bg-[var(--pinktone-soft)] transition">
               <svg className="w-4 h-4 text-[var(--texto-suave)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
-            </button>
+            </Link>
             <button
               onClick={abrirCarrito}
               className="flex items-center gap-2 bg-[var(--primrose)] hover:bg-[var(--primrose-hover)] text-white px-4 py-2 rounded-full transition text-sm font-semibold shadow-md shadow-pink-200"
@@ -373,13 +368,6 @@ function ProductoCard({
         ) : stockBajo && !producto.destacado ? (
           <span className="absolute top-3 left-3 bg-amber-500 text-white text-xs px-3 py-1 rounded-full font-semibold">Últimos {producto.stock}</span>
         ) : null}
-
-        {/* Corazón — top right */}
-        <button className="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow hover:scale-110 transition">
-          <svg className="w-4 h-4 text-[var(--primrose)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-          </svg>
-        </button>
 
         {/* Badge descriptivo — bottom left */}
         <span className="absolute bottom-3 left-3 bg-[var(--lime)] text-white text-xs px-3 py-1 rounded-full font-semibold shadow">

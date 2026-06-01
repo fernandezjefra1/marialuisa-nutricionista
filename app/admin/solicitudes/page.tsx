@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase";
 
 type Solicitud = {
   id: number;
@@ -26,7 +25,6 @@ const ESTADO_COLOR: Record<string, string> = {
 };
 
 export default function AdminSolicitudes() {
-  const supabase = createClient();
   const [solicitudes, setSolicitudes] = useState<Solicitud[]>([]);
   const [cargando, setCargando] = useState(true);
   const [filtroEstado, setFiltroEstado] = useState<string>("todos");
@@ -38,21 +36,20 @@ export default function AdminSolicitudes() {
 
   async function cargar() {
     setCargando(true);
-    const { data } = await supabase
-      .from("solicitudes_empresariales")
-      .select("*")
-      .order("created_at", { ascending: false });
+    const res = await fetch("/api/admin/solicitudes_empresariales");
+    const { data } = await res.json();
     setSolicitudes(data || []);
     setCargando(false);
   }
 
   async function cambiarEstado(id: number, nuevoEstado: string) {
-    const { error } = await supabase
-      .from("solicitudes_empresariales")
-      .update({ estado: nuevoEstado, updated_at: new Date().toISOString() })
-      .eq("id", id);
+    const res = await fetch(`/api/admin/solicitudes_empresariales/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ estado: nuevoEstado, updated_at: new Date().toISOString() }),
+    });
 
-    if (error) {
+    if (!res.ok) {
       alert("Error al actualizar el estado.");
       return;
     }

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase";
 
 type Estado = "pendiente" | "confirmado" | "cancelado";
 type Modalidad = "presencial" | "virtual";
@@ -31,8 +30,6 @@ const COLOR_ESTADO: Record<Estado, string> = {
 };
 
 export default function ReservasTallerAdminPage() {
-  const supabase = createClient();
-
   const [reservas, setReservas] = useState<Reserva[]>([]);
   const [loading, setLoading] = useState(true);
   const [filtroEstado, setFiltroEstado] = useState<Estado | "todos">("todos");
@@ -45,17 +42,19 @@ export default function ReservasTallerAdminPage() {
 
   async function cargarReservas() {
     setLoading(true);
-    const { data } = await supabase
-      .from("reservas_taller")
-      .select("*")
-      .order("created_at", { ascending: false });
+    const res = await fetch("/api/admin/reservas_taller");
+    const { data } = await res.json();
     setReservas(data ?? []);
     setLoading(false);
   }
 
   async function cambiarEstado(id: number, nuevoEstado: Estado) {
     setActualizando(id);
-    await supabase.from("reservas_taller").update({ estado: nuevoEstado }).eq("id", id);
+    await fetch(`/api/admin/reservas_taller/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ estado: nuevoEstado }),
+    });
     setReservas((prev) =>
       prev.map((r) => (r.id === id ? { ...r, estado: nuevoEstado } : r))
     );

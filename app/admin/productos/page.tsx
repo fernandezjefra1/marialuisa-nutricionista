@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase"; // solo para Storage
 
 type Producto = {
   id: number;
@@ -45,7 +45,7 @@ const VACIO: Omit<Producto, "id"> = {
 };
 
 export default function AdminProductos() {
-  const supabase = createClient();
+  const supabase = createClient(); // solo para Storage
   const [productos, setProductos] = useState<Producto[]>([]);
   const [cargando, setCargando] = useState(true);
   const [busqueda, setBusqueda] = useState("");
@@ -67,12 +67,12 @@ export default function AdminProductos() {
 
   async function cargar() {
     setCargando(true);
-    const { data } = await supabase
-      .from("productos")
-      .select("*")
-      .order("categoria")
-      .order("nombre");
-    setProductos(data || []);
+    const res = await fetch("/api/admin/productos");
+    const { data } = await res.json();
+    const sorted = (data || []).sort((a: Producto, b: Producto) =>
+      a.categoria.localeCompare(b.categoria) || a.nombre.localeCompare(b.nombre)
+    );
+    setProductos(sorted);
     setCargando(false);
   }
 
@@ -114,12 +114,21 @@ export default function AdminProductos() {
     };
 
     if (editando) {
-      const { error } = await supabase.from("productos").update(payload).eq("id", editando.id);
-      if (error) { alert("Error al actualizar."); setGuardando(false); return; }
+      const res = await fetch(`/api/admin/productos/${editando.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) { alert("Error al actualizar."); setGuardando(false); return; }
       setProductos((prev) => prev.map((p) => (p.id === editando.id ? { ...p, ...payload } : p)));
     } else {
-      const { data, error } = await supabase.from("productos").insert(payload).select().single();
-      if (error) { alert("Error al crear el producto."); setGuardando(false); return; }
+      const res = await fetch("/api/admin/productos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) { alert("Error al crear el producto."); setGuardando(false); return; }
+      const { data } = await res.json();
       setProductos((prev) => [...prev, data]);
     }
 
@@ -136,11 +145,12 @@ export default function AdminProductos() {
     if (!modalReposicion || cantidadReponer <= 0) return;
     setReponiendo(true);
     const nuevoStock = modalReposicion.stock + cantidadReponer;
-    const { error } = await supabase
-      .from("productos")
-      .update({ stock: nuevoStock })
-      .eq("id", modalReposicion.id);
-    if (error) { alert("Error al reponer stock."); setReponiendo(false); return; }
+    const res = await fetch(`/api/admin/productos/${modalReposicion.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ stock: nuevoStock }),
+    });
+    if (!res.ok) { alert("Error al reponer stock."); setReponiendo(false); return; }
     setProductos((prev) =>
       prev.map((p) => p.id === modalReposicion.id ? { ...p, stock: nuevoStock } : p)
     );
@@ -187,16 +197,20 @@ export default function AdminProductos() {
   }
 
   async function confirmarEliminar(p: Producto) {
-    const { error } = await supabase.from("productos").delete().eq("id", p.id);
-    if (error) { alert("Error al eliminar."); return; }
+    const res = await fetch(`/api/admin/productos/${p.id}`, { method: "DELETE" });
+    if (!res.ok) { alert("Error al eliminar."); return; }
     setProductos((prev) => prev.filter((x) => x.id !== p.id));
     setConfirmEliminar(null);
   }
 
   async function toggleActivo(p: Producto) {
     const nuevoActivo = !p.activo;
-    const { error } = await supabase.from("productos").update({ activo: nuevoActivo }).eq("id", p.id);
-    if (error) { alert("Error al actualizar."); return; }
+    const res = await fetch(`/api/admin/productos/${p.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ activo: nuevoActivo }),
+    });
+    if (!res.ok) { alert("Error al actualizar."); return; }
     setProductos((prev) => prev.map((x) => (x.id === p.id ? { ...x, activo: nuevoActivo } : x)));
   }
 

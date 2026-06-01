@@ -4,7 +4,13 @@
       "Bash(npm install *)",
       "Bash(cd \"/c/Users/jeffe/marialuisa-nutricionista\" *)",
       "Read(//c/c/Users/jeffe/marialuisa-nutricionista/app/perfil/**)",
-      "Bash(npx next *)"
+      "Bash(npx next *)",
+      "Bash(mkdir -p \"c:\\\\Users\\\\jeffe\\\\marialuisa-nutricionista\\\\app\\\\api\\\\admin\\\\[table]\")",
+      "Bash(mkdir -p \"c:\\\\Users\\\\jeffe\\\\marialuisa-nutricionista\\\\app\\\\api\\\\admin\\\\[table]\\\\[id]\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\jeffe\\marialuisa-nutricionista\\app\\api\\admin",
+      "c:\\Users\\jeffe\\marialuisa-nutricionista\\app\\api\\admin\\[table]"
     ]
   }
 }

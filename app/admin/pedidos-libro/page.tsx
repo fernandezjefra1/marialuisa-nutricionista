@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase";
 
 type Compra = {
   id: number;
@@ -30,7 +29,6 @@ const ESTADO_COLOR: Record<string, string> = {
 };
 
 export default function AdminPedidosLibro() {
-  const supabase = createClient();
   const [compras, setCompras] = useState<Compra[]>([]);
   const [cargando, setCargando] = useState(true);
   const [filtroEstado, setFiltroEstado] = useState<string>("todos");
@@ -43,27 +41,24 @@ export default function AdminPedidosLibro() {
 
   async function cargar() {
     setCargando(true);
-    const { data } = await supabase
-      .from("compras")
-      .select("*")
-      .order("created_at", { ascending: false });
+    const res = await fetch("/api/admin/compras");
+    const { data } = await res.json();
     setCompras(data || []);
     setCargando(false);
   }
 
   async function cambiarEstado(id: number, nuevoEstado: string) {
-    const { error } = await supabase
-      .from("compras")
-      .update({ estado: nuevoEstado, updated_at: new Date().toISOString() })
-      .eq("id", id);
+    const res = await fetch(`/api/admin/compras/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ estado: nuevoEstado, updated_at: new Date().toISOString() }),
+    });
 
-    if (error) {
+    if (!res.ok) {
       alert("Error al actualizar el estado. Intenta de nuevo.");
-      console.error(error);
       return;
     }
 
-    // Actualizar localmente
     setCompras((prev) => prev.map((c) => (c.id === id ? { ...c, estado: nuevoEstado } : c)));
     if (seleccionado?.id === id) {
       setSeleccionado({ ...seleccionado, estado: nuevoEstado });

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { createClient } from "@/lib/supabase";
 import { useUser } from "@/lib/use-user";
 
 type AdminEntry = {
@@ -21,12 +20,12 @@ export default function AdministradoresPage() {
   const [exito, setExito] = useState("");
 
   async function cargarAdmins() {
-    const supabase = createClient();
-    const { data } = await supabase
-      .from("admin_emails")
-      .select("*")
-      .order("created_at", { ascending: true });
-    setAdmins(data ?? []);
+    const res = await fetch("/api/admin/admin_emails");
+    const { data } = await res.json();
+    const sorted = (data ?? []).sort((a: AdminEntry, b: AdminEntry) =>
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    );
+    setAdmins(sorted);
     setLoading(false);
   }
 
@@ -43,13 +42,15 @@ export default function AdministradoresPage() {
     setError("");
     setExito("");
 
-    const supabase = createClient();
-    const { error: err } = await supabase
-      .from("admin_emails")
-      .insert({ email, agregado_por: correo });
+    const res = await fetch("/api/admin/admin_emails", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, agregado_por: correo }),
+    });
 
-    if (err) {
-      if (err.code === "23505") {
+    if (!res.ok) {
+      const { error: err } = await res.json();
+      if (err?.includes("23505") || err?.includes("duplicate")) {
         setError("Ese correo ya es administrador.");
       } else {
         setError("No se pudo agregar el administrador. Verifica el correo.");
@@ -70,13 +71,9 @@ export default function AdministradoresPage() {
     }
     if (!confirm(`¿Eliminar a ${email} como administrador?`)) return;
 
-    const supabase = createClient();
-    const { error: err } = await supabase
-      .from("admin_emails")
-      .delete()
-      .eq("id", id);
+    const res = await fetch(`/api/admin/admin_emails/${id}`, { method: "DELETE" });
 
-    if (err) {
+    if (!res.ok) {
       setError("No se pudo eliminar el administrador.");
     } else {
       setExito(`${email} eliminado de administradores.`);

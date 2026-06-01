@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase";
 
 type Compra = {
   id: number;
@@ -29,6 +30,7 @@ const ESTADO_COLOR: Record<string, string> = {
 };
 
 export default function AdminPedidosLibro() {
+  const supabase = createClient();
   const [compras, setCompras] = useState<Compra[]>([]);
   const [cargando, setCargando] = useState(true);
   const [filtroEstado, setFiltroEstado] = useState<string>("todos");
@@ -42,8 +44,7 @@ export default function AdminPedidosLibro() {
   async function cargar() {
     setCargando(true);
     try {
-      const res = await fetch("/api/admin/compras");
-      const { data } = await res.json();
+      const { data } = await supabase.from("compras").select("*").order("created_at", { ascending: false });
       setCompras(data || []);
     } catch {
       setCompras([]);
@@ -53,12 +54,12 @@ export default function AdminPedidosLibro() {
   }
 
   async function cambiarEstado(id: number, nuevoEstado: string) {
-    const res = await fetch(`/api/admin/compras/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify({ estado: nuevoEstado, updated_at: new Date().toISOString() }),
-    });
+    const { error } = await supabase
+      .from("compras")
+      .update({ estado: nuevoEstado, updated_at: new Date().toISOString() })
+      .eq("id", id);
 
-    if (!res.ok) {
+    if (error) {
       alert("Error al actualizar el estado. Intenta de nuevo.");
       return;
     }

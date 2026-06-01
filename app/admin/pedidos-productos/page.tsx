@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase";
 
 type Pedido = {
   id: number;
@@ -30,6 +31,7 @@ const ESTADO_COLOR: Record<string, string> = {
 };
 
 export default function AdminPedidosProductos() {
+  const supabase = createClient();
   const [pedidos, setPedidos] = useState<Pedido[]>([]);
   const [cargando, setCargando] = useState(true);
   const [filtroEstado, setFiltroEstado] = useState<string>("todos");
@@ -43,8 +45,7 @@ export default function AdminPedidosProductos() {
   async function cargar() {
     setCargando(true);
     try {
-      const res = await fetch("/api/admin/pedidos");
-      const { data } = await res.json();
+      const { data } = await supabase.from("pedidos").select("*").order("created_at", { ascending: false });
       setPedidos(data || []);
     } catch {
       setPedidos([]);
@@ -54,12 +55,12 @@ export default function AdminPedidosProductos() {
   }
 
   async function cambiarEstado(id: number, nuevoEstado: string) {
-    const res = await fetch(`/api/admin/pedidos/${id}`, {
-      method: "PATCH",
-      body: JSON.stringify({ estado: nuevoEstado, updated_at: new Date().toISOString() }),
-    });
+    const { error } = await supabase
+      .from("pedidos")
+      .update({ estado: nuevoEstado, updated_at: new Date().toISOString() })
+      .eq("id", id);
 
-    if (!res.ok) {
+    if (error) {
       alert("Error al actualizar el estado.");
       return;
     }

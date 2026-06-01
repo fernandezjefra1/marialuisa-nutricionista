@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { createClient } from "@/lib/supabase";
 
 type ProductoAlerta = { id: number; nombre: string; stock: number; imagen_url?: string | null };
 
@@ -158,6 +159,7 @@ const IcoCart    = () => <svg className="w-4 h-4" fill="none" stroke="currentCol
 const IcoTriangle= () => <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>;
 
 export default function AdminDashboard() {
+  const supabase = createClient();
   const [stats, setStats] = useState({
     librosPendientes: 0, librosVendidos: 0, librosTotal: 0,
     pedidosPendientes: 0, pedidosVentas: 0, pedidosTotal: 0,
@@ -173,63 +175,68 @@ export default function AdminDashboard() {
   useEffect(() => {
     async function cargar() {
       try {
-      const inicioMes = new Date();
-      inicioMes.setDate(1);
-      inicioMes.setHours(0, 0, 0, 0);
+        const inicioMes = new Date();
+        inicioMes.setDate(1);
+        inicioMes.setHours(0, 0, 0, 0);
 
-      const [librosRes, pedidosRes, solicitudesRes, productosRes] = await Promise.all([
-        fetch("/api/admin/compras").then((r) => r.json()),
-        fetch("/api/admin/pedidos").then((r) => r.json()),
-        fetch("/api/admin/solicitudes_empresariales").then((r) => r.json()),
-        fetch("/api/admin/productos").then((r) => r.json()),
-      ]);
+        const [
+          { data: librosArr },
+          { data: pedidosArr },
+          { data: solicitudesArr },
+          { data: todosProductos },
+        ] = await Promise.all([
+          supabase.from("compras").select("*").order("created_at", { ascending: false }),
+          supabase.from("pedidos").select("*").order("created_at", { ascending: false }),
+          supabase.from("solicitudes_empresariales").select("*").order("created_at", { ascending: false }),
+          supabase.from("productos").select("*").order("created_at", { ascending: false }),
+        ]);
 
-      const librosArr: any[]      = librosRes.data || [];
-      const pedidosArr: any[]     = pedidosRes.data || [];
-      const solicitudesArr: any[] = solicitudesRes.data || [];
-      const todosProductos: any[] = productosRes.data || [];
+        const libros      = librosArr      || [];
+        const pedidos     = pedidosArr     || [];
+        const solicitudes = solicitudesArr || [];
+        const productos   = todosProductos || [];
 
-      const stockBajo = todosProductos.filter((p) => p.activo && p.stock <= UMBRAL_ADVERTENCIA);
-      const productos = todosProductos.filter((p) => p.activo).slice(0, 5);
+        const stockBajo = productos.filter((p: any) => p.activo && p.stock <= UMBRAL_ADVERTENCIA);
+        const productosActivos = productos.filter((p: any) => p.activo).slice(0, 5);
 
-      const librosVendidos  = librosArr.filter((c) => ["completado","pagado","enviado"].includes(c.estado));
-      const pedidosVendidos = pedidosArr.filter((p) => ["completado","pagado","enviado"].includes(p.estado));
-      const ingresoLibrosMes    = librosVendidos.filter((c) => new Date(c.created_at) >= inicioMes).reduce((s: number, c: any) => s + Number(c.precio), 0);
-      const ingresoProductosMes = pedidosVendidos.filter((p) => new Date(p.created_at) >= inicioMes).reduce((s: number, p: any) => s + Number(p.total), 0);
+        const librosVendidos  = libros.filter((c: any) => ["completado","pagado","enviado"].includes(c.estado));
+        const pedidosVendidos = pedidos.filter((p: any) => ["completado","pagado","enviado"].includes(p.estado));
+        const ingresoLibrosMes    = librosVendidos.filter((c: any) => new Date(c.created_at) >= inicioMes).reduce((s: number, c: any) => s + Number(c.precio), 0);
+        const ingresoProductosMes = pedidosVendidos.filter((p: any) => new Date(p.created_at) >= inicioMes).reduce((s: number, p: any) => s + Number(p.total), 0);
 
-      setStats({
-        librosTotal: librosArr.length,
-        librosPendientes: librosArr.filter((c) => c.estado === "pendiente").length,
-        librosVendidos: librosVendidos.length,
-        pedidosTotal: pedidosArr.length,
-        pedidosPendientes: pedidosArr.filter((p) => p.estado === "pendiente").length,
-        pedidosVentas: pedidosVendidos.length,
-        solicitudesTotal: solicitudesArr.length,
-        solicitudesNuevas: solicitudesArr.filter((s) => s.estado === "nuevo").length,
-        ingresoLibros: ingresoLibrosMes,
-        ingresoProductos: ingresoProductosMes,
-        ingresoTotalMes: ingresoLibrosMes + ingresoProductosMes,
-        clientes: new Set([...librosArr.map((c) => c.nombre_comprador), ...pedidosArr.map((p) => p.nombre)].filter(Boolean)).size,
-        stockBajoCount: stockBajo.length,
-      });
+        setStats({
+          librosTotal: libros.length,
+          librosPendientes: libros.filter((c: any) => c.estado === "pendiente").length,
+          librosVendidos: librosVendidos.length,
+          pedidosTotal: pedidos.length,
+          pedidosPendientes: pedidos.filter((p: any) => p.estado === "pendiente").length,
+          pedidosVentas: pedidosVendidos.length,
+          solicitudesTotal: solicitudes.length,
+          solicitudesNuevas: solicitudes.filter((s: any) => s.estado === "nuevo").length,
+          ingresoLibros: ingresoLibrosMes,
+          ingresoProductos: ingresoProductosMes,
+          ingresoTotalMes: ingresoLibrosMes + ingresoProductosMes,
+          clientes: new Set([...libros.map((c: any) => c.nombre_comprador), ...pedidos.map((p: any) => p.nombre)].filter(Boolean)).size,
+          stockBajoCount: stockBajo.length,
+        });
 
-      const recientes = [
-        ...librosArr.slice(0, 4).map((c: any) => ({ ...c, tipo: "libro",     fecha: c.created_at, monto: c.precio, cliente: c.nombre_comprador })),
-        ...pedidosArr.slice(0, 4).map((p: any) => ({ ...p, tipo: "pedido",   fecha: p.created_at, monto: p.total,  cliente: p.nombre })),
-        ...solicitudesArr.slice(0, 2).map((s: any) => ({ ...s, tipo: "solicitud", fecha: s.created_at, monto: 0, cliente: s.empresa })),
-      ].sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()).slice(0, 5);
+        const recientes = [
+          ...libros.slice(0, 4).map((c: any) => ({ ...c, tipo: "libro",     fecha: c.created_at, monto: c.precio, cliente: c.nombre_comprador })),
+          ...pedidos.slice(0, 4).map((p: any) => ({ ...p, tipo: "pedido",   fecha: p.created_at, monto: p.total,  cliente: p.nombre })),
+          ...solicitudes.slice(0, 2).map((s: any) => ({ ...s, tipo: "solicitud", fecha: s.created_at, monto: 0, cliente: s.empresa })),
+        ].sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()).slice(0, 5);
 
-      setActividadReciente(recientes);
-      setProductosAlerta(stockBajo);
-      setProductosMasVendidos(productos);
+        setActividadReciente(recientes);
+        setProductosAlerta(stockBajo);
+        setProductosMasVendidos(productosActivos);
       } catch {
-        // silently fail — show empty dashboard rather than hanging forever
+        // error silencioso
       } finally {
         setCargando(false);
       }
     }
     cargar();
-  }, []);
+  }, [supabase]);
 
   if (cargando) {
     return (
@@ -463,7 +470,7 @@ function AlertaStock({ productos }: { productos: ProductoAlerta[] }) {
         <div className="flex-1">
           <p className="font-semibold text-amber-800 text-base">Alerta de inventario</p>
           <p className="font-nunito text-sm text-amber-700 mt-0.5">
-            Hay {productos.length} producto{productos.length !== 1 ? "s" : ""} que requiere{productos.length !== 1 ? "n" : ""} tu atención. Revisa y repón el stock para evitar interrupciones.
+            Hay {productos.length} producto{productos.length !== 1 ? "s" : ""} que requiere{productos.length !== 1 ? "n" : ""} tu atención.
           </p>
         </div>
         <Link href="/admin/productos" className="shrink-0 bg-amber-500 hover:bg-amber-600 text-white px-4 py-2 rounded-xl text-sm font-semibold transition">
@@ -495,20 +502,12 @@ function AlertaStock({ productos }: { productos: ProductoAlerta[] }) {
 /* ===== GRÁFICO SVG ===== */
 function SalesChart({ total }: { total: number }) {
   const points = [
-    { x: 0,   y: 80 },
-    { x: 40,  y: 70 },
-    { x: 80,  y: 75 },
-    { x: 120, y: 55 },
-    { x: 160, y: 60 },
-    { x: 200, y: 40 },
-    { x: 240, y: 45 },
-    { x: 280, y: 25 },
-    { x: 300, y: 20 },
+    { x: 0,   y: 80 }, { x: 40,  y: 70 }, { x: 80,  y: 75 },
+    { x: 120, y: 55 }, { x: 160, y: 60 }, { x: 200, y: 40 },
+    { x: 240, y: 45 }, { x: 280, y: 25 }, { x: 300, y: 20 },
   ];
-
   const pathD = points.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
   const areaD = `${pathD} L 300 100 L 0 100 Z`;
-
   const labels = ["1 May","5 May","9 May","13 May","17 May"];
 
   return (

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useUser } from "@/lib/use-user";
+import { createClient } from "@/lib/supabase";
 
 type AdminEntry = {
   id: string;
@@ -11,6 +12,7 @@ type AdminEntry = {
 };
 
 export default function AdministradoresPage() {
+  const supabase = createClient();
   const { correo } = useUser();
   const [admins, setAdmins] = useState<AdminEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -21,12 +23,8 @@ export default function AdministradoresPage() {
 
   async function cargarAdmins() {
     try {
-      const res = await fetch("/api/admin/admin_emails");
-      const { data } = await res.json();
-      const sorted = (data ?? []).sort((a: AdminEntry, b: AdminEntry) =>
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-      );
-      setAdmins(sorted);
+      const { data } = await supabase.from("admin_emails").select("*").order("created_at", { ascending: true });
+      setAdmins(data ?? []);
     } catch {
       setAdmins([]);
     } finally {
@@ -47,14 +45,12 @@ export default function AdministradoresPage() {
     setError("");
     setExito("");
 
-    const res = await fetch("/api/admin/admin_emails", {
-      method: "POST",
-      body: JSON.stringify({ email, agregado_por: correo }),
-    });
+    const { error: err } = await supabase
+      .from("admin_emails")
+      .insert({ email, agregado_por: correo });
 
-    if (!res.ok) {
-      const { error: err } = await res.json();
-      if (err?.includes("23505") || err?.includes("duplicate")) {
+    if (err) {
+      if (err.code === "23505" || err.message?.includes("duplicate")) {
         setError("Ese correo ya es administrador.");
       } else {
         setError("No se pudo agregar el administrador. Verifica el correo.");
@@ -75,9 +71,9 @@ export default function AdministradoresPage() {
     }
     if (!confirm(`¿Eliminar a ${email} como administrador?`)) return;
 
-    const res = await fetch(`/api/admin/admin_emails/${id}`, { method: "DELETE" });
+    const { error: err } = await supabase.from("admin_emails").delete().eq("id", id);
 
-    if (!res.ok) {
+    if (err) {
       setError("No se pudo eliminar el administrador.");
     } else {
       setExito(`${email} eliminado de administradores.`);

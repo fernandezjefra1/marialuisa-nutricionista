@@ -248,9 +248,9 @@ function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 bg-[#f5f0e8]/95 backdrop-blur-sm border-b border-[var(--borde-verde)]">
-      <div className="max-w-6xl mx-auto px-4 md:px-6 py-3 md:py-4 flex items-center justify-between gap-2">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-2 md:py-3 flex items-center justify-between gap-2">
         <Link href="/" className="flex items-center gap-2 font-playfair font-bold tracking-tight text-[var(--texto-principal)] text-base md:text-lg">
-          <Image src="/images/iconoNutricion.png" alt="Logo" width={80} height={80} className="object-contain drop-shadow-sm w-14 h-14 sm:w-20 sm:h-20" />
+          <Image src="/images/iconoNutricion.png" alt="Logo" width={96} height={96} className="object-contain drop-shadow-sm w-16 h-16 sm:w-24 sm:h-24" />
           <span className="truncate"><span className="hidden sm:inline">María Luisa </span><span className="text-[var(--primrose)]">Nutricionista</span></span>
         </Link>
 

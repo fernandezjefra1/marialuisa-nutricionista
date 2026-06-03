@@ -146,29 +146,30 @@ export default function ProductosContent() {
 
       {/* ===== HEADER ===== */}
       <header className="bg-white border-b border-[var(--borde-rosa)] sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-sm text-[var(--texto-suave)] hover:text-[var(--primrose)] transition font-nunito">
-            ← Volver al inicio
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-2">
+          <Link href="/" className="text-sm text-[var(--texto-suave)] hover:text-[var(--primrose)] transition font-nunito shrink-0">
+            <span className="sm:hidden">←</span>
+            <span className="hidden sm:inline">← Volver al inicio</span>
           </Link>
-          <div className="flex items-center gap-2">
-            <p className="font-playfair font-bold text-[var(--texto-principal)] text-base">
+          <div className="flex items-center gap-2 min-w-0">
+            <p className="font-playfair font-bold text-[var(--texto-principal)] text-sm sm:text-base truncate">
               María Luisa <span className="text-[var(--primrose)]">Nutricionista</span>
             </p>
           </div>
-          <div className="flex items-center gap-2">
-            <Link href="/perfil" className="w-9 h-9 flex items-center justify-center rounded-full border border-[var(--borde-rosa)] hover:bg-[var(--pinktone-soft)] transition">
+          <div className="flex items-center gap-2 shrink-0">
+            <Link href="/perfil" className="hidden sm:flex w-9 h-9 items-center justify-center rounded-full border border-[var(--borde-rosa)] hover:bg-[var(--pinktone-soft)] transition">
               <svg className="w-4 h-4 text-[var(--texto-suave)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
             </Link>
             <button
               onClick={abrirCarrito}
-              className="flex items-center gap-2 bg-[var(--primrose)] hover:bg-[var(--primrose-hover)] text-white px-4 py-2 rounded-full transition text-sm font-semibold shadow-md shadow-pink-200"
+              className="flex items-center gap-1.5 sm:gap-2 bg-[var(--primrose)] hover:bg-[var(--primrose-hover)] text-white px-3 sm:px-4 py-2 rounded-full transition text-sm font-semibold shadow-md shadow-pink-200"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
-              Carrito
+              <span className="hidden sm:inline">Carrito</span>
               {cantidadTotal > 0 && (
                 <span className="bg-white text-[var(--primrose)] rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
                   {cantidadTotal}
@@ -190,8 +191,8 @@ export default function ProductosContent() {
       </section>
 
       {/* ===== TABS ===== */}
-      <section className="bg-white border-b border-[var(--borde-rosa)] sticky top-[65px] z-20">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="bg-white border-b border-[var(--borde-rosa)] sticky top-[60px] sm:top-[68px] z-20">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6">
           <div className="flex gap-1 justify-center">
             {(["productos","snacks"] as const).map((tab) => {
               const activa = tabActiva === tab;
@@ -201,7 +202,7 @@ export default function ProductosContent() {
                 <button
                   key={tab}
                   onClick={() => cambiarTab(tab)}
-                  className={`px-8 py-4 font-medium text-base transition relative font-nunito capitalize ${
+                  className={`px-5 sm:px-8 py-3 sm:py-4 font-medium text-sm sm:text-base transition relative font-nunito capitalize ${
                     activa ? "text-[var(--texto-principal)]" : "text-[var(--texto-suave)] hover:text-[var(--texto-principal)]"
                   }`}
                 >
@@ -226,16 +227,16 @@ export default function ProductosContent() {
 
       {/* ===== FILTROS CATEGORÍA ===== */}
       {categoriasDeTab.length > 2 && (
-        <section className="bg-white py-5 border-b border-[var(--borde-rosa)]">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex flex-wrap gap-3 justify-center">
+        <section className="bg-white py-3 sm:py-5 border-b border-[var(--borde-rosa)]">
+          <div className="max-w-7xl mx-auto px-3 sm:px-6">
+            <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
               {categoriasDeTab.map((cat) => {
                 const activa = categoriaActiva === cat;
                 return (
                   <button
                     key={cat}
                     onClick={() => setCategoriaActiva(cat)}
-                    className={`px-5 py-2 rounded-full text-base font-medium transition font-nunito border-2 ${
+                    className={`px-3 sm:px-5 py-1.5 sm:py-2 rounded-full text-sm sm:text-base font-medium transition font-nunito border-2 ${
                       activa
                         ? "bg-[var(--primrose)] border-[var(--primrose)] text-white shadow-md shadow-pink-200"
                         : "bg-white border-[var(--borde-rosa)] text-[var(--texto-principal)] hover:border-[var(--primrose)] hover:text-[var(--primrose)]"
@@ -251,8 +252,8 @@ export default function ProductosContent() {
       )}
 
       {/* ===== GRID DE PRODUCTOS ===== */}
-      <section className="py-12 md:py-16 bg-[var(--lime-soft)]">
-        <div className="max-w-7xl mx-auto px-6">
+      <section className="py-8 md:py-16 bg-[var(--lime-soft)]">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6">
           {cargando ? (
             <p className="text-center text-sm text-[var(--texto-suave)] py-12">Cargando...</p>
           ) : productosFiltrados.length === 0 ? (
@@ -278,9 +279,9 @@ export default function ProductosContent() {
       </section>
 
       {/* ===== FEATURES ROW ===== */}
-      <section className="bg-white py-10 border-t border-[var(--borde-verde)]">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <section className="bg-white py-8 sm:py-10 border-t border-[var(--borde-verde)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
             {([
               {
                 svg: <svg className="w-5 h-5 text-[var(--lime)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
@@ -376,27 +377,27 @@ function ProductoCard({
       </div>
 
       {/* Info */}
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         <p className={`font-nunito text-xs uppercase tracking-widest mb-1 font-semibold ${
           colorPrincipal === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
         }`}>
           {nombreCategoria(producto.categoria)}
         </p>
-        <h3 className="font-semibold text-[var(--texto-principal)] mb-1.5 text-base leading-snug">{producto.nombre}</h3>
+        <h3 className="font-semibold text-[var(--texto-principal)] mb-1.5 text-sm sm:text-base leading-snug">{producto.nombre}</h3>
         {producto.descripcion && (
-          <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-4 line-clamp-2">
+          <p className="font-nunito text-xs sm:text-sm text-[var(--texto-suave)] leading-relaxed mb-3 sm:mb-4 line-clamp-2">
             {producto.descripcion}
           </p>
         )}
 
         <div className="flex items-center justify-between gap-2">
-          <p className="text-2xl font-semibold text-[var(--texto-principal)]">
+          <p className="text-xl sm:text-2xl font-semibold text-[var(--texto-principal)]">
             S/ {producto.precio}
           </p>
           <button
             onClick={onAgregar}
             disabled={sinStock}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition ${
+            className={`flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition shrink-0 ${
               sinStock
                 ? "bg-neutral-200 text-neutral-400 cursor-not-allowed"
                 : recienAgregado
@@ -407,15 +408,19 @@ function ProductoCard({
             }`}
           >
             {recienAgregado ? (
-              "✓ Agregado"
+              <>
+                <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                <span className="hidden sm:inline">Agregado</span>
+              </>
             ) : sinStock ? (
               "Agotado"
             ) : (
               <>
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                Agregar al carrito
+                <span className="sm:hidden">Agregar</span>
+                <span className="hidden sm:inline">Agregar al carrito</span>
               </>
             )}
           </button>

@@ -6,7 +6,10 @@
       "Read(//c/c/Users/jeffe/marialuisa-nutricionista/app/perfil/**)",
       "Bash(npx next *)",
       "Bash(mkdir -p \"c:\\\\Users\\\\jeffe\\\\marialuisa-nutricionista\\\\app\\\\api\\\\admin\\\\[table]\")",
-      "Bash(mkdir -p \"c:\\\\Users\\\\jeffe\\\\marialuisa-nutricionista\\\\app\\\\api\\\\admin\\\\[table]\\\\[id]\")"
+      "Bash(mkdir -p \"c:\\\\Users\\\\jeffe\\\\marialuisa-nutricionista\\\\app\\\\api\\\\admin\\\\[table]\\\\[id]\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('scripts',{}\\), indent=2\\)\\)\")",
+      "Bash(npm run *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)"
     ],
     "additionalDirectories": [
       "c:\\Users\\jeffe\\marialuisa-nutricionista\\app\\api\\admin",

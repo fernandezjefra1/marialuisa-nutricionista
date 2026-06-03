@@ -199,18 +199,20 @@ export default function ComprarCarritoPage() {
     <main className="min-h-screen bg-[var(--yucca)]">
       {/* Header */}
       <header className="bg-[var(--yucca-soft)] border-b border-[var(--borde-rosa)]">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/productos" className="text-sm text-[var(--texto-suave)] hover:text-[var(--primrose)] transition">
-            ← Seguir comprando
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+          <Link href="/productos" className="text-sm text-[var(--texto-suave)] hover:text-[var(--primrose)] transition shrink-0">
+            <span className="sm:hidden">←</span>
+            <span className="hidden sm:inline">← Seguir comprando</span>
           </Link>
-          <p className="text-sm font-semibold text-[var(--texto-principal)]">
+          <p className="text-sm font-semibold text-[var(--texto-principal)] truncate px-3">
             María Luisa <span className="text-[var(--primrose)]">Nutricionista</span>
           </p>
+          <div className="w-20 sm:w-28 shrink-0" />
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-6 py-10 md:py-12">
-        <div className="grid lg:grid-cols-[1fr_400px] gap-10">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+        <div className="grid lg:grid-cols-[1fr_400px] gap-8 lg:gap-10">
           {/* Columna izquierda: Formulario */}
           <div>
             <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
@@ -236,7 +238,7 @@ export default function ComprarCarritoPage() {
                 <h2 className="text-lg font-semibold text-[var(--texto-principal)]">Tus datos</h2>
               </div>
 
-              <div className="space-y-4 bg-white p-6 rounded-2xl border-2 border-[var(--borde-rosa)]">
+              <div className="space-y-4 bg-white p-4 sm:p-6 rounded-2xl border-2 border-[var(--borde-rosa)]">
                 <div>
                   <label className="text-xs uppercase tracking-widest text-[var(--texto-suave)] mb-2 block font-semibold">
                     Nombre completo *
@@ -319,7 +321,7 @@ export default function ComprarCarritoPage() {
                 <h2 className="text-lg font-semibold text-[var(--texto-principal)]">Dirección de envío</h2>
               </div>
 
-              <div className="space-y-4 bg-white p-6 rounded-2xl border-2 border-[var(--borde-verde)]">
+              <div className="space-y-4 bg-white p-4 sm:p-6 rounded-2xl border-2 border-[var(--borde-verde)]">
                 <p className="text-xs text-[var(--texto-suave)] mb-2">
                   Por ahora solo realizamos envíos en San Juan de Miraflores. Para otras zonas, contáctanos directamente.
                 </p>
@@ -389,7 +391,7 @@ export default function ComprarCarritoPage() {
 
           {/* Columna derecha: Resumen sticky */}
           <aside className="lg:sticky lg:top-6 lg:self-start">
-            <div className="bg-white rounded-2xl border-2 border-[var(--borde-rosa)] p-6 shadow-lg shadow-pink-100">
+            <div className="bg-white rounded-2xl border-2 border-[var(--borde-rosa)] p-4 sm:p-6 shadow-lg shadow-pink-100">
               <h3 className="font-semibold mb-4 text-[var(--texto-principal)]">
                 Resumen del pedido <span className="text-sm font-normal text-[var(--texto-suave)]">({items.length} {items.length === 1 ? "item" : "items"})</span>
               </h3>

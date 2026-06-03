@@ -130,16 +130,18 @@ export default function ComprarLibroPage() {
 
       {/* Header */}
       <header className="bg-[#edf7e8] border-b border-[#C5DFC5]">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="font-nunito text-sm text-[#5a7255] hover:text-[#31543d] transition flex items-center gap-1">
-            ← Volver al inicio
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+          <Link href="/" className="font-nunito text-sm text-[#5a7255] hover:text-[#31543d] transition flex items-center gap-1 shrink-0">
+            <span className="sm:hidden">←</span>
+            <span className="hidden sm:inline">← Volver al inicio</span>
           </Link>
-          <p className="font-playfair font-semibold text-[#31543d]">María Luisa Nutricionista</p>
+          <p className="font-playfair font-semibold text-[#31543d] truncate px-3">María Luisa Nutricionista</p>
+          <div className="w-16 sm:w-24 shrink-0" />
         </div>
       </header>
 
-      <div className="max-w-5xl mx-auto px-6 py-12">
-        <div className="grid lg:grid-cols-[1fr_380px] gap-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+        <div className="grid lg:grid-cols-[1fr_380px] gap-8 lg:gap-10">
 
           {/* ---- COLUMNA IZQUIERDA: FORMULARIO ---- */}
           <div>
@@ -222,7 +224,7 @@ export default function ComprarLibroPage() {
                 <h2 className="font-playfair text-lg font-semibold text-[#31543d]">Tus datos</h2>
               </div>
 
-              <div className="space-y-4 bg-white p-6 rounded-2xl border border-[#C5DFC5]">
+              <div className="space-y-4 bg-white p-4 sm:p-6 rounded-2xl border border-[#C5DFC5]">
                 <div>
                   <label className="font-nunito text-xs uppercase tracking-widest text-[#5a7255] mb-2 block font-semibold">
                     Nombre completo *
@@ -370,7 +372,7 @@ export default function ComprarLibroPage() {
           <aside className="lg:sticky lg:top-6 lg:self-start space-y-4">
 
             {/* Fidelización */}
-            <div className="bg-gradient-to-br from-[#31543d] to-[#4a7a58] text-white rounded-2xl p-6">
+            <div className="bg-gradient-to-br from-[#31543d] to-[#4a7a58] text-white rounded-2xl p-4 sm:p-6">
               <p className="font-nunito text-xs uppercase tracking-widest text-white/60 mb-3 font-semibold">
                 Programa de Fidelización
               </p>
@@ -395,7 +397,7 @@ export default function ComprarLibroPage() {
             </div>
 
             {/* Resumen del pedido */}
-            <div className="bg-white rounded-2xl border border-[#C5DFC5] p-6">
+            <div className="bg-white rounded-2xl border border-[#C5DFC5] p-4 sm:p-6">
               <h3 className="font-playfair font-semibold text-[#31543d] mb-4">Resumen del pedido</h3>
 
               <div className="flex gap-4 pb-4 border-b border-[#C5DFC5]">

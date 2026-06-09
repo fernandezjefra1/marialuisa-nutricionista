@@ -204,6 +204,98 @@ function FoodBg() {
   );
 }
 
+/* ---------- FONDO VEGETAL HERO (kiwis a la izquierda, sin palta ni smoothie) ---------- */
+function FoodBgHero() {
+  type P = { style?: React.CSSProperties; className?: string };
+
+  const Kiwi = ({ className, style }: P) => (
+    <svg className={className} style={style} viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="80" cy="80" r="72" fill="#5a8a2a"/>
+      <circle cx="80" cy="80" r="58" fill="#d4e87a"/>
+      <circle cx="80" cy="80" r="14" fill="white"/>
+      {[0,30,60,90,120,150,180,210,240,270,300,330].map((a, i) => {
+        const rad = (Math.PI * a) / 180;
+        const x2 = 80 + 56 * Math.cos(rad);
+        const y2 = 80 + 56 * Math.sin(rad);
+        const sx = 80 + 14 * Math.cos(rad);
+        const sy = 80 + 14 * Math.sin(rad);
+        const ex = 80 + 40 * Math.cos(rad);
+        const ey = 80 + 40 * Math.sin(rad);
+        return (
+          <g key={i}>
+            <line x1={sx} y1={sy} x2={x2} y2={y2} stroke="white" strokeWidth="1.2" opacity="0.6"/>
+            <ellipse cx={ex} cy={ey} rx="5" ry="9" transform={`rotate(${a} ${ex} ${ey})`} fill="#2d4a10"/>
+          </g>
+        );
+      })}
+    </svg>
+  );
+
+  const Lime = ({ className, style }: P) => (
+    <svg className={className} style={style} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="60" cy="60" r="56" fill="#8fcc3a"/>
+      <circle cx="60" cy="60" r="56" fill="#a8d840"/>
+      <circle cx="60" cy="60" r="44" fill="#c8ec60"/>
+      <circle cx="60" cy="60" r="10" fill="white" opacity="0.9"/>
+      {[0,45,90,135,180,225,270,315].map((a, i) => {
+        const rad = (Math.PI * a) / 180;
+        return (
+          <line key={i}
+            x1={60 + 10 * Math.cos(rad)} y1={60 + 10 * Math.sin(rad)}
+            x2={60 + 43 * Math.cos(rad)} y2={60 + 43 * Math.sin(rad)}
+            stroke="white" strokeWidth="1.5" opacity="0.7"/>
+        );
+      })}
+    </svg>
+  );
+
+  const Grapes = ({ className, style }: P) => (
+    <svg className={className} style={style} viewBox="0 0 140 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M70 40 Q75 18 80 12" stroke="#4a7a2a" strokeWidth="4" fill="none" strokeLinecap="round"/>
+      <path d="M80 12 Q96 4 100 18 Q85 22 80 12Z" fill="#4a7a2a"/>
+      {[
+        {x:45,y:110},{x:70,y:100},{x:95,y:110},
+        {x:32,y:85}, {x:57,y:75}, {x:82,y:75}, {x:107,y:85},
+        {x:45,y:60}, {x:70,y:50}, {x:95,y:60},
+                     {x:70,y:130}
+      ].map((g,i)=>(
+        <g key={i}>
+          <circle cx={g.x} cy={g.y} r="18" fill="#6b3d9a"/>
+          <circle cx={g.x-5} cy={g.y-5} r="5" fill="white" opacity="0.25"/>
+        </g>
+      ))}
+    </svg>
+  );
+
+  const Broccoli = ({ className, style }: P) => (
+    <svg className={className} style={style} viewBox="0 0 160 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="68" y="110" width="24" height="60" rx="10" fill="#3d6e2a"/>
+      <rect x="72" y="110" width="8" height="60" rx="6" fill="#4d8a3a" opacity="0.5"/>
+      <circle cx="80" cy="80" r="38" fill="#3a8a3a"/>
+      <circle cx="48" cy="94" r="28" fill="#3a8a3a"/>
+      <circle cx="112" cy="94" r="28" fill="#3a8a3a"/>
+      <circle cx="62" cy="58" r="22" fill="#4aaa4a"/>
+      <circle cx="98" cy="58" r="22" fill="#4aaa4a"/>
+      <circle cx="80" cy="46" r="20" fill="#5aba5a"/>
+      <circle cx="48" cy="94" r="14" fill="#4aaa4a"/>
+      <circle cx="112" cy="94" r="14" fill="#4aaa4a"/>
+    </svg>
+  );
+
+  const fd = (dur: string, del: string) => ({"--fdur": dur, "--fdel": del} as React.CSSProperties);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+      <Kiwi     className="absolute -top-8 -left-14 w-32 md:w-40 opacity-85 food-d2" style={fd("7s","0s")} />
+      <Kiwi     className="absolute top-1/3 -left-14 w-36 md:w-52 opacity-85 food-d1" style={fd("9s","0.5s")} />
+      <Kiwi     className="absolute top-28 md:top-20 -left-10 w-20 md:w-28 opacity-70 food-d3" style={fd("8s","1.5s")} />
+      <Lime     className="absolute top-1/2 -translate-y-1/2 -right-10 w-20 md:w-24 opacity-75 food-d2" style={fd("7s","2s")} />
+      <Grapes   className="absolute -bottom-6 -left-10 w-28 md:w-40 opacity-80 food-sw" style={fd("9s","0.8s")} />
+      <Broccoli className="absolute -bottom-8 -right-10 w-36 md:w-52 opacity-85 food-d3" style={fd("7s","2.5s")} />
+    </div>
+  );
+}
+
 /* ---------- BRILLITOS FLOTANTES ---------- */
 function FloatingSparkles() {
   const items = [
@@ -249,23 +341,7 @@ function Navbar() {
   return (
     <nav className="sticky top-0 z-50 bg-[#f5f0e8]/95 backdrop-blur-sm border-b border-[var(--borde-verde)]">
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-2 md:py-3 flex items-center justify-between gap-2">
-        <Link href="/" className="flex items-center gap-2 font-playfair font-bold tracking-tight text-[var(--texto-principal)] text-base md:text-lg">
-          <Image src="/images/iconoNutricion.png" alt="Logo" width={96} height={96} className="object-contain drop-shadow-sm w-16 h-16 sm:w-24 sm:h-24" />
-          <span className="truncate"><span className="hidden sm:inline">María Luisa </span><span className="text-[var(--primrose)]">Nutricionista</span></span>
-        </Link>
-
-        {/* Menú desktop */}
-        <ul className="hidden md:flex gap-2 text-sm font-medium">
-          <li><a href="#libro"    className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Libro</a></li>
-          <li><Link href="/productos" className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Tienda</Link></li>
-          <li><a href="#sobre-mi" className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Sobre mí</a></li>
-          <li><a href="#taller"   className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Talleres</a></li>
-          <li><Link href="/empresas"  className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Empresas</Link></li>
-        </ul>
-
         <div className="flex items-center gap-2 md:gap-3">
-          <MenuUsuario />
-
           {/* Botón hamburguesa - solo en mobile */}
           <button
             onClick={() => setMenuAbierto(!menuAbierto)}
@@ -280,7 +356,24 @@ function Navbar() {
               )}
             </svg>
           </button>
+
+          {/* Menú desktop */}
+          <ul className="hidden md:flex gap-2 text-sm font-medium">
+            <li><a href="#libro"    className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Libro</a></li>
+            <li><Link href="/productos" className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Tienda</Link></li>
+            <li><a href="#sobre-mi" className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Sobre mí</a></li>
+            <li><a href="#taller"   className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Talleres</a></li>
+            <li><Link href="/empresas"  className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Empresas</Link></li>
+          </ul>
+
+          <div className="hidden md:block w-px h-6 bg-[var(--borde-verde)] mx-2" />
+          <MenuUsuario />
         </div>
+
+        <Link href="/" className="flex items-center gap-2 font-playfair font-bold tracking-tight text-[var(--texto-principal)] text-base md:text-lg">
+          <span className="truncate"><span className="hidden sm:inline">María Luisa </span><span className="text-[var(--primrose)]">Nutricionista</span></span>
+          <Image src="/images/iconoNutricion.png" alt="Logo" width={96} height={96} className="object-contain drop-shadow-sm w-16 h-16 sm:w-24 sm:h-24" />
+        </Link>
       </div>
 
       {/* Menú mobile desplegable */}
@@ -488,7 +581,7 @@ function MenuUsuario() {
 function HeroLibro() {
   return (
     <section id="libro" className="relative overflow-hidden bg-[#f5f0e8]">
-      <FoodBg />
+      <FoodBgHero />
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-14 md:py-20">
 
         {/* Cabecera centrada */}
@@ -505,7 +598,7 @@ function HeroLibro() {
 
           {/* ── IZQUIERDA: Libro ── */}
           <div className="flex flex-col items-center">
-            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold flex items-center gap-2 self-start">
+            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-7 font-semibold flex items-center gap-2 self-start">
               <IcoBook cls="w-4 h-4" /> Nuevo lanzamiento
             </p>
 
@@ -558,7 +651,7 @@ function HeroLibro() {
 
           {/* ── DERECHA: Taller ── */}
           <div id="taller" className="flex flex-col items-center">
-            <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-4 font-semibold flex items-center gap-2 self-start">
+            <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-7 font-semibold flex items-center gap-2 self-start">
               <IcoBlender cls="w-4 h-4" /> Próximo taller
             </p>
 

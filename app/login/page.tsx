@@ -1,160 +1,181 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase";
-import { logEvent } from "@/lib/audit-log";
 
-const MAX_ATTEMPTS = 5;
+type Paso = "email" | "codigo";
 
-type Step = "credentials" | "mfa";
+function enmascararEmail(email: string): string {
+  const [user, domain] = email.split("@");
+  if (!user || !domain) return email;
+  const visible = user.length > 3 ? user.slice(0, 3) : user.slice(0, 1);
+  const oculto = "*".repeat(Math.max(user.length - visible.length, 3));
+  return `${visible}${oculto}@${domain}`;
+}
+
+const ERRORES_ES: Record<string, string> = {
+  "Email rate limit exceeded": "Demasiados intentos. Espera un momento antes de volver a intentar.",
+  "Invalid OTP": "El código es incorrecto. Verifica e intenta de nuevo.",
+  "Token has expired": "El código ha expirado. Solicita uno nuevo.",
+  "Email not confirmed": "Tu correo no ha sido confirmado.",
+  "User not found": "No se encontró una cuenta con este correo.",
+  "Signup is disabled": "El registro está desactivado temporalmente.",
+  "only one OTP": "Ya se envió un código recientemente. Espera antes de solicitar otro.",
+};
+
+function traducirError(msg: string): string {
+  for (const [key, val] of Object.entries(ERRORES_ES)) {
+    if (msg.toLowerCase().includes(key.toLowerCase())) return val;
+  }
+  return "Ocurrió un error. Intenta de nuevo.";
+}
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
 
-  // ── Campos del formulario ──────────────────────────────────────────
-  const [email, setEmail]       = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [paso, setPaso] = useState<Paso>("email");
+  const [email, setEmail] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [codigo, setCodigo] = useState<string[]>(Array(6).fill(""));
+  const [cargando, setCargando] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [segundosRestantes, setSegundosRestantes] = useState(0);
 
-  // ── Estado general ─────────────────────────────────────────────────
-  const [step, setStep]     = useState<Step>("credentials");
-  const [error, setError]   = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const inputsRef = useRef<Array<HTMLInputElement | null>>(Array(6).fill(null));
 
-  // ── Rate limiting ──────────────────────────────────────────────────
-  const [locked, setLocked]           = useState(false);
-  const [secondsLeft, setSecondsLeft] = useState(0);
-  const [attemptsLeft, setAttemptsLeft] = useState(5);
-
-  // ── MFA ────────────────────────────────────────────────────────────
-  const [totpCode, setTotpCode]     = useState("");
-  const [factorId, setFactorId]     = useState<string | null>(null);
-  const [challengeId, setChallengeId] = useState<string | null>(null);
-
-  // Cuenta regresiva del bloqueo
   useEffect(() => {
-    if (!locked) return;
-    const interval = setInterval(() => {
-      setSecondsLeft((prev) => {
-        if (prev <= 1) {
-          setLocked(false);
-          setAttemptsLeft(MAX_ATTEMPTS);
-          clearInterval(interval);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [locked]);
+    if (segundosRestantes <= 0) return;
+    const t = setTimeout(() => setSegundosRestantes((s) => s - 1), 1000);
+    return () => clearTimeout(t);
+  }, [segundosRestantes]);
 
-  // ── Login con email/contraseña (rate limiting server-side) ───────────
-  async function handleEmailLogin(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await res.json();
-
-    if (!data.ok) {
-      if (data.reason === "rate_limited") {
-        setLocked(true);
-        setSecondsLeft(
-          Math.max(0, Math.ceil((data.lockedUntil - Date.now()) / 1000))
-        );
-        setError("Demasiados intentos fallidos. Cuenta bloqueada temporalmente.");
-        setLoading(false);
-        return;
-      }
-      if (data.reason === "invalid_credentials") {
-        const left = data.attemptsLeft ?? 0;
-        setAttemptsLeft(left);
-        setError(
-          left <= 2
-            ? `Correo o contraseña incorrectos. Te quedan ${left} intento${left === 1 ? "" : "s"}.`
-            : "Correo o contraseña incorrectos."
-        );
-        setLoading(false);
-        return;
-      }
-      setError("Error inesperado. Intenta de nuevo.");
-      setLoading(false);
-      return;
-    }
-
-    if (data.requiresMfa) {
-      setFactorId(data.factorId);
-      setChallengeId(data.challengeId);
-      setStep("mfa");
-      setLoading(false);
-      return;
-    }
-
-    router.push("/");
-    router.refresh();
-  }
-
-  // ── Verificación del código TOTP ───────────────────────────────────
-  const handleMfaVerify = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!factorId || !challengeId) return;
-      setError(null);
-      setLoading(true);
-
-      const { data: verifyData, error: verifyError } =
-        await supabase.auth.mfa.verify({
-          factorId,
-          challengeId,
-          code: totpCode.replace(/\s/g, ""),
-        });
-
-      if (verifyError) {
-        setError("Código incorrecto. Verifica tu aplicación de autenticación.");
-        await logEvent("login_mfa_failed", { email });
-        setLoading(false);
-        return;
-      }
-
-      await logEvent("login_mfa_success", {
-        email,
-        userId: verifyData.user?.id,
-      });
-      router.push("/");
-      router.refresh();
-    },
-    [factorId, challengeId, totpCode, email, router, supabase]
-  );
-
-  // ── Login con Google ───────────────────────────────────────────────
   async function handleGoogleLogin() {
-    setLoading(true);
-    await logEvent("login_google_initiated", { email: undefined });
+    setCargando(true);
+    setError(null);
     const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
     if (oauthError) {
-      setError(oauthError.message);
-      setLoading(false);
+      setError(traducirError(oauthError.message));
+      setCargando(false);
     }
   }
 
-  // ── Utilidades UI ──────────────────────────────────────────────────
-  const minutosRestantes = Math.ceil(secondsLeft / 60);
+  async function handleEnviarCodigo(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) return;
+    setError(null);
+    setCargando(true);
+
+    const { error: otpError } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        data: { nombre_completo: nombre },
+        shouldCreateUser: true,
+        emailRedirectTo: undefined,
+      },
+    });
+
+    if (otpError) {
+      setError(traducirError(otpError.message));
+      setCargando(false);
+      return;
+    }
+
+    setCodigo(Array(6).fill(""));
+    setSegundosRestantes(60);
+    setPaso("codigo");
+    setCargando(false);
+    setTimeout(() => inputsRef.current[0]?.focus(), 100);
+  }
+
+  async function handleVerificarCodigo(e: React.FormEvent) {
+    e.preventDefault();
+    const token = codigo.join("");
+    if (token.length !== 6) return;
+    setError(null);
+    setCargando(true);
+
+    const { error: verifyError } = await supabase.auth.verifyOtp({
+      email,
+      token,
+      type: "email",
+    });
+
+    if (verifyError) {
+      setError(traducirError(verifyError.message));
+      setCargando(false);
+      return;
+    }
+
+    const redirect = searchParams.get("redirect") || "/";
+    router.push(redirect);
+    router.refresh();
+  }
+
+  function handleDigitChange(index: number, value: string) {
+    const digit = value.replace(/\D/g, "").slice(-1);
+    const newCodigo = [...codigo];
+    newCodigo[index] = digit;
+    setCodigo(newCodigo);
+    if (digit && index < 5) {
+      inputsRef.current[index + 1]?.focus();
+    }
+  }
+
+  function handleDigitKeyDown(index: number, e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Backspace" && !codigo[index] && index > 0) {
+      const newCodigo = [...codigo];
+      newCodigo[index - 1] = "";
+      setCodigo(newCodigo);
+      inputsRef.current[index - 1]?.focus();
+    }
+  }
+
+  function handleDigitPaste(e: React.ClipboardEvent) {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    const newCodigo = Array(6).fill("");
+    for (let i = 0; i < pasted.length; i++) newCodigo[i] = pasted[i];
+    setCodigo(newCodigo);
+    const nextFocus = Math.min(pasted.length, 5);
+    inputsRef.current[nextFocus]?.focus();
+  }
+
+  async function handleReenviar() {
+    if (!email) return;
+    setError(null);
+    setCargando(true);
+
+    const { error: otpError } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        data: { nombre_completo: nombre },
+        shouldCreateUser: true,
+        emailRedirectTo: undefined,
+      },
+    });
+
+    if (otpError) {
+      setError(traducirError(otpError.message));
+    } else {
+      setCodigo(Array(6).fill(""));
+      setSegundosRestantes(60);
+      setTimeout(() => inputsRef.current[0]?.focus(), 100);
+    }
+    setCargando(false);
+  }
+
+  const codigoCompleto = codigo.join("").length === 6;
 
   return (
-    <div className="min-h-screen bg-[#d4edcc] flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-[#f5f0e8] flex flex-col items-center justify-center p-4">
 
       {/* Brillitos decorativos */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
@@ -167,7 +188,7 @@ export default function LoginPage() {
         ].map((s, i) => (
           <span
             key={i}
-            className="absolute text-[#C4607A] sparkle-item"
+            className="absolute text-[var(--verde-fuerte)] sparkle-item"
             style={{
               top: s.top, left: s.left, fontSize: s.size,
               ["--dur" as string]: s.dur, ["--delay" as string]: s.delay,
@@ -179,60 +200,41 @@ export default function LoginPage() {
       </div>
 
       {/* Card */}
-      <div className="w-full max-w-5xl bg-white rounded-[40px] shadow-2xl shadow-green-200 overflow-hidden grid md:grid-cols-[1fr_1.1fr]">
+      <div className="w-full max-w-5xl bg-white rounded-[40px] shadow-2xl shadow-green-100 overflow-hidden grid md:grid-cols-[1fr_1.1fr]">
 
         {/* ── PANEL IZQUIERDO ── */}
-        <div className="px-10 py-12 flex flex-col justify-between bg-white">
+        <div className="px-8 md:px-10 py-10 md:py-12 flex flex-col gap-6 bg-white">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 mb-6">
-            <Image src="/images/iconoNutricion.png" alt="Logo" width={60} height={60} className="object-contain drop-shadow-sm" />
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/images/iconoNutricion.png" alt="Logo" width={56} height={56} className="object-contain drop-shadow-sm" />
             <div>
-              <p className="font-playfair font-bold text-[#31543d] text-lg leading-tight">María Luisa</p>
+              <p className="font-playfair font-bold text-[var(--verde-fuerte)] text-lg leading-tight">María Luisa</p>
               <p className="text-[10px] uppercase tracking-widest text-[#5a7255]">Nutricionista</p>
             </div>
           </Link>
 
-          {/* ── PASO 1: Credenciales ── */}
-          {step === "credentials" && (
+          {/* ── PASO 1: Email ── */}
+          {paso === "email" && (
             <>
-              <div className="mb-7">
-                <h1 className="text-4xl font-bold text-[#31543d] leading-tight">
+              <div>
+                <h1 className="text-3xl md:text-4xl font-bold text-[var(--verde-fuerte)] leading-tight">
                   ¡Bienvenida{" "}
-                  <span className="font-playfair italic text-[#C4607A]">de nuevo!</span>{" "}
-                  <span className="text-[#C4607A]">♡</span>
+                  <span className="font-playfair italic text-[var(--primrose)]">de nuevo!</span>{" "}
+                  <span className="text-[var(--primrose)]">♡</span>
                 </h1>
-                <p className="font-nunito mt-3 text-[#5a7255] leading-relaxed text-sm">
-                  Inicia sesión para reservar tu cita<br />
-                  y continuar tu camino hacia tu bienestar.
+                <p className="font-nunito mt-2 text-[#5a7255] text-sm leading-relaxed">
+                  Inicia sesión o crea tu cuenta para reservar citas y acceder a tu contenido.
                 </p>
               </div>
-
-              {/* Bloqueo por rate limit */}
-              {locked && (
-                <div className="mb-5 p-4 rounded-2xl bg-red-50 border border-red-200 text-sm text-red-700 flex items-start gap-3">
-                  <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-                  </svg>
-                  <div>
-                    <p className="font-semibold">Cuenta bloqueada temporalmente</p>
-                    <p className="mt-1">
-                      Demasiados intentos fallidos. Podrás intentarlo de nuevo en{" "}
-                      <span className="font-bold tabular-nums">
-                        {minutosRestantes > 1 ? `${minutosRestantes} minutos` : `${secondsLeft} segundos`}
-                      </span>.
-                    </p>
-                  </div>
-                </div>
-              )}
 
               {/* Google */}
               <button
                 onClick={handleGoogleLogin}
-                disabled={loading || locked}
-                className="btn-coquette w-full flex items-center justify-center gap-3 border border-gray-200 bg-white hover:bg-gray-50 py-3.5 rounded-2xl text-gray-700 font-medium transition duration-300 shadow-sm mb-5 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={cargando}
+                className="btn-coquette w-full flex items-center justify-center gap-3 border border-gray-200 bg-white hover:bg-gray-50 py-3.5 rounded-2xl text-gray-700 font-medium transition duration-300 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <svg width="20" height="20" viewBox="0 0 48 48">
+                <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
                   <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.5 33.4 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.7-.1-4z"/>
                   <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.1 18.9 12 24 12c3 0 5.7 1.1 7.8 2.9l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
                   <path fill="#4CAF50" d="M24 44c5.2 0 10-1.8 13.7-4.8l-6.3-5.2C29.5 35.6 26.9 36 24 36c-5.2 0-9.5-2.6-11.3-6.3l-6.6 5.1C9.8 39.8 16.4 44 24 44z"/>
@@ -241,16 +243,30 @@ export default function LoginPage() {
                 Continuar con Google
               </button>
 
-              <div className="relative flex items-center mb-5">
+              <div className="relative flex items-center">
                 <div className="flex-1 h-px bg-gray-200" />
-                <span className="mx-3 text-xs text-[#8aa487] bg-white px-2 font-nunito">o con correo</span>
+                <span className="mx-3 text-xs text-[#8aa487] bg-white px-2 font-nunito">o con tu correo</span>
                 <div className="flex-1 h-px bg-gray-200" />
               </div>
 
-              <form onSubmit={handleEmailLogin} className="space-y-4">
+              <form onSubmit={handleEnviarCodigo} className="space-y-3">
+                {/* Nombre */}
+                <div className="relative">
+                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8aa487]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  <input
+                    type="text"
+                    value={nombre}
+                    onChange={(e) => setNombre(e.target.value)}
+                    placeholder="Tu nombre (opcional)"
+                    className="font-nunito w-full bg-[#f5f0e8] border border-[#d4c8b0] pl-11 pr-4 py-3.5 rounded-2xl text-[#31543d] outline-none focus:border-[var(--verde-fuerte)] focus:ring-2 focus:ring-[#d4edcc] transition"
+                  />
+                </div>
+
                 {/* Email */}
                 <div className="relative">
-                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8aa487]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8aa487]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
                   </svg>
                   <input
@@ -259,128 +275,97 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Correo electrónico"
-                    disabled={locked}
-                    className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] pl-11 pr-4 py-3.5 rounded-2xl text-[#31543d] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition disabled:opacity-50"
+                    className="font-nunito w-full bg-[#f5f0e8] border border-[#d4c8b0] pl-11 pr-4 py-3.5 rounded-2xl text-[#31543d] outline-none focus:border-[var(--verde-fuerte)] focus:ring-2 focus:ring-[#d4edcc] transition"
                   />
-                </div>
-
-                {/* Contraseña */}
-                <div className="relative">
-                  <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8aa487]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                  </svg>
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Contraseña"
-                    disabled={locked}
-                    className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] pl-11 pr-12 py-3.5 rounded-2xl text-[#31543d] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition disabled:opacity-50"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8aa487] hover:text-[#31543d] transition"
-                  >
-                    {showPassword ? (
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-                    ) : (
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                    )}
-                  </button>
                 </div>
 
                 {error && (
                   <p className="text-red-500 text-sm font-nunito flex items-center gap-2">
-                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
                       <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
                     </svg>
                     {error}
                   </p>
                 )}
 
-                {/* Indicador de intentos restantes */}
-                {!locked && attemptsLeft <= 3 && attemptsLeft > 0 && (
-                  <p className="text-amber-600 text-xs font-nunito">
-                    ⚠️ Te quedan {attemptsLeft} intento{attemptsLeft === 1 ? "" : "s"} antes del bloqueo temporal.
-                  </p>
-                )}
-
                 <button
                   type="submit"
-                  disabled={loading || locked}
-                  className="btn-coquette w-full bg-[#6daa6d] hover:bg-[#5a9a5a] text-white py-4 rounded-2xl font-semibold transition duration-300 shadow-md shadow-green-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={cargando || !email}
+                  className="btn-coquette w-full bg-[var(--verde-fuerte)] hover:opacity-90 text-white py-4 rounded-2xl font-semibold transition duration-300 shadow-md shadow-green-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                  {loading ? "Ingresando..." : "Iniciar sesión"}
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.7a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+                  </svg>
+                  {cargando ? "Enviando..." : "Enviar código por correo"}
                 </button>
               </form>
 
-              <div className="mt-6">
-                <Link href="/" className="text-sm text-[#5a7255] hover:text-[#31543d] transition font-nunito">
-                  ← Volver al inicio
-                </Link>
-              </div>
-
-              <div className="mt-4 bg-[#f0f8ec] rounded-2xl p-4 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Image src="/images/iconoNutricion.png" alt="Logo" width={42} height={42} className="object-contain" />
-                  <div>
-                    <p className="text-xs text-[#5a7255] font-nunito">¿No tienes cuenta?</p>
-                    <Link href="/registro" className="text-sm font-semibold text-[#C4607A] hover:underline font-nunito">
-                      Crea tu cuenta y comienza hoy
-                    </Link>
-                  </div>
-                </div>
-                <Link
-                  href="/registro"
-                  className="w-9 h-9 rounded-full bg-[#C4607A] text-white flex items-center justify-center hover:bg-[#A84D65] transition text-sm font-bold"
-                >
-                  →
-                </Link>
-              </div>
+              <Link href="/" className="text-sm text-[#5a7255] hover:text-[#31543d] transition font-nunito">
+                ← Volver al inicio
+              </Link>
             </>
           )}
 
-          {/* ── PASO 2: Código MFA ── */}
-          {step === "mfa" && (
-            <div className="flex-1 flex flex-col justify-center">
-              <div className="mb-7">
-                <div className="w-14 h-14 rounded-full bg-[#f0f8ec] flex items-center justify-center mb-4">
-                  <svg className="w-7 h-7 text-[#31543d]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                    <rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+          {/* ── PASO 2: Código OTP ── */}
+          {paso === "codigo" && (
+            <div className="flex flex-col gap-5">
+              <div>
+                <div className="w-14 h-14 rounded-full bg-[#f5f0e8] flex items-center justify-center mb-4">
+                  <svg className="w-7 h-7 text-[var(--verde-fuerte)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
                   </svg>
                 </div>
-                <h1 className="text-3xl font-bold text-[#31543d] leading-tight mb-2">
-                  Verificación{" "}
-                  <span className="font-playfair italic text-[#C4607A]">en dos pasos</span>
+                <h1 className="text-3xl font-bold text-[var(--verde-fuerte)] leading-tight mb-2">
+                  Revisa tu{" "}
+                  <span className="font-playfair italic text-[var(--primrose)]">correo</span>
                 </h1>
                 <p className="font-nunito text-sm text-[#5a7255] leading-relaxed">
-                  Abre tu aplicación de autenticación (Google Authenticator, Authy, etc.)
-                  e ingresa el código de 6 dígitos.
+                  Enviamos un código de 6 dígitos a{" "}
+                  <span className="font-semibold text-[var(--verde-fuerte)]">{enmascararEmail(email)}</span>.
+                  Ingresa el código aquí abajo.
                 </p>
               </div>
 
-              <form onSubmit={handleMfaVerify} className="space-y-4">
-                <div className="relative">
-                  <input
-                    type="text"
-                    inputMode="numeric"
-                    pattern="\d{6}"
-                    maxLength={6}
-                    required
-                    value={totpCode}
-                    onChange={(e) => setTotpCode(e.target.value.replace(/\D/g, ""))}
-                    placeholder="000000"
-                    className="font-nunito w-full bg-[#f0f8ec] border border-[#C5DFC5] px-5 py-4 rounded-2xl text-[#31543d] text-center text-2xl tracking-[0.4em] outline-none focus:border-[#6daa6d] focus:ring-2 focus:ring-[#d4edcc] transition"
-                    autoFocus
-                  />
+              <form onSubmit={handleVerificarCodigo} className="space-y-4">
+                {/* 6 digit inputs */}
+                <div className="flex gap-2 justify-center" onPaste={handleDigitPaste}>
+                  {codigo.map((digit, index) => (
+                    <input
+                      key={index}
+                      ref={(el) => { inputsRef.current[index] = el; }}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={1}
+                      value={digit}
+                      onChange={(e) => handleDigitChange(index, e.target.value)}
+                      onKeyDown={(e) => handleDigitKeyDown(index, e)}
+                      className="w-11 h-14 text-center text-xl font-bold bg-[#f5f0e8] border-2 border-[#d4c8b0] rounded-xl text-[var(--verde-fuerte)] outline-none focus:border-[var(--verde-fuerte)] focus:ring-2 focus:ring-[#d4edcc] transition caret-transparent"
+                    />
+                  ))}
+                </div>
+
+                {/* Countdown / reenviar */}
+                <div className="text-center">
+                  {segundosRestantes > 0 ? (
+                    <p className="text-sm text-[#8aa487] font-nunito">
+                      Puedes solicitar un nuevo código en{" "}
+                      <span className="font-bold tabular-nums text-[var(--verde-fuerte)]">{segundosRestantes}s</span>
+                    </p>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={handleReenviar}
+                      disabled={cargando}
+                      className="text-sm text-[var(--verde-fuerte)] hover:underline font-nunito font-medium disabled:opacity-50"
+                    >
+                      ¿No recibiste el código? Reenviar
+                    </button>
+                  )}
                 </div>
 
                 {error && (
                   <p className="text-red-500 text-sm font-nunito flex items-center gap-2">
-                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" aria-hidden="true">
                       <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
                     </svg>
                     {error}
@@ -389,20 +374,20 @@ export default function LoginPage() {
 
                 <button
                   type="submit"
-                  disabled={loading || totpCode.length !== 6}
-                  className="btn-coquette w-full bg-[#6daa6d] hover:bg-[#5a9a5a] text-white py-4 rounded-2xl font-semibold transition duration-300 shadow-md shadow-green-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={cargando || !codigoCompleto}
+                  className="btn-coquette w-full bg-[var(--verde-fuerte)] hover:opacity-90 text-white py-4 rounded-2xl font-semibold transition duration-300 shadow-md shadow-green-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loading ? "Verificando..." : "Verificar código"}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => { setStep("credentials"); setError(null); setTotpCode(""); }}
-                  className="w-full text-sm text-[#5a7255] hover:text-[#31543d] transition font-nunito text-center"
-                >
-                  ← Volver al inicio de sesión
+                  {cargando ? "Verificando..." : "Verificar código"}
                 </button>
               </form>
+
+              <button
+                type="button"
+                onClick={() => { setPaso("email"); setError(null); setCodigo(Array(6).fill("")); }}
+                className="text-sm text-[#5a7255] hover:text-[#31543d] transition font-nunito text-center"
+              >
+                ← Cambiar correo electrónico
+              </button>
             </div>
           )}
 
@@ -410,7 +395,7 @@ export default function LoginPage() {
 
         {/* ── PANEL DERECHO: IMAGEN ── */}
         <div className="hidden md:flex flex-col relative bg-[#edf7e8] overflow-hidden">
-          <div className="absolute top-[-50px] right-[-50px] w-40 h-40 bg-[#C4607A]/10 rounded-full" />
+          <div className="absolute top-[-50px] right-[-50px] w-40 h-40 bg-[var(--primrose)]/10 rounded-full" />
           <div className="absolute top-[30%] left-[-30px] w-24 h-24 bg-[#d4edcc] rounded-full" />
 
           <div className="flex-1 relative overflow-hidden">
@@ -422,11 +407,11 @@ export default function LoginPage() {
             />
           </div>
 
-          <div className="bg-[#f4f8f4] px-8 py-5">
-            <h2 className="font-playfair italic text-2xl text-[#31543d] leading-snug">
+          <div className="bg-[#f5f0e8] px-8 py-5">
+            <h2 className="font-playfair italic text-2xl text-[var(--verde-fuerte)] leading-snug">
               Pequeños cambios,
-              <span className="font-semibold text-[#6daa6d] not-italic"> + grandes resultados </span>
-              <span className="text-[#C4607A]">🌿 ♡</span>
+              <span className="font-semibold not-italic"> + grandes resultados </span>
+              <span className="text-[var(--primrose)]">🌿 ♡</span>
             </h2>
             <div className="flex gap-5 mt-3">
               {[
@@ -435,11 +420,11 @@ export default function LoginPage() {
                 { icon: "📅", label: "Citas",         sub: "fáciles y rápidas" },
               ].map((item) => (
                 <div key={item.label} className="flex items-center gap-2">
-                  <span className="w-8 h-8 rounded-full bg-[#edf7e8] flex items-center justify-center text-sm shrink-0">
+                  <span className="w-8 h-8 rounded-full bg-white/60 flex items-center justify-center text-sm shrink-0">
                     {item.icon}
                   </span>
                   <div>
-                    <p className="text-xs font-semibold text-[#31543d] font-nunito">{item.label}</p>
+                    <p className="text-xs font-semibold text-[var(--verde-fuerte)] font-nunito">{item.label}</p>
                     <p className="text-[10px] text-[#5a7255] font-nunito">{item.sub}</p>
                   </div>
                 </div>
@@ -450,7 +435,7 @@ export default function LoginPage() {
 
       </div>
 
-      <p className="mt-5 text-sm text-[#5a7255] font-nunito flex items-center gap-2">
+      <p className="mt-5 text-sm text-[#5a7255] font-nunito">
         🌿 Tu salud es tu mejor inversión 🍓
       </p>
     </div>

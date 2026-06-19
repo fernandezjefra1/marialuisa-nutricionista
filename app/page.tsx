@@ -826,8 +826,8 @@ function CarruselComentarios() {
   ];
 
   const fotos = [
-    { src: "/images/conferencia-1.jpeg",  titulo: "Conferencia en el Colegio de Nutricionistas", sub: "Compartiendo conocimiento profesional" },
-    { src: "/images/CitasRealizadas.jpeg", titulo: "Consultas nutricionales",                      sub: "Atención personalizada para cada paciente" },
+    { src: "/images/ReunionConEscolares.jpeg",  titulo: "Conferencia en el Colegio de Nutricionistas", sub: "Compartiendo conocimiento profesional" },
+    { src: "/images/conferencia-grupo.jpeg", titulo: "Consultas nutricionales",                      sub: "Atención personalizada para cada paciente" },
   ];
 
   const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;

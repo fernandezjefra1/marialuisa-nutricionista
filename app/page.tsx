@@ -873,143 +873,154 @@ function CarruselComentarios() {
           </p>
         </div>
 
-        {/* 2 fotos grandes */}
-        <div className="grid md:grid-cols-2 gap-4 mb-12">
-          {fotos.map((f, i) => (
-            <div key={i} className="relative rounded-2xl border-4 border-white shadow-xl overflow-hidden aspect-[4/5] group">
-              <Image
-                src={f.src}
-                alt={f.titulo}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
-              <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
-                <h3 className="font-playfair text-base md:text-lg font-bold leading-snug">{f.titulo}</h3>
-                <p className="font-nunito text-xs md:text-sm text-white/80 mt-1">{f.sub}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* Layout 2 columnas: fotos izquierda, comentarios derecha */}
+        <div className="grid lg:grid-cols-[40%_60%] gap-8 items-start">
 
-        {/* Sección de comentarios */}
-        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 md:p-10">
-          <h3 className="font-playfair text-2xl font-bold text-[var(--primrose)] mb-6">
-            Deja tu comentario
-          </h3>
-
-          {/* Formulario o botón de login */}
-          {!userLoading && (
-            user ? (
-              <form onSubmit={handleSubmit} className="mb-8">
-                <div className="flex items-center gap-3 mb-4">
-                  {avatarUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={avatarUrl}
-                      alt={nombre}
-                      className="w-10 h-10 rounded-full object-cover border-2 border-[var(--primrose)]"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-[var(--primrose)] text-white text-sm font-semibold flex items-center justify-center flex-shrink-0">
-                      {nombre.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                  <span className="font-medium text-[var(--texto-principal)]">{nombre}</span>
-                </div>
-
-                {/* Selector de estrellas */}
-                <div className="flex gap-1 mb-4">
-                  {[1, 2, 3, 4, 5].map((n) => (
-                    <button key={n} type="button" onClick={() => setEstrellas(n)} className="transition hover:scale-110">
-                      <svg
-                        className={`w-7 h-7 transition-colors ${n <= estrellas ? "text-[var(--primrose)]" : "text-gray-300"}`}
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                      >
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                      </svg>
-                    </button>
-                  ))}
-                </div>
-
-                <textarea
-                  value={texto}
-                  onChange={(e) => setTexto(e.target.value)}
-                  rows={3}
-                  placeholder="Cuéntanos tu experiencia..."
-                  className="w-full border-2 border-[var(--borde-verde)] rounded-xl px-4 py-3 text-sm font-nunito text-[var(--texto-principal)] focus:outline-none focus:border-[var(--lime)] resize-none mb-4 transition"
+          {/* Columna izquierda: galería compacta */}
+          <div className="flex flex-col gap-4">
+            {fotos.map((f, i) => (
+              <div key={i} className="relative rounded-2xl border-[3px] border-white shadow-lg overflow-hidden aspect-[4/3] group" style={{ maxHeight: "16rem" }}>
+                <Image
+                  src={f.src}
+                  alt={f.titulo}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-
-                {toast && (
-                  <div className="mb-4 text-sm text-[var(--primrose)] font-medium bg-[var(--pinktone-soft)] px-4 py-2 rounded-xl">
-                    {toast}
-                  </div>
-                )}
-
-                <button
-                  type="submit"
-                  disabled={enviando || !texto.trim()}
-                  className="btn-coquette w-full md:w-auto bg-[var(--primrose)] text-white px-6 py-2.5 rounded-full font-medium hover:bg-[var(--primrose-hover)] transition disabled:opacity-50"
-                >
-                  {enviando ? "Publicando..." : "Publicar comentario"}
-                </button>
-              </form>
-            ) : (
-              <div className="mb-8">
-                <Link
-                  href="/login"
-                  className="inline-block bg-[var(--primrose)] text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-[var(--primrose-hover)] transition shadow-md shadow-pink-200"
-                >
-                  Inicia sesión para comentar
-                </Link>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
+                  <p className="text-sm font-semibold leading-snug">{f.titulo}</p>
+                </div>
               </div>
-            )
-          )}
+            ))}
+          </div>
 
-          {/* Lista de testimonios */}
-          {comentarios.length === 0 ? (
-            <p className="text-center font-nunito text-[var(--texto-suave)] py-8 text-sm">
-              Sé el primero en comentar 💕
-            </p>
-          ) : (
-            <div className="grid md:grid-cols-2 gap-4">
-              {comentarios.map((c) => (
-                <div key={c.id} className="bg-white rounded-xl p-4 border border-[var(--borde-verde)] flex flex-col gap-2">
-                  <div className="flex items-center gap-2">
-                    {c.avatar_url ? (
+          {/* Columna derecha: feed estilo Facebook */}
+          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6">
+            <h3 className="font-playfair text-2xl font-bold text-[var(--primrose)] mb-5">
+              Deja tu comentario
+            </h3>
+
+            {/* Formulario o botón login */}
+            {!userLoading && (
+              user ? (
+                <form onSubmit={handleSubmit} className="mb-5">
+                  <div className="flex items-center gap-3 mb-3">
+                    {avatarUrl ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
-                        src={c.avatar_url}
-                        alt={c.nombre}
-                        className="w-8 h-8 rounded-full object-cover border border-[var(--primrose)] flex-shrink-0"
+                        src={avatarUrl}
+                        alt={nombre}
+                        className="w-10 h-10 rounded-full object-cover border-2 border-[var(--primrose)] flex-shrink-0"
                         referrerPolicy="no-referrer"
                       />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-[var(--lime-soft)] text-[var(--lime)] text-xs font-semibold flex items-center justify-center flex-shrink-0">
-                        {c.nombre.charAt(0).toUpperCase()}
+                      <div className="w-10 h-10 rounded-full bg-[var(--primrose)] text-white text-sm font-semibold flex items-center justify-center flex-shrink-0">
+                        {nombre.charAt(0).toUpperCase()}
                       </div>
                     )}
-                    <div>
-                      <p className="text-sm font-semibold text-[var(--texto-principal)]">{c.nombre}</p>
-                      <p className="text-xs text-[var(--texto-suave)] font-nunito">{fechaRelativa(c.creado_en)}</p>
-                    </div>
+                    <span className="font-medium text-[var(--texto-principal)] text-sm">{nombre}</span>
                   </div>
-                  <div className="flex gap-0.5">
+
+                  <div className="flex gap-1 mb-3">
                     {[1, 2, 3, 4, 5].map((n) => (
-                      <svg key={n} className={`w-4 h-4 ${n <= c.estrellas ? "text-[var(--primrose)]" : "text-gray-200"}`} viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                      </svg>
+                      <button key={n} type="button" onClick={() => setEstrellas(n)} className="transition hover:scale-110">
+                        <svg
+                          className={`w-6 h-6 transition-colors ${n <= estrellas ? "text-[var(--primrose)]" : "text-gray-300"}`}
+                          viewBox="0 0 24 24" fill="currentColor"
+                        >
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                      </button>
                     ))}
                   </div>
-                  <p className="font-playfair italic text-sm text-[var(--texto-suave)] leading-relaxed">
-                    &ldquo;{c.comentario}&rdquo;
-                  </p>
+
+                  <textarea
+                    value={texto}
+                    onChange={(e) => setTexto(e.target.value)}
+                    rows={2}
+                    placeholder="Cuéntanos tu experiencia..."
+                    className="w-full border border-[var(--borde-verde)] rounded-xl px-4 py-2.5 text-sm font-nunito text-[var(--texto-principal)] focus:outline-none focus:border-[var(--lime)] resize-none mb-3 transition"
+                  />
+
+                  {toast && (
+                    <div className="mb-3 text-sm text-[var(--primrose)] font-medium bg-[var(--pinktone-soft)] px-3 py-2 rounded-xl">
+                      {toast}
+                    </div>
+                  )}
+
+                  <div className="flex justify-end">
+                    <button
+                      type="submit"
+                      disabled={enviando || !texto.trim()}
+                      className="btn-coquette bg-[var(--primrose)] text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-[var(--primrose-hover)] transition disabled:opacity-50"
+                    >
+                      {enviando ? "Publicando..." : "Publicar comentario"}
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <div className="mb-5">
+                  <Link
+                    href="/login"
+                    className="inline-block bg-[var(--primrose)] text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-[var(--primrose-hover)] transition shadow-md shadow-pink-200"
+                  >
+                    Inicia sesión para comentar
+                  </Link>
                 </div>
-              ))}
-            </div>
-          )}
+              )
+            )}
+
+            <div className="border-t border-gray-200 my-5" />
+
+            <p className="text-xs uppercase tracking-widest text-[var(--primrose)] font-semibold mb-4">
+              Comentarios recientes
+            </p>
+
+            {comentarios.length === 0 ? (
+              <p className="text-center font-nunito text-[var(--texto-suave)] py-6 text-sm">
+                Sé el primero en comentar 💕
+              </p>
+            ) : (
+              <div className="max-h-[500px] overflow-y-auto pr-2">
+                {comentarios.map((c, idx) => (
+                  <div
+                    key={c.id}
+                    className={`py-4 ${idx < comentarios.length - 1 ? "border-b border-gray-100" : ""}`}
+                  >
+                    <div className="flex items-center gap-2 mb-1.5">
+                      {c.avatar_url ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={c.avatar_url}
+                          alt={c.nombre}
+                          className="w-10 h-10 rounded-full object-cover border border-[var(--primrose)] flex-shrink-0"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-[var(--lime-soft)] text-[var(--lime)] text-sm font-semibold flex items-center justify-center flex-shrink-0">
+                          {c.nombre.charAt(0).toUpperCase()}
+                        </div>
+                      )}
+                      <div>
+                        <p className="text-sm font-semibold text-[var(--texto-principal)]">{c.nombre}</p>
+                        <p className="text-xs text-gray-500 font-nunito">{fechaRelativa(c.creado_en)}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-0.5 mb-2">
+                      {[1, 2, 3, 4, 5].map((n) => (
+                        <svg key={n} className={`w-3.5 h-3.5 ${n <= c.estrellas ? "text-[var(--primrose)]" : "text-gray-200"}`} viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                      ))}
+                    </div>
+                    <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed">
+                      {c.comentario}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </section>
@@ -1209,7 +1220,7 @@ function DietaMariaLuisa() {
   ];
 
   return (
-    <section id="dieta" className="py-14 md:py-20 bg-[#f5f0e8] relative overflow-hidden">
+    <section id="dieta" className="py-14 md:py-20 bg-[#eaf3de] relative overflow-hidden">
       <FoodBg />
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="text-center mb-12">
@@ -1488,7 +1499,7 @@ function SeccionEnfermedadesYFaq() {
   const [faqAbierta, setFaqAbierta] = useState<number | null>(null);
 
   return (
-    <section className="py-14 md:py-20 bg-[#f5f0e8] relative overflow-hidden">
+    <section className="py-14 md:py-20 bg-white relative overflow-hidden">
       <FoodBg />
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="text-center mb-12">
@@ -1934,26 +1945,11 @@ function SeccionPromotores() {
   ];
 
   return (
-    <section className="py-14 md:py-16 bg-[#f5f0e8] relative overflow-hidden">
+    <section className="py-14 md:py-16 bg-[#fce4ec]/40 relative overflow-hidden">
       <FoodBg />
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="grid md:grid-cols-2 gap-10 items-center">
-          {/* Imagen izquierda */}
-          <div className="relative">
-            <div className="relative max-w-md mx-auto md:mx-0">
-              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl -rotate-2" />
-              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
-                <Image
-                  src="/images/conferencia-grupo.jpeg"
-                  alt="Programa de promotores María Luisa Nutricionista"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Contenido derecha */}
+          {/* Contenido izquierda */}
           <div>
             <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center gap-2">
               <IcoLeaf cls="w-4 h-4" /> Únete al equipo
@@ -1980,6 +1976,21 @@ function SeccionPromotores() {
             >
               Postular como promotor
             </Link>
+          </div>
+
+          {/* Imagen derecha */}
+          <div className="relative">
+            <div className="relative max-w-md mx-auto md:mx-0">
+              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl -rotate-2" />
+              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
+                <Image
+                  src="/images/conferencia-grupo.jpeg"
+                  alt="Programa de promotores María Luisa Nutricionista"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -2008,6 +2019,36 @@ function SeccionEmpresas() {
       <FoodBg />
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="grid md:grid-cols-2 gap-10 items-center">
+          <div className="relative">
+            <div className="bg-white rounded-2xl p-5 md:p-8 shadow-xl shadow-green-100 border-2 border-[var(--borde-verde)]">
+              <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold">
+                Empresas que confían
+              </p>
+              <p className="font-nunito text-sm md:text-lg font-light text-[var(--texto-principal)] mb-2 leading-relaxed">
+                &quot;Más de <span className="font-semibold text-[var(--lime)]">20 años</span> recorriendo
+                el Perú evaluando nutricionalmente a familias y trabajadores.&quot;
+              </p>
+              <p className="font-nunito text-sm md:text-base text-[var(--texto-suave)] leading-relaxed mt-4">
+                — Lic. María Luisa Peña Valdivia, Nutricionista colegiada
+              </p>
+
+              <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8 pt-6 border-t border-[var(--borde-rosa)]">
+                <div>
+                  <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">20+</p>
+                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Años de experiencia</p>
+                </div>
+                <div>
+                  <p className="text-lg md:text-2xl font-semibold text-[var(--lime)]">100%</p>
+                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Personalizado</p>
+                </div>
+                <div>
+                  <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">B2B</p>
+                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Empresarial</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div>
             <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold">
               Para empresas
@@ -2042,36 +2083,6 @@ function SeccionEmpresas() {
             >
               Conocer el programa
             </Link>
-          </div>
-
-          <div className="relative">
-            <div className="bg-white rounded-2xl p-5 md:p-8 shadow-xl shadow-green-100 border-2 border-[var(--borde-verde)]">
-              <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold">
-                Empresas que confían
-              </p>
-              <p className="font-nunito text-sm md:text-lg font-light text-[var(--texto-principal)] mb-2 leading-relaxed">
-                &quot;Más de <span className="font-semibold text-[var(--lime)]">20 años</span> recorriendo
-                el Perú evaluando nutricionalmente a familias y trabajadores.&quot;
-              </p>
-              <p className="font-nunito text-sm md:text-base text-[var(--texto-suave)] leading-relaxed mt-4">
-                — Lic. María Luisa Peña Valdivia, Nutricionista colegiada
-              </p>
-
-              <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8 pt-6 border-t border-[var(--borde-rosa)]">
-                <div>
-                  <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">20+</p>
-                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Años de experiencia</p>
-                </div>
-                <div>
-                  <p className="text-lg md:text-2xl font-semibold text-[var(--lime)]">100%</p>
-                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Personalizado</p>
-                </div>
-                <div>
-                  <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">B2B</p>
-                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Empresarial</p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

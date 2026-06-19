@@ -698,34 +698,35 @@ function LoginContent() {
               </div>
 
               {/* Checkbox términos */}
-              <label className="flex items-start gap-3 cursor-pointer group">
-                <div className="relative mt-0.5 flex-shrink-0">
-                  <input
-                    type="checkbox"
-                    checked={aceptoTerminos}
-                    onChange={(e) => setAceptoTerminos(e.target.checked)}
-                    className="sr-only"
-                  />
-                  <div
-                    className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
-                      aceptoTerminos ? "bg-[var(--verde-fuerte)] border-[var(--verde-fuerte)]" : "bg-white border-[#d4c8b0] group-hover:border-[var(--verde-fuerte)]"
-                    }`}
-                    onClick={() => setAceptoTerminos(!aceptoTerminos)}
-                  >
-                    {aceptoTerminos && <IconoCheck />}
-                  </div>
-                </div>
-                <span className="text-xs text-[#5a7255] font-nunito leading-relaxed">
+              <div className="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  id="acepto-terminos"
+                  checked={aceptoTerminos}
+                  onChange={(e) => setAceptoTerminos(e.target.checked)}
+                  className="mt-0.5 w-5 h-5 flex-shrink-0 cursor-pointer accent-[var(--verde-fuerte)] rounded"
+                />
+                <label htmlFor="acepto-terminos" className="text-sm text-[#5a7255] font-nunito leading-relaxed cursor-pointer select-none">
                   Acepto los{" "}
-                  <Link href="/terminos" className="text-[var(--verde-fuerte)] font-semibold hover:underline">
+                  <Link
+                    href="/terminos"
+                    target="_blank"
+                    className="text-[var(--primrose)] underline hover:text-[var(--verde-fuerte)] transition-colors"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     términos y condiciones
-                  </Link>{" "}
-                  y la{" "}
-                  <Link href="/privacidad" className="text-[var(--verde-fuerte)] font-semibold hover:underline">
+                  </Link>
+                  {" "}y la{" "}
+                  <Link
+                    href="/privacidad"
+                    target="_blank"
+                    className="text-[var(--primrose)] underline hover:text-[var(--verde-fuerte)] transition-colors"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     política de privacidad
                   </Link>
-                </span>
-              </label>
+                </label>
+              </div>
 
               {error && <CajaError mensaje={error} />}
 
@@ -820,7 +821,19 @@ function LoginContent() {
 
       </div>
 
-      <p className="mt-5 text-sm text-[#5a7255] font-nunito">
+      <div className="mt-4 text-center">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-sm text-[#5a7255] hover:text-[var(--verde-fuerte)] transition-colors duration-300 font-nunito"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+          </svg>
+          Volver al inicio
+        </Link>
+      </div>
+
+      <p className="mt-3 text-sm text-[#5a7255] font-nunito">
         🌿 Tu salud es tu mejor inversión 🍓
       </p>
     </div>

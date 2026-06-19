@@ -18,8 +18,7 @@ export default function Home() {
       <SeccionEnfermedadesYFaq />
       <DietaMariaLuisa />
       <SeccionProductos />
-      <SeccionEmpresas />
-      <SeccionPromotores />
+      <BloqueEmpresasYPromotores />
       <AsesoriasProyectos />
       <Footer />
     </main>
@@ -1499,17 +1498,17 @@ function SeccionEnfermedadesYFaq() {
   const [faqAbierta, setFaqAbierta] = useState<number | null>(null);
 
   return (
-    <section className="py-14 md:py-20 bg-white relative overflow-hidden">
+    <section className="py-14 md:py-20 bg-[var(--verde-fuerte)] relative overflow-hidden">
       <FoodBg />
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="text-center mb-12">
-          <p className="text-sm uppercase tracking-widest text-[var(--texto-principal)] mb-2 font-semibold flex items-center justify-center gap-2">
+          <p className="text-sm uppercase tracking-widest text-white/70 mb-2 font-semibold flex items-center justify-center gap-2">
             <IcoLeaf cls="w-4 h-4 text-[var(--lime)]" /> Nutrición preventiva
           </p>
-          <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-4 text-[var(--texto-principal)]">
+          <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-4 text-white">
             Enfermedades que se pueden <span className="font-semibold text-[var(--primrose)]">prevenir.</span>
           </h2>
-          <p className="font-nunito text-[var(--texto-suave)] max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
+          <p className="font-nunito text-white/80 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
             Una buena nutrición es la mejor medicina preventiva. Estos son algunos de los problemas de salud
             que podemos reducir o evitar con hábitos alimenticios adecuados desde temprana edad.
           </p>
@@ -1536,10 +1535,10 @@ function SeccionEnfermedadesYFaq() {
 
           {/* Columna derecha: FAQ */}
           <div>
-            <p className="text-sm uppercase tracking-widest text-[var(--texto-principal)] mb-2 font-semibold flex items-center gap-2">
+            <p className="text-sm uppercase tracking-widest text-white/70 mb-2 font-semibold flex items-center gap-2">
               <IcoChat cls="w-4 h-4 text-[var(--primrose)]" /> Resolvemos tus dudas
             </p>
-            <h3 className="font-playfair text-2xl md:text-3xl font-bold mb-5 text-[var(--texto-principal)]">
+            <h3 className="font-playfair text-2xl md:text-3xl font-bold mb-5 text-white">
               Preguntas <span className="text-[var(--primrose)]">frecuentes</span>
             </h3>
             <div className="space-y-2">
@@ -1587,7 +1586,7 @@ function SeccionEnfermedadesYFaq() {
         </div>
 
         <div className="mt-10">
-          <div className="bg-[var(--verde-fuerte)] text-white rounded-2xl px-4 md:px-8 py-5 flex items-start gap-3 md:gap-4">
+          <div className="bg-white/20 text-white rounded-2xl px-4 md:px-8 py-5 flex items-start gap-3 md:gap-4">
             <span className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
               <IcoHeart cls="w-4 h-4 md:w-5 md:h-5 text-white" />
             </span>
@@ -1753,10 +1752,7 @@ function AsesoriasProyectos() {
   ];
 
   return (
-    <section
-      className="py-14 md:py-16 overflow-hidden relative"
-      style={{ background: "linear-gradient(135deg, #e2f4ce 0%, #cce9b0 40%, #daf2c4 70%, #c8e8a8 100%)" }}
-    >
+    <section className="py-14 md:py-16 overflow-hidden relative bg-[var(--verde-fuerte)]">
       {/* Orbes animados */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         {orbs.map((b, i) => (
@@ -1810,11 +1806,11 @@ function AsesoriasProyectos() {
             <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
               Mi especialidad
             </p>
-            <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-4 leading-tight text-[var(--texto-principal)]">
+            <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-4 leading-tight text-white">
               Asesorías para<br />
               <span className="font-semibold text-[var(--primrose)]">Proyectos nutricionales.</span>
             </h2>
-            <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed mb-6">
+            <p className="font-nunito text-base text-white/80 leading-relaxed mb-6">
               Más de dos décadas diseñando e implementando proyectos de nutrición preventiva en instituciones,
               comunidades y empresas del Perú. Si tu organización necesita una estrategia nutricional con
               impacto real, conversemos.
@@ -1829,7 +1825,7 @@ function AsesoriasProyectos() {
               ].map(({ t, ac }, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className="mt-[3px] flex-shrink-0 font-bold text-lg leading-none" style={{ color: ac }}>—</span>
-                  <span className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">{t}</span>
+                  <span className="font-nunito text-base text-white/80 leading-relaxed">{t}</span>
                 </li>
               ))}
             </ul>
@@ -1929,96 +1925,28 @@ function AsesoriasProyectos() {
   );
 }
 
-/* ---------- SECCIÓN PROMOTORES ---------- */
-function SeccionPromotores() {
-  const beneficios = [
+/* ---------- EMPRESAS + PROMOTORES (bloque unificado) ---------- */
+function BloqueEmpresasYPromotores() {
+  const beneficiosPromotores = [
     { texto: "Comisión por cada venta de libros y talleres",                                color: "var(--primrose)" },
     { texto: "Material de marketing listo para usar",                                       color: "var(--lime)"     },
     { texto: "Capacitación nutricional básica",                                             color: "var(--primrose)" },
     { texto: "Crecimiento profesional con respaldo del Colegio de Nutricionistas",          color: "var(--lime)"     },
   ];
 
-  const stats = [
+  const statsPromotores = [
     { val: "+50", sub: "promotores activos", color: "var(--primrose)", bg: "var(--pinktone-soft)" },
     { val: "24",  sub: "regiones del Perú",  color: "var(--lime)",     bg: "var(--lime-soft)"     },
     { val: "25%", sub: "comisión máxima",    color: "var(--primrose)", bg: "var(--pinktone-soft)" },
   ];
 
   return (
-    <section className="py-14 md:py-16 bg-[#f5f0e8] relative overflow-hidden">
+    <section className="py-14 md:py-20 bg-[#f5f0e8] relative overflow-hidden">
       <FoodBg />
       <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <div className="grid md:grid-cols-2 gap-10 items-center">
-          {/* Imagen izquierda */}
-          <div className="relative">
-            <div className="relative max-w-md mx-auto md:mx-0">
-              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl -rotate-2" />
-              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
-                <Image
-                  src="/images/conferencia-grupo.jpeg"
-                  alt="Programa de promotores María Luisa Nutricionista"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          </div>
 
-          {/* Contenido derecha */}
-          <div>
-            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center gap-2">
-              <IcoLeaf cls="w-4 h-4" /> Únete al equipo
-            </p>
-            <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-4 leading-tight text-[var(--texto-principal)]">
-              Buscamos promotores<br />
-              <span className="font-semibold text-[var(--primrose)]">en todo el Perú.</span>
-            </h2>
-            <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed mb-6">
-              Conviértete en embajador de la marca María Luisa Nutricionista. Vende libros, talleres y
-              productos nutricionales, gana comisiones y ayuda a más familias a vivir mejor.
-            </p>
-            <ul className="space-y-3 mb-8">
-              {beneficios.map(({ texto, color }, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className="mt-[3px] flex-shrink-0 font-bold text-lg leading-none" style={{ color }}>—</span>
-                  <span className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">{texto}</span>
-                </li>
-              ))}
-            </ul>
-            <Link
-              href="/promotores"
-              className="btn-coquette inline-block bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
-            >
-              Postular como promotor
-            </Link>
-          </div>
-        </div>
-
-        {/* Stats */}
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {stats.map(({ val, sub, color, bg }, i) => (
-            <div
-              key={i}
-              className="rounded-2xl px-6 py-5 text-center transition hover:scale-105 cursor-default"
-              style={{ background: bg }}
-            >
-              <p className="font-playfair text-3xl font-bold mb-1" style={{ color }}>{val}</p>
-              <p className="font-nunito text-sm text-[var(--texto-suave)]">{sub}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ---------- SECCIÓN EMPRESAS ---------- */
-function SeccionEmpresas() {
-  return (
-    <section className="py-14 md:py-16 bg-white relative overflow-hidden">
-      <FoodBg />
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <div className="grid md:grid-cols-2 gap-10 items-center">
+        {/* FILA 1: Empresas — texto izquierda, card stats derecha */}
+        <div className="grid md:grid-cols-2 gap-10 items-center mb-16 md:mb-24">
           <div>
             <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold">
               Para empresas
@@ -2033,7 +1961,6 @@ function SeccionEmpresas() {
               charlas y planes personalizados para cada colaborador.
               Mejora el rendimiento, reduce el ausentismo y cuida a tu equipo.
             </p>
-
             <ul className="space-y-3 mb-6">
               {[
                 { t: "Evaluación individual a cada colaborador", ac: "var(--primrose)" },
@@ -2046,7 +1973,6 @@ function SeccionEmpresas() {
                 </li>
               ))}
             </ul>
-
             <Link
               href="/empresas"
               className="inline-block bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
@@ -2067,7 +1993,6 @@ function SeccionEmpresas() {
               <p className="font-nunito text-sm md:text-base text-[var(--texto-suave)] leading-relaxed mt-4">
                 — Lic. María Luisa Peña Valdivia, Nutricionista colegiada
               </p>
-
               <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8 pt-6 border-t border-[var(--borde-rosa)]">
                 <div>
                   <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">20+</p>
@@ -2085,6 +2010,66 @@ function SeccionEmpresas() {
             </div>
           </div>
         </div>
+
+        {/* FILA 2: Promotores — imagen izquierda, texto derecha */}
+        <div className="grid md:grid-cols-2 gap-10 items-center mb-12">
+          <div className="relative">
+            <div className="relative max-w-md mx-auto md:mx-0">
+              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl -rotate-2" />
+              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
+                <Image
+                  src="/images/conferencia-grupo.jpeg"
+                  alt="Programa de promotores María Luisa Nutricionista"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center gap-2">
+              <IcoLeaf cls="w-4 h-4" /> Únete al equipo
+            </p>
+            <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-4 leading-tight text-[var(--texto-principal)]">
+              Buscamos promotores<br />
+              <span className="font-semibold text-[var(--primrose)]">en todo el Perú.</span>
+            </h2>
+            <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed mb-6">
+              Conviértete en embajador de la marca María Luisa Nutricionista. Vende libros, talleres y
+              productos nutricionales, gana comisiones y ayuda a más familias a vivir mejor.
+            </p>
+            <ul className="space-y-3 mb-8">
+              {beneficiosPromotores.map(({ texto, color }, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="mt-[3px] flex-shrink-0 font-bold text-lg leading-none" style={{ color }}>—</span>
+                  <span className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">{texto}</span>
+                </li>
+              ))}
+            </ul>
+            <Link
+              href="/promotores"
+              className="btn-coquette inline-block bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
+            >
+              Postular como promotor
+            </Link>
+          </div>
+        </div>
+
+        {/* FILA 3: Stats promotores — ancho completo */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {statsPromotores.map(({ val, sub, color, bg }, i) => (
+            <div
+              key={i}
+              className="rounded-2xl px-6 py-5 text-center transition hover:scale-105 cursor-default"
+              style={{ background: bg }}
+            >
+              <p className="font-playfair text-3xl font-bold mb-1" style={{ color }}>{val}</p>
+              <p className="font-nunito text-sm text-[var(--texto-suave)]">{sub}</p>
+            </div>
+          ))}
+        </div>
+
       </div>
     </section>
   );

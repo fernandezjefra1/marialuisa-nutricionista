@@ -1212,6 +1212,20 @@ function DietaMariaLuisa() {
                   className="w-full rounded-xl mt-4 object-cover"
                 />
               )}
+              {plan.nombre === "Dieta VIP" && (
+                <img
+                  src="/images/vip.png"
+                  alt="Plan VIP"
+                  className="w-full rounded-xl mt-4 object-cover"
+                />
+              )}
+              {plan.nombre === "Dieta Básica" && (
+                <img
+                  src="/images/free.png"
+                  alt="Plan gratuito"
+                  className="w-full rounded-xl mt-4 object-cover"
+                />
+              )}
             </div>
           ))}
         </div>

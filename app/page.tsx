@@ -12,13 +12,14 @@ export default function Home() {
       <FloatingSparkles />
       <Navbar />
       <HeroLibro />
-      <CarruselImagenes />
+      <CarruselComentarios />
       <FilosofiaYServicios />
       <SeccionEnfermedades />
       <SeccionProductos />
       <SeccionEmpresas />
+      <SeccionPromotores />
       <AsesoriasProyectos />
-      <Trayectoria />
+      <DietaMariaLuisa />
       <Footer />
     </main>
   );
@@ -710,38 +711,30 @@ function HeroLibro() {
   );
 }
 
-/* ---------- TRAYECTORIA: BENTO ANIMADO ---------- */
-function CarruselImagenes() {
-  type Foto = { src: string; titulo: string; desc: string; fit: "cover" | "contain" };
-
-  const slides: Foto[] = [
-    { src: "/images/conferencia-1.jpeg",      titulo: "Conferencia en el Colegio de Nutricionistas", desc: "Presentación oficial del libro 'Nutrición del Bebé' ante colegas del sector.",                                     fit: "cover"   },
-    { src: "/images/conferencia-grupo.jpeg",   titulo: "Compartiendo conocimiento",                   desc: "Profesionales y asistentes recibiendo el libro durante la conferencia.",                                           fit: "cover"   },
-    { src: "/images/ExperienciaLaboral.jpeg",  titulo: "Lonchera Saludable",                          desc: "Guía práctica para preparar loncheras nutritivas y balanceadas para tus hijos.",                                   fit: "contain" },
-    { src: "/images/CitasRealizadas.jpeg",     titulo: "Consultas Nutricionales",                     desc: "Sesiones personalizadas donde evaluamos tus hábitos alimenticios y creamos un plan adaptado.",                    fit: "cover"   },
-    { src: "/images/ReunionConEscolares.jpeg", titulo: "Talleres con Escolares",                      desc: "Actividades educativas para enseñar a los niños la importancia de una alimentación saludable.",                   fit: "cover"   },
+/* ---------- CARRUSEL DE COMENTARIOS ---------- */
+function CarruselComentarios() {
+  const testimonios = [
+    {
+      foto: "/images/conferencia-grupo.jpeg",
+      texto: "Llevé a mi bebé al programa de María Luisa y su crecimiento mejoró notablemente. Su enfoque preventivo es único y se nota desde los primeros meses.",
+      nombre: "Karina M.",
+      contexto: "Madre de familia",
+    },
+    {
+      foto: "/images/taller-dietetica.jpeg",
+      texto: "El taller de comida dietética me cambió la forma de cocinar. Recetas fáciles, sabrosas y saludables que ahora preparo toda la semana.",
+      nombre: "Roberto S.",
+      contexto: "Participante del taller",
+    },
   ];
 
-  const total = slides.length;
-  const [destacado, setDestacado] = useState(0);
+  const total = testimonios.length;
+  const [actual, setActual] = useState(0);
 
   useEffect(() => {
-    const t = setInterval(() => setDestacado((d) => (d + 1) % total), 4500);
+    const t = setInterval(() => setActual((a) => (a + 1) % total), 6000);
     return () => clearInterval(t);
   }, [total]);
-
-  /*
-   * Bento layout: 1 grande (izquierda) + 4 pequeñas (2×2 derecha).
-   * Cada slot tiene posición en % dentro del contenedor.
-   * Cuando cambia `destacado`, cada imagen vuela suavemente a su nuevo slot.
-   */
-  const slots = [
-    { top: 0,   left: 0,    w: 57,   h: 100  }, // slot 0 → DESTACADA (grande)
-    { top: 0,   left: 58.5, w: 19.5, h: 48.5 }, // slot 1 → pequeña arriba-izq
-    { top: 0,   left: 79,   w: 21,   h: 48.5 }, // slot 2 → pequeña arriba-der
-    { top: 51.5,left: 58.5, w: 19.5, h: 48.5 }, // slot 3 → pequeña abajo-izq
-    { top: 51.5,left: 79,   w: 21,   h: 48.5 }, // slot 4 → pequeña abajo-der
-  ];
 
   const burbujas = [
     { w:70,  top:"6%",  left:"0%",  op:0.10, dur:"7s", del:"0s"   },
@@ -754,7 +747,6 @@ function CarruselImagenes() {
     { w:40,  top:"90%", left:"96%", op:0.08, dur:"7s", del:"0.4s" },
   ];
 
-  /* SVG de cohete pequeño reutilizable */
   const RocketSvg = ({ size = 28, color = "white" }: { size?: number; color?: string }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M12 2C12 2 7 7 7 13c0 2.5 1.5 4.5 5 6 3.5-1.5 5-3.5 5-6 0-6-5-11-5-11z" fill={color} opacity="0.9"/>
@@ -766,20 +758,16 @@ function CarruselImagenes() {
   );
 
   const cohetes: { top: string; left: string; size: number; cls: string; dur: string; del: string; color: string }[] = [
-    { top:"80%", left:"3%",   size:22, cls:"rocket-up",   dur:"5.5s", del:"0s",    color:"rgba(255,255,255,0.7)" },
-    { top:"70%", left:"15%",  size:16, cls:"rocket-fast",  dur:"3.8s", del:"1.4s",  color:"rgba(255,255,255,0.5)" },
-    { top:"85%", left:"30%",  size:26, cls:"rocket-up",   dur:"6.2s", del:"2.8s",  color:"rgba(200,240,180,0.7)" },
-    { top:"75%", left:"52%",  size:18, cls:"rocket-fast",  dur:"4s",   del:"0.6s",  color:"rgba(255,255,255,0.5)" },
-    { top:"82%", left:"68%",  size:24, cls:"rocket-up",   dur:"5s",   del:"3.5s",  color:"rgba(255,255,255,0.65)"},
-    { top:"78%", left:"83%",  size:20, cls:"rocket-fast",  dur:"3.5s", del:"1.8s",  color:"rgba(200,240,180,0.6)" },
-    { top:"10%", left:"8%",   size:18, cls:"rocket-down", dur:"6s",   del:"0.9s",  color:"rgba(255,255,255,0.45)"},
-    { top:"5%",  left:"60%",  size:22, cls:"rocket-down", dur:"7s",   del:"2.2s",  color:"rgba(200,240,180,0.5)" },
-    { top:"8%",  left:"88%",  size:16, cls:"rocket-down", dur:"5.5s", del:"4s",    color:"rgba(255,255,255,0.4)" },
+    { top:"80%", left:"3%",  size:22, cls:"rocket-up",   dur:"5.5s", del:"0s",   color:"rgba(255,255,255,0.7)"  },
+    { top:"70%", left:"15%", size:16, cls:"rocket-fast",  dur:"3.8s", del:"1.4s", color:"rgba(255,255,255,0.5)"  },
+    { top:"85%", left:"30%", size:26, cls:"rocket-up",   dur:"6.2s", del:"2.8s", color:"rgba(200,240,180,0.7)"  },
+    { top:"75%", left:"52%", size:18, cls:"rocket-fast",  dur:"4s",   del:"0.6s", color:"rgba(255,255,255,0.5)"  },
+    { top:"82%", left:"68%", size:24, cls:"rocket-up",   dur:"5s",   del:"3.5s", color:"rgba(255,255,255,0.65)" },
+    { top:"78%", left:"83%", size:20, cls:"rocket-fast",  dur:"3.5s", del:"1.8s", color:"rgba(200,240,180,0.6)"  },
   ];
 
   return (
     <section className="bg-[var(--verde-fuerte)] py-14 md:py-16 relative overflow-hidden">
-      {/* Burbujas */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         {burbujas.map((b, i) => (
           <span
@@ -793,137 +781,66 @@ function CarruselImagenes() {
             }}
           />
         ))}
-
-        {/* Cohetes animados */}
         {cohetes.map((c, i) => (
           <div
             key={`r${i}`}
             className={`absolute pointer-events-none ${c.cls}`}
-            style={{
-              top: c.top, left: c.left,
-              ["--rdur" as string]: c.dur,
-              ["--rdel" as string]: c.del,
-            }}
+            style={{ top: c.top, left: c.left, ["--rdur" as string]: c.dur, ["--rdel" as string]: c.del }}
           >
             <RocketSvg size={c.size} color={c.color} />
           </div>
         ))}
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 md:px-8 relative z-10">
-        {/* Cabecera */}
-        <div className="mb-8">
-          <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
-            <IcoLeaf cls="w-4 h-4 inline-block" /> Trayectoria reciente
+      <div className="max-w-4xl mx-auto px-4 md:px-8 relative z-10">
+        <div className="text-center mb-10">
+          <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center justify-center gap-2">
+            <IcoHeart cls="w-4 h-4 inline-block" /> Lo que dicen nuestros pacientes
           </p>
           <h2 className="font-playfair text-3xl md:text-5xl font-bold text-white">
-            Momentos que marcan <span className="font-semibold text-[var(--primrose)]">una carrera.</span>
+            Historias que <span className="font-semibold shimmer-white">inspiran.</span>
           </h2>
         </div>
 
-        {/* Mobile: imagen única a pantalla completa */}
-        <div className="sm:hidden">
-          <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-[#2d5016] shadow-xl">
-            <Image
-              src={slides[destacado].src}
-              alt={slides[destacado].titulo}
-              fill
-              className={`transition-transform duration-700 ${
-                slides[destacado].fit === "contain" ? "object-contain p-2" : "object-cover"
+        <div className="relative min-h-[320px] md:min-h-[300px]">
+          {testimonios.map((t, i) => (
+            <div
+              key={i}
+              className={`transition-all duration-700 ${
+                i === actual ? "opacity-100 relative" : "opacity-0 absolute inset-0 pointer-events-none"
               }`}
-              style={{ objectPosition: "center center" }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-              <h3 className="text-base font-bold mb-1 drop-shadow-lg leading-snug">
-                {slides[destacado].titulo}
-              </h3>
-              <p className="text-xs text-white/80 leading-relaxed line-clamp-2 drop-shadow">
-                {slides[destacado].desc}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Desktop: BENTO — contenedor con altura fija, posicionamiento absoluto */}
-        <div className="hidden sm:block relative w-full h-[400px] md:h-[440px]">
-          {slides.map((slide, i) => {
-            const slotIdx = (i - destacado + total) % total;
-            const s = slots[slotIdx];
-            const esFeatured = slotIdx === 0;
-
-            return (
-              <div
-                key={i}
-                onClick={() => setDestacado(i)}
-                className="absolute cursor-pointer"
-                style={{
-                  top: `${s.top}%`,
-                  left: `${s.left}%`,
-                  width: `${s.w}%`,
-                  height: `${s.h}%`,
-                  transition: "top 0.7s cubic-bezier(0.4,0,0.2,1), left 0.7s cubic-bezier(0.4,0,0.2,1), width 0.7s cubic-bezier(0.4,0,0.2,1), height 0.7s cubic-bezier(0.4,0,0.2,1)",
-                  zIndex: esFeatured ? 3 : 1,
-                  padding: "4px",
-                }}
-              >
-                <div className="relative w-full h-full rounded-xl overflow-hidden bg-[#2d5016] group shadow-xl">
-                  <Image
-                    src={slide.src}
-                    alt={slide.titulo}
-                    fill
-                    className={`transition-transform duration-700 group-hover:scale-105 ${
-                      slide.fit === "contain" ? "object-contain p-2" : "object-cover"
-                    }`}
-                    style={{ objectPosition: "center center" }}
-                    priority={i === 0}
-                  />
-
-                  {/* Overlay siempre */}
-                  <div className={`absolute inset-0 transition-all duration-700 ${
-                    esFeatured
-                      ? "bg-gradient-to-t from-black/70 via-black/10 to-transparent"
-                      : "bg-black/30 group-hover:bg-black/15"
-                  }`} />
-
-                  {/* Texto solo en la destacada */}
-                  {esFeatured && (
-                    <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
-                      <h3 className="text-base md:text-xl font-bold mb-1 drop-shadow-lg leading-snug">
-                        {slide.titulo}
-                      </h3>
-                      <p className="text-xs md:text-sm text-white/80 leading-relaxed line-clamp-2 drop-shadow">
-                        {slide.desc}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Ícono "expandir" en pequeñas al hover */}
-                  {!esFeatured && (
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <span className="bg-white/80 text-[var(--texto-principal)] text-xs font-semibold px-3 py-1 rounded-full shadow">
-                        Ver
-                      </span>
-                    </div>
-                  )}
+            >
+              <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 md:p-12 text-center border border-white/20 relative overflow-hidden">
+                <span className="absolute top-4 left-8 font-playfair text-8xl text-white/10 leading-none select-none">&ldquo;</span>
+                <div className="w-24 h-24 rounded-full border-4 border-white overflow-hidden mx-auto mb-5 relative">
+                  <Image src={t.foto} alt={t.nombre} fill className="object-cover" />
                 </div>
+                <div className="flex justify-center gap-1 mb-4">
+                  {[...Array(5)].map((_, si) => (
+                    <svg key={si} className="w-5 h-5 text-[var(--primrose)]" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  ))}
+                </div>
+                <p className="font-playfair text-lg md:text-xl italic text-white leading-relaxed mb-5 max-w-2xl mx-auto">
+                  &ldquo;{t.texto}&rdquo;
+                </p>
+                <p className="font-semibold text-white">{t.nombre}</p>
+                <p className="font-nunito text-white/70 text-sm">{t.contexto}</p>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
 
-        {/* Puntos de navegación */}
         <div className="flex justify-center gap-2 mt-6">
-          {slides.map((_, i) => (
+          {testimonios.map((_, i) => (
             <button
               key={i}
-              onClick={() => setDestacado(i)}
+              onClick={() => setActual(i)}
               className={`rounded-full transition-all duration-300 ${
-                i === destacado
-                  ? "w-8 h-2 bg-[var(--primrose)]"
-                  : "w-2 h-2 bg-white/40 hover:bg-white/70"
+                i === actual ? "w-8 h-2 bg-[var(--primrose)]" : "w-2 h-2 bg-white/40 hover:bg-white/70"
               }`}
-              aria-label={`Imagen ${i + 1}`}
+              aria-label={`Testimonio ${i + 1}`}
             />
           ))}
         </div>
@@ -1052,41 +969,144 @@ function FilosofiaYServicios() {
   );
 }
 
-/* ---------- TRAYECTORIA ---------- */
-function Trayectoria() {
-  const hitos = [
-    { año: "Años de carrera", titulo: "Trabajo en MINSA", desc: "Ha trabajado en todo el Perú en forma presencial.", color: "primrose" },
-    { año: "Experiencia", titulo: "Sector público", desc: "Trabajo en CENAN y diversas instituciones de salud.", color: "lime" },
-    { año: "Reciente", titulo: "Conferencista", desc: "Presentación en el Colegio de Nutricionistas del Perú.", color: "primrose" },
-    { año: "Hoy", titulo: "Práctica privada", desc: "Enfoque en prevención y nutrición personalizada.", color: "lime" },
+/* ---------- DIETA MARÍA LUISA (PLANES) ---------- */
+function DietaMariaLuisa() {
+  const planes = [
+    {
+      badge: "Gratis",
+      badgeBg: "var(--lime-soft)",
+      badgeColor: "var(--verde-fuerte)",
+      nombre: "Dieta Básica",
+      precio: "S/ 0",
+      periodo: "siempre",
+      desc: "Lo esencial para empezar a comer mejor.",
+      beneficios: [
+        "Guía PDF de alimentos saludables",
+        "Lista de superalimentos peruanos",
+        "Tips semanales por WhatsApp",
+        "Acceso a contenido público",
+      ],
+      cta: "Descargar gratis",
+      ctaHref: "/dieta-basica",
+      ctaExtra: "border-2 border-[var(--verde-fuerte)] text-[var(--verde-fuerte)] hover:bg-[var(--lime-soft)]",
+      checkColor: "var(--lime)",
+      destacado: false,
+      popular: false,
+    },
+    {
+      badge: "VIP",
+      badgeBg: "var(--primrose)",
+      badgeColor: "white",
+      nombre: "Dieta VIP",
+      precio: "S/ 80",
+      periodo: "mensual",
+      desc: "Recomendaciones nutricionales semi-profundas adaptadas a ti.",
+      beneficios: [
+        "Evaluación nutricional inicial",
+        "Plan alimenticio semanal personalizado",
+        "2 ajustes al mes según tu progreso",
+        "Chat directo con la nutricionista",
+        "Recetas dietéticas exclusivas",
+      ],
+      cta: "Quiero el plan VIP",
+      ctaHref: "/dieta-vip",
+      ctaExtra: "btn-coquette bg-[var(--primrose)] text-white shadow-lg shadow-pink-200 hover:bg-[var(--primrose-hover)]",
+      checkColor: "var(--primrose)",
+      destacado: true,
+      popular: true,
+    },
+    {
+      badge: "Premium",
+      badgeBg: "var(--verde-fuerte)",
+      badgeColor: "white",
+      nombre: "Dieta Premium",
+      precio: "S/ 180",
+      periodo: "mensual",
+      desc: "Dieta preventiva detallada con seguimiento profesional completo.",
+      beneficios: [
+        "Evaluación clínica nutricional completa",
+        "Plan preventivo según historial médico",
+        "Seguimiento semanal personalizado",
+        "Análisis de progreso con métricas",
+        "Consultas ilimitadas por videollamada",
+        "Recetario personalizado físico + digital",
+        "Acceso prioritario a talleres y libros",
+      ],
+      cta: "Acceder a Premium",
+      ctaHref: "/dieta-premium",
+      ctaExtra: "bg-[var(--verde-fuerte)] text-white hover:opacity-90",
+      checkColor: "var(--verde-fuerte)",
+      destacado: false,
+      popular: false,
+    },
   ];
 
   return (
-    <section className="py-14 md:py-16 bg-[#f5f0e8] relative overflow-hidden">
+    <section id="dieta" className="py-14 md:py-20 bg-[#f5f0e8] relative overflow-hidden">
       <FoodBg />
       <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">
-          Trayectoria
-        </p>
-        <h2 className="text-3xl md:text-5xl font-bold mb-10 text-[var(--texto-principal)]">
-          Más de dos décadas <span className="font-semibold text-[var(--lime)]">construyendo experiencia.</span>
-        </h2>
+        <div className="text-center mb-12">
+          <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center justify-center gap-2">
+            <IcoLeaf cls="w-4 h-4" /> Dieta María Luisa
+          </p>
+          <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-3 text-[var(--texto-principal)]">
+            Elige tu nivel de cuidado <span className="font-semibold text-[var(--lime)]">nutricional.</span>
+          </h2>
+          <p className="font-nunito text-[var(--texto-suave)] max-w-xl mx-auto text-sm md:text-base leading-relaxed">
+            Tres planes diseñados para acompañarte según tus necesidades.
+          </p>
+        </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6">
-          {hitos.map((h, i) => (
+        <div className="grid md:grid-cols-3 gap-6 items-start">
+          {planes.map((plan, i) => (
             <div
               key={i}
-              className={`bg-white rounded-2xl p-3 sm:p-5 shadow-md border-t-4 transition hover:-translate-y-1 ${
-                h.color === "primrose"
-                  ? "border-[var(--primrose)] shadow-pink-100"
-                  : "border-[var(--lime)] shadow-green-100"
+              className={`bg-white rounded-2xl border-2 p-6 transition relative flex flex-col ${
+                plan.destacado
+                  ? "scale-105 border-[var(--primrose)] shadow-xl shadow-pink-200"
+                  : "border-[var(--borde-verde)] hover:shadow-lg hover:shadow-green-100 hover:-translate-y-1"
               }`}
             >
-              <p className={`text-[10px] mb-1.5 uppercase tracking-widest font-semibold ${
-                h.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
-              }`}>{h.año}</p>
-              <h3 className="font-semibold mb-1.5 text-sm md:text-base text-[var(--texto-principal)]">{h.titulo}</h3>
-              <p className="font-nunito text-xs text-[var(--texto-suave)] leading-relaxed">{h.desc}</p>
+              {plan.popular && (
+                <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[var(--primrose)] text-white text-xs px-4 py-1 rounded-full font-semibold whitespace-nowrap shadow-md">
+                  Más popular
+                </div>
+              )}
+              <div className="mb-4">
+                <span
+                  className="text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full"
+                  style={{ background: plan.badgeBg, color: plan.badgeColor }}
+                >
+                  {plan.badge}
+                </span>
+              </div>
+              <h3 className="font-playfair text-xl font-bold text-[var(--texto-principal)] mb-1">{plan.nombre}</h3>
+              <div className="mb-2 flex items-baseline gap-1">
+                <span className="text-3xl font-bold text-[var(--texto-principal)]">{plan.precio}</span>
+                <span className="text-sm text-[var(--texto-suave)]">/ {plan.periodo}</span>
+              </div>
+              <p className="font-nunito text-sm text-[var(--texto-suave)] mb-5 leading-relaxed">{plan.desc}</p>
+              <ul className="space-y-2.5 mb-6 flex-1">
+                {plan.beneficios.map((b, j) => (
+                  <li key={j} className="flex items-start gap-2.5 font-nunito text-sm text-[var(--texto-suave)]">
+                    <span
+                      className="mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0"
+                      style={{ borderColor: plan.checkColor }}
+                    >
+                      <svg className="w-3 h-3" style={{ color: plan.checkColor }} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                        <polyline points="20 6 9 17 4 12"/>
+                      </svg>
+                    </span>
+                    {b}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href={plan.ctaHref}
+                className={`block text-center px-5 py-2.5 rounded-full font-medium transition text-sm ${plan.ctaExtra}`}
+              >
+                {plan.cta}
+              </Link>
             </div>
           ))}
         </div>
@@ -1263,16 +1283,45 @@ function Footer() {
 /* ---------- SECCIÓN ENFERMEDADES PREVENIBLES ---------- */
 function SeccionEnfermedades() {
   const enfermedades: { nombre: string; descripcion: string; Ico: (p:{cls?:string})=>React.JSX.Element }[] = [
-    { nombre: "Anemia",                       descripcion: "Una alimentación rica en hierro y vitamina C previene la deficiencia que afecta a millones de niños y mujeres en el Perú.",                                                                       Ico: IcoDrop   },
-    { nombre: "Obesidad y sobrepeso",          descripcion: "Dietas equilibradas con alimentos naturales regulan el peso corporal y reducen el riesgo de enfermedades asociadas.",                                                                            Ico: IcoScale  },
-    { nombre: "Diabetes tipo 2",               descripcion: "Controlar el consumo de azúcares refinados y elegir alimentos de bajo índice glucémico reduce significativamente el riesgo.",                                                                    Ico: IcoLeaf   },
-    { nombre: "Hipertensión arterial",         descripcion: "Reducir el sodio e incorporar potasio, magnesio y fibra ayuda a mantener la presión arterial en niveles saludables.",                                                                           Ico: IcoHeart  },
-    { nombre: "Osteoporosis",                  descripcion: "El calcio, la vitamina D y el fósforo desde la infancia construyen huesos fuertes que protegen en la adultez y vejez.",                                                                          Ico: IcoBone   },
-    { nombre: "Enfermedades cardiovasculares", descripcion: "Omega-3, fibra y antioxidantes reducen el colesterol malo y protegen el corazón a largo plazo.",                                                                                                Ico: IcoWave   },
-    { nombre: "Desnutrición infantil",         descripcion: "Una nutrición adecuada desde la gestación y los primeros años garantiza el desarrollo físico e intelectual del niño.",                                                                           Ico: IcoChild  },
-    { nombre: "Gastritis y problemas digestivos", descripcion: "Alimentos naturales, fibra y hábitos alimenticios ordenados protegen la mucosa gástrica y mejoran el tránsito intestinal.",                                                                   Ico: IcoStomach},
-    { nombre: "Colesterol alto",               descripcion: "Superalimentos como la sacha inchi y el cacao orgánico aportan grasas saludables que equilibran los niveles de colesterol.",                                                                    Ico: IcoBowl   },
+    { nombre: "Anemia",                          descripcion: "Una alimentación rica en hierro y vitamina C previene la deficiencia que afecta a millones de niños y mujeres en el Perú.",          Ico: IcoDrop    },
+    { nombre: "Obesidad y sobrepeso",             descripcion: "Dietas equilibradas con alimentos naturales regulan el peso corporal y reducen el riesgo de enfermedades asociadas.",                Ico: IcoScale   },
+    { nombre: "Diabetes tipo 2",                  descripcion: "Controlar el consumo de azúcares refinados y elegir alimentos de bajo índice glucémico reduce significativamente el riesgo.",       Ico: IcoLeaf    },
+    { nombre: "Hipertensión arterial",            descripcion: "Reducir el sodio e incorporar potasio, magnesio y fibra ayuda a mantener la presión arterial en niveles saludables.",               Ico: IcoHeart   },
+    { nombre: "Osteoporosis",                     descripcion: "El calcio, la vitamina D y el fósforo desde la infancia construyen huesos fuertes que protegen en la adultez y vejez.",             Ico: IcoBone    },
+    { nombre: "Enf. cardiovasculares",            descripcion: "Omega-3, fibra y antioxidantes reducen el colesterol malo y protegen el corazón a largo plazo.",                                    Ico: IcoWave    },
+    { nombre: "Desnutrición infantil",            descripcion: "Una nutrición adecuada desde la gestación y los primeros años garantiza el desarrollo físico e intelectual del niño.",              Ico: IcoChild   },
+    { nombre: "Gastritis y prob. digestivos",     descripcion: "Alimentos naturales, fibra y hábitos alimenticios ordenados protegen la mucosa gástrica y mejoran el tránsito intestinal.",        Ico: IcoStomach },
+    { nombre: "Colesterol alto",                  descripcion: "Superalimentos como la sacha inchi y el cacao orgánico aportan grasas saludables que equilibran los niveles de colesterol.",       Ico: IcoBowl    },
   ];
+
+  const faqs = [
+    {
+      pregunta: "¿En qué consiste la primera consulta?",
+      respuesta: "La primera consulta incluye una evaluación nutricional completa: revisión de hábitos alimenticios, medidas antropométricas y elaboración de un plan inicial adaptado a tus objetivos y estado de salud.",
+    },
+    {
+      pregunta: "¿Atiendes a niños y adultos mayores?",
+      respuesta: "Sí, tenemos experiencia en todas las etapas de la vida: desde la alimentación del bebé desde los 6 meses, niños en edad escolar, adultos y adultos mayores con necesidades nutricionales específicas.",
+    },
+    {
+      pregunta: "¿Las consultas son presenciales o virtuales?",
+      respuesta: "Ofrecemos ambas modalidades. Las consultas presenciales se realizan en San Juan de Miraflores, Lima. Las virtuales se coordinan por videollamada y son igual de efectivas.",
+    },
+    {
+      pregunta: "¿Cuánto tiempo dura un plan nutricional?",
+      respuesta: "Depende de tus objetivos. Los planes básicos duran 1 mes con seguimiento quincenal. Los planes preventivos completos son de 3 a 6 meses con ajustes periódicos según tu evolución.",
+    },
+    {
+      pregunta: "¿Trabajas con seguros o convenios?",
+      respuesta: "Actualmente atendemos de forma particular con precios accesibles y facilidades de pago. Consulta nuestros planes en la sección Dieta María Luisa.",
+    },
+    {
+      pregunta: "¿Cómo reservo mi cita?",
+      respuesta: "Puedes reservar tu cita directamente por WhatsApp al 985 577 017 o a través del botón 'Reservar cita' en la parte superior de la página. Te responderemos en menos de 24 horas.",
+    },
+  ];
+
+  const [faqAbierta, setFaqAbierta] = useState<number | null>(null);
 
   return (
     <section className="py-14 md:py-20 bg-[#f5f0e8] relative overflow-hidden">
@@ -1291,25 +1340,79 @@ function SeccionEnfermedades() {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-          {enfermedades.map((e, i) => (
-            <div
-              key={i}
-              className="bg-white rounded-2xl p-5 border-2 border-[var(--borde-verde)] transition hover:-translate-y-1 hover:shadow-lg hover:border-[var(--lime)] hover:shadow-green-100"
-            >
-              <div className="flex items-start gap-3 mb-3">
-                <span className="w-10 h-10 rounded-full bg-[var(--lime-soft)] flex items-center justify-center flex-shrink-0">
-                  <e.Ico cls="w-5 h-5 text-[var(--lime)]" />
-                </span>
-                <h3 className="font-semibold text-[var(--texto-principal)] leading-tight pt-2">{e.nombre}</h3>
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Columna izquierda: enfermedades */}
+          <div className="grid grid-cols-2 gap-3">
+            {enfermedades.map((e, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-2xl p-4 border-2 border-[var(--borde-verde)] transition hover:-translate-y-1 hover:shadow-md hover:border-[var(--lime)] hover:shadow-green-100"
+              >
+                <div className="flex items-start gap-2 mb-2">
+                  <span className="w-8 h-8 rounded-full bg-[var(--lime-soft)] flex items-center justify-center flex-shrink-0">
+                    <e.Ico cls="w-4 h-4 text-[var(--lime)]" />
+                  </span>
+                  <h3 className="font-semibold text-[var(--texto-principal)] leading-tight text-sm pt-1">{e.nombre}</h3>
+                </div>
+                <p className="font-nunito text-xs text-[var(--texto-suave)] leading-relaxed pl-10">{e.descripcion}</p>
               </div>
-              <p className="font-nunito text-sm md:text-base text-[var(--texto-suave)] leading-relaxed pl-[52px]">{e.descripcion}</p>
+            ))}
+          </div>
+
+          {/* Columna derecha: FAQ */}
+          <div>
+            <p className="text-sm uppercase tracking-widest text-[var(--texto-principal)] mb-2 font-semibold flex items-center gap-2">
+              <IcoChat cls="w-4 h-4 text-[var(--primrose)]" /> Resolvemos tus dudas
+            </p>
+            <h3 className="font-playfair text-2xl md:text-3xl font-bold mb-5 text-[var(--texto-principal)]">
+              Preguntas <span className="text-[var(--primrose)]">frecuentes</span>
+            </h3>
+            <div className="space-y-2">
+              {faqs.map((faq, i) => {
+                const activo = faqAbierta === i;
+                return (
+                  <div
+                    key={i}
+                    className={`rounded-2xl overflow-hidden transition-all border-2 ${
+                      activo
+                        ? "bg-[var(--lime-soft)] border-[var(--lime)]"
+                        : "bg-white border-[var(--borde-suave)]"
+                    }`}
+                  >
+                    <button
+                      onClick={() => setFaqAbierta(activo ? null : i)}
+                      className="w-full px-5 py-3.5 flex items-center gap-3 text-left transition"
+                    >
+                      <span className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition ${
+                        activo ? "bg-[var(--lime)] text-white" : "bg-[var(--lime-soft)] text-[var(--lime)]"
+                      }`}>
+                        <IcoChat cls="w-4 h-4" />
+                      </span>
+                      <span className="flex-1 text-sm md:text-base font-medium text-[var(--texto-principal)]">
+                        {faq.pregunta}
+                      </span>
+                      <span className={`text-2xl transition-transform duration-300 text-[var(--lime)] ${activo ? "rotate-45" : ""}`}>
+                        +
+                      </span>
+                    </button>
+                    <div className={`grid transition-all duration-500 ease-in-out ${
+                      activo ? "grid-rows-[1fr] opacity-100 px-5 pb-4" : "grid-rows-[0fr] opacity-0"
+                    }`}>
+                      <div className="overflow-hidden">
+                        <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed pl-11">
+                          {faq.respuesta}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          ))}
+          </div>
         </div>
 
-        <div className="mt-10 flex justify-center">
-          <div className="bg-[var(--verde-fuerte)] text-white rounded-2xl px-4 md:px-8 py-5 max-w-2xl flex items-start gap-3 md:gap-4">
+        <div className="mt-10">
+          <div className="bg-[var(--verde-fuerte)] text-white rounded-2xl px-4 md:px-8 py-5 flex items-start gap-3 md:gap-4">
             <span className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 mt-0.5">
               <IcoHeart cls="w-4 h-4 md:w-5 md:h-5 text-white" />
             </span>
@@ -1645,6 +1748,89 @@ function AsesoriasProyectos() {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- SECCIÓN PROMOTORES ---------- */
+function SeccionPromotores() {
+  const beneficios = [
+    { texto: "Comisión por cada venta de libros y talleres",                                color: "var(--primrose)" },
+    { texto: "Material de marketing listo para usar",                                       color: "var(--lime)"     },
+    { texto: "Capacitación nutricional básica",                                             color: "var(--primrose)" },
+    { texto: "Crecimiento profesional con respaldo del Colegio de Nutricionistas",          color: "var(--lime)"     },
+  ];
+
+  const stats = [
+    { val: "+50", sub: "promotores activos", color: "var(--primrose)", bg: "var(--pinktone-soft)" },
+    { val: "24",  sub: "regiones del Perú",  color: "var(--lime)",     bg: "var(--lime-soft)"     },
+    { val: "25%", sub: "comisión máxima",    color: "var(--primrose)", bg: "var(--pinktone-soft)" },
+  ];
+
+  return (
+    <section className="py-14 md:py-16 bg-[#f5f0e8] relative overflow-hidden">
+      <FoodBg />
+      <div className="max-w-6xl mx-auto px-6 relative z-10">
+        <div className="grid md:grid-cols-2 gap-10 items-center">
+          {/* Imagen izquierda */}
+          <div className="relative">
+            <div className="relative max-w-md mx-auto md:mx-0">
+              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl -rotate-2" />
+              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
+                <Image
+                  src="/images/conferencia-grupo.jpeg"
+                  alt="Programa de promotores María Luisa Nutricionista"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Contenido derecha */}
+          <div>
+            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center gap-2">
+              <IcoLeaf cls="w-4 h-4" /> Únete al equipo
+            </p>
+            <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-4 leading-tight text-[var(--texto-principal)]">
+              Buscamos promotores<br />
+              <span className="font-semibold text-[var(--primrose)]">en todo el Perú.</span>
+            </h2>
+            <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed mb-6">
+              Conviértete en embajador de la marca María Luisa Nutricionista. Vende libros, talleres y
+              productos nutricionales, gana comisiones y ayuda a más familias a vivir mejor.
+            </p>
+            <ul className="space-y-3 mb-8">
+              {beneficios.map(({ texto, color }, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="mt-[3px] flex-shrink-0 font-bold text-lg leading-none" style={{ color }}>—</span>
+                  <span className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">{texto}</span>
+                </li>
+              ))}
+            </ul>
+            <Link
+              href="/promotores"
+              className="btn-coquette inline-block bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
+            >
+              Postular como promotor
+            </Link>
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {stats.map(({ val, sub, color, bg }, i) => (
+            <div
+              key={i}
+              className="rounded-2xl px-6 py-5 text-center transition hover:scale-105 cursor-default"
+              style={{ background: bg }}
+            >
+              <p className="font-playfair text-3xl font-bold mb-1" style={{ color }}>{val}</p>
+              <p className="font-nunito text-sm text-[var(--texto-suave)]">{sub}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

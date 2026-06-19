@@ -1205,6 +1205,13 @@ function DietaMariaLuisa() {
               >
                 {plan.cta}
               </Link>
+              {plan.nombre === "Dieta Premium" && (
+                <img
+                  src="/images/imagenlibro.jpeg"
+                  alt="Libro de dieta premium"
+                  className="w-full rounded-xl mt-4 object-cover"
+                />
+              )}
             </div>
           ))}
         </div>
@@ -1391,28 +1398,24 @@ function SeccionEnfermedadesYFaq() {
 
   const faqs = [
     {
-      pregunta: "¿En qué consiste la primera consulta?",
-      respuesta: "Evaluación nutricional completa, análisis de hábitos, antropometría y diseño de un plan personalizado. Dura aproximadamente 60 minutos.",
+      pregunta: "¿Cuál es la edad adecuada para empezar a cuidar la salud?",
+      respuesta: "¡Desde la niñez! La nutricionista atiende a personas de cualquier edad: niños, adolescentes, adultos y adultos mayores. Nunca es demasiado pronto ni demasiado tarde para empezar.",
     },
     {
-      pregunta: "¿Atiendes a niños y adultos mayores?",
-      respuesta: "Sí, atiendo todas las etapas de la vida: bebés desde los 6 meses, niños, adolescentes, adultos y adultos mayores.",
+      pregunta: "¿Cuánto tiempo dura su atención?",
+      respuesta: "La duración varía según el tipo de consulta y el plan nutricional diseñado para ti. Para conocer los detalles exactos, contáctate con la secretaria o escríbenos directamente.",
     },
     {
-      pregunta: "¿Las consultas son presenciales o virtuales?",
-      respuesta: "Ambas modalidades. Las virtuales se realizan por videollamada con la misma calidad de evaluación.",
+      pregunta: "¿Cuáles son los beneficios de cuidarme ahora con su dieta preventiva?",
+      respuesta: "Con una dieta preventiva puedes evitar enfermedades como la diabetes, la hipertensión y la obesidad, entre otras. Cuidarte hoy es la mejor inversión para tu salud futura.",
     },
     {
-      pregunta: "¿Cuánto tiempo dura un plan nutricional?",
-      respuesta: "Los planes van de 1 a 6 meses según el objetivo, con controles periódicos para ajustar resultados.",
+      pregunta: "¿Es doloroso, caro o difícil llevar su dieta preventiva?",
+      respuesta: "¡Para nada! La dieta preventiva está pensada para adaptarse a tu vida cotidiana: es accesible, práctica y sin sacrificios extremos. La idea es que la disfrutes, no que la sufras.",
     },
     {
-      pregunta: "¿Trabajas con seguros o convenios?",
-      respuesta: "Atiendo convenios empresariales B2B. Para seguros particulares consulta directamente por WhatsApp.",
-    },
-    {
-      pregunta: "¿Cómo reservo mi cita?",
-      respuesta: "Desde el botón 'Reservar cita' en la web o escribiéndome al WhatsApp 985 577 017.",
+      pregunta: "¿Se puede llevar una vida normal con su dieta preventiva?",
+      respuesta: "Sí, totalmente. Puedes seguir con tu rutina, trabajo, familia y vida social sin restricciones drásticas. Si quieres más detalles, escríbenos o contáctate con la secretaria.",
     },
   ];
 

@@ -968,7 +968,7 @@ function FilosofiaYServicios() {
   return (
     <section id="sobre-mi" className="bg-[#f5f0e8] relative overflow-hidden">
       <FoodBg />
-      <div className="max-w-6xl mx-auto px-6 py-14 md:py-16 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-14 md:py-16 relative z-10">
         <div className="grid md:grid-cols-2 gap-12 md:gap-16">
 
           {/* IZQUIERDA: Filosofía */}
@@ -1032,15 +1032,15 @@ function FilosofiaYServicios() {
               Cuatro <span className="font-semibold text-[var(--lime)]">pilares.</span>
             </h2>
 
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid sm:grid-cols-2 gap-4 md:gap-5">
               {servicios.map((item) => (
                 <div
                   key={item.n}
-                  className="p-3 sm:p-5 rounded-2xl bg-white border-2 border-[var(--borde-verde)] transition cursor-default hover:scale-[1.02] hover:border-[var(--lime)] hover:shadow-md"
+                  className="p-5 rounded-2xl bg-white border-2 border-[var(--borde-verde)] transition cursor-default hover:scale-[1.02] hover:border-[var(--lime)] hover:shadow-md"
                 >
                   <p className="text-xs mb-2 font-semibold text-[var(--lime)]">{item.n}</p>
-                  <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-[var(--lime-soft)] flex items-center justify-center mb-2 sm:mb-3">
-                    <item.Ico cls="w-4 h-4 sm:w-5 sm:h-5 text-[var(--lime)]" />
+                  <div className="w-11 h-11 rounded-full bg-[var(--lime-soft)] flex items-center justify-center mb-3">
+                    <item.Ico cls="w-5 h-5 text-[var(--lime)]" />
                   </div>
                   <h3 className="font-semibold mb-1 text-sm md:text-base text-[var(--texto-principal)]">{item.titulo}</h3>
                   <p className="font-nunito text-xs sm:text-sm text-[var(--texto-suave)] leading-relaxed">{item.desc}</p>
@@ -1142,8 +1142,8 @@ function DietaMariaLuisa() {
   return (
     <section id="dieta" className="py-14 md:py-20 bg-[#f5f0e8] relative overflow-hidden">
       <FoodBg />
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-12">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
+        <div className="text-center mb-8 md:mb-12">
           <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center justify-center gap-2">
             <IcoLeaf cls="w-4 h-4" /> Dieta María Luisa
           </p>
@@ -1300,7 +1300,7 @@ function Footer() {
         ))}
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
 
         {/* Columnas info */}
         <div className="grid md:grid-cols-3 gap-8 mb-10">
@@ -1421,8 +1421,8 @@ function SeccionEnfermedadesYFaq() {
   return (
     <section className="py-14 md:py-20 bg-[var(--verde-fuerte)] relative overflow-hidden">
       <FoodBg />
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
-        <div className="text-center mb-12">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
+        <div className="text-center mb-8 md:mb-12">
           <p className="text-sm uppercase tracking-widest text-white/70 mb-2 font-semibold flex items-center justify-center gap-2">
             <IcoLeaf cls="w-4 h-4 text-[var(--lime)]" /> Nutrición preventiva
           </p>
@@ -1437,11 +1437,11 @@ function SeccionEnfermedadesYFaq() {
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Columna izquierda: enfermedades */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4 md:gap-5">
             {enfermedades.map((e, i) => (
               <div
                 key={i}
-                className="bg-white rounded-2xl p-4 border-2 border-[var(--borde-verde)] transition hover:-translate-y-1 hover:shadow-md hover:border-[var(--lime)] hover:shadow-green-100"
+                className="bg-white rounded-2xl p-4 md:p-5 border-2 border-[var(--borde-verde)] transition hover:-translate-y-1 hover:shadow-md hover:border-[var(--lime)] hover:shadow-green-100"
               >
                 <div className="flex items-start gap-2 mb-2">
                   <span className="w-8 h-8 rounded-full bg-[var(--lime-soft)] flex items-center justify-center flex-shrink-0">
@@ -1449,7 +1449,7 @@ function SeccionEnfermedadesYFaq() {
                   </span>
                   <h3 className="font-semibold text-[var(--texto-principal)] leading-tight text-sm pt-1">{e.nombre}</h3>
                 </div>
-                <p className="font-nunito text-xs text-[var(--texto-suave)] leading-relaxed pl-10">{e.descripcion}</p>
+                <p className="font-nunito text-xs text-[var(--texto-suave)] leading-relaxed pl-10 hidden sm:block">{e.descripcion}</p>
               </div>
             ))}
           </div>
@@ -1596,7 +1596,7 @@ function SeccionProductos() {
         ))}
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-4">
           <div>
             <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
@@ -1617,12 +1617,12 @@ function SeccionProductos() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {productos.map((p, i) => (
             <Link
               key={i}
               href="/productos"
-              className="bg-white rounded-2xl border-2 border-[var(--borde-rosa)] p-3 sm:p-5 hover:border-[var(--primrose)] hover:shadow-lg hover:shadow-pink-200 hover:-translate-y-1 transition group"
+              className="bg-white rounded-2xl border-2 border-[var(--borde-rosa)] p-4 sm:p-5 hover:border-[var(--primrose)] hover:shadow-lg hover:shadow-pink-200 hover:-translate-y-1 transition group"
             >
               <div className="aspect-square rounded-xl mb-4 overflow-hidden relative">
                <Image
@@ -1704,7 +1704,7 @@ function AsesoriasProyectos() {
       </div>
 
       <FoodBg />
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           {/* Foto izquierda — mobile: arriba, desktop: izquierda */}
           <div className="relative">
@@ -1864,10 +1864,10 @@ function BloqueEmpresasYPromotores() {
   return (
     <section className="py-14 md:py-20 bg-[#f5f0e8] relative overflow-hidden">
       <FoodBg />
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
 
         {/* FILA 1: Empresas — card stats izquierda, texto derecha */}
-        <div className="grid md:grid-cols-2 gap-10 items-center mb-10 md:mb-14">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-10 items-center mb-10 md:mb-14">
           <div className="relative">
             <div className="bg-white rounded-2xl p-5 md:p-8 shadow-xl shadow-green-100 border-2 border-[var(--borde-verde)]">
               <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold">
@@ -1933,7 +1933,7 @@ function BloqueEmpresasYPromotores() {
         </div>
 
         {/* FILA 2: Promotores — texto izquierda, imagen derecha */}
-        <div className="grid md:grid-cols-2 gap-10 items-center mb-12">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-10 items-center mb-12">
           <div>
             <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center gap-2">
               <IcoLeaf cls="w-4 h-4" /> Únete al equipo

@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@/lib/use-user";
 import { useAdmin } from "@/lib/use-admin";
+import { createClient } from "@/lib/supabase";
 
 export default function Home() {
   return (
@@ -14,12 +15,12 @@ export default function Home() {
       <HeroLibro />
       <CarruselComentarios />
       <FilosofiaYServicios />
-      <SeccionEnfermedades />
+      <SeccionEnfermedadesYFaq />
+      <DietaMariaLuisa />
       <SeccionProductos />
       <SeccionEmpresas />
       <SeccionPromotores />
       <AsesoriasProyectos />
-      <DietaMariaLuisa />
       <Footer />
     </main>
   );
@@ -363,6 +364,7 @@ function Navbar() {
             <li><a href="#libro"    className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Libro</a></li>
             <li><Link href="/productos" className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Tienda</Link></li>
             <li><a href="#sobre-mi" className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Sobre mí</a></li>
+            <li><a href="#dieta"    className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Dieta</a></li>
             <li><a href="#taller"   className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Talleres</a></li>
             <li><Link href="/empresas"  className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Empresas</Link></li>
           </ul>
@@ -406,6 +408,15 @@ function Navbar() {
                 className="block py-3 px-4 rounded-lg text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition font-medium"
               >
                 Sobre mí
+              </a>
+            </li>
+            <li>
+              <a
+                href="#dieta"
+                onClick={() => setMenuAbierto(false)}
+                className="block py-3 px-4 rounded-lg text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition font-medium"
+              >
+                Dieta
               </a>
             </li>
             <li>
@@ -713,28 +724,75 @@ function HeroLibro() {
 
 /* ---------- CARRUSEL DE COMENTARIOS ---------- */
 function CarruselComentarios() {
-  const testimonios = [
-    {
-      foto: "/images/conferencia-grupo.jpeg",
-      texto: "Llevé a mi bebé al programa de María Luisa y su crecimiento mejoró notablemente. Su enfoque preventivo es único y se nota desde los primeros meses.",
-      nombre: "Karina M.",
-      contexto: "Madre de familia",
-    },
-    {
-      foto: "/images/taller-dietetica.jpeg",
-      texto: "El taller de comida dietética me cambió la forma de cocinar. Recetas fáciles, sabrosas y saludables que ahora preparo toda la semana.",
-      nombre: "Roberto S.",
-      contexto: "Participante del taller",
-    },
-  ];
+  const { user, nombre, loading: userLoading } = useUser();
 
-  const total = testimonios.length;
-  const [actual, setActual] = useState(0);
+  type Comentario = {
+    id: string;
+    nombre: string;
+    avatar_url: string | null;
+    estrellas: number;
+    comentario: string;
+    creado_en: string;
+  };
+
+  const [comentarios, setComentarios] = useState<Comentario[]>([]);
+  const [texto, setTexto] = useState("");
+  const [estrellas, setEstrellas] = useState(5);
+  const [enviando, setEnviando] = useState(false);
+  const [toast, setToast] = useState("");
 
   useEffect(() => {
-    const t = setInterval(() => setActual((a) => (a + 1) % total), 6000);
-    return () => clearInterval(t);
-  }, [total]);
+    async function cargarComentarios() {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from("testimonios")
+        .select("id, nombre, avatar_url, estrellas, comentario, creado_en")
+        .eq("aprobado", true)
+        .order("creado_en", { ascending: false })
+        .limit(6);
+      if (data) setComentarios(data);
+    }
+    cargarComentarios();
+  }, []);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!texto.trim() || !user) return;
+    setEnviando(true);
+    const supabase = createClient();
+    const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture || null;
+    const { error } = await supabase.from("testimonios").insert({
+      user_id: user.id,
+      nombre,
+      avatar_url: avatarUrl,
+      estrellas,
+      comentario: texto.trim(),
+      aprobado: true,
+    });
+    if (!error) {
+      setToast("¡Gracias por tu comentario! 💕");
+      setTexto("");
+      setEstrellas(5);
+      const { data } = await supabase
+        .from("testimonios")
+        .select("id, nombre, avatar_url, estrellas, comentario, creado_en")
+        .eq("aprobado", true)
+        .order("creado_en", { ascending: false })
+        .limit(6);
+      if (data) setComentarios(data);
+      setTimeout(() => setToast(""), 4000);
+    }
+    setEnviando(false);
+  }
+
+  function fechaRelativa(iso: string) {
+    const dias = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+    if (dias === 0) return "Hoy";
+    if (dias === 1) return "Hace 1 día";
+    if (dias < 30) return `Hace ${dias} días`;
+    const meses = Math.floor(dias / 30);
+    return meses === 1 ? "Hace 1 mes" : `Hace ${meses} meses`;
+  }
 
   const burbujas = [
     { w:70,  top:"6%",  left:"0%",  op:0.10, dur:"7s", del:"0s"   },
@@ -748,7 +806,7 @@ function CarruselComentarios() {
   ];
 
   const RocketSvg = ({ size = 28, color = "white" }: { size?: number; color?: string }) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <path d="M12 2C12 2 7 7 7 13c0 2.5 1.5 4.5 5 6 3.5-1.5 5-3.5 5-6 0-6-5-11-5-11z" fill={color} opacity="0.9"/>
       <path d="M10 14c0 0-3 1-3 4l2-1 1 2c0-2 2-3 2-5" fill={color} opacity="0.7"/>
       <path d="M14 14c0 0 3 1 3 4l-2-1-1 2c0-2-2-3-2-5" fill={color} opacity="0.7"/>
@@ -764,7 +822,16 @@ function CarruselComentarios() {
     { top:"75%", left:"52%", size:18, cls:"rocket-fast",  dur:"4s",   del:"0.6s", color:"rgba(255,255,255,0.5)"  },
     { top:"82%", left:"68%", size:24, cls:"rocket-up",   dur:"5s",   del:"3.5s", color:"rgba(255,255,255,0.65)" },
     { top:"78%", left:"83%", size:20, cls:"rocket-fast",  dur:"3.5s", del:"1.8s", color:"rgba(200,240,180,0.6)"  },
+    { top:"10%", left:"8%",  size:18, cls:"rocket-down", dur:"6s",   del:"0.9s", color:"rgba(255,255,255,0.45)" },
+    { top:"5%",  left:"60%", size:22, cls:"rocket-down", dur:"7s",   del:"2.2s", color:"rgba(200,240,180,0.5)"  },
   ];
+
+  const fotos = [
+    { src: "/images/conferencia-1.jpeg",  titulo: "Conferencia en el Colegio de Nutricionistas", sub: "Compartiendo conocimiento profesional" },
+    { src: "/images/CitasRealizadas.jpeg", titulo: "Consultas nutricionales",                      sub: "Atención personalizada para cada paciente" },
+  ];
+
+  const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
 
   return (
     <section className="bg-[var(--verde-fuerte)] py-14 md:py-16 relative overflow-hidden">
@@ -792,7 +859,8 @@ function CarruselComentarios() {
         ))}
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 md:px-8 relative z-10">
+      <div className="max-w-6xl mx-auto px-4 md:px-8 relative z-10">
+        {/* Cabecera */}
         <div className="text-center mb-10">
           <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center justify-center gap-2">
             <IcoHeart cls="w-4 h-4 inline-block" /> Lo que dicen nuestros pacientes
@@ -800,49 +868,148 @@ function CarruselComentarios() {
           <h2 className="font-playfair text-3xl md:text-5xl font-bold text-white">
             Historias que <span className="font-semibold shimmer-white">inspiran.</span>
           </h2>
+          <p className="font-nunito text-white/70 mt-3 text-sm md:text-base">
+            Comparte tu experiencia con la dieta María Luisa.
+          </p>
         </div>
 
-        <div className="relative min-h-[320px] md:min-h-[300px]">
-          {testimonios.map((t, i) => (
-            <div
-              key={i}
-              className={`transition-all duration-700 ${
-                i === actual ? "opacity-100 relative" : "opacity-0 absolute inset-0 pointer-events-none"
-              }`}
-            >
-              <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 md:p-12 text-center border border-white/20 relative overflow-hidden">
-                <span className="absolute top-4 left-8 font-playfair text-8xl text-white/10 leading-none select-none">&ldquo;</span>
-                <div className="w-24 h-24 rounded-full border-4 border-white overflow-hidden mx-auto mb-5 relative">
-                  <Image src={t.foto} alt={t.nombre} fill className="object-cover" />
-                </div>
-                <div className="flex justify-center gap-1 mb-4">
-                  {[...Array(5)].map((_, si) => (
-                    <svg key={si} className="w-5 h-5 text-[var(--primrose)]" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                  ))}
-                </div>
-                <p className="font-playfair text-lg md:text-xl italic text-white leading-relaxed mb-5 max-w-2xl mx-auto">
-                  &ldquo;{t.texto}&rdquo;
-                </p>
-                <p className="font-semibold text-white">{t.nombre}</p>
-                <p className="font-nunito text-white/70 text-sm">{t.contexto}</p>
+        {/* 2 fotos grandes */}
+        <div className="grid md:grid-cols-2 gap-4 mb-12">
+          {fotos.map((f, i) => (
+            <div key={i} className="relative rounded-2xl border-4 border-white shadow-xl overflow-hidden aspect-[4/5] group">
+              <Image
+                src={f.src}
+                alt={f.titulo}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
+                <h3 className="font-playfair text-base md:text-lg font-bold leading-snug">{f.titulo}</h3>
+                <p className="font-nunito text-xs md:text-sm text-white/80 mt-1">{f.sub}</p>
               </div>
             </div>
           ))}
         </div>
 
-        <div className="flex justify-center gap-2 mt-6">
-          {testimonios.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setActual(i)}
-              className={`rounded-full transition-all duration-300 ${
-                i === actual ? "w-8 h-2 bg-[var(--primrose)]" : "w-2 h-2 bg-white/40 hover:bg-white/70"
-              }`}
-              aria-label={`Testimonio ${i + 1}`}
-            />
-          ))}
+        {/* Sección de comentarios */}
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 md:p-10">
+          <h3 className="font-playfair text-2xl font-bold text-[var(--primrose)] mb-6">
+            Deja tu comentario
+          </h3>
+
+          {/* Formulario o botón de login */}
+          {!userLoading && (
+            user ? (
+              <form onSubmit={handleSubmit} className="mb-8">
+                <div className="flex items-center gap-3 mb-4">
+                  {avatarUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={avatarUrl}
+                      alt={nombre}
+                      className="w-10 h-10 rounded-full object-cover border-2 border-[var(--primrose)]"
+                      referrerPolicy="no-referrer"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-[var(--primrose)] text-white text-sm font-semibold flex items-center justify-center flex-shrink-0">
+                      {nombre.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                  <span className="font-medium text-[var(--texto-principal)]">{nombre}</span>
+                </div>
+
+                {/* Selector de estrellas */}
+                <div className="flex gap-1 mb-4">
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <button key={n} type="button" onClick={() => setEstrellas(n)} className="transition hover:scale-110">
+                      <svg
+                        className={`w-7 h-7 transition-colors ${n <= estrellas ? "text-[var(--primrose)]" : "text-gray-300"}`}
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                      >
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    </button>
+                  ))}
+                </div>
+
+                <textarea
+                  value={texto}
+                  onChange={(e) => setTexto(e.target.value)}
+                  rows={3}
+                  placeholder="Cuéntanos tu experiencia..."
+                  className="w-full border-2 border-[var(--borde-verde)] rounded-xl px-4 py-3 text-sm font-nunito text-[var(--texto-principal)] focus:outline-none focus:border-[var(--lime)] resize-none mb-4 transition"
+                />
+
+                {toast && (
+                  <div className="mb-4 text-sm text-[var(--primrose)] font-medium bg-[var(--pinktone-soft)] px-4 py-2 rounded-xl">
+                    {toast}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={enviando || !texto.trim()}
+                  className="btn-coquette w-full md:w-auto bg-[var(--primrose)] text-white px-6 py-2.5 rounded-full font-medium hover:bg-[var(--primrose-hover)] transition disabled:opacity-50"
+                >
+                  {enviando ? "Publicando..." : "Publicar comentario"}
+                </button>
+              </form>
+            ) : (
+              <div className="mb-8">
+                <Link
+                  href="/login"
+                  className="inline-block bg-[var(--primrose)] text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-[var(--primrose-hover)] transition shadow-md shadow-pink-200"
+                >
+                  Inicia sesión para comentar
+                </Link>
+              </div>
+            )
+          )}
+
+          {/* Lista de testimonios */}
+          {comentarios.length === 0 ? (
+            <p className="text-center font-nunito text-[var(--texto-suave)] py-8 text-sm">
+              Sé el primero en comentar 💕
+            </p>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-4">
+              {comentarios.map((c) => (
+                <div key={c.id} className="bg-white rounded-xl p-4 border border-[var(--borde-verde)] flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    {c.avatar_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={c.avatar_url}
+                        alt={c.nombre}
+                        className="w-8 h-8 rounded-full object-cover border border-[var(--primrose)] flex-shrink-0"
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-[var(--lime-soft)] text-[var(--lime)] text-xs font-semibold flex items-center justify-center flex-shrink-0">
+                        {c.nombre.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <p className="text-sm font-semibold text-[var(--texto-principal)]">{c.nombre}</p>
+                      <p className="text-xs text-[var(--texto-suave)] font-nunito">{fechaRelativa(c.creado_en)}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <svg key={n} className={`w-4 h-4 ${n <= c.estrellas ? "text-[var(--primrose)]" : "text-gray-200"}`} viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="font-playfair italic text-sm text-[var(--texto-suave)] leading-relaxed">
+                    &ldquo;{c.comentario}&rdquo;
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
@@ -1280,44 +1447,41 @@ function Footer() {
     </footer>
   );
 }
-/* ---------- SECCIÓN ENFERMEDADES PREVENIBLES ---------- */
-function SeccionEnfermedades() {
+/* ---------- SECCIÓN ENFERMEDADES + FAQ ---------- */
+function SeccionEnfermedadesYFaq() {
   const enfermedades: { nombre: string; descripcion: string; Ico: (p:{cls?:string})=>React.JSX.Element }[] = [
-    { nombre: "Anemia",                          descripcion: "Una alimentación rica en hierro y vitamina C previene la deficiencia que afecta a millones de niños y mujeres en el Perú.",          Ico: IcoDrop    },
-    { nombre: "Obesidad y sobrepeso",             descripcion: "Dietas equilibradas con alimentos naturales regulan el peso corporal y reducen el riesgo de enfermedades asociadas.",                Ico: IcoScale   },
-    { nombre: "Diabetes tipo 2",                  descripcion: "Controlar el consumo de azúcares refinados y elegir alimentos de bajo índice glucémico reduce significativamente el riesgo.",       Ico: IcoLeaf    },
-    { nombre: "Hipertensión arterial",            descripcion: "Reducir el sodio e incorporar potasio, magnesio y fibra ayuda a mantener la presión arterial en niveles saludables.",               Ico: IcoHeart   },
-    { nombre: "Osteoporosis",                     descripcion: "El calcio, la vitamina D y el fósforo desde la infancia construyen huesos fuertes que protegen en la adultez y vejez.",             Ico: IcoBone    },
-    { nombre: "Enf. cardiovasculares",            descripcion: "Omega-3, fibra y antioxidantes reducen el colesterol malo y protegen el corazón a largo plazo.",                                    Ico: IcoWave    },
-    { nombre: "Desnutrición infantil",            descripcion: "Una nutrición adecuada desde la gestación y los primeros años garantiza el desarrollo físico e intelectual del niño.",              Ico: IcoChild   },
-    { nombre: "Gastritis y prob. digestivos",     descripcion: "Alimentos naturales, fibra y hábitos alimenticios ordenados protegen la mucosa gástrica y mejoran el tránsito intestinal.",        Ico: IcoStomach },
-    { nombre: "Colesterol alto",                  descripcion: "Superalimentos como la sacha inchi y el cacao orgánico aportan grasas saludables que equilibran los niveles de colesterol.",       Ico: IcoBowl    },
+    { nombre: "Anemia",                    descripcion: "Hierro y vitamina C desde la dieta previenen la deficiencia más frecuente en mujeres y niños.",   Ico: IcoDrop  },
+    { nombre: "Obesidad y sobrepeso",      descripcion: "Alimentos naturales y dietas equilibradas regulan el peso sin comprometer la salud.",               Ico: IcoScale },
+    { nombre: "Diabetes tipo 2",           descripcion: "Reducir azúcares refinados y elegir alimentos de bajo índice glucémico disminuye el riesgo.",       Ico: IcoLeaf  },
+    { nombre: "Hipertensión arterial",     descripcion: "Menos sodio, más potasio y fibra mantienen la presión arterial en niveles saludables.",             Ico: IcoHeart },
+    { nombre: "Osteoporosis",              descripcion: "Calcio, vitamina D y fósforo desde la infancia fortalecen los huesos para toda la vida.",           Ico: IcoBone  },
+    { nombre: "Enf. cardiovasculares",     descripcion: "Omega-3, fibra y antioxidantes protegen el corazón y reducen el colesterol malo.",                   Ico: IcoWave  },
   ];
 
   const faqs = [
     {
       pregunta: "¿En qué consiste la primera consulta?",
-      respuesta: "La primera consulta incluye una evaluación nutricional completa: revisión de hábitos alimenticios, medidas antropométricas y elaboración de un plan inicial adaptado a tus objetivos y estado de salud.",
+      respuesta: "Evaluación nutricional completa, análisis de hábitos, antropometría y diseño de un plan personalizado. Dura aproximadamente 60 minutos.",
     },
     {
       pregunta: "¿Atiendes a niños y adultos mayores?",
-      respuesta: "Sí, tenemos experiencia en todas las etapas de la vida: desde la alimentación del bebé desde los 6 meses, niños en edad escolar, adultos y adultos mayores con necesidades nutricionales específicas.",
+      respuesta: "Sí, atiendo todas las etapas de la vida: bebés desde los 6 meses, niños, adolescentes, adultos y adultos mayores.",
     },
     {
       pregunta: "¿Las consultas son presenciales o virtuales?",
-      respuesta: "Ofrecemos ambas modalidades. Las consultas presenciales se realizan en San Juan de Miraflores, Lima. Las virtuales se coordinan por videollamada y son igual de efectivas.",
+      respuesta: "Ambas modalidades. Las virtuales se realizan por videollamada con la misma calidad de evaluación.",
     },
     {
       pregunta: "¿Cuánto tiempo dura un plan nutricional?",
-      respuesta: "Depende de tus objetivos. Los planes básicos duran 1 mes con seguimiento quincenal. Los planes preventivos completos son de 3 a 6 meses con ajustes periódicos según tu evolución.",
+      respuesta: "Los planes van de 1 a 6 meses según el objetivo, con controles periódicos para ajustar resultados.",
     },
     {
       pregunta: "¿Trabajas con seguros o convenios?",
-      respuesta: "Actualmente atendemos de forma particular con precios accesibles y facilidades de pago. Consulta nuestros planes en la sección Dieta María Luisa.",
+      respuesta: "Atiendo convenios empresariales B2B. Para seguros particulares consulta directamente por WhatsApp.",
     },
     {
       pregunta: "¿Cómo reservo mi cita?",
-      respuesta: "Puedes reservar tu cita directamente por WhatsApp al 985 577 017 o a través del botón 'Reservar cita' en la parte superior de la página. Te responderemos en menos de 24 horas.",
+      respuesta: "Desde el botón 'Reservar cita' en la web o escribiéndome al WhatsApp 985 577 017.",
     },
   ];
 
@@ -1914,3 +2078,35 @@ function SeccionEmpresas() {
     </section>
   );
 }
+
+/*
+══════════════════════════════════════════════════════
+  SQL — Tabla testimonios + políticas RLS (Supabase)
+  Ejecutar una vez en el SQL Editor de Supabase:
+══════════════════════════════════════════════════════
+
+CREATE TABLE IF NOT EXISTS testimonios (
+  id         uuid        PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id    uuid        REFERENCES auth.users(id) ON DELETE SET NULL,
+  nombre     text        NOT NULL,
+  avatar_url text,
+  estrellas  int         CHECK (estrellas BETWEEN 1 AND 5),
+  comentario text        NOT NULL,
+  aprobado   boolean     NOT NULL DEFAULT true,
+  creado_en  timestamptz NOT NULL DEFAULT now()
+);
+
+-- Habilitar RLS
+ALTER TABLE testimonios ENABLE ROW LEVEL SECURITY;
+
+-- Lectura pública: solo testimonios aprobados
+CREATE POLICY "testimonios_select_public"
+  ON testimonios FOR SELECT
+  USING (aprobado = true);
+
+-- Inserción: solo usuarios autenticados
+CREATE POLICY "testimonios_insert_auth"
+  ON testimonios FOR INSERT
+  TO authenticated
+  WITH CHECK (auth.uid() = user_id);
+*/

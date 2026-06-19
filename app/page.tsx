@@ -1220,7 +1220,7 @@ function DietaMariaLuisa() {
   ];
 
   return (
-    <section id="dieta" className="py-14 md:py-20 bg-[#eaf3de] relative overflow-hidden">
+    <section id="dieta" className="py-14 md:py-20 bg-[#f5f0e8] relative overflow-hidden">
       <FoodBg />
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="text-center mb-12">
@@ -1945,11 +1945,26 @@ function SeccionPromotores() {
   ];
 
   return (
-    <section className="py-14 md:py-16 bg-[#fce4ec]/40 relative overflow-hidden">
+    <section className="py-14 md:py-16 bg-[#f5f0e8] relative overflow-hidden">
       <FoodBg />
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="grid md:grid-cols-2 gap-10 items-center">
-          {/* Contenido izquierda */}
+          {/* Imagen izquierda */}
+          <div className="relative">
+            <div className="relative max-w-md mx-auto md:mx-0">
+              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl -rotate-2" />
+              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
+                <Image
+                  src="/images/conferencia-grupo.jpeg"
+                  alt="Programa de promotores María Luisa Nutricionista"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Contenido derecha */}
           <div>
             <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center gap-2">
               <IcoLeaf cls="w-4 h-4" /> Únete al equipo
@@ -1977,21 +1992,6 @@ function SeccionPromotores() {
               Postular como promotor
             </Link>
           </div>
-
-          {/* Imagen derecha */}
-          <div className="relative">
-            <div className="relative max-w-md mx-auto md:mx-0">
-              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl -rotate-2" />
-              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
-                <Image
-                  src="/images/conferencia-grupo.jpeg"
-                  alt="Programa de promotores María Luisa Nutricionista"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* Stats */}
@@ -2015,40 +2015,10 @@ function SeccionPromotores() {
 /* ---------- SECCIÓN EMPRESAS ---------- */
 function SeccionEmpresas() {
   return (
-    <section className="py-14 md:py-16 bg-[#f5f0e8] relative overflow-hidden">
+    <section className="py-14 md:py-16 bg-white relative overflow-hidden">
       <FoodBg />
       <div className="max-w-6xl mx-auto px-6 relative z-10">
         <div className="grid md:grid-cols-2 gap-10 items-center">
-          <div className="relative">
-            <div className="bg-white rounded-2xl p-5 md:p-8 shadow-xl shadow-green-100 border-2 border-[var(--borde-verde)]">
-              <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold">
-                Empresas que confían
-              </p>
-              <p className="font-nunito text-sm md:text-lg font-light text-[var(--texto-principal)] mb-2 leading-relaxed">
-                &quot;Más de <span className="font-semibold text-[var(--lime)]">20 años</span> recorriendo
-                el Perú evaluando nutricionalmente a familias y trabajadores.&quot;
-              </p>
-              <p className="font-nunito text-sm md:text-base text-[var(--texto-suave)] leading-relaxed mt-4">
-                — Lic. María Luisa Peña Valdivia, Nutricionista colegiada
-              </p>
-
-              <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8 pt-6 border-t border-[var(--borde-rosa)]">
-                <div>
-                  <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">20+</p>
-                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Años de experiencia</p>
-                </div>
-                <div>
-                  <p className="text-lg md:text-2xl font-semibold text-[var(--lime)]">100%</p>
-                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Personalizado</p>
-                </div>
-                <div>
-                  <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">B2B</p>
-                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Empresarial</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <div>
             <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold">
               Para empresas
@@ -2083,6 +2053,36 @@ function SeccionEmpresas() {
             >
               Conocer el programa
             </Link>
+          </div>
+
+          <div className="relative">
+            <div className="bg-white rounded-2xl p-5 md:p-8 shadow-xl shadow-green-100 border-2 border-[var(--borde-verde)]">
+              <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-4 font-semibold">
+                Empresas que confían
+              </p>
+              <p className="font-nunito text-sm md:text-lg font-light text-[var(--texto-principal)] mb-2 leading-relaxed">
+                &quot;Más de <span className="font-semibold text-[var(--lime)]">20 años</span> recorriendo
+                el Perú evaluando nutricionalmente a familias y trabajadores.&quot;
+              </p>
+              <p className="font-nunito text-sm md:text-base text-[var(--texto-suave)] leading-relaxed mt-4">
+                — Lic. María Luisa Peña Valdivia, Nutricionista colegiada
+              </p>
+
+              <div className="grid grid-cols-3 gap-2 md:gap-4 mt-8 pt-6 border-t border-[var(--borde-rosa)]">
+                <div>
+                  <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">20+</p>
+                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Años de experiencia</p>
+                </div>
+                <div>
+                  <p className="text-lg md:text-2xl font-semibold text-[var(--lime)]">100%</p>
+                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Personalizado</p>
+                </div>
+                <div>
+                  <p className="text-lg md:text-2xl font-semibold text-[var(--primrose)]">B2B</p>
+                  <p className="font-nunito text-xs md:text-base text-[var(--texto-suave)] leading-relaxed">Empresarial</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

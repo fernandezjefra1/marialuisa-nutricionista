@@ -517,7 +517,18 @@ function HeroLibro() {
       <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-20 space-y-12 md:space-y-20">
 
         {/* ── INTRO: María Luisa arriba en móvil, al lado en desktop ── */}
-        <div className="flex flex-col-reverse md:grid md:grid-cols-2 gap-6 md:gap-10 items-center">
+        <div className="relative rounded-3xl overflow-hidden">
+          {/* Fondo San Marcos */}
+          <img
+            src="/images/sanmarcos.png"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+          {/* Capa suave para que el texto se lea bien */}
+          <div className="absolute inset-0 bg-[#f5f0e8]/75" />
+
+          <div className="relative z-10 flex flex-col-reverse md:grid md:grid-cols-2 gap-6 md:gap-10 items-center px-6 py-10 md:py-14">
           {/* Frase — queda abajo en móvil, izquierda en desktop */}
           <div className="text-center md:text-left">
             <p className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[var(--texto-principal)] font-semibold italic leading-tight mb-4">
@@ -536,7 +547,8 @@ function HeroLibro() {
               className="w-44 sm:w-56 md:w-72 lg:w-80 flotar drop-shadow-2xl pointer-events-none"
             />
           </div>
-        </div>
+          </div>{/* fin grid interior */}
+        </div>{/* fin bloque intro con fondo */}
 
         {/* ── LIBRO: imagen arriba en móvil, fila en desktop ── */}
         <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">

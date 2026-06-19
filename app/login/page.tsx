@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -33,7 +33,7 @@ function traducirError(msg: string): string {
   return "Ocurrió un error. Intenta de nuevo.";
 }
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const supabase = createClient();
@@ -67,7 +67,7 @@ export default function LoginPage() {
     }
   }
 
-  async function handleEnviarCodigo(e: React.FormEvent) {
+  async function handleEnviarCodigo(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!email) return;
     setError(null);
@@ -95,7 +95,7 @@ export default function LoginPage() {
     setTimeout(() => inputsRef.current[0]?.focus(), 100);
   }
 
-  async function handleVerificarCodigo(e: React.FormEvent) {
+  async function handleVerificarCodigo(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const token = codigo.join("");
     if (token.length !== 6) return;
@@ -439,5 +439,17 @@ export default function LoginPage() {
         🌿 Tu salud es tu mejor inversión 🍓
       </p>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#f5f0e8] flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-4 border-[var(--verde-fuerte)] border-t-transparent animate-spin" />
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }

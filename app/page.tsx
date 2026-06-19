@@ -509,58 +509,62 @@ function MenuUsuario() {
   );
 }
 
-/* ---------- HERO: LIBRO (izq) + TALLER (der) ---------- */
+/* ---------- HERO: INTRO + LIBRO + TALLER ---------- */
 function HeroLibro() {
   return (
     <section id="libro" className="relative overflow-hidden bg-[#f5f0e8]">
       <FoodBgHero />
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-14 md:py-20">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-20 space-y-12 md:space-y-20">
 
-        {/* Cabecera centrada */}
-        <div className="text-center mb-10">
-          <p className="font-playfair text-xl md:text-2xl text-[var(--texto-principal)] font-semibold italic leading-snug mb-1">
-            &ldquo;Vive la magia de la comida dietética&rdquo;
-          </p>
-          <p className="text-sm text-[var(--texto-suave)]">
-            María Luisa Nutricionista &nbsp;·&nbsp; <span className="font-medium text-[var(--texto-principal)]">Universidad de San Marcos</span>
-          </p>
+        {/* ── INTRO: María Luisa arriba en móvil, al lado en desktop ── */}
+        <div className="flex flex-col-reverse md:grid md:grid-cols-2 gap-6 md:gap-10 items-center">
+          {/* Frase — queda abajo en móvil, izquierda en desktop */}
+          <div className="text-center md:text-left">
+            <p className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[var(--texto-principal)] font-semibold italic leading-tight mb-4">
+              &ldquo;Vive la magia de la comida dietética&rdquo;
+            </p>
+            <p className="text-sm md:text-base text-[var(--texto-suave)]">
+              María Luisa Nutricionista &nbsp;·&nbsp;
+              <span className="font-semibold text-[var(--texto-principal)]">Universidad de San Marcos</span>
+            </p>
+          </div>
+          {/* Imagen — queda arriba en móvil, derecha en desktop */}
+          <div className="flex justify-center md:justify-end">
+            <img
+              src="/images/marialuisa.png"
+              alt="María Luisa Nutricionista"
+              className="w-44 sm:w-56 md:w-72 lg:w-80 flotar drop-shadow-2xl pointer-events-none"
+            />
+          </div>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6 lg:gap-10 items-start">
-
-        {/* Sub-grid: Libro + Taller juntos */}
-        <div className="flex-1 grid md:grid-cols-2 gap-6 lg:gap-10 items-start">
-
-          {/* ── IZQUIERDA: Libro ── */}
-          <div className="flex flex-col items-center">
-            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-7 font-semibold flex items-center gap-2 self-start">
+        {/* ── LIBRO: imagen arriba en móvil, fila en desktop ── */}
+        <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
+          {/* Imagen */}
+          <div className="relative w-full max-w-[280px] sm:max-w-xs mx-auto md:mx-0 pb-4">
+            <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-3 font-semibold flex items-center gap-2">
               <IcoBook cls="w-4 h-4" /> Nuevo lanzamiento
             </p>
-
-            {/* Portada */}
-            <div className="relative w-full max-w-sm mx-auto mb-6">
-              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl rotate-3" />
-              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
-                <Image
-                  src="/images/libro-portada.jpg"
-                  alt="Libro Nutrición del Bebé - Lic. María Luisa"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
+            <div className="absolute inset-0 top-8 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl rotate-3 -z-0" />
+            <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white z-10">
+              <Image
+                src="/images/libro-portada.jpg"
+                alt="Libro Nutrición del Bebé - Lic. María Luisa"
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
-
-            <h1 className="font-playfair text-3xl sm:text-4xl font-light leading-tight tracking-tight mb-3 text-[var(--texto-principal)] text-center">
+          </div>
+          {/* Info */}
+          <div className="flex flex-col">
+            <h1 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight tracking-tight mb-3 text-[var(--texto-principal)]">
               Nutrición <span className="font-semibold shimmer-rose">del Bebé.</span>
             </h1>
-
-            <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-5 text-center max-w-sm">
-              Guía de nutrición infantil <span className="text-[var(--lime)] font-semibold">preventiva</span> desde los 6 meses hasta el año de vida.
-              Recientemente presentada en el Colegio de Nutricionistas del Perú.
+            <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-5">
+              Guía de nutrición infantil <span className="text-[var(--lime)] font-semibold">preventiva</span> desde
+              los 6 meses hasta el año de vida. Recientemente presentada en el Colegio de Nutricionistas del Perú.
             </p>
-
-            {/* Precios */}
             <div className="flex items-center gap-3 mb-5">
               <div className="relative bg-[var(--lime-soft)] border-2 border-[var(--lime)] rounded-2xl px-4 py-2.5 flex flex-col items-start halo-animado overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full" style={{animation:"shimmer-slide 2.5s ease-in-out infinite"}}/>
@@ -575,40 +579,37 @@ function HeroLibro() {
                 <span className="text-3xl font-semibold text-[var(--texto-principal)]">S/ 20</span>
               </div>
             </div>
-
             <Link
               href="/comprar-libro"
-              className="btn-coquette bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200 w-full max-w-sm text-center"
+              className="btn-coquette bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200 w-full md:w-fit text-center"
             >
               Adquirir el libro
             </Link>
           </div>
+        </div>
 
-          {/* ── DERECHA: Taller ── */}
-          <div id="taller" className="flex flex-col items-center">
-            <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-7 font-semibold flex items-center gap-2 self-start">
+        {/* ── TALLER: imagen arriba en móvil, fila en desktop ── */}
+        <div id="taller" className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
+          {/* Imagen */}
+          <div className="relative w-full max-w-[280px] sm:max-w-xs mx-auto md:mx-0 pb-4">
+            <p className="text-xs uppercase tracking-widest text-[var(--lime)] mb-3 font-semibold flex items-center gap-2">
               <IcoBlender cls="w-4 h-4" /> Próximo taller
             </p>
-
-            {/* Imagen */}
-            <div className="relative w-full max-w-sm mx-auto mb-6">
-              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--lime-soft)] to-[var(--verde-fuerte)]/30 rounded-2xl -rotate-3" />
-              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-green-200 overflow-hidden border-4 border-white">
-                <Image src="/images/taller-dietetica.jpeg" alt="Taller de Comida Dietética" fill className="object-cover object-top"/>
-              </div>
+            <div className="absolute inset-0 top-8 bg-gradient-to-br from-[var(--lime-soft)] to-[var(--verde-fuerte)]/30 rounded-2xl -rotate-3 -z-0" />
+            <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-green-200 overflow-hidden border-4 border-white z-10">
+              <Image src="/images/taller-dietetica.jpeg" alt="Taller de Comida Dietética" fill className="object-cover object-top"/>
             </div>
-
-            <h2 className="font-playfair text-3xl sm:text-4xl font-bold leading-tight mb-3 text-[var(--texto-principal)] text-center">
+          </div>
+          {/* Info */}
+          <div className="flex flex-col">
+            <h2 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 text-[var(--texto-principal)]">
               Taller de <span className="text-[var(--lime)]">Comida Dietética.</span>
             </h2>
-
-            <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-5 text-center max-w-sm">
+            <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-4">
               Aprende a cocinar rico y saludable. Un taller práctico donde descubrirás
               comidas fáciles, saludables y saciadoras que transformarán tu día a día.
             </p>
-
-            {/* Precios */}
-            <div className="flex items-center gap-3 mb-5">
+            <div className="flex items-center gap-3 mb-4">
               <div className="bg-[var(--verde-fuerte)] rounded-2xl px-4 py-2.5 flex flex-col items-start">
                 <span className="text-xs uppercase tracking-widest text-white/70 font-semibold mb-0.5">Presencial</span>
                 <span className="text-3xl font-bold text-white">S/ 80</span>
@@ -618,9 +619,7 @@ function HeroLibro() {
                 <span className="text-3xl font-bold text-white">S/ 40</span>
               </div>
             </div>
-
-            {/* Beneficios */}
-            <ul className="space-y-2 mb-5 w-full max-w-sm">
+            <ul className="space-y-2 mb-5">
               {["Degustación incluida","Materiales: taper, cubiertos, jabón y toalla","Modalidad presencial y virtual"].map((item,i)=>(
                 <li key={i} className="flex items-center gap-2 font-nunito text-sm text-[var(--texto-suave)]">
                   <span className="w-5 h-5 rounded-full bg-[var(--lime-soft)] flex items-center justify-center flex-shrink-0">
@@ -632,25 +631,13 @@ function HeroLibro() {
                 </li>
               ))}
             </ul>
-
             <Link href="/reservar-taller"
-              className="btn-coquette bg-[var(--verde-fuerte)] text-white px-6 py-3 rounded-full hover:opacity-90 transition font-medium shadow-lg shadow-green-200 w-full max-w-sm text-center">
+              className="btn-coquette bg-[var(--verde-fuerte)] text-white px-6 py-3 rounded-full hover:opacity-90 transition font-medium shadow-lg shadow-green-200 w-full md:w-fit text-center">
               Reservar cupo ahora
             </Link>
           </div>
-
-        </div>{/* fin sub-grid libro+taller */}
-
-        {/* ── DERECHA DE TODO: María Luisa flotando ── */}
-        <div className="hidden md:flex w-44 lg:w-56 xl:w-64 flex-shrink-0 items-start justify-center pt-24">
-          <img
-            src="/images/marialuisa.png"
-            alt="María Luisa Nutricionista"
-            className="w-full flotar drop-shadow-2xl pointer-events-none"
-          />
         </div>
 
-        </div>{/* fin flex row principal */}
       </div>
     </section>
   );

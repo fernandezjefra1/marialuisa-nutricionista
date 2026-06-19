@@ -529,7 +529,16 @@ function HeroLibro() {
         <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-start">
 
           {/* ── IZQUIERDA: Libro ── */}
-          <div className="flex flex-col items-center">
+          <div className="relative flex flex-col items-center">
+
+            {/* María Luisa flotando a la derecha */}
+            <img
+              src="/images/marialuisa.png"
+              alt="María Luisa Nutricionista"
+              className="hidden md:block absolute -right-4 top-16 w-28 lg:w-36 flotar z-10 pointer-events-none drop-shadow-xl"
+            />
+
+            <div className="w-full flex flex-col items-center md:pr-24 lg:pr-32">
             <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-7 font-semibold flex items-center gap-2 self-start">
               <IcoBook cls="w-4 h-4" /> Nuevo lanzamiento
             </p>
@@ -579,7 +588,8 @@ function HeroLibro() {
             >
               Adquirir el libro
             </Link>
-          </div>
+            </div>{/* cierre inner wrapper */}
+          </div>{/* cierre relative */}
 
           {/* ── DERECHA: Taller ── */}
           <div id="taller" className="flex flex-col items-center">

@@ -529,67 +529,71 @@ function HeroLibro() {
         <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-start">
 
           {/* ── IZQUIERDA: Libro ── */}
-          <div className="relative flex flex-col items-center">
+          <div className="flex items-start gap-3">
 
-            {/* María Luisa flotando a la derecha */}
-            <img
-              src="/images/marialuisa.png"
-              alt="María Luisa Nutricionista"
-              className="hidden md:block absolute -right-4 top-16 w-28 lg:w-36 flotar z-10 pointer-events-none drop-shadow-xl"
-            />
+            {/* Contenido del libro */}
+            <div className="flex-1 flex flex-col items-center">
+              <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-7 font-semibold flex items-center gap-2 self-start">
+                <IcoBook cls="w-4 h-4" /> Nuevo lanzamiento
+              </p>
 
-            <div className="w-full flex flex-col items-center md:pr-24 lg:pr-32">
-            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-7 font-semibold flex items-center gap-2 self-start">
-              <IcoBook cls="w-4 h-4" /> Nuevo lanzamiento
-            </p>
-
-            {/* Portada */}
-            <div className="relative w-full max-w-sm mx-auto mb-6">
-              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl rotate-3" />
-              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
-                <Image
-                  src="/images/libro-portada.jpg"
-                  alt="Libro Nutrición del Bebé - Lic. María Luisa"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
-            </div>
-
-            <h1 className="font-playfair text-3xl sm:text-4xl font-light leading-tight tracking-tight mb-3 text-[var(--texto-principal)] text-center">
-              Nutrición <span className="font-semibold shimmer-rose">del Bebé.</span>
-            </h1>
-
-            <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-5 text-center max-w-sm">
-              Guía de nutrición infantil <span className="text-[var(--lime)] font-semibold">preventiva</span> desde los 6 meses hasta el año de vida.
-              Recientemente presentada en el Colegio de Nutricionistas del Perú.
-            </p>
-
-            {/* Precios */}
-            <div className="flex items-center gap-3 mb-5">
-              <div className="relative bg-[var(--lime-soft)] border-2 border-[var(--lime)] rounded-2xl px-4 py-2.5 flex flex-col items-start halo-animado overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full" style={{animation:"shimmer-slide 2.5s ease-in-out infinite"}}/>
-                <span className="text-xs uppercase tracking-widest text-[var(--lime)] font-bold mb-0.5 relative z-10">Digital</span>
-                <div className="flex items-baseline gap-1.5 relative z-10">
-                  <span className="text-3xl font-bold text-[var(--texto-principal)]">S/ 10</span>
-                  <span className="text-xs bg-[var(--primrose)] text-white px-1.5 py-0.5 rounded-full font-bold bow-animate">¡Oferta!</span>
+              {/* Portada */}
+              <div className="relative w-full max-w-sm mx-auto mb-6">
+                <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl rotate-3" />
+                <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
+                  <Image
+                    src="/images/libro-portada.jpg"
+                    alt="Libro Nutrición del Bebé - Lic. María Luisa"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
                 </div>
               </div>
-              <div className="bg-white border-2 border-[var(--borde-verde)] rounded-2xl px-4 py-2.5 flex flex-col items-start">
-                <span className="text-xs uppercase tracking-widest text-[var(--texto-tenue)] font-semibold mb-0.5">Físico</span>
-                <span className="text-3xl font-semibold text-[var(--texto-principal)]">S/ 20</span>
+
+              <h1 className="font-playfair text-3xl sm:text-4xl font-light leading-tight tracking-tight mb-3 text-[var(--texto-principal)] text-center">
+                Nutrición <span className="font-semibold shimmer-rose">del Bebé.</span>
+              </h1>
+
+              <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-5 text-center max-w-sm">
+                Guía de nutrición infantil <span className="text-[var(--lime)] font-semibold">preventiva</span> desde los 6 meses hasta el año de vida.
+                Recientemente presentada en el Colegio de Nutricionistas del Perú.
+              </p>
+
+              {/* Precios */}
+              <div className="flex items-center gap-3 mb-5">
+                <div className="relative bg-[var(--lime-soft)] border-2 border-[var(--lime)] rounded-2xl px-4 py-2.5 flex flex-col items-start halo-animado overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full" style={{animation:"shimmer-slide 2.5s ease-in-out infinite"}}/>
+                  <span className="text-xs uppercase tracking-widest text-[var(--lime)] font-bold mb-0.5 relative z-10">Digital</span>
+                  <div className="flex items-baseline gap-1.5 relative z-10">
+                    <span className="text-3xl font-bold text-[var(--texto-principal)]">S/ 10</span>
+                    <span className="text-xs bg-[var(--primrose)] text-white px-1.5 py-0.5 rounded-full font-bold bow-animate">¡Oferta!</span>
+                  </div>
+                </div>
+                <div className="bg-white border-2 border-[var(--borde-verde)] rounded-2xl px-4 py-2.5 flex flex-col items-start">
+                  <span className="text-xs uppercase tracking-widest text-[var(--texto-tenue)] font-semibold mb-0.5">Físico</span>
+                  <span className="text-3xl font-semibold text-[var(--texto-principal)]">S/ 20</span>
+                </div>
               </div>
+
+              <Link
+                href="/comprar-libro"
+                className="btn-coquette bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200 w-full max-w-sm text-center"
+              >
+                Adquirir el libro
+              </Link>
             </div>
 
-            <Link
-              href="/comprar-libro"
-              className="btn-coquette bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200 w-full max-w-sm text-center"
-            >
-              Adquirir el libro
-            </Link>
-            </div>{/* cierre inner wrapper */}
-          </div>{/* cierre relative */}
+            {/* María Luisa flotando a la derecha del bloque */}
+            <div className="hidden md:flex flex-col items-center justify-start pt-20 flex-shrink-0">
+              <img
+                src="/images/marialuisa.png"
+                alt="María Luisa Nutricionista"
+                className="w-24 lg:w-28 flotar drop-shadow-xl pointer-events-none"
+              />
+            </div>
+
+          </div>
 
           {/* ── DERECHA: Taller ── */}
           <div id="taller" className="flex flex-col items-center">

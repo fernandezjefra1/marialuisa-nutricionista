@@ -337,108 +337,67 @@ function FloatingSparkles() {
 
 /* ---------- NAVBAR ---------- */
 function Navbar() {
-  const [menuAbierto, setMenuAbierto] = useState(false);
+  const { user, loading: userLoading } = useUser();
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#f5f0e8]/95 backdrop-blur-sm border-b border-[var(--borde-verde)]">
-      <div className="max-w-6xl mx-auto px-4 md:px-6 py-2 md:py-3 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 md:gap-3">
-          {/* Botón hamburguesa - solo en mobile */}
-          <button
-            onClick={() => setMenuAbierto(!menuAbierto)}
-            className="md:hidden w-10 h-10 rounded-full hover:bg-[var(--pinktone-soft)] flex items-center justify-center transition"
-            aria-label="Abrir menú"
-          >
-            <svg className="w-6 h-6 text-[var(--texto-principal)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              {menuAbierto ? (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+    <nav className="sticky top-0 z-50 bg-[#f5f0e8]/90 backdrop-blur-md border-b border-[var(--verde-fuerte)]/20">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-2 md:py-3 flex items-center gap-3">
 
-          {/* Menú desktop */}
-          <ul className="hidden md:flex gap-2 text-sm font-medium">
-            <li><a href="#libro"    className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Libro</a></li>
-            <li><Link href="/productos" className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Tienda</Link></li>
-            <li><a href="#sobre-mi" className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Sobre mí</a></li>
-            <li><a href="#dieta"    className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Dieta</a></li>
-            <li><a href="#taller"   className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Talleres</a></li>
-            <li><Link href="/empresas"  className="px-4 py-2 rounded-full bg-[var(--primrose)] text-white hover:bg-[var(--primrose-hover)] transition-all duration-300">Empresas</Link></li>
-          </ul>
-
-          <div className="hidden md:block w-px h-6 bg-[var(--borde-verde)] mx-2" />
-          <MenuUsuario />
-        </div>
-
-        <Link href="/" className="flex items-center gap-2 font-playfair font-bold tracking-tight text-[var(--texto-principal)] text-base md:text-lg">
-          <span className="truncate"><span className="hidden sm:inline">María Luisa </span><span className="text-[var(--primrose)]">Nutricionista</span></span>
-          <Image src="/images/iconoNutricion.png" alt="Logo" width={96} height={96} className="object-contain drop-shadow-sm w-16 h-16 sm:w-24 sm:h-24" />
+        {/* LOGO */}
+        <Link href="/" className="flex items-center gap-2.5 hover:scale-105 transition-transform duration-300 flex-shrink-0">
+          <Image
+            src="/images/iconoNutricion.png"
+            alt="Logo María Luisa Nutricionista"
+            width={64}
+            height={64}
+            className="w-12 h-12 md:w-16 md:h-16 object-contain drop-shadow-sm"
+          />
+          <div className="hidden sm:block leading-tight">
+            <p className="font-playfair italic text-[var(--texto-principal)] text-base md:text-lg leading-none">
+              María Luisa
+            </p>
+            <p className="text-xs uppercase tracking-wider text-[var(--primrose)] font-semibold">
+              Nutricionista
+            </p>
+          </div>
         </Link>
-      </div>
 
-      {/* Menú mobile desplegable */}
-      {menuAbierto && (
-        <div className="md:hidden border-t border-[var(--borde-verde)] bg-[var(--verde-1)]">
-          <ul className="px-6 py-4 space-y-1">
-            <li>
-              <a
-                href="#libro"
-                onClick={() => setMenuAbierto(false)}
-                className="block py-3 px-4 rounded-lg text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition font-medium"
-              >
-                Libro
-              </a>
-            </li>
-            <li>
-              <Link
-                href="/productos"
-                onClick={() => setMenuAbierto(false)}
-                className="block py-3 px-4 rounded-lg text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition font-medium"
-              >
-                Tienda
-              </Link>
-            </li>
-            <li>
-              <a
-                href="#sobre-mi"
-                onClick={() => setMenuAbierto(false)}
-                className="block py-3 px-4 rounded-lg text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition font-medium"
-              >
-                Sobre mí
-              </a>
-            </li>
-            <li>
-              <a
-                href="#dieta"
-                onClick={() => setMenuAbierto(false)}
-                className="block py-3 px-4 rounded-lg text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition font-medium"
-              >
-                Dieta
-              </a>
-            </li>
-            <li>
-              <a
-                href="#taller"
-                onClick={() => setMenuAbierto(false)}
-                className="block py-3 px-4 rounded-lg text-[var(--texto-principal)] hover:bg-[var(--lime-soft)] transition font-medium"
-              >
-                Talleres
-              </a>
-            </li>
-            <li>
-              <Link
-                href="/empresas"
-                onClick={() => setMenuAbierto(false)}
-                className="block py-3 px-4 rounded-lg text-[var(--texto-principal)] hover:bg-[var(--lime-soft)] transition font-medium"
-              >
-                Empresas
-              </Link>
-            </li>
-          </ul>
-        </div>
-      )}
+        {/* ESPACIADOR */}
+        <div className="flex-1" />
+
+        {/* BOTÓN TIENDA */}
+        <Link
+          href="/productos"
+          className="inline-flex items-center gap-2 px-3 py-2.5 md:px-6 rounded-full border-2 border-[var(--primrose)] text-[var(--primrose)] font-medium text-sm transition-all duration-300 ease-out hover:bg-[var(--primrose)] hover:text-white hover:shadow-lg hover:shadow-[var(--primrose)]/30 hover:-translate-y-0.5"
+        >
+          <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+          <span className="hidden md:inline">Tienda</span>
+        </Link>
+
+        {/* BOTÓN RESERVAR CITA */}
+        {!userLoading && (
+          <Link
+            href={user ? "/reservar-cita" : "/login?redirect=/reservar-cita"}
+            className="inline-flex items-center gap-2 px-4 py-2.5 md:px-7 rounded-full bg-[var(--verde-fuerte)] text-white font-medium text-sm shadow-md shadow-[var(--verde-fuerte)]/30 transition-all duration-300 ease-out hover:shadow-xl hover:shadow-[var(--verde-fuerte)]/40 hover:-translate-y-0.5 hover:scale-105 active:scale-95 whitespace-nowrap"
+          >
+            <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span className="md:hidden">Cita</span>
+            <span className="hidden md:inline">Reservar cita</span>
+          </Link>
+        )}
+
+        {/* AVATAR / LOGIN */}
+        <MenuUsuario />
+      </div>
     </nav>
   );
 }
@@ -450,26 +409,21 @@ function MenuUsuario() {
   const { esAdmin } = useAdmin();
 
   if (loading) {
-    return <div className="w-24 h-9" />;
+    return <div className="w-10 h-10 rounded-full bg-[#f5f0e8] border-2 border-[var(--primrose)]/30 animate-pulse flex-shrink-0" />;
   }
 
   if (!user) {
     return (
-      <div className="flex items-center gap-2">
-        <Link
-          href="/login"
-          className="hidden sm:inline-block text-sm px-4 py-2 rounded-full bg-[var(--texto-principal)] text-white hover:bg-[var(--lime-hover)] transition-all duration-300"
-        >
-          Iniciar sesión
-        </Link>
-        <Link
-          href="/login?redirect=/reservar-cita"
-          className="text-xs sm:text-sm bg-[var(--texto-principal)] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:bg-[var(--lime-hover)] transition-all duration-300 shadow-md shadow-green-200 whitespace-nowrap"
-        >
-          <span className="sm:hidden">Cita</span>
-          <span className="hidden sm:inline">Reservar cita</span>
-        </Link>
-      </div>
+      <Link
+        href="/login"
+        className="w-10 h-10 rounded-full bg-[#f5f0e8] border-2 border-[var(--primrose)] flex items-center justify-center text-[var(--primrose)] hover:bg-[var(--primrose)] hover:text-white transition-all duration-300 flex-shrink-0"
+        aria-label="Iniciar sesión"
+      >
+        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </Link>
     );
   }
 
@@ -482,90 +436,58 @@ function MenuUsuario() {
     .toUpperCase();
 
   return (
-    <div className="flex items-center gap-2">
-      <Link
-        href="/reservar-taller"
-        className="hidden sm:inline-block text-xs sm:text-sm bg-[var(--texto-principal)] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full hover:bg-[var(--lime-hover)] transition-all duration-300 shadow-md shadow-green-200 whitespace-nowrap"
-      >
-        Reservar cita
-      </Link>
-    <div className="relative">
+    <div className="relative flex-shrink-0">
       <button
         onClick={() => setAbierto(!abierto)}
-        className="flex items-center gap-3 hover:bg-[var(--pinktone-soft)] rounded-full pl-1 pr-3 py-1 transition"
+        className="block rounded-full border-2 border-white shadow-md hover:scale-105 transition-all duration-300"
+        aria-label="Menú de usuario"
       >
         {avatarUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={avatarUrl}
             alt={nombre}
-            className="w-8 h-8 rounded-full object-cover border-2 border-[var(--pinktone)]"
+            className="w-10 h-10 rounded-full object-cover"
             referrerPolicy="no-referrer"
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-[var(--primrose)] text-white text-xs font-semibold flex items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-[var(--primrose)] text-white text-sm font-semibold flex items-center justify-center">
             {iniciales}
           </div>
         )}
-        <span className="text-sm font-medium hidden sm:inline text-[var(--texto-principal)]">{nombre.split(" ")[0]}</span>
-        <svg
-          className={`w-3.5 h-3.5 text-[var(--texto-tenue)] transition-transform ${abierto ? "rotate-180" : ""}`}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <path d="M6 9l6 6 6-6" />
-        </svg>
       </button>
 
       {abierto && (
         <>
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setAbierto(false)}
-          />
+          <div className="fixed inset-0 z-40" onClick={() => setAbierto(false)} />
           <div className="absolute right-0 mt-2 w-64 bg-white border border-[var(--borde-rosa)] rounded-2xl shadow-xl shadow-pink-100 z-50 overflow-hidden">
             <div className="p-4 border-b border-[var(--borde-suave)] bg-[var(--pinktone-soft)]">
               <p className="text-sm font-semibold truncate text-[var(--texto-principal)]">{nombre}</p>
               <p className="text-xs text-[var(--texto-suave)] truncate">{user.email}</p>
             </div>
 
+            {esAdmin && (
+              <div className="py-1 border-b border-[var(--borde-suave)]">
+                <Link
+                  href="/admin"
+                  onClick={() => setAbierto(false)}
+                  className="block px-4 py-2.5 text-sm font-semibold text-[var(--primrose)] hover:bg-[var(--pinktone-soft)] transition"
+                >
+                  Panel administrador
+                </Link>
+              </div>
+            )}
+
             <div className="py-1">
-              <Link
-                href="/perfil"
-                onClick={() => setAbierto(false)}
-                className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
-              >
+              <Link href="/perfil" onClick={() => setAbierto(false)} className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition">
                 Mi perfil
               </Link>
-              <Link
-                href="/perfil?tab=compras"
-                onClick={() => setAbierto(false)}
-                className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
-              >
+              <Link href="/perfil?tab=compras" onClick={() => setAbierto(false)} className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition">
                 Mis compras
               </Link>
-              <Link
-                href="/perfil?tab=fidelizacion"
-                onClick={() => setAbierto(false)}
-                className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition"
-              >
+              <Link href="/perfil?tab=fidelizacion" onClick={() => setAbierto(false)} className="block px-4 py-2.5 text-sm text-[var(--texto-principal)] hover:bg-[var(--pinktone-soft)] transition">
                 Programa de fidelización
               </Link>
-
-              {esAdmin && (
-                <>
-                  <div className="border-t border-[var(--borde-suave)] my-1" />
-                  <Link
-                    href="/admin"
-                    onClick={() => setAbierto(false)}
-                    className="block px-4 py-2.5 text-sm font-semibold text-[var(--primrose)] hover:bg-[var(--pinktone-soft)] transition"
-                  >
-                    Panel administrador
-                  </Link>
-                </>
-              )}
             </div>
 
             <div className="border-t border-[var(--borde-suave)] py-1">
@@ -583,7 +505,6 @@ function MenuUsuario() {
           </div>
         </>
       )}
-    </div>
     </div>
   );
 }

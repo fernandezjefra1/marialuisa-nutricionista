@@ -37,8 +37,8 @@ const JUEGOS = [
   },
   {
     emoji: "🧩",
-    titulo: "Rompecabezas",
-    descripcion: "Arma el plato saludable perfecto.",
+    titulo: "Rompecabezas Deslizante",
+    descripcion: "Desliza las piezas para armar el plato saludable.",
     href: "/nutri-kids/rompecabezas",
     bg: "bg-[#B5EAD7]",
     border: "border-[#6fc8a0]",

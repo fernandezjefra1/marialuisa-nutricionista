@@ -1612,20 +1612,20 @@ function SeccionProductos() {
 
     const direccionTexto = "Calle José del Carmen Verastegui 303, San Juan de Miraflores, Lima, Perú";
     const direccionUrl = encodeURIComponent(direccionTexto);
+    const lat = -12.1669714;
+    const lng = -76.9685542;
+    const placeId = "ChIJayLPEWi5BZERQfPSTTv1Mx4";
 
     if (isIOS) {
-      window.location.href = `comgooglemaps://?q=${direccionUrl}&center=-12.1669714,-76.9685542`;
+      window.location.href = `comgooglemaps://?q=${direccionUrl}&center=${lat},${lng}`;
       setTimeout(() => {
         window.location.href = `https://maps.google.com/?q=${direccionUrl}`;
       }, 500);
     } else if (isAndroid) {
-      window.location.href = `geo:-12.1669714,-76.9685542?q=${direccionUrl}`;
+      window.location.href = `geo:${lat},${lng}?q=${direccionUrl}`;
     } else {
-      window.open(
-        "https://www.google.com/maps/place/Residencial+Mart%C3%ADn/@-12.1669714,-76.9685542,17z",
-        "_blank",
-        "noopener,noreferrer"
-      );
+      const url = `https://www.google.com/maps/search/?api=1&query=${lat}%2C${lng}&query_place_id=${placeId}`;
+      window.open(url, "_blank", "noopener,noreferrer");
     }
   };
 

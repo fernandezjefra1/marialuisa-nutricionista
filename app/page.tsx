@@ -340,79 +340,92 @@ function Navbar() {
   const { user, loading: userLoading } = useUser();
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#e8f3dc]/90 backdrop-blur-md border-b border-[var(--verde-fuerte)]/20">
-      <div className="max-w-6xl mx-auto px-4 md:px-6 py-2 md:py-3 flex items-center gap-3">
+    <nav className="sticky top-0 z-50 bg-[#f5f0e8]/95 backdrop-blur-md border-b border-[var(--verde-fuerte)]/20">
+      <div className="max-w-6xl mx-auto px-3 sm:px-6">
+        <div className="flex items-center justify-between h-14 sm:h-16 gap-2">
 
-        {/* LOGO */}
-        <Link href="/" className="flex items-center gap-2.5 hover:scale-105 transition-transform duration-300 flex-shrink-0">
-          <Image
-            src="/images/logoNutricion.png"
-            alt="Logo María Luisa Nutricionista"
-            width={112}
-            height={112}
-            className="w-20 h-20 md:w-28 md:h-28 object-contain drop-shadow-sm -my-4 md:-my-6"
-          />
-          <div className="hidden sm:block leading-tight">
-            <p className="font-playfair italic text-[var(--texto-principal)] text-base md:text-lg leading-none">
-              María Luisa
-            </p>
-            <p className="text-xs uppercase tracking-wider text-[var(--primrose)] font-semibold">
-              Nutricionista
-            </p>
-          </div>
-        </Link>
-
-        {/* ESPACIADOR */}
-        <div className="flex-1" />
-
-        {/* BOTÓN TIENDA */}
-        <Link
-          href="/productos"
-          className="inline-flex items-center gap-2 px-3 py-2.5 md:px-6 rounded-full border-2 border-[var(--primrose)] text-[var(--primrose)] font-medium text-sm transition-all duration-300 ease-out hover:bg-[var(--primrose)] hover:text-white hover:shadow-lg hover:shadow-[var(--primrose)]/30 hover:-translate-y-0.5"
-        >
-          <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <path d="M16 10a4 4 0 01-8 0"/>
-          </svg>
-          <span className="hidden md:inline">Tienda</span>
-        </Link>
-
-        {/* BOTÓN NUTRI KIDS */}
-        <Link
-          href="/nutri-kids"
-          className="inline-flex items-center gap-1.5 px-3 py-2.5 md:px-5 rounded-full bg-[#FFD93D] text-[#5a3e00] font-semibold text-sm transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:shadow-[#FFD93D]/50 hover:-translate-y-0.5 active:scale-95"
-          style={{ touchAction: "manipulation" }}
-        >
-          <Image
-            src="/images/NutriKids.jpeg"
-            alt="Nutri Kids"
-            width={20}
-            height={20}
-            className="w-5 h-5 rounded-full object-cover flex-shrink-0"
-          />
-          <span className="hidden md:inline">Nutri Kids</span>
-        </Link>
-
-        {/* BOTÓN RESERVAR CITA */}
-        {!userLoading && (
-          <Link
-            href={user ? "/reservar-cita" : "/login?redirect=/reservar-cita"}
-            className="inline-flex items-center gap-2 px-4 py-2.5 md:px-7 rounded-full bg-[var(--verde-fuerte)] text-white font-medium text-sm shadow-md shadow-[var(--verde-fuerte)]/30 transition-all duration-300 ease-out hover:shadow-xl hover:shadow-[var(--verde-fuerte)]/40 hover:-translate-y-0.5 hover:scale-105 active:scale-95 whitespace-nowrap"
-          >
-            <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-              <line x1="16" y1="2" x2="16" y2="6"/>
-              <line x1="8" y1="2" x2="8" y2="6"/>
-              <line x1="3" y1="10" x2="21" y2="10"/>
-            </svg>
-            <span className="md:hidden">Cita</span>
-            <span className="hidden md:inline">Reservar cita</span>
+          {/* LOGO */}
+          <Link href="/" className="flex items-center gap-2 hover:scale-105 transition-transform duration-300 flex-shrink-0">
+            <Image
+              src="/images/logoNutricion.png"
+              alt="Logo María Luisa Nutricionista"
+              width={112}
+              height={112}
+              className="w-10 h-10 sm:w-12 sm:h-12 object-contain drop-shadow-sm"
+            />
+            <div className="hidden md:block leading-tight">
+              <p className="font-playfair italic text-[var(--texto-principal)] text-base md:text-lg leading-none">
+                María Luisa
+              </p>
+              <p className="text-xs uppercase tracking-wider text-[var(--primrose)] font-semibold">
+                Nutricionista
+              </p>
+            </div>
           </Link>
-        )}
 
-        {/* AVATAR / LOGIN */}
-        <MenuUsuario />
+          {/* BOTONES DERECHA */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5">
+
+            {/* BOTÓN TIENDA — solo ícono en mobile, texto en sm+ */}
+            <Link
+              href="/productos"
+              aria-label="Tienda"
+              className="inline-flex items-center justify-center gap-2
+                         w-9 h-9 sm:w-auto sm:h-auto sm:px-5 sm:py-2
+                         rounded-full border-2 border-[var(--primrose)] text-[var(--primrose)]
+                         hover:bg-[var(--primrose)] hover:text-white
+                         transition-all duration-300"
+            >
+              <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 01-8 0"/>
+              </svg>
+              <span className="hidden sm:inline text-sm font-medium">Tienda</span>
+            </Link>
+
+            {/* BOTÓN NUTRI KIDS — círculo con imagen */}
+            <Link
+              href="/nutri-kids"
+              aria-label="Nutri Kids"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2 border-yellow-400 hover:scale-110 transition-transform flex-shrink-0"
+              style={{ touchAction: "manipulation" }}
+            >
+              <Image
+                src="/images/NutriKids.jpeg"
+                alt="Nutri Kids"
+                width={40}
+                height={40}
+                className="w-full h-full object-cover"
+              />
+            </Link>
+
+            {/* BOTÓN RESERVAR CITA — solo ícono en mobile, texto en sm+ */}
+            {!userLoading && (
+              <Link
+                href={user ? "/reservar-cita" : "/login?redirect=/reservar-cita"}
+                aria-label="Reservar cita"
+                className="inline-flex items-center justify-center gap-1.5
+                           w-9 h-9 sm:w-auto sm:h-auto sm:px-5 sm:py-2
+                           rounded-full bg-[var(--verde-fuerte)] text-white
+                           shadow-md shadow-[var(--verde-fuerte)]/30
+                           hover:shadow-xl hover:scale-105 transition-all"
+              >
+                <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                <span className="hidden sm:inline text-sm font-medium">Cita</span>
+              </Link>
+            )}
+
+            {/* AVATAR / LOGIN */}
+            <MenuUsuario />
+          </div>
+
+        </div>
       </div>
     </nav>
   );
@@ -1430,13 +1443,13 @@ function Footer() {
 }
 /* ---------- SECCIÓN ENFERMEDADES + FAQ ---------- */
 function SeccionEnfermedadesYFaq() {
-  const enfermedades: { nombre: string; descripcion: string; Ico: (p:{cls?:string})=>React.JSX.Element }[] = [
+  const enfermedades: { nombre: string; nombreCorto?: string; descripcion: string; Ico: (p:{cls?:string})=>React.JSX.Element }[] = [
     { nombre: "Anemia",                    descripcion: "Hierro y vitamina C desde la dieta previenen la deficiencia más frecuente en mujeres y niños.",   Ico: IcoDrop  },
-    { nombre: "Obesidad y sobrepeso",      descripcion: "Alimentos naturales y dietas equilibradas regulan el peso sin comprometer la salud.",               Ico: IcoScale },
+    { nombre: "Obesidad y sobrepeso",      nombreCorto: "Obesidad",       descripcion: "Alimentos naturales y dietas equilibradas regulan el peso sin comprometer la salud.",               Ico: IcoScale },
     { nombre: "Diabetes tipo 2",           descripcion: "Reducir azúcares refinados y elegir alimentos de bajo índice glucémico disminuye el riesgo.",       Ico: IcoLeaf  },
-    { nombre: "Hipertensión arterial",     descripcion: "Menos sodio, más potasio y fibra mantienen la presión arterial en niveles saludables.",             Ico: IcoHeart },
+    { nombre: "Hipertensión arterial",     nombreCorto: "Hipertensión",   descripcion: "Menos sodio, más potasio y fibra mantienen la presión arterial en niveles saludables.",             Ico: IcoHeart },
     { nombre: "Osteoporosis",              descripcion: "Calcio, vitamina D y fósforo desde la infancia fortalecen los huesos para toda la vida.",           Ico: IcoBone  },
-    { nombre: "Enf. cardiovasculares",     descripcion: "Omega-3, fibra y antioxidantes protegen el corazón y reducen el colesterol malo.",                   Ico: IcoWave  },
+    { nombre: "Enf. cardiovasculares",     nombreCorto: "Cardiovasc.",    descripcion: "Omega-3, fibra y antioxidantes protegen el corazón y reducen el colesterol malo.",                   Ico: IcoWave  },
   ];
 
   const faqs = [
@@ -1487,13 +1500,16 @@ function SeccionEnfermedadesYFaq() {
             {enfermedades.map((e, i) => (
               <div
                 key={i}
-                className="bg-white rounded-2xl p-4 md:p-5 border-2 border-[var(--borde-verde)] transition hover:-translate-y-1 hover:shadow-md hover:border-[var(--lime)] hover:shadow-green-100"
+                className="bg-white rounded-2xl p-3 sm:p-4 md:p-5 border-2 border-[var(--borde-verde)] transition hover:-translate-y-1 hover:shadow-md hover:border-[var(--lime)] hover:shadow-green-100 flex flex-col gap-2 min-h-[100px] sm:min-h-[120px]"
               >
-                <div className="flex items-start gap-2 mb-2">
-                  <span className="w-8 h-8 rounded-full bg-[var(--lime-soft)] flex items-center justify-center flex-shrink-0">
+                <div className="flex items-start gap-2">
+                  <span className="w-8 h-8 rounded-full bg-[var(--lime-soft)] flex items-center justify-center flex-shrink-0 mt-0.5">
                     <e.Ico cls="w-4 h-4 text-[var(--lime)]" />
                   </span>
-                  <h3 className="font-semibold text-[var(--texto-principal)] leading-tight text-sm pt-1">{e.nombre}</h3>
+                  <h3 className="font-semibold text-[var(--texto-principal)] leading-tight text-xs sm:text-sm">
+                    <span className="sm:hidden">{e.nombreCorto ?? e.nombre}</span>
+                    <span className="hidden sm:inline">{e.nombre}</span>
+                  </h3>
                 </div>
                 <p className="font-nunito text-xs text-[var(--texto-suave)] leading-relaxed pl-10 hidden sm:block">{e.descripcion}</p>
               </div>

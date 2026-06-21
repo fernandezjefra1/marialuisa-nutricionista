@@ -5,17 +5,19 @@ import Link from "next/link";
 
 const PALABRAS_LIST = [
   "MANZANA", "BROCOLI", "ZANAHORIA", "ESPINACA",
-  "QUINUA", "PALTA", "FRESA", "LECHUGA",
+  "QUINUA",  "PALTA",   "FRESA",     "LECHUGA",
+  "PEPINO",  "NARANJA", "AVENA",     "ARANDANO",
 ];
 const COLORES_PALABRAS = [
   "#FFD93D", "#FF9A3C", "#AEE6FF", "#B5EAD7",
   "#FFAAC9", "#D4AAFF", "#FF6B6B", "#74C0FC",
+  "#B8E986", "#FFCE6E", "#E8A0BF", "#A8D8EA",
 ];
 
 type Celda = { letra: string; color?: string };
 type PalabraInfo = {
   palabra: string;
-  celdas: [number, number][];   // posiciones exactas de cada letra
+  celdas: [number, number][];
   encontrada: boolean;
   color: string;
 };
@@ -29,9 +31,6 @@ function letraRandom() {
   return String.fromCharCode(65 + Math.floor(Math.random() * 26));
 }
 
-/* ── Algoritmo robusto: genera un grid vacío, coloca cada palabra
-   verificando límites Y conflictos de letras, rellena el resto con
-   letras aleatorias. Reintenta hasta 100 veces si no caben todas. ── */
 function generarGrid(): { grid: Celda[][]; palabras: PalabraInfo[] } {
   const MAX_GLOBAL = 100;
 
@@ -44,7 +43,7 @@ function generarGrid(): { grid: Celda[][]; palabras: PalabraInfo[] } {
       const palabra = PALABRAS_LIST[wi];
       let colocada = false;
 
-      for (let intento = 0; intento < 200 && !colocada; intento++) {
+      for (let intento = 0; intento < 300 && !colocada; intento++) {
         const [dr, dc] = DIRS[Math.floor(Math.random() * DIRS.length)];
         const fila = Math.floor(Math.random() * SIZE);
         const col  = Math.floor(Math.random() * SIZE);
@@ -57,8 +56,7 @@ function generarGrid(): { grid: Celda[][]; palabras: PalabraInfo[] } {
           const c = col  + dc * i;
           if (r < 0 || r >= SIZE || c < 0 || c >= SIZE) { valido = false; break; }
           const existente = raw[r][c];
-          // Solo es conflicto si la celda ya tiene UNA LETRA DISTINTA
-          if (existente !== "" && existente !== palabra[i])  { valido = false; break; }
+          if (existente !== "" && existente !== palabra[i]) { valido = false; break; }
           celdas.push([r, c]);
         }
 
@@ -66,12 +64,7 @@ function generarGrid(): { grid: Celda[][]; palabras: PalabraInfo[] } {
           for (let i = 0; i < palabra.length; i++) {
             raw[celdas[i][0]][celdas[i][1]] = palabra[i];
           }
-          palabrasInfo.push({
-            palabra,
-            celdas,
-            encontrada: false,
-            color: COLORES_PALABRAS[wi],
-          });
+          palabrasInfo.push({ palabra, celdas, encontrada: false, color: COLORES_PALABRAS[wi] });
           colocada = true;
         }
       }
@@ -87,7 +80,6 @@ function generarGrid(): { grid: Celda[][]; palabras: PalabraInfo[] } {
     }
   }
 
-  // Fallback teórico (nunca debería ocurrir con SIZE=10 y 8 palabras)
   console.error("No se pudo generar el grid después de 100 intentos");
   return {
     grid: Array.from({ length: SIZE }, () =>
@@ -130,10 +122,8 @@ export default function Pupiletras() {
   const [arrastrando, setArrastrando] = useState(false);
   const [tiempo, setTiempo]           = useState(0);
   const [ganaste, setGanaste]         = useState(false);
-  const [pistasRestantes, setPistas]  = useState(3);
-  // Set de ÍNDICES de palabras ya pisteadas en esta ronda
+  const [pistasRestantes, setPistas]  = useState(2);
   const [pistasUsadas, setPistasUsadas] = useState<Set<number>>(new Set());
-  // Celdas actualmente iluminadas por una pista
   const [celdasPista, setCeldasPista] = useState<[number, number][]>([]);
   const gridRef = useRef<HTMLDivElement>(null);
 
@@ -145,7 +135,7 @@ export default function Pupiletras() {
     setArrastrando(false);
     setTiempo(0);
     setGanaste(false);
-    setPistas(3);
+    setPistas(2);
     setPistasUsadas(new Set());
     setCeldasPista([]);
   }, []);
@@ -164,7 +154,6 @@ export default function Pupiletras() {
     return `${m}:${ss}`;
   };
 
-  /* ── Drag / Selección ── */
   const getCeldaDesdeEl = (el: Element | null): [number, number] | null => {
     if (!el) return null;
     const r = el.getAttribute("data-row");
@@ -233,7 +222,6 @@ export default function Pupiletras() {
     });
   }, [arrastrando, grid]);
 
-  /* ── Touch handlers ── */
   const handleTouchStart = useCallback((e: React.TouchEvent) => {
     const t = e.touches[0];
     const el = document.elementFromPoint(t.clientX, t.clientY);
@@ -249,11 +237,9 @@ export default function Pupiletras() {
     if (pos) extenderSeleccion(pos[0], pos[1]);
   }, [extenderSeleccion]);
 
-  /* ── Sistema de pistas rotativo ── */
   const usarPista = useCallback(() => {
     if (pistasRestantes <= 0) return;
 
-    // Candidatas: no encontradas, tienen posición, y NO fueron pisteadas esta ronda
     const candidatas = palabras
       .map((p, i) => ({ p, i }))
       .filter(({ p, i }) => !p.encontrada && p.celdas.length > 0 && !pistasUsadas.has(i));
@@ -262,13 +248,12 @@ export default function Pupiletras() {
     let idxElegido: number;
 
     if (candidatas.length === 0) {
-      // Ya pisteamos todas las no encontradas → resetear ciclo
       const noEncontradas = palabras
         .map((p, i) => ({ p, i }))
         .filter(({ p }) => !p.encontrada && p.celdas.length > 0);
       if (noEncontradas.length === 0) return;
       const pick = noEncontradas[Math.floor(Math.random() * noEncontradas.length)];
-      elegida   = pick.p;
+      elegida    = pick.p;
       idxElegido = pick.i;
       setPistasUsadas(new Set([idxElegido]));
     } else {
@@ -283,11 +268,10 @@ export default function Pupiletras() {
     setTimeout(() => setCeldasPista([]), 2000);
   }, [pistasRestantes, palabras, pistasUsadas]);
 
-  const encontradas       = palabras.filter(p => p.encontrada).length;
-  const estaSeleccionada  = (r: number, c: number) => seleccionadas.some(([sr, sc]) => sr === r && sc === c);
-  const esPista           = (r: number, c: number) => celdasPista.some(([pr, pc]) => pr === r && pc === c);
+  const encontradas      = palabras.filter(p => p.encontrada).length;
+  const estaSeleccionada = (r: number, c: number) => seleccionadas.some(([sr, sc]) => sr === r && sc === c);
+  const esPista          = (r: number, c: number) => celdasPista.some(([pr, pc]) => pr === r && pc === c);
 
-  /* ══════════════════════════════════════════════════════════════ */
   return (
     <main
       className="min-h-screen pb-10"
@@ -307,24 +291,24 @@ export default function Pupiletras() {
           <span className="text-xl font-bold text-[#1a3d22] flex-1 text-center">🔤 Pupiletras</span>
           <Link href="/" className="text-xs text-[var(--primrose)] hover:underline" style={{ touchAction: "manipulation" }}>🏠</Link>
         </div>
-        <div className="max-w-4xl mx-auto px-4 pb-3 flex flex-wrap justify-center gap-3 text-sm">
-          <span className="bg-[#AEE6FF] text-[#1a3d55] px-3 py-1 rounded-full font-semibold">
-            Palabras: {encontradas}/{palabras.length}
+        <div className="max-w-4xl mx-auto px-4 pb-3 flex flex-wrap justify-center gap-2 sm:gap-3 text-sm">
+          <span className="bg-[#AEE6FF] text-[#1a3d55] px-3 py-1 rounded-full font-semibold text-xs sm:text-sm">
+            🔍 {encontradas}/{palabras.length}
           </span>
-          <span className="bg-[#FFD93D] text-[#5a3e00] px-3 py-1 rounded-full font-semibold">
-            Tiempo: {formatTiempo(tiempo)}
+          <span className="bg-[#FFD93D] text-[#5a3e00] px-3 py-1 rounded-full font-semibold text-xs sm:text-sm">
+            ⏱️ {formatTiempo(tiempo)}
           </span>
           <button
             onClick={usarPista}
             disabled={pistasRestantes === 0}
-            className="bg-[#D4AAFF] text-[#3a1a6a] px-3 py-1 rounded-full font-semibold disabled:opacity-40 hover:opacity-90 active:scale-95 transition-all"
+            className="bg-[#D4AAFF] text-[#3a1a6a] px-3 py-1 rounded-full font-semibold disabled:opacity-40 hover:opacity-90 active:scale-95 transition-all text-xs sm:text-sm"
             style={{ touchAction: "manipulation" }}
           >
-            💡 Pista ({pistasRestantes}/3)
+            💡 Pista ({pistasRestantes}/2)
           </button>
           <button
             onClick={reiniciar}
-            className="bg-[var(--primrose)] text-white px-4 py-1 rounded-full font-semibold hover:opacity-90 active:scale-95 transition-all"
+            className="bg-[var(--primrose)] text-white px-4 py-1 rounded-full font-semibold hover:opacity-90 active:scale-95 transition-all text-xs sm:text-sm"
             style={{ touchAction: "manipulation" }}
           >
             Reiniciar
@@ -332,67 +316,93 @@ export default function Pupiletras() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-2 pt-4 flex flex-col lg:flex-row gap-4">
-        {/* Lista de palabras */}
-        <div className="order-first lg:order-last lg:w-48 flex-shrink-0">
-          <div className="bg-white rounded-2xl shadow p-3">
-            <p className="font-bold text-[#1a3d22] text-sm mb-2 text-center">Encuentra:</p>
-            <div className="flex flex-wrap lg:flex-col gap-2">
-              {palabras.map(pw => (
-                <div key={pw.palabra} className="flex items-center gap-2 text-sm font-semibold" style={{ color: pw.encontrada ? "#888" : "#1a3d22" }}>
-                  <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ background: pw.color }} />
-                  <span className={pw.encontrada ? "line-through" : ""}>
-                    {pw.encontrada ? "✓ " : ""}{pw.palabra}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
+      <div className="max-w-4xl mx-auto px-2 pt-4">
+
+        {/* Mobile: chips de palabras encima del grid */}
+        <div className="sm:hidden mb-3 px-1 flex flex-wrap gap-1.5">
+          {palabras.map(pw => (
+            <span
+              key={pw.palabra}
+              className={`px-2 py-1 rounded-full text-[10px] font-semibold border transition-all ${
+                pw.encontrada
+                  ? "bg-green-100 text-green-700 border-green-200 line-through opacity-70"
+                  : "bg-white text-gray-700"
+              }`}
+              style={{ borderColor: pw.encontrada ? undefined : pw.color }}
+            >
+              {pw.encontrada ? "✓ " : ""}{pw.palabra}
+            </span>
+          ))}
         </div>
 
-        {/* Grid */}
-        <div className="flex-1 flex justify-center">
-          <div
-            ref={gridRef}
-            className="inline-grid gap-0.5 select-none"
-            style={{ gridTemplateColumns: `repeat(${SIZE}, 1fr)`, touchAction: "none" }}
-            onMouseLeave={() => { if (arrastrando) confirmarSeleccion(); }}
-            onMouseUp={confirmarSeleccion}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={confirmarSeleccion}
-          >
-            {grid.map((fila, ri) =>
-              fila.map((celda, ci) => {
-                const sel   = estaSeleccionada(ri, ci);
-                const hint  = esPista(ri, ci);
-                const bg    = celda.color
-                  ? celda.color + "80"
-                  : sel  ? "#FFD93D80"
-                  : hint ? "#D4AAFF"
-                  : "white";
+        <div className="flex flex-col sm:flex-row gap-4 items-start">
 
-                return (
-                  <div
-                    key={`${ri}-${ci}`}
-                    data-row={ri}
-                    data-col={ci}
-                    onMouseDown={() => iniciarSeleccion(ri, ci)}
-                    onMouseEnter={() => extenderSeleccion(ri, ci)}
-                    className={`w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 flex items-center justify-center rounded text-xs sm:text-sm font-bold uppercase border cursor-pointer transition-colors duration-100 ${hint ? "ring-2 ring-[#9b59b6] ring-offset-1" : ""}`}
-                    style={{
-                      background: bg,
-                      borderColor: sel ? "#e6c200" : celda.color ? celda.color : "#e0e0e0",
-                      userSelect: "none",
-                      WebkitUserSelect: "none",
-                    }}
-                  >
-                    {celda.letra}
-                  </div>
-                );
-              })
-            )}
+          {/* Grid responsive — celdas aspect-square que llenan el ancho */}
+          <div className="flex-1 w-full">
+            <div
+              ref={gridRef}
+              className="w-full grid gap-0.5 select-none"
+              style={{ gridTemplateColumns: `repeat(${SIZE}, 1fr)`, touchAction: "none" }}
+              onMouseLeave={() => { if (arrastrando) confirmarSeleccion(); }}
+              onMouseUp={confirmarSeleccion}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={confirmarSeleccion}
+            >
+              {grid.map((fila, ri) =>
+                fila.map((celda, ci) => {
+                  const sel  = estaSeleccionada(ri, ci);
+                  const hint = esPista(ri, ci);
+                  const bg   = celda.color
+                    ? celda.color + "80"
+                    : sel  ? "#FFD93D80"
+                    : hint ? "#D4AAFF"
+                    : "white";
+
+                  return (
+                    <div
+                      key={`${ri}-${ci}`}
+                      data-row={ri}
+                      data-col={ci}
+                      onMouseDown={() => iniciarSeleccion(ri, ci)}
+                      onMouseEnter={() => extenderSeleccion(ri, ci)}
+                      className={`aspect-square flex items-center justify-center rounded text-[9px] sm:text-xs md:text-sm font-bold uppercase border cursor-pointer transition-colors duration-100 ${hint ? "ring-2 ring-[#9b59b6] ring-offset-0" : ""}`}
+                      style={{
+                        background: bg,
+                        borderColor: sel ? "#e6c200" : celda.color ? celda.color : "#d0d0d0",
+                        userSelect: "none",
+                        WebkitUserSelect: "none",
+                      }}
+                    >
+                      {celda.letra}
+                    </div>
+                  );
+                })
+              )}
+            </div>
           </div>
+
+          {/* Desktop: sidebar de palabras */}
+          <div className="hidden sm:block w-52 flex-shrink-0">
+            <div className="bg-white rounded-2xl shadow p-3 sticky top-36">
+              <p className="font-bold text-[#1a3d22] text-sm mb-2 text-center">Encuentra:</p>
+              <div className="flex flex-col gap-1.5">
+                {palabras.map(pw => (
+                  <div
+                    key={pw.palabra}
+                    className="flex items-center gap-2 text-sm font-semibold"
+                    style={{ color: pw.encontrada ? "#888" : "#1a3d22" }}
+                  >
+                    <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ background: pw.color }} />
+                    <span className={pw.encontrada ? "line-through text-xs" : "text-xs sm:text-sm"}>
+                      {pw.encontrada ? "✓ " : ""}{pw.palabra}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -402,6 +412,9 @@ export default function Pupiletras() {
           <div className="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl bounce-in" style={{ fontFamily: "var(--font-fredoka), sans-serif" }}>
             <div className="text-6xl mb-3">🎉</div>
             <h2 className="text-3xl font-bold text-[#1a3d22] mb-2">¡Encontraste todas las palabras!</h2>
+            <p className="text-[#5a3e00] mb-4">
+              Tiempo: <span className="font-bold text-[var(--verde-fuerte)]">{formatTiempo(tiempo)}</span>
+            </p>
             <div className="bg-[#e8f7ff] border border-[#AEE6FF] rounded-2xl p-4 mb-5 text-sm text-[#1a3d55]">
               💡 La quinua es originaria de los Andes peruanos y es uno de los alimentos más nutritivos del mundo. 🇵🇪
             </div>

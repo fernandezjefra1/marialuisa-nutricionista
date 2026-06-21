@@ -509,55 +509,74 @@ function MenuUsuario() {
   );
 }
 
-/* ---------- HERO: LIBRO (izq) + TALLER (der) ---------- */
+/* ---------- HERO: INTRO + LIBRO + TALLER ---------- */
 function HeroLibro() {
   return (
     <section id="libro" className="relative overflow-hidden bg-[#f5f0e8]">
       <FoodBgHero />
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-14 md:py-20">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-20 space-y-12 md:space-y-20">
 
-        {/* Cabecera centrada */}
-        <div className="text-center mb-10">
-          <p className="font-playfair text-xl md:text-2xl text-[var(--texto-principal)] font-semibold italic leading-snug mb-1">
-            &ldquo;Vive la magia de la comida dietética&rdquo;
-          </p>
-          <p className="text-sm text-[var(--texto-suave)]">
-            María Luisa Nutricionista &nbsp;·&nbsp; <span className="font-medium text-[var(--texto-principal)]">Universidad de San Marcos</span>
-          </p>
-        </div>
+        {/* ── INTRO: María Luisa arriba en móvil, al lado en desktop ── */}
+        <div className="relative rounded-3xl overflow-hidden">
+          {/* Fondo San Marcos */}
+          <img
+            src="/images/sanmarcos.png"
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          />
+          {/* Capa suave para que el texto se lea bien */}
+          <div className="absolute inset-0 bg-[#f5f0e8]/75" />
 
-        <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-start">
+          <div className="relative z-10 flex flex-col-reverse md:grid md:grid-cols-2 gap-6 md:gap-10 items-center px-6 py-10 md:py-14">
+          {/* Frase — queda abajo en móvil, izquierda en desktop */}
+          <div className="text-center md:text-left">
+            <p className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[var(--texto-principal)] font-semibold italic leading-tight mb-4">
+              &ldquo;Vive la magia de la comida dietética&rdquo;
+            </p>
+            <p className="text-sm md:text-base text-[var(--texto-suave)]">
+              María Luisa Nutricionista &nbsp;·&nbsp;
+              <span className="font-semibold text-[var(--texto-principal)]">Universidad de San Marcos</span>
+            </p>
+          </div>
+          {/* Imagen — queda arriba en móvil, derecha en desktop */}
+          <div className="flex justify-center md:justify-end">
+            <img
+              src="/images/marialuisa.png"
+              alt="María Luisa Nutricionista"
+              className="w-44 sm:w-56 md:w-72 lg:w-80 flotar drop-shadow-2xl pointer-events-none"
+            />
+          </div>
+          </div>{/* fin grid interior */}
+        </div>{/* fin bloque intro con fondo */}
 
-          {/* ── IZQUIERDA: Libro ── */}
-          <div className="flex flex-col items-center">
-            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-7 font-semibold flex items-center gap-2 self-start">
+        {/* ── LIBRO: imagen arriba en móvil, fila en desktop ── */}
+        <div className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
+          {/* Imagen */}
+          <div className="relative w-full max-w-[280px] sm:max-w-xs mx-auto md:mx-0 pb-4">
+            <p className="text-xs uppercase tracking-widest text-[var(--primrose)] mb-3 font-semibold flex items-center gap-2">
               <IcoBook cls="w-4 h-4" /> Nuevo lanzamiento
             </p>
-
-            {/* Portada */}
-            <div className="relative w-full max-w-sm mx-auto mb-6">
-              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl rotate-3" />
-              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
-                <Image
-                  src="/images/libro-portada.jpg"
-                  alt="Libro Nutrición del Bebé - Lic. María Luisa"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
+            <div className="absolute inset-0 top-8 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl rotate-3 -z-0" />
+            <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white z-10">
+              <Image
+                src="/images/libro-portada.jpg"
+                alt="Libro Nutrición del Bebé - Lic. María Luisa"
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
-
-            <h1 className="font-playfair text-3xl sm:text-4xl font-light leading-tight tracking-tight mb-3 text-[var(--texto-principal)] text-center">
+          </div>
+          {/* Info */}
+          <div className="flex flex-col">
+            <h1 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight tracking-tight mb-3 text-[var(--texto-principal)]">
               Nutrición <span className="font-semibold shimmer-rose">del Bebé.</span>
             </h1>
-
-            <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-5 text-center max-w-sm">
-              Guía de nutrición infantil <span className="text-[var(--lime)] font-semibold">preventiva</span> desde los 6 meses hasta el año de vida.
-              Recientemente presentada en el Colegio de Nutricionistas del Perú.
+            <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-5">
+              Guía de nutrición infantil <span className="text-[var(--lime)] font-semibold">preventiva</span> desde
+              los 6 meses hasta el año de vida. Recientemente presentada en el Colegio de Nutricionistas del Perú.
             </p>
-
-            {/* Precios */}
             <div className="flex items-center gap-3 mb-5">
               <div className="relative bg-[var(--lime-soft)] border-2 border-[var(--lime)] rounded-2xl px-4 py-2.5 flex flex-col items-start halo-animado overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full" style={{animation:"shimmer-slide 2.5s ease-in-out infinite"}}/>
@@ -572,40 +591,37 @@ function HeroLibro() {
                 <span className="text-3xl font-semibold text-[var(--texto-principal)]">S/ 20</span>
               </div>
             </div>
-
             <Link
               href="/comprar-libro"
-              className="btn-coquette bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200 w-full max-w-sm text-center"
+              className="btn-coquette bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200 w-full md:w-fit text-center"
             >
               Adquirir el libro
             </Link>
           </div>
+        </div>
 
-          {/* ── DERECHA: Taller ── */}
-          <div id="taller" className="flex flex-col items-center">
-            <p className="text-sm uppercase tracking-widest text-[var(--lime)] mb-7 font-semibold flex items-center gap-2 self-start">
+        {/* ── TALLER: imagen arriba en móvil, fila en desktop ── */}
+        <div id="taller" className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
+          {/* Imagen */}
+          <div className="relative w-full max-w-[280px] sm:max-w-xs mx-auto md:mx-0 pb-4">
+            <p className="text-xs uppercase tracking-widest text-[var(--lime)] mb-3 font-semibold flex items-center gap-2">
               <IcoBlender cls="w-4 h-4" /> Próximo taller
             </p>
-
-            {/* Imagen */}
-            <div className="relative w-full max-w-sm mx-auto mb-6">
-              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--lime-soft)] to-[var(--verde-fuerte)]/30 rounded-2xl -rotate-3" />
-              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-green-200 overflow-hidden border-4 border-white">
-                <Image src="/images/taller-dietetica.jpeg" alt="Taller de Comida Dietética" fill className="object-cover object-top"/>
-              </div>
+            <div className="absolute inset-0 top-8 bg-gradient-to-br from-[var(--lime-soft)] to-[var(--verde-fuerte)]/30 rounded-2xl -rotate-3 -z-0" />
+            <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-green-200 overflow-hidden border-4 border-white z-10">
+              <Image src="/images/taller-dietetica.jpeg" alt="Taller de Comida Dietética" fill className="object-cover object-top"/>
             </div>
-
-            <h2 className="font-playfair text-3xl sm:text-4xl font-bold leading-tight mb-3 text-[var(--texto-principal)] text-center">
+          </div>
+          {/* Info */}
+          <div className="flex flex-col">
+            <h2 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 text-[var(--texto-principal)]">
               Taller de <span className="text-[var(--lime)]">Comida Dietética.</span>
             </h2>
-
-            <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-5 text-center max-w-sm">
+            <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-4">
               Aprende a cocinar rico y saludable. Un taller práctico donde descubrirás
               comidas fáciles, saludables y saciadoras que transformarán tu día a día.
             </p>
-
-            {/* Precios */}
-            <div className="flex items-center gap-3 mb-5">
+            <div className="flex items-center gap-3 mb-4">
               <div className="bg-[var(--verde-fuerte)] rounded-2xl px-4 py-2.5 flex flex-col items-start">
                 <span className="text-xs uppercase tracking-widest text-white/70 font-semibold mb-0.5">Presencial</span>
                 <span className="text-3xl font-bold text-white">S/ 80</span>
@@ -615,9 +631,7 @@ function HeroLibro() {
                 <span className="text-3xl font-bold text-white">S/ 40</span>
               </div>
             </div>
-
-            {/* Beneficios */}
-            <ul className="space-y-2 mb-5 w-full max-w-sm">
+            <ul className="space-y-2 mb-5">
               {["Degustación incluida","Materiales: taper, cubiertos, jabón y toalla","Modalidad presencial y virtual"].map((item,i)=>(
                 <li key={i} className="flex items-center gap-2 font-nunito text-sm text-[var(--texto-suave)]">
                   <span className="w-5 h-5 rounded-full bg-[var(--lime-soft)] flex items-center justify-center flex-shrink-0">
@@ -629,14 +643,13 @@ function HeroLibro() {
                 </li>
               ))}
             </ul>
-
             <Link href="/reservar-taller"
-              className="btn-coquette bg-[var(--verde-fuerte)] text-white px-6 py-3 rounded-full hover:opacity-90 transition font-medium shadow-lg shadow-green-200 w-full max-w-sm text-center">
+              className="btn-coquette bg-[var(--verde-fuerte)] text-white px-6 py-3 rounded-full hover:opacity-90 transition font-medium shadow-lg shadow-green-200 w-full md:w-fit text-center">
               Reservar cupo ahora
             </Link>
           </div>
-
         </div>
+
       </div>
     </section>
   );
@@ -1205,6 +1218,27 @@ function DietaMariaLuisa() {
               >
                 {plan.cta}
               </Link>
+              {plan.nombre === "Dieta Premium" && (
+                <img
+                  src="/images/imagenlibro.jpeg"
+                  alt="Libro de dieta premium"
+                  className="w-full rounded-xl mt-4 object-cover"
+                />
+              )}
+              {plan.nombre === "Dieta VIP" && (
+                <img
+                  src="/images/vip.png"
+                  alt="Plan VIP"
+                  className="w-full rounded-xl mt-4 object-cover"
+                />
+              )}
+              {plan.nombre === "Dieta Básica" && (
+                <img
+                  src="/images/free.png"
+                  alt="Plan gratuito"
+                  className="w-full rounded-xl mt-4 object-cover"
+                />
+              )}
             </div>
           ))}
         </div>
@@ -1391,28 +1425,24 @@ function SeccionEnfermedadesYFaq() {
 
   const faqs = [
     {
-      pregunta: "¿En qué consiste la primera consulta?",
-      respuesta: "Evaluación nutricional completa, análisis de hábitos, antropometría y diseño de un plan personalizado. Dura aproximadamente 60 minutos.",
+      pregunta: "¿Cuál es la edad adecuada para empezar a cuidar la salud?",
+      respuesta: "¡Desde la niñez! La nutricionista atiende a personas de cualquier edad: niños, adolescentes, adultos y adultos mayores. Nunca es demasiado pronto ni demasiado tarde para empezar.",
     },
     {
-      pregunta: "¿Atiendes a niños y adultos mayores?",
-      respuesta: "Sí, atiendo todas las etapas de la vida: bebés desde los 6 meses, niños, adolescentes, adultos y adultos mayores.",
+      pregunta: "¿Cuánto tiempo dura su atención?",
+      respuesta: "La duración varía según el tipo de consulta y el plan nutricional diseñado para ti. Para conocer los detalles exactos, contáctate con la secretaria o escríbenos directamente.",
     },
     {
-      pregunta: "¿Las consultas son presenciales o virtuales?",
-      respuesta: "Ambas modalidades. Las virtuales se realizan por videollamada con la misma calidad de evaluación.",
+      pregunta: "¿Cuáles son los beneficios de cuidarme ahora con su dieta preventiva?",
+      respuesta: "Con una dieta preventiva puedes evitar enfermedades como la diabetes, la hipertensión y la obesidad, entre otras. Cuidarte hoy es la mejor inversión para tu salud futura.",
     },
     {
-      pregunta: "¿Cuánto tiempo dura un plan nutricional?",
-      respuesta: "Los planes van de 1 a 6 meses según el objetivo, con controles periódicos para ajustar resultados.",
+      pregunta: "¿Es doloroso, caro o difícil llevar su dieta preventiva?",
+      respuesta: "¡Para nada! La dieta preventiva está pensada para adaptarse a tu vida cotidiana: es accesible, práctica y sin sacrificios extremos. La idea es que la disfrutes, no que la sufras.",
     },
     {
-      pregunta: "¿Trabajas con seguros o convenios?",
-      respuesta: "Atiendo convenios empresariales B2B. Para seguros particulares consulta directamente por WhatsApp.",
-    },
-    {
-      pregunta: "¿Cómo reservo mi cita?",
-      respuesta: "Desde el botón 'Reservar cita' en la web o escribiéndome al WhatsApp 985 577 017.",
+      pregunta: "¿Se puede llevar una vida normal con su dieta preventiva?",
+      respuesta: "Sí, totalmente. Puedes seguir con tu rutina, trabajo, familia y vida social sin restricciones drásticas. Si quieres más detalles, escríbenos o contáctate con la secretaria.",
     },
   ];
 

@@ -378,6 +378,22 @@ function Navbar() {
           <span className="hidden md:inline">Tienda</span>
         </Link>
 
+        {/* BOTÓN NUTRI KIDS */}
+        <Link
+          href="/nutri-kids"
+          className="inline-flex items-center gap-1.5 px-3 py-2.5 md:px-5 rounded-full bg-[#FFD93D] text-[#5a3e00] font-semibold text-sm transition-all duration-300 ease-out hover:scale-105 hover:shadow-lg hover:shadow-[#FFD93D]/50 hover:-translate-y-0.5 active:scale-95"
+          style={{ touchAction: "manipulation" }}
+        >
+          <Image
+            src="/images/NutriKids.jpeg"
+            alt="Nutri Kids"
+            width={20}
+            height={20}
+            className="w-5 h-5 rounded-full object-cover flex-shrink-0"
+          />
+          <span className="hidden md:inline">Nutri Kids</span>
+        </Link>
+
         {/* BOTÓN RESERVAR CITA */}
         {!userLoading && (
           <Link

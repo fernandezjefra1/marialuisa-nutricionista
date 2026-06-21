@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Playfair_Display, Nunito } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display, Nunito, Fredoka } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -23,6 +23,12 @@ const nunito = Nunito({
   subsets: ["latin"],
 });
 
+const fredoka = Fredoka({
+  variable: "--font-fredoka",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -41,7 +47,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${nunito.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${nunito.variable} ${fredoka.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col overflow-x-hidden">{children}</body>
     </html>

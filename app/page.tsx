@@ -348,9 +348,9 @@ function Navbar() {
           <Image
             src="/images/logoNutricion.png"
             alt="Logo María Luisa Nutricionista"
-            width={96}
-            height={96}
-            className="w-16 h-16 md:w-24 md:h-24 object-contain drop-shadow-sm"
+            width={112}
+            height={112}
+            className="w-20 h-20 md:w-28 md:h-28 object-contain drop-shadow-sm -my-4 md:-my-6"
           />
           <div className="hidden sm:block leading-tight">
             <p className="font-playfair italic text-[var(--texto-principal)] text-base md:text-lg leading-none">

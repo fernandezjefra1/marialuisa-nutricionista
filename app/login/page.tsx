@@ -767,6 +767,22 @@ function LoginContent() {
               </div>
 
               <form onSubmit={handleVerificarCodigo} className="flex flex-col gap-4">
+                <div className="bg-[#fff3e0] border-2 border-[#ff9800]/30 rounded-xl p-3 sm:p-4 my-2">
+                  <div className="flex items-start gap-2">
+                    <span className="text-xl flex-shrink-0">📬</span>
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold text-[#e65100] mb-1">
+                        ¿No te llega el correo?
+                      </p>
+                      <ul className="text-xs text-[#b8551c] space-y-1 list-disc list-inside font-nunito">
+                        <li>Revisa tu carpeta de <strong>SPAM o Correo no deseado</strong>.</li>
+                        <li>Puede tardar hasta <strong>5 minutos</strong> en llegar.</li>
+                        <li>Verifica que tu correo esté bien escrito.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
                 <InputsCodigo
                   codigo={codigo}
                   inputsRef={inputsRef}

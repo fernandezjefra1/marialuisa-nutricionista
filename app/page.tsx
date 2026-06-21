@@ -783,7 +783,7 @@ function CarruselComentarios() {
   const avatarUrl = user?.user_metadata?.avatar_url || user?.user_metadata?.picture;
 
   return (
-    <section className="bg-[var(--verde-fuerte)] py-14 md:py-16 relative overflow-hidden">
+    <section className="bg-[var(--verde-fuerte)] py-12 sm:py-14 md:py-16 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         {burbujas.map((b, i) => (
           <span
@@ -1169,7 +1169,7 @@ function DietaMariaLuisa() {
   ];
 
   return (
-    <section id="dieta" className="py-14 md:py-20 bg-[#f5f0e8] relative overflow-hidden">
+    <section id="dieta" className="py-12 sm:py-16 lg:py-20 bg-[#f5f0e8] relative overflow-hidden">
       <FoodBg />
       <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
         <div className="text-center mb-8 md:mb-12">
@@ -1184,13 +1184,13 @@ function DietaMariaLuisa() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
           {planes.map((plan, i) => (
             <div
               key={i}
-              className={`bg-white rounded-2xl border-2 p-6 transition relative flex flex-col ${
+              className={`bg-white rounded-2xl border-2 p-5 sm:p-6 transition relative flex flex-col ${
                 plan.destacado
-                  ? "scale-105 border-[var(--primrose)] shadow-xl shadow-pink-200"
+                  ? "md:scale-105 border-[var(--primrose)] shadow-xl shadow-pink-200"
                   : "border-[var(--borde-verde)] hover:shadow-lg hover:shadow-green-100 hover:-translate-y-1"
               }`}
             >
@@ -1230,7 +1230,7 @@ function DietaMariaLuisa() {
               </ul>
               <Link
                 href={plan.ctaHref}
-                className={`block text-center px-5 py-2.5 rounded-full font-medium transition text-sm ${plan.ctaExtra}`}
+                className={`block w-full text-center px-5 py-3 rounded-full font-medium transition text-sm ${plan.ctaExtra}`}
               >
                 {plan.cta}
               </Link>
@@ -1465,7 +1465,7 @@ function SeccionEnfermedadesYFaq() {
   const [faqAbierta, setFaqAbierta] = useState<number | null>(null);
 
   return (
-    <section className="py-14 md:py-20 bg-[var(--verde-fuerte)] relative overflow-hidden">
+    <section className="py-12 sm:py-16 lg:py-20 bg-[var(--verde-fuerte)] relative overflow-hidden">
       <FoodBg />
       <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
         <div className="text-center mb-8 md:mb-12">
@@ -1569,59 +1569,29 @@ function SeccionEnfermedadesYFaq() {
   );
 }
 
-/* ---------- SECCIÓN PRODUCTOS DESTACADOS ---------- */
+/* ---------- SECCIÓN PRODUCTOS DESTACADOS + MAPA ---------- */
 function SeccionProductos() {
   const productos = [
-    { 
-      nombre: "Harina de Cúrcuma", 
-      precio: 15, 
-      descripcion: "Libre de gluten · 250 gr", 
-      color: "primrose",
-      imagen: "/images/harinaCurcuma.png"  
-    },
-    { 
-      nombre: "Salvado de Trigo", 
-      precio: 12, 
-      descripcion: "100% Fibra Natural · 500 gr", 
-      color: "lime",
-      imagen: "/images/salvadoTrigo.png" 
-    },
-    { 
-      nombre: "Sacha Inchi", 
-      precio: 25, 
-      descripcion: "Omega-3 y proteínas · 250 gr", 
-      color: "primrose",
-      imagen: "/images/SachaInchi.png"   
-    },
-    { 
-      nombre: "Cacao Orgánico", 
-      precio: 20, 
-      descripcion: "Sin azúcar añadida · 200 gr", 
-      color: "lime",
-      imagen: "/images/Cacao.png"         
-    },
+    { nombre: "Harina de Cúrcuma", precio: 15, descripcion: "Libre de gluten · 250 gr",    color: "primrose", imagen: "/images/harinaCurcuma.png" },
+    { nombre: "Salvado de Trigo",  precio: 12, descripcion: "100% Fibra Natural · 500 gr",  color: "lime",     imagen: "/images/salvadoTrigo.png"  },
+    { nombre: "Sacha Inchi",       precio: 25, descripcion: "Omega-3 y proteínas · 250 gr", color: "primrose", imagen: "/images/SachaInchi.png"    },
+    { nombre: "Cacao Orgánico",    precio: 20, descripcion: "Sin azúcar añadida · 200 gr",  color: "lime",     imagen: "/images/Cacao.png"         },
   ];
 
   const burbujas = [
-    { w: 90,  top: "8%",   left: "3%",   op: 0.12, dur: "7s",  del: "0s"   },
-    { w: 50,  top: "20%",  left: "8%",   op: 0.08, dur: "5s",  del: "1s"   },
-    { w: 130, top: "55%",  left: "1%",   op: 0.10, dur: "9s",  del: "2s"   },
-    { w: 40,  top: "75%",  left: "10%",  op: 0.14, dur: "6s",  del: "0.5s" },
-    { w: 70,  top: "5%",   left: "18%",  op: 0.07, dur: "8s",  del: "3s"   },
-    { w: 110, top: "40%",  left: "88%",  op: 0.11, dur: "7s",  del: "1.5s" },
-    { w: 60,  top: "10%",  left: "80%",  op: 0.09, dur: "6s",  del: "2.5s" },
-    { w: 85,  top: "70%",  left: "92%",  op: 0.13, dur: "8s",  del: "0.8s" },
-    { w: 45,  top: "85%",  left: "75%",  op: 0.08, dur: "5s",  del: "1.8s" },
-    { w: 120, top: "25%",  left: "93%",  op: 0.10, dur: "9s",  del: "3.5s" },
-    { w: 55,  top: "50%",  left: "5%",   op: 0.09, dur: "6.5s",del: "4s"   },
-    { w: 35,  top: "90%",  left: "20%",  op: 0.12, dur: "5.5s",del: "2.2s" },
-    { w: 75,  top: "60%",  left: "97%",  op: 0.07, dur: "7.5s",del: "0.3s" },
-    { w: 95,  top: "15%",  left: "96%",  op: 0.11, dur: "8.5s",del: "1.2s" },
-    { w: 48,  top: "35%",  left: "2%",   op: 0.08, dur: "6s",  del: "3.8s" },
+    { w: 90,  top: "8%",  left: "3%",  op: 0.12, dur: "7s",   del: "0s"   },
+    { w: 50,  top: "20%", left: "8%",  op: 0.08, dur: "5s",   del: "1s"   },
+    { w: 130, top: "55%", left: "1%",  op: 0.10, dur: "9s",   del: "2s"   },
+    { w: 40,  top: "75%", left: "10%", op: 0.14, dur: "6s",   del: "0.5s" },
+    { w: 110, top: "40%", left: "88%", op: 0.11, dur: "7s",   del: "1.5s" },
+    { w: 60,  top: "10%", left: "80%", op: 0.09, dur: "6s",   del: "2.5s" },
+    { w: 85,  top: "70%", left: "92%", op: 0.13, dur: "8s",   del: "0.8s" },
+    { w: 55,  top: "50%", left: "5%",  op: 0.09, dur: "6.5s", del: "4s"   },
+    { w: 95,  top: "15%", left: "96%", op: 0.11, dur: "8.5s", del: "1.2s" },
   ];
 
   return (
-    <section id="tienda" className="py-14 md:py-16 bg-[var(--verde-fuerte)] relative overflow-hidden">
+    <section id="tienda" className="py-12 sm:py-16 lg:py-20 bg-[var(--verde-fuerte)] relative overflow-hidden">
       {/* Burbujas animadas */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         {burbujas.map((b, i) => (
@@ -1629,65 +1599,108 @@ function SeccionProductos() {
             key={i}
             className="absolute rounded-full border-2 border-white food-d1"
             style={{
-              width: b.w,
-              height: b.w,
-              top: b.top,
-              left: b.left,
-              opacity: b.op,
+              width: b.w, height: b.w, top: b.top, left: b.left, opacity: b.op,
               backgroundColor: i % 3 === 0 ? "#ffffff" : i % 3 === 1 ? "#a8d890" : "transparent",
-              ["--fdur" as string]: b.dur,
-              ["--fdel" as string]: b.del,
+              ["--fdur" as string]: b.dur, ["--fdel" as string]: b.del,
             }}
           />
         ))}
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 gap-4">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+
+          {/* ── COLUMNA IZQUIERDA: Productos ── */}
           <div>
-            <p className="text-sm uppercase tracking-widest text-white/80 mb-2 font-semibold flex items-center gap-2">
-              <IcoLeaf cls="w-4 h-4 inline-block" /> Nuestra tienda
-            </p>
-            <h2 className="font-playfair text-3xl md:text-5xl font-bold text-white">
+            <div className="flex items-center gap-2 mb-3">
+              <IcoLeaf cls="w-5 h-5 text-white" />
+              <span className="text-xs sm:text-sm uppercase tracking-wider text-white/90 font-semibold">
+                Nuestra tienda
+              </span>
+            </div>
+            <h2 className="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
               Productos <span className="font-semibold shimmer-white">naturales.</span>
             </h2>
-            <p className="font-nunito text-white/80 mt-2 text-sm md:text-base max-w-lg">
+            <p className="font-nunito text-white/80 text-sm sm:text-base mb-6">
               Superalimentos, harinas y suplementos cuidadosamente seleccionados.
             </p>
-          </div>
-          <Link
-            href="/productos"
-            className="text-sm bg-[var(--primrose)] text-white px-5 py-2.5 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium w-fit"
-          >
-            Ver tienda completa →
-          </Link>
-        </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {productos.map((p, i) => (
+            {/* Grid 2×2 de productos compacto */}
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6">
+              {productos.map((p, i) => (
+                <Link
+                  key={i}
+                  href="/productos"
+                  className="bg-white rounded-xl border-2 border-[var(--borde-rosa)] p-3 sm:p-4 hover:border-[var(--primrose)] hover:shadow-lg hover:shadow-pink-200 hover:-translate-y-1 transition group"
+                >
+                  <div className="aspect-square rounded-lg mb-2 sm:mb-3 overflow-hidden relative">
+                    <Image src={p.imagen} alt={p.nombre} fill className="object-contain p-1.5" />
+                  </div>
+                  <p className={`text-[10px] uppercase tracking-widest mb-0.5 font-semibold ${
+                    p.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
+                  }`}>Destacado</p>
+                  <h3 className="font-semibold text-[var(--texto-principal)] text-sm sm:text-base mb-0.5 leading-tight">{p.nombre}</h3>
+                  <p className="font-nunito text-xs text-[var(--texto-suave)] leading-relaxed hidden sm:block">{p.descripcion}</p>
+                  <p className="text-base sm:text-lg font-semibold text-[var(--texto-principal)] mt-1">S/ {p.precio}</p>
+                </Link>
+              ))}
+            </div>
+
             <Link
-              key={i}
               href="/productos"
-              className="bg-white rounded-2xl border-2 border-[var(--borde-rosa)] p-4 sm:p-5 hover:border-[var(--primrose)] hover:shadow-lg hover:shadow-pink-200 hover:-translate-y-1 transition group"
+              className="block sm:inline-block w-full sm:w-auto text-center bg-white text-[var(--primrose)] px-6 py-3 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all"
             >
-              <div className="aspect-square rounded-xl mb-4 overflow-hidden relative">
-               <Image
-                  src={p.imagen}
-                  alt={p.nombre}
-                  fill
-                  className="object-contain p-2"
-                 />
-                </div>
-              <p className={`text-xs uppercase tracking-widest mb-1 font-semibold ${
-                p.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
-              }`}>
-                Destacado
-              </p>
-              <h3 className="font-semibold text-[var(--texto-principal)] mb-1 text-sm">{p.nombre}</h3>
-              <p className="font-nunito text-sm text-[var(--texto-suave)] mb-3 leading-relaxed">{p.descripcion}</p>
-              <p className="text-lg font-semibold text-[var(--texto-principal)]">S/ {p.precio}</p>
+              Ver tienda completa →
             </Link>
-          ))}
+          </div>
+
+          {/* ── COLUMNA DERECHA: Mapa ── */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <IcoPin cls="w-5 h-5 text-white" />
+              <span className="text-xs sm:text-sm uppercase tracking-wider text-white/90 font-semibold">
+                Visítanos
+              </span>
+            </div>
+            <h2 className="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
+              Encuéntranos en <span className="font-semibold shimmer-white">San Juan.</span>
+            </h2>
+            <p className="font-nunito text-white/80 text-sm sm:text-base mb-5">
+              Atención presencial con cita previa.
+            </p>
+
+            {/* Iframe de Google Maps */}
+            <div className="rounded-2xl overflow-hidden border-4 border-white shadow-2xl aspect-[4/3] sm:aspect-[4/3] lg:aspect-[4/5] mb-4">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d487.52465407991576!2d-76.9685542!3d-12.1669714!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105b96811cf226b%3A0x1e33f53b4d52f3d4!2sResidencial%20Mart%C3%ADn!5e0!3m2!1ses!2spe!4v1782026789930!5m2!1ses!2spe"
+                width="100%"
+                height="100%"
+                style={{ border: 0, display: "block" }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Ubicación María Luisa Nutricionista"
+              />
+            </div>
+
+            {/* Dirección */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 mb-4">
+              <p className="text-white text-sm sm:text-base leading-relaxed">
+                📍 Calle José del Carmen Verastegui 303<br />
+                San Juan de Miraflores, Lima, Perú
+              </p>
+            </div>
+
+            <a
+              href="https://www.google.com/maps/place/Residencial+Mart%C3%ADn/@-12.1669714,-76.9685542,17z"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block sm:inline-block w-full sm:w-auto text-center bg-white text-[var(--verde-fuerte)] px-6 py-3 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all"
+            >
+              Abrir en Google Maps →
+            </a>
+          </div>
+
         </div>
       </div>
     </section>
@@ -1719,7 +1732,7 @@ function AsesoriasProyectos() {
   ];
 
   return (
-    <section className="py-14 md:py-16 overflow-hidden relative bg-[var(--verde-fuerte)]">
+    <section className="py-12 sm:py-14 md:py-16 overflow-hidden relative bg-[var(--verde-fuerte)]">
       {/* Orbes animados */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         {orbs.map((b, i) => (
@@ -1799,7 +1812,7 @@ function AsesoriasProyectos() {
 
             <Link
               href="/empresas"
-              className="inline-block bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
+              className="block sm:inline-block w-full sm:w-auto text-center bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
             >
               Solicitar asesoría
             </Link>
@@ -1908,7 +1921,7 @@ function BloqueEmpresasYPromotores() {
   ];
 
   return (
-    <section className="py-14 md:py-20 bg-[#f5f0e8] relative overflow-hidden">
+    <section className="py-12 sm:py-16 lg:py-20 bg-[#f5f0e8] relative overflow-hidden">
       <FoodBg />
       <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
 
@@ -1971,7 +1984,7 @@ function BloqueEmpresasYPromotores() {
             </ul>
             <Link
               href="/empresas"
-              className="inline-block bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
+              className="block sm:inline-block w-full sm:w-auto text-center bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
             >
               Conocer el programa
             </Link>
@@ -2002,7 +2015,7 @@ function BloqueEmpresasYPromotores() {
             </ul>
             <Link
               href="/promotores"
-              className="btn-coquette inline-block bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
+              className="btn-coquette block sm:inline-block w-full sm:w-auto text-center bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
             >
               Postular como promotor
             </Link>

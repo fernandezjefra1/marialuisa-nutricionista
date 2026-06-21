@@ -1606,6 +1606,29 @@ function SeccionProductos() {
     { w: 95,  top: "15%", left: "96%", op: 0.11, dur: "8.5s", del: "1.2s" },
   ];
 
+  const abrirMapa = () => {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+
+    const direccionTexto = "Calle José del Carmen Verastegui 303, San Juan de Miraflores, Lima, Perú";
+    const direccionUrl = encodeURIComponent(direccionTexto);
+
+    if (isIOS) {
+      window.location.href = `comgooglemaps://?q=${direccionUrl}&center=-12.1669714,-76.9685542`;
+      setTimeout(() => {
+        window.location.href = `https://maps.google.com/?q=${direccionUrl}`;
+      }, 500);
+    } else if (isAndroid) {
+      window.location.href = `geo:-12.1669714,-76.9685542?q=${direccionUrl}`;
+    } else {
+      window.open(
+        "https://www.google.com/maps/place/Residencial+Mart%C3%ADn/@-12.1669714,-76.9685542,17z",
+        "_blank",
+        "noopener,noreferrer"
+      );
+    }
+  };
+
   return (
     <section id="tienda" className="py-12 sm:py-16 lg:py-20 bg-[var(--verde-fuerte)] relative overflow-hidden">
       {/* Burbujas animadas */}
@@ -1707,14 +1730,12 @@ function SeccionProductos() {
               </p>
             </div>
 
-            <a
-              href="https://www.google.com/maps/place/Residencial+Mart%C3%ADn/@-12.1669714,-76.9685542,17z"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block sm:inline-block w-full sm:w-auto text-center bg-white text-[var(--verde-fuerte)] px-6 py-3 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all"
+            <button
+              onClick={abrirMapa}
+              className="block w-full sm:w-auto sm:inline-block text-center bg-white text-[var(--verde-fuerte)] px-6 py-3 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all cursor-pointer"
             >
               Abrir en Google Maps →
-            </a>
+            </button>
           </div>
 
         </div>

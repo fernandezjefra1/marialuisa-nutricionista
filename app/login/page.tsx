@@ -536,7 +536,7 @@ function LoginContent() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/images/iconoNutricion.png" alt="Logo" width={52} height={52} className="object-contain drop-shadow-sm" />
+            <Image src="/images/logoNutricion.png" alt="Logo" width={52} height={52} className="object-contain drop-shadow-sm" />
             <div>
               <p className="font-playfair font-bold text-[var(--verde-fuerte)] text-lg leading-tight">María Luisa</p>
               <p className="text-[10px] uppercase tracking-widest text-[#5a7255]">Nutricionista</p>

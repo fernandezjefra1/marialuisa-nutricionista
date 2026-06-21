@@ -57,7 +57,7 @@ export default function RegistroPage() {
       <div className="min-h-screen bg-[#d4edcc] flex items-center justify-center p-6">
         <div className="bg-white rounded-[40px] shadow-2xl shadow-green-200 p-12 max-w-lg w-full text-center">
           <div className="w-20 h-20 rounded-full bg-[#d4edcc] flex items-center justify-center mx-auto">
-            <Image src="/images/iconoNutricion.png" alt="Logo" width={70} height={70} className="object-contain" />
+            <Image src="/images/logoNutricion.png" alt="Logo" width={70} height={70} className="object-contain" />
           </div>
           <h1 className="font-playfair text-4xl text-[#31543d] mt-6 font-bold">
             ¡Revisa tu correo! <span className="text-[#C4607A]">♡</span>
@@ -144,7 +144,7 @@ export default function RegistroPage() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 mb-6">
-            <Image src="/images/iconoNutricion.png" alt="Logo" width={60} height={60} className="object-contain drop-shadow-sm" />
+            <Image src="/images/logoNutricion.png" alt="Logo" width={60} height={60} className="object-contain drop-shadow-sm" />
             <div>
               <p className="font-playfair font-bold text-[#31543d] text-lg leading-tight">María Luisa</p>
               <p className="text-[10px] uppercase tracking-widest text-[#5a7255]">Nutricionista</p>
@@ -232,7 +232,7 @@ export default function RegistroPage() {
               disabled={loading}
               className="btn-coquette w-full bg-[#6daa6d] hover:bg-[#5a9a5a] text-white py-4 rounded-2xl font-semibold transition duration-300 shadow-md shadow-green-200 flex items-center justify-center gap-2"
             >
-              <Image src="/images/iconoNutricion.png" alt="" width={20} height={20} className="object-contain brightness-0 invert" />
+              <Image src="/images/logoNutricion.png" alt="" width={20} height={20} className="object-contain brightness-0 invert" />
               {loading ? "Creando cuenta..." : "Crear cuenta"}
             </button>
           </form>

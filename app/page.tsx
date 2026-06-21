@@ -346,7 +346,7 @@ function Navbar() {
         {/* LOGO */}
         <Link href="/" className="flex items-center gap-2.5 hover:scale-105 transition-transform duration-300 flex-shrink-0">
           <Image
-            src="/images/iconoNutricion.png"
+            src="/images/logoNutricion.png"
             alt="Logo María Luisa Nutricionista"
             width={64}
             height={64}

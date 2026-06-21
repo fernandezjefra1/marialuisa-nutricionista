@@ -36,7 +36,7 @@ export default function RecuperarContrasenaPage() {
       <div className="w-full max-w-md bg-white rounded-[32px] shadow-2xl shadow-green-100 p-10">
 
         <Link href="/login" className="flex items-center gap-2 mb-8">
-          <Image src="/images/iconoNutricion.png" alt="Logo" width={48} height={48} className="object-contain" />
+          <Image src="/images/logoNutricion.png" alt="Logo" width={48} height={48} className="object-contain" />
           <div>
             <p className="font-playfair font-bold text-[var(--verde-fuerte)] text-lg leading-tight">María Luisa</p>
             <p className="text-[10px] uppercase tracking-widest text-[#5a7255]">Nutricionista</p>

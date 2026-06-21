@@ -77,7 +77,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="px-6 py-6 border-b border-[var(--borde-verde)]">
           <Link href="/" className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full overflow-hidden border border-[var(--borde-verde)] shrink-0">
-              <img src="/images/iconoNutricion.png" alt="Logo" className="w-full h-full object-cover" />
+              <img src="/images/logoNutricion.png" alt="Logo" className="w-full h-full object-cover" />
             </div>
             <div>
               <p className="font-playfair font-bold text-[var(--texto-principal)] text-sm leading-tight">María Luisa</p>

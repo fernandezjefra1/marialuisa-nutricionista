@@ -1606,29 +1606,6 @@ function SeccionProductos() {
     { w: 95,  top: "15%", left: "96%", op: 0.11, dur: "8.5s", del: "1.2s" },
   ];
 
-  const abrirMapa = () => {
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const isAndroid = /Android/.test(navigator.userAgent);
-
-    const direccionTexto = "Calle José del Carmen Verastegui 303, San Juan de Miraflores, Lima, Perú";
-    const direccionUrl = encodeURIComponent(direccionTexto);
-    const lat = -12.1669714;
-    const lng = -76.9685542;
-    const placeId = "ChIJayLPEWi5BZERQfPSTTv1Mx4";
-
-    if (isIOS) {
-      window.location.href = `comgooglemaps://?q=${direccionUrl}&center=${lat},${lng}`;
-      setTimeout(() => {
-        window.location.href = `https://maps.google.com/?q=${direccionUrl}`;
-      }, 500);
-    } else if (isAndroid) {
-      window.location.href = `geo:${lat},${lng}?q=${direccionUrl}`;
-    } else {
-      const url = `https://www.google.com/maps/search/?api=1&query=${lat}%2C${lng}&query_place_id=${placeId}`;
-      window.open(url, "_blank", "noopener,noreferrer");
-    }
-  };
-
   return (
     <section id="tienda" className="py-12 sm:py-16 lg:py-20 bg-[var(--verde-fuerte)] relative overflow-hidden">
       {/* Burbujas animadas */}
@@ -1647,97 +1624,49 @@ function SeccionProductos() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+        <div className="text-center mb-10">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <IcoLeaf cls="w-5 h-5 text-white" />
+            <span className="text-xs sm:text-sm uppercase tracking-wider text-white/90 font-semibold">
+              Nuestra tienda
+            </span>
+          </div>
+          <h2 className="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
+            Productos <span className="font-semibold shimmer-white">naturales.</span>
+          </h2>
+          <p className="font-nunito text-white/80 text-sm sm:text-base">
+            Superalimentos, harinas y suplementos cuidadosamente seleccionados.
+          </p>
+        </div>
 
-          {/* ── COLUMNA IZQUIERDA: Productos ── */}
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <IcoLeaf cls="w-5 h-5 text-white" />
-              <span className="text-xs sm:text-sm uppercase tracking-wider text-white/90 font-semibold">
-                Nuestra tienda
-              </span>
-            </div>
-            <h2 className="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
-              Productos <span className="font-semibold shimmer-white">naturales.</span>
-            </h2>
-            <p className="font-nunito text-white/80 text-sm sm:text-base mb-6">
-              Superalimentos, harinas y suplementos cuidadosamente seleccionados.
-            </p>
-
-            {/* Grid 2×2 de productos compacto */}
-            <div className="grid grid-cols-2 gap-3 sm:gap-4 mb-6">
-              {productos.map((p, i) => (
-                <Link
-                  key={i}
-                  href="/productos"
-                  className="bg-white rounded-xl border-2 border-[var(--borde-rosa)] p-3 sm:p-4 hover:border-[var(--primrose)] hover:shadow-lg hover:shadow-pink-200 hover:-translate-y-1 transition group"
-                >
-                  <div className="aspect-square rounded-lg mb-2 sm:mb-3 overflow-hidden relative">
-                    <Image src={p.imagen} alt={p.nombre} fill className="object-contain p-1.5" />
-                  </div>
-                  <p className={`text-[10px] uppercase tracking-widest mb-0.5 font-semibold ${
-                    p.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
-                  }`}>Destacado</p>
-                  <h3 className="font-semibold text-[var(--texto-principal)] text-sm sm:text-base mb-0.5 leading-tight">{p.nombre}</h3>
-                  <p className="font-nunito text-xs text-[var(--texto-suave)] leading-relaxed hidden sm:block">{p.descripcion}</p>
-                  <p className="text-base sm:text-lg font-semibold text-[var(--texto-principal)] mt-1">S/ {p.precio}</p>
-                </Link>
-              ))}
-            </div>
-
+        {/* Grid de 4 productos a ancho completo */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          {productos.map((p, i) => (
             <Link
+              key={i}
               href="/productos"
-              className="block sm:inline-block w-full sm:w-auto text-center bg-white text-[var(--primrose)] px-6 py-3 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all"
+              className="bg-white rounded-xl border-2 border-[var(--borde-rosa)] p-3 sm:p-4 hover:border-[var(--primrose)] hover:shadow-lg hover:shadow-pink-200 hover:-translate-y-1 transition group"
             >
-              Ver tienda completa →
+              <div className="aspect-square rounded-lg mb-2 sm:mb-3 overflow-hidden relative">
+                <Image src={p.imagen} alt={p.nombre} fill className="object-contain p-1.5" />
+              </div>
+              <p className={`text-[10px] uppercase tracking-widest mb-0.5 font-semibold ${
+                p.color === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
+              }`}>Destacado</p>
+              <h3 className="font-semibold text-[var(--texto-principal)] text-sm sm:text-base mb-0.5 leading-tight">{p.nombre}</h3>
+              <p className="font-nunito text-xs text-[var(--texto-suave)] leading-relaxed hidden sm:block">{p.descripcion}</p>
+              <p className="text-base sm:text-lg font-semibold text-[var(--texto-principal)] mt-1">S/ {p.precio}</p>
             </Link>
-          </div>
+          ))}
+        </div>
 
-          {/* ── COLUMNA DERECHA: Mapa ── */}
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <IcoPin cls="w-5 h-5 text-white" />
-              <span className="text-xs sm:text-sm uppercase tracking-wider text-white/90 font-semibold">
-                Visítanos
-              </span>
-            </div>
-            <h2 className="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
-              Encuéntranos en <span className="font-semibold shimmer-white">San Juan.</span>
-            </h2>
-            <p className="font-nunito text-white/80 text-sm sm:text-base mb-5">
-              Atención presencial con cita previa.
-            </p>
-
-            {/* Iframe de Google Maps */}
-            <div className="rounded-2xl overflow-hidden border-4 border-white shadow-2xl aspect-[4/3] sm:aspect-[4/3] lg:aspect-[4/5] mb-4">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d487.52465407991576!2d-76.9685542!3d-12.1669714!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9105b96811cf226b%3A0x1e33f53b4d52f3d4!2sResidencial%20Mart%C3%ADn!5e0!3m2!1ses!2spe!4v1782026789930!5m2!1ses!2spe"
-                width="100%"
-                height="100%"
-                style={{ border: 0, display: "block" }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Ubicación María Luisa Nutricionista"
-              />
-            </div>
-
-            {/* Dirección */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 mb-4">
-              <p className="text-white text-sm sm:text-base leading-relaxed">
-                📍 Calle José del Carmen Verastegui 303<br />
-                San Juan de Miraflores, Lima, Perú
-              </p>
-            </div>
-
-            <button
-              onClick={abrirMapa}
-              className="block w-full sm:w-auto sm:inline-block text-center bg-white text-[var(--verde-fuerte)] px-6 py-3 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all cursor-pointer"
-            >
-              Abrir en Google Maps →
-            </button>
-          </div>
-
+        <div className="text-center">
+          <Link
+            href="/productos"
+            className="inline-block bg-white text-[var(--primrose)] px-6 py-3 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all"
+          >
+            Ver tienda completa →
+          </Link>
         </div>
       </div>
     </section>

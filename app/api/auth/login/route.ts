@@ -7,6 +7,26 @@ const MAX_ATTEMPTS = 5;
 const WINDOW_MS = 15 * 60 * 1000;
 const LOCKOUT_MS = 15 * 60 * 1000;
 
+// Respaldo en memoria: garantiza rate limiting aunque la BD falle.
+// En serverless multi-instancia no es global, pero sí bloquea dentro de cada instancia.
+const memAttempts = new Map<string, { count: number; windowStart: number }>();
+
+function getMemCount(ip: string): number {
+  const entry = memAttempts.get(ip);
+  if (!entry || Date.now() - entry.windowStart > WINDOW_MS) return 0;
+  return entry.count;
+}
+
+function incrementMem(ip: string): void {
+  const now = Date.now();
+  const entry = memAttempts.get(ip);
+  if (!entry || now - entry.windowStart > WINDOW_MS) {
+    memAttempts.set(ip, { count: 1, windowStart: now });
+  } else {
+    entry.count++;
+  }
+}
+
 function adminClient() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -27,25 +47,35 @@ export async function POST(request: NextRequest) {
   const admin = adminClient();
   const windowStart = new Date(Date.now() - WINDOW_MS).toISOString();
 
-  // Verificar intentos fallidos recientes por IP en la base de datos
-  const { count } = await admin
+  // Verificar intentos fallidos en BD + respaldo en memoria
+  const { count, error: rateCheckError } = await admin
     .from("audit_logs")
     .select("*", { count: "exact", head: true })
     .eq("ip_address", ip)
     .eq("event_type", "login_failed")
     .gte("created_at", windowStart);
 
-  const failedCount = count ?? 0;
+  if (rateCheckError) {
+    console.error("[rate-limit] Error consultando audit_logs:", rateCheckError.message);
+  }
+
+  // Si la BD falla, usamos el conteo en memoria como respaldo; nunca permitimos
+  // silenciosamente pasar cuando no podemos verificar el límite.
+  const dbCount = rateCheckError ? null : (count ?? 0);
+  const failedCount = dbCount !== null ? Math.max(dbCount, getMemCount(ip)) : getMemCount(ip);
 
   if (failedCount >= MAX_ATTEMPTS) {
     const lockedUntil = Date.now() + LOCKOUT_MS;
-    await admin.from("audit_logs").insert({
+    const { error: insertError } = await admin.from("audit_logs").insert({
       event_type: "login_rate_limited",
       email: email ?? null,
       ip_address: ip,
       user_agent: userAgent,
       metadata: {},
     });
+    if (insertError) {
+      console.error("[rate-limit] Error insertando log rate_limited:", insertError.message);
+    }
     return NextResponse.json(
       { ok: false, reason: "rate_limited", lockedUntil },
       { status: 429 }
@@ -77,16 +107,20 @@ export async function POST(request: NextRequest) {
   });
 
   if (error) {
+    incrementMem(ip);
     const newCount = failedCount + 1;
     const attemptsLeft = MAX_ATTEMPTS - newCount;
 
-    await admin.from("audit_logs").insert({
+    const { error: insertError } = await admin.from("audit_logs").insert({
       event_type: "login_failed",
       email: email ?? null,
       ip_address: ip,
       user_agent: userAgent,
       metadata: {},
     });
+    if (insertError) {
+      console.error("[rate-limit] Error insertando log login_failed:", insertError.message);
+    }
 
     if (attemptsLeft <= 0) {
       const lockedUntil = Date.now() + LOCKOUT_MS;

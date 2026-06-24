@@ -1,3 +1,6 @@
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
@@ -23,29 +26,31 @@ function incrementMem(ip: string): void {
   }
 }
 
-function adminClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { autoRefreshToken: false, persistSession: false } }
-  );
-}
-
-function anonClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { auth: { autoRefreshToken: false, persistSession: false } }
-  );
-}
-
 export async function POST(request: NextRequest) {
+  // ── 1. Validar variables de entorno ─────────────────────────────────────────
+  const supabaseUrl    = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const anonKey        = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!supabaseUrl || !serviceRoleKey || !anonKey) {
+    const missing = [
+      !supabaseUrl    && "NEXT_PUBLIC_SUPABASE_URL",
+      !serviceRoleKey && "SUPABASE_SERVICE_ROLE_KEY",
+      !anonKey        && "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    ].filter(Boolean);
+    console.error("[login] Faltan variables de entorno:", missing);
+    return NextResponse.json(
+      { ok: false, reason: "missing_env", missing },
+      { status: 500 }
+    );
+  }
+
+  // ── 2. Parsear body ──────────────────────────────────────────────────────────
   let email: string;
   let password: string;
-
   try {
     const body = await request.json();
-    email = body.email;
+    email    = body.email;
     password = body.password;
     if (!email || !password) throw new Error("missing fields");
   } catch {
@@ -58,8 +63,12 @@ export async function POST(request: NextRequest) {
     "unknown";
   const userAgent = request.headers.get("user-agent") ?? "unknown";
 
+  // ── 3. Lógica principal ──────────────────────────────────────────────────────
   try {
-    const admin = adminClient();
+    const admin = createClient(supabaseUrl, serviceRoleKey, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
+
     const windowStart = new Date(Date.now() - WINDOW_MS).toISOString();
 
     const { count, error: rateCheckError } = await admin
@@ -70,10 +79,11 @@ export async function POST(request: NextRequest) {
       .gte("created_at", windowStart);
 
     if (rateCheckError) {
-      console.error("[rate-limit] Error consultando audit_logs:", rateCheckError.message);
+      // La tabla puede no existir o RLS bloquea — degradamos a solo memoria
+      console.error("[rate-limit] audit_logs no disponible:", rateCheckError.message);
     }
 
-    const dbCount = rateCheckError ? null : (count ?? 0);
+    const dbCount    = rateCheckError ? null : (count ?? 0);
     const failedCount = dbCount !== null ? Math.max(dbCount, getMemCount(ip)) : getMemCount(ip);
 
     if (failedCount >= MAX_ATTEMPTS) {
@@ -88,10 +98,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ ok: false, reason: "rate_limited", lockedUntil }, { status: 429 });
     }
 
-    // Autenticar con cliente anon (sin cookies). Retorna la sesión en JSON
-    // para que el browser la aplique con setSession(), evitando escribir
-    // cookies en el Route Handler donde no están soportadas en esta versión.
-    const supabase = anonClient();
+    // Autenticar — cliente anon sin cookies; la sesión vuelve en JSON y el
+    // browser la aplica con setSession() para no necesitar escribir cookies
+    // en el Route Handler (no soportado en esta versión de Next.js).
+    const supabase = createClient(supabaseUrl, anonKey, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
@@ -131,7 +143,16 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (err) {
-    console.error("[login] Error inesperado:", err);
-    return NextResponse.json({ ok: false, reason: "server_error" }, { status: 500 });
+    const message = err instanceof Error ? err.message : String(err);
+    console.error("[login] Error inesperado:", message);
+    return NextResponse.json(
+      {
+        ok: false,
+        reason: "server_error",
+        // Solo exponer el mensaje real en desarrollo para poder depurar
+        ...(process.env.NODE_ENV !== "production" && { debug: message }),
+      },
+      { status: 500 }
+    );
   }
 }

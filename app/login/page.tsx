@@ -419,6 +419,12 @@ function LoginContent() {
       return;
     }
 
+    // Aplicar la sesión recibida del servidor en el cliente browser
+    await supabase.auth.setSession({
+      access_token: data.session.access_token,
+      refresh_token: data.session.refresh_token,
+    });
+
     const redirect = searchParams.get("redirect") || "/";
     router.push(redirect);
     router.refresh();

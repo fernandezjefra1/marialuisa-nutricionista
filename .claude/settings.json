@@ -9,7 +9,13 @@
       "Bash(mkdir -p \"c:\\\\Users\\\\jeffe\\\\marialuisa-nutricionista\\\\app\\\\api\\\\admin\\\\[table]\\\\[id]\")",
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('scripts',{}\\), indent=2\\)\\)\")",
       "Bash(npm run *)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "Bash(vercel ls *)",
+      "Bash(vercel inspect *)",
+      "Bash(vercel list *)",
+      "Bash(vercel --prod --yes)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\jeffe\\marialuisa-nutricionista\\app\\api\\admin",

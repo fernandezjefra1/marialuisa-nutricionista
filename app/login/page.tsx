@@ -393,41 +393,45 @@ function LoginContent() {
     setError(null);
     setCargando(true);
 
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
-    setCargando(false);
+      const data = await res.json();
 
-    if (!data.ok) {
-      if (data.reason === "rate_limited") {
-        setLoginBloqueadoHasta(data.lockedUntil);
-        setError("Demasiados intentos fallidos. Tu cuenta está bloqueada temporalmente.");
-      } else if (data.reason === "invalid_credentials") {
-        const left: number = data.attemptsLeft ?? 0;
-        setError(
-          left > 0
-            ? `Correo o contraseña incorrectos. Te quedan ${left} intento${left !== 1 ? "s" : ""}.`
-            : "Correo o contraseña incorrectos."
-        );
-      } else {
-        setError("Ocurrió un error. Intenta de nuevo.");
+      if (!data.ok) {
+        if (data.reason === "rate_limited") {
+          setLoginBloqueadoHasta(data.lockedUntil);
+          setError("Demasiados intentos fallidos. Tu cuenta está bloqueada temporalmente.");
+        } else if (data.reason === "invalid_credentials") {
+          const left: number = data.attemptsLeft ?? 0;
+          setError(
+            left > 0
+              ? `Correo o contraseña incorrectos. Te quedan ${left} intento${left !== 1 ? "s" : ""}.`
+              : "Correo o contraseña incorrectos."
+          );
+        } else {
+          setError("Ocurrió un error. Intenta de nuevo.");
+        }
+        return;
       }
-      return;
+
+      await supabase.auth.setSession({
+        access_token: data.session.access_token,
+        refresh_token: data.session.refresh_token,
+      });
+
+      const redirect = searchParams.get("redirect") || "/";
+      router.push(redirect);
+      router.refresh();
+    } catch {
+      setError("Error de conexión. Intenta de nuevo.");
+    } finally {
+      setCargando(false);
     }
-
-    // Aplicar la sesión recibida del servidor en el cliente browser
-    await supabase.auth.setSession({
-      access_token: data.session.access_token,
-      refresh_token: data.session.refresh_token,
-    });
-
-    const redirect = searchParams.get("redirect") || "/";
-    router.push(redirect);
-    router.refresh();
   }
 
   // ── Registro — paso datos ────────────────────────────────────────────────────

@@ -40,7 +40,17 @@ function anonClient() {
 }
 
 export async function POST(request: NextRequest) {
-  const { email, password } = await request.json();
+  let email: string;
+  let password: string;
+
+  try {
+    const body = await request.json();
+    email = body.email;
+    password = body.password;
+    if (!email || !password) throw new Error("missing fields");
+  } catch {
+    return NextResponse.json({ ok: false, reason: "bad_request" }, { status: 400 });
+  }
 
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
@@ -48,85 +58,80 @@ export async function POST(request: NextRequest) {
     "unknown";
   const userAgent = request.headers.get("user-agent") ?? "unknown";
 
-  const admin = adminClient();
-  const windowStart = new Date(Date.now() - WINDOW_MS).toISOString();
+  try {
+    const admin = adminClient();
+    const windowStart = new Date(Date.now() - WINDOW_MS).toISOString();
 
-  const { count, error: rateCheckError } = await admin
-    .from("audit_logs")
-    .select("*", { count: "exact", head: true })
-    .eq("ip_address", ip)
-    .eq("event_type", "login_failed")
-    .gte("created_at", windowStart);
+    const { count, error: rateCheckError } = await admin
+      .from("audit_logs")
+      .select("*", { count: "exact", head: true })
+      .eq("ip_address", ip)
+      .eq("event_type", "login_failed")
+      .gte("created_at", windowStart);
 
-  if (rateCheckError) {
-    console.error("[rate-limit] Error consultando audit_logs:", rateCheckError.message);
-  }
-
-  const dbCount = rateCheckError ? null : (count ?? 0);
-  const failedCount = dbCount !== null ? Math.max(dbCount, getMemCount(ip)) : getMemCount(ip);
-
-  if (failedCount >= MAX_ATTEMPTS) {
-    const lockedUntil = Date.now() + LOCKOUT_MS;
-    await admin.from("audit_logs").insert({
-      event_type: "login_rate_limited",
-      email: email ?? null,
-      ip_address: ip,
-      user_agent: userAgent,
-      metadata: {},
-    });
-    return NextResponse.json(
-      { ok: false, reason: "rate_limited", lockedUntil },
-      { status: 429 }
-    );
-  }
-
-  // Usar cliente anon sin cookies — la sesión se devuelve en el JSON y el
-  // cliente browser la aplica con setSession(), evitando escribir cookies
-  // en el Route Handler (no soportado en esta versión de Next.js).
-  const supabase = anonClient();
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-
-  if (error) {
-    incrementMem(ip);
-    const newCount = failedCount + 1;
-    const attemptsLeft = MAX_ATTEMPTS - newCount;
-
-    await admin.from("audit_logs").insert({
-      event_type: "login_failed",
-      email: email ?? null,
-      ip_address: ip,
-      user_agent: userAgent,
-      metadata: {},
-    });
-
-    if (attemptsLeft <= 0) {
-      const lockedUntil = Date.now() + LOCKOUT_MS;
-      return NextResponse.json(
-        { ok: false, reason: "rate_limited", lockedUntil },
-        { status: 429 }
-      );
+    if (rateCheckError) {
+      console.error("[rate-limit] Error consultando audit_logs:", rateCheckError.message);
     }
 
-    return NextResponse.json(
-      { ok: false, reason: "invalid_credentials", attemptsLeft },
-      { status: 401 }
-    );
+    const dbCount = rateCheckError ? null : (count ?? 0);
+    const failedCount = dbCount !== null ? Math.max(dbCount, getMemCount(ip)) : getMemCount(ip);
+
+    if (failedCount >= MAX_ATTEMPTS) {
+      const lockedUntil = Date.now() + LOCKOUT_MS;
+      await admin.from("audit_logs").insert({
+        event_type: "login_rate_limited",
+        email,
+        ip_address: ip,
+        user_agent: userAgent,
+        metadata: {},
+      });
+      return NextResponse.json({ ok: false, reason: "rate_limited", lockedUntil }, { status: 429 });
+    }
+
+    // Autenticar con cliente anon (sin cookies). Retorna la sesión en JSON
+    // para que el browser la aplique con setSession(), evitando escribir
+    // cookies en el Route Handler donde no están soportadas en esta versión.
+    const supabase = anonClient();
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      incrementMem(ip);
+      const attemptsLeft = MAX_ATTEMPTS - (failedCount + 1);
+
+      await admin.from("audit_logs").insert({
+        event_type: "login_failed",
+        email,
+        ip_address: ip,
+        user_agent: userAgent,
+        metadata: {},
+      });
+
+      if (attemptsLeft <= 0) {
+        const lockedUntil = Date.now() + LOCKOUT_MS;
+        return NextResponse.json({ ok: false, reason: "rate_limited", lockedUntil }, { status: 429 });
+      }
+
+      return NextResponse.json({ ok: false, reason: "invalid_credentials", attemptsLeft }, { status: 401 });
+    }
+
+    await admin.from("audit_logs").insert({
+      event_type: "login_success",
+      email,
+      user_id: data.user?.id ?? null,
+      ip_address: ip,
+      user_agent: userAgent,
+      metadata: {},
+    });
+
+    return NextResponse.json({
+      ok: true,
+      session: {
+        access_token: data.session!.access_token,
+        refresh_token: data.session!.refresh_token,
+      },
+    });
+  } catch (err) {
+    console.error("[login] Error inesperado:", err);
+    return NextResponse.json({ ok: false, reason: "server_error" }, { status: 500 });
   }
-
-  await admin.from("audit_logs").insert({
-    event_type: "login_success",
-    email: email ?? null,
-    user_id: data.user?.id ?? null,
-    ip_address: ip,
-    user_agent: userAgent,
-    metadata: {},
-  });
-
-  return NextResponse.json({
-    ok: true,
-    session: {
-      access_token: data.session!.access_token,
-      refresh_token: data.session!.refresh_token,
-    },
-  });
 }

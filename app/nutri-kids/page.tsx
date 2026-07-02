@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import QrFlotante from "./_components/QrFlotante";
 
 const JUEGOS = [
   {
@@ -44,6 +45,16 @@ const JUEGOS = [
     border: "border-[#6fc8a0]",
     shadow: "hover:shadow-[#B5EAD7]/60",
     delay: "300ms",
+  },
+  {
+    emoji: "🎯",
+    titulo: "Tira al Blanco",
+    descripcion: "Elimina la comida chatarra en 10 niveles",
+    href: "/nutri-kids/tiro-al-blanco",
+    bg: "bg-[#FFB088]",
+    border: "border-[#f0873b]",
+    shadow: "hover:shadow-[#FFB088]/60",
+    delay: "400ms",
   },
 ];
 
@@ -120,7 +131,7 @@ export default function NutriKidsLanding() {
       </section>
 
       {/* GRID DE JUEGOS */}
-      <section className="max-w-4xl mx-auto px-4 pb-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <section className="max-w-5xl mx-auto px-4 pb-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {JUEGOS.map((j, i) => (
           <div
             key={j.titulo}
@@ -165,6 +176,8 @@ export default function NutriKidsLanding() {
           ← Volver al inicio
         </Link>
       </footer>
+
+      <QrFlotante />
     </main>
   );
 }

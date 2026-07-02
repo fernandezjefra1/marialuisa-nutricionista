@@ -15,7 +15,19 @@
       "Bash(vercel list *)",
       "Bash(vercel --prod --yes)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(npx tsc *)",
+      "Bash(npx eslint *)",
+      "Bash(echo \"started with pid $!\")",
+      "Read(//tmp/**)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:3000/nutri-kids/tiro-al-blanco --max-time 5)",
+      "Bash(sleep 2; cat /tmp/dev.log)",
+      "Bash(taskkill //F //IM node.exe)",
+      "Bash(curl -s -o /dev/null -w \"nutri-kids: %{http_code}\\\\n\" http://localhost:3000/nutri-kids --max-time 10)",
+      "Bash(curl -s -o /dev/null -w \"tiro-al-blanco: %{http_code}\\\\n\" http://localhost:3000/nutri-kids/tiro-al-blanco --max-time 10)",
+      "Bash(cat /tmp/dev2.log | tail -40)",
+      "Bash(curl -s http://localhost:3000/nutri-kids/tiro-al-blanco --max-time 10)",
+      "Bash(curl -s http://localhost:3000/nutri-kids --max-time 10)"
     ],
     "additionalDirectories": [
       "c:\\Users\\jeffe\\marialuisa-nutricionista\\app\\api\\admin",

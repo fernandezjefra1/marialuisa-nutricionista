@@ -27,7 +27,14 @@
       "Bash(curl -s -o /dev/null -w \"tiro-al-blanco: %{http_code}\\\\n\" http://localhost:3000/nutri-kids/tiro-al-blanco --max-time 10)",
       "Bash(cat /tmp/dev2.log | tail -40)",
       "Bash(curl -s http://localhost:3000/nutri-kids/tiro-al-blanco --max-time 10)",
-      "Bash(curl -s http://localhost:3000/nutri-kids --max-time 10)"
+      "Bash(curl -s http://localhost:3000/nutri-kids --max-time 10)",
+      "Bash(rm -f \"app/nutri-kids/memorama/page.tsx\" \"app/nutri-kids/pupiletras/page.tsx\" \"app/nutri-kids/rompecabezas/page.tsx\" \"app/nutri-kids/tiro-al-blanco/page.tsx\" \"public/images/plato-saludable.png\")",
+      "Bash(rmdir \"app/nutri-kids/memorama\" \"app/nutri-kids/pupiletras\" \"app/nutri-kids/rompecabezas\" \"app/nutri-kids/tiro-al-blanco\")",
+      "Bash(curl -s http://localhost:3000/nutri-kids/michi --max-time 10)",
+      "Bash(curl -s http://localhost:3000/nutri-kids/atrapa-saludable --max-time 10)",
+      "Bash(curl -s http://localhost:3000/nutri-kids/trivia --max-time 10)",
+      "Bash(curl -s http://localhost:3000/nutri-kids/nutri-batalla --max-time 10)",
+      "Bash(curl -s http://localhost:3000/sitemap.xml --max-time 10)"
     ],
     "additionalDirectories": [
       "c:\\Users\\jeffe\\marialuisa-nutricionista\\app\\api\\admin",

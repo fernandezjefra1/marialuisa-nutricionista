@@ -157,6 +157,41 @@
 }
 .float-up-fade { animation: float-up-fade 0.8s ease-out forwards; }
 
+/* Respeta la preferencia de movimiento reducido del sistema */
+@media (prefers-reduced-motion: reduce) {
+  .food-pop, .float-up-fade, .confetti-piece, .bounce-in, .shake, .flotar, .slide-up-fade, .correct-glow {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* =========================================
+   NUTRI BATALLA — estética retro Game Boy
+   ========================================= */
+.nutri-batalla {
+  font-family: var(--font-press-start), monospace;
+  image-rendering: pixelated;
+}
+.nutri-batalla .pixel-box {
+  border: 3px solid #1a1a2e;
+  box-shadow: 4px 4px 0 #1a1a2e;
+  border-radius: 4px;
+}
+.nutri-batalla button {
+  border: 3px solid #1a1a2e;
+  box-shadow: 3px 3px 0 #1a1a2e;
+  border-radius: 4px;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+.nutri-batalla button:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 #1a1a2e;
+}
+.nutri-batalla button:focus-visible {
+  outline: 3px solid #FFD93D;
+  outline-offset: 2px;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

@@ -431,7 +431,7 @@ export default function CalculadoraImcClient() {
                 </Campo>
 
                 <Campo label="WhatsApp *" error={errores.whatsappNumero}>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 items-stretch">
                     <input
                       type="text"
                       inputMode="tel"
@@ -439,7 +439,8 @@ export default function CalculadoraImcClient() {
                       onChange={(e) => actualizarCampo("whatsappCodigo", formatCodigoPais(e.target.value))}
                       placeholder="+51"
                       maxLength={4}
-                      className={`${inputClass(!!errores.whatsappNumero)} w-20 flex-shrink-0 text-center`}
+                      aria-label="Código de país"
+                      className={`w-16 flex-shrink-0 px-2 py-3 text-center ${inputBaseClass(!!errores.whatsappNumero)}`}
                     />
                     <input
                       type="tel"
@@ -447,7 +448,8 @@ export default function CalculadoraImcClient() {
                       value={agruparDigitos(form.whatsappNumero)}
                       onChange={(e) => actualizarCampo("whatsappNumero", e.target.value.replace(/\D/g, "").slice(0, 12))}
                       placeholder="999 888 777"
-                      className={inputClass(!!errores.whatsappNumero)}
+                      aria-label="Número de WhatsApp"
+                      className={`flex-1 min-w-0 px-4 py-3 ${inputBaseClass(!!errores.whatsappNumero)}`}
                     />
                   </div>
                 </Campo>
@@ -576,8 +578,15 @@ export default function CalculadoraImcClient() {
   );
 }
 
+// Clases compartidas SIN ancho ni padding: así los campos que necesitan un
+// tamaño distinto (p. ej. el código de país junto al número de WhatsApp) no
+// terminan con dos utilidades de "width" o "padding" en conflicto.
+function inputBaseClass(conError: boolean) {
+  return `border ${conError ? "border-red-400" : "border-[var(--borde-rosa)]"} rounded-lg focus:outline-none focus:border-[var(--lime)] transition text-sm`;
+}
+
 function inputClass(conError: boolean) {
-  return `w-full border ${conError ? "border-red-400" : "border-[var(--borde-rosa)]"} px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--lime)] transition text-sm`;
+  return `w-full px-4 py-3 ${inputBaseClass(conError)}`;
 }
 
 function Campo({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {

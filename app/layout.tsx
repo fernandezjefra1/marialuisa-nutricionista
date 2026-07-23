@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Playfair_Display, Nunito, Fredoka, Press_Start_2P } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display, Nunito } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -23,18 +23,6 @@ const nunito = Nunito({
   subsets: ["latin"],
 });
 
-const fredoka = Fredoka({
-  variable: "--font-fredoka",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
-
-const pressStart = Press_Start_2P({
-  variable: "--font-press-start",
-  subsets: ["latin"],
-  weight: "400",
-});
-
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -55,8 +43,12 @@ export const metadata: Metadata = {
     "consulta nutricional Lima",
     "taller comida dietética",
     "dieta María Luisa",
-    "nutrición infantil Perú",
     "alimentación saludable Lima",
+    "calculadora IMC",
+    "constancia nutricional",
+    "examen médico ocupacional",
+    "evaluación nutricional Perú",
+    "certificado nutricional laboral",
   ],
   authors: [{ name: "María Luisa Peña Valdivia" }],
   creator: "María Luisa Nutricionista",
@@ -112,7 +104,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${nunito.variable} ${fredoka.variable} ${pressStart.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${nunito.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col overflow-x-hidden">
         <script

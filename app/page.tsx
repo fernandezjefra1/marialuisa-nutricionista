@@ -18,6 +18,7 @@ export default function Home() {
       <SeccionEnfermedadesYFaq />
       <DietaMariaLuisa />
       <SeccionProductos />
+      <SeccionCalculadoraImc />
       <BloqueEmpresasYPromotores />
       <AsesoriasProyectos />
       <Footer />
@@ -382,20 +383,23 @@ function Navbar() {
               <span className="hidden sm:inline text-sm font-medium">Tienda</span>
             </Link>
 
-            {/* BOTÓN NUTRI KIDS — círculo con imagen */}
+            {/* BOTÓN CALCULADORA IMC — solo ícono en mobile, texto en sm+ */}
             <Link
-              href="/nutri-kids"
-              aria-label="Nutri Kids"
-              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2 border-yellow-400 hover:scale-110 transition-transform flex-shrink-0"
-              style={{ touchAction: "manipulation" }}
+              href="/calculadora-imc"
+              aria-label="Calcula tu IMC"
+              className="inline-flex items-center justify-center gap-2
+                         w-9 h-9 sm:w-auto sm:h-auto sm:px-5 sm:py-2
+                         rounded-full border-2 border-[var(--lime)] text-[var(--lime)]
+                         hover:bg-[var(--lime)] hover:text-white
+                         transition-all duration-300"
             >
-              <Image
-                src="/images/NutriKids.jpeg"
-                alt="Nutri Kids"
-                width={40}
-                height={40}
-                className="w-full h-full object-cover"
-              />
+              <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 3v18" />
+                <path d="M3 7l9-4 9 4" />
+                <path d="M3 7c0 3.3 2.7 6 6 6s6-2.7 6-6" />
+                <path d="M9 13c0 3.3 2.7 6 6 6s6-2.7 6-6" />
+              </svg>
+              <span className="hidden sm:inline text-sm font-medium">Calcula tu IMC</span>
             </Link>
 
             {/* BOTÓN RESERVAR CITA — solo ícono en mobile, texto en sm+ */}
@@ -1593,6 +1597,40 @@ function SeccionProductos() {
     </section>
   );
 }
+/* ---------- CALCULADORA IMC (SECCIÓN DESTACADA) ---------- */
+function SeccionCalculadoraImc() {
+  return (
+    <section className="py-12 sm:py-16 lg:py-20 bg-white relative overflow-hidden">
+      <div className="max-w-5xl mx-auto px-4 md:px-6">
+        <div className="rounded-3xl border-2 border-[var(--borde-verde)] bg-gradient-to-br from-[var(--lime-soft)] via-white to-[var(--pinktone-soft)] p-6 sm:p-10 md:p-14 grid md:grid-cols-[1fr_auto] gap-8 items-center">
+          <div>
+            <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
+              <IcoScale cls="w-5 h-5 text-[var(--lime)]" />
+              <span className="text-xs sm:text-sm uppercase tracking-wider text-[var(--lime)] font-semibold">
+                Herramienta gratuita
+              </span>
+            </div>
+            <h2 className="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold text-[var(--texto-principal)] mb-3 text-center md:text-left">
+              Calcula tu <span className="text-[var(--lime)]">Índice de Masa Corporal.</span>
+            </h2>
+            <p className="font-nunito text-sm sm:text-base text-[var(--texto-suave)] leading-relaxed text-center md:text-left max-w-xl">
+              Descubre tu IMC en segundos y recibe orientación profesional, o descarga tu
+              Constancia Nutricional para tu empresa firmada por una nutricionista colegiada
+              por solo S/ 10.
+            </p>
+          </div>
+          <Link
+            href="/calculadora-imc"
+            className="btn-coquette bg-[var(--lime)] text-white px-8 py-4 rounded-full hover:bg-[var(--lime-hover)] transition font-semibold shadow-lg shadow-green-200 text-center whitespace-nowrap"
+          >
+            Calcular mi IMC →
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ---------- ASESORÍAS PARA PROYECTOS ---------- */
 function AsesoriasProyectos() {
   const orbs = [

@@ -34,11 +34,16 @@
       "Bash(curl -s http://localhost:3000/nutri-kids/atrapa-saludable --max-time 10)",
       "Bash(curl -s http://localhost:3000/nutri-kids/trivia --max-time 10)",
       "Bash(curl -s http://localhost:3000/nutri-kids/nutri-batalla --max-time 10)",
-      "Bash(curl -s http://localhost:3000/sitemap.xml --max-time 10)"
+      "Bash(curl -s http://localhost:3000/sitemap.xml --max-time 10)",
+      "Bash(rm -rf app/nutri-kids data/nutri-batalla.ts data/trivia-questions.ts data/nutrition-facts.ts lib/michi-ai.ts public/images/NutriKids.jpeg && echo DONE)",
+      "Bash(mkdir -p /c/Users/jeffe/marialuisa-nutricionista/lib/config /c/Users/jeffe/marialuisa-nutricionista/lib/pdf /c/Users/jeffe/marialuisa-nutricionista/app/calculadora-imc/_components /c/Users/jeffe/marialuisa-nutricionista/app/api/constancia/registrar-pago \"/c/Users/jeffe/marialuisa-nutricionista/app/api/constancia/[id]/descargar\" && echo ok)",
+      "Bash(git status *)"
     ],
     "additionalDirectories": [
       "c:\\Users\\jeffe\\marialuisa-nutricionista\\app\\api\\admin",
-      "c:\\Users\\jeffe\\marialuisa-nutricionista\\app\\api\\admin\\[table]"
+      "c:\\Users\\jeffe\\marialuisa-nutricionista\\app\\api\\admin\\[table]",
+      "C:\\Users\\jeffe\\marialuisa-nutricionista\\app\\nutri-kids",
+      "C:\\Users\\jeffe\\marialuisa-nutricionista\\app\\api\\constancia\\[id]"
     ]
   }
 }

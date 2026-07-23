@@ -9,6 +9,20 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/nutri-kids",
+        destination: "/calculadora-imc",
+        permanent: true,
+      },
+      {
+        source: "/nutri-kids/:path*",
+        destination: "/calculadora-imc",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

@@ -16,7 +16,8 @@ type FormState = {
   peso: string;
   altura: string;
   correo: string;
-  whatsapp: string;
+  whatsappCodigo: string;
+  whatsappNumero: string;
   empresa: string;
   cargo: string;
   objetivo: string;
@@ -31,7 +32,8 @@ const FORM_INICIAL: FormState = {
   peso: "",
   altura: "",
   correo: "",
-  whatsapp: "",
+  whatsappCodigo: "+51",
+  whatsappNumero: "",
   empresa: "",
   cargo: "",
   objetivo: "",
@@ -112,10 +114,15 @@ const ZONAS_BARRA: { key: CategoriaKey; desde: number; hasta: number }[] = [
 const BARRA_MIN = 15;
 const BARRA_MAX = 45;
 
-function formatWhatsapp(valor: string): string {
-  const digitos = valor.replace(/\D/g, "").slice(0, 9);
-  const partes = [digitos.slice(0, 3), digitos.slice(3, 6), digitos.slice(6, 9)].filter(Boolean);
-  return partes.length ? `+51 ${partes.join(" ")}` : "";
+// El código de país es un campo aparte (editable) para no romper el formato
+// al escribir y para permitir números de otros países si el sitio se expande.
+function formatCodigoPais(valor: string): string {
+  const limpio = valor.replace(/[^\d+]/g, "").replace(/\+/g, "");
+  return limpio ? `+${limpio.slice(0, 3)}` : "";
+}
+
+function agruparDigitos(digitos: string): string {
+  return digitos.match(/.{1,3}/g)?.join(" ") ?? "";
 }
 
 type MotivoConstancia = "Ingreso laboral" | "Renovación anual" | "Chequeo médico" | "Otro";
@@ -170,7 +177,10 @@ export default function CalculadoraImcClient() {
 
     if (!/^\S+@\S+\.\S+$/.test(form.correo)) nuevosErrores.correo = "Ingresa un correo electrónico válido.";
 
-    if (form.whatsapp.replace(/\D/g, "").length !== 9) nuevosErrores.whatsapp = "Ingresa un número de WhatsApp válido (9 dígitos).";
+    const numeroDigitos = form.whatsappNumero.replace(/\D/g, "");
+    if (!/^\+\d{1,3}$/.test(form.whatsappCodigo) || numeroDigitos.length < 6 || numeroDigitos.length > 12) {
+      nuevosErrores.whatsappNumero = "Ingresa un código de país y un número de WhatsApp válidos.";
+    }
 
     if (!form.consentimiento) nuevosErrores.consentimiento = "Debes aceptar el uso de tus datos para continuar.";
 
@@ -203,7 +213,7 @@ export default function CalculadoraImcClient() {
       imc: Number(resultado!.imc.toFixed(2)),
       categoria: CATEGORIAS[resultado!.categoria].label,
       correo: form.correo.trim(),
-      whatsapp: form.whatsapp.trim(),
+      whatsapp: `${form.whatsappCodigo} ${agruparDigitos(form.whatsappNumero)}`.trim(),
       empresa: form.empresa.trim() || null,
       cargo: form.cargo.trim() || null,
       objetivo: form.objetivo.trim() || null,
@@ -258,7 +268,7 @@ export default function CalculadoraImcClient() {
         peso_kg: Number(form.peso),
         altura_cm: Number(form.altura),
         correo: form.correo.trim(),
-        whatsapp: form.whatsapp.trim(),
+        whatsapp: `${form.whatsappCodigo} ${agruparDigitos(form.whatsappNumero)}`.trim(),
         estado: "pendiente_pago",
       })
       .select("id")
@@ -420,14 +430,26 @@ export default function CalculadoraImcClient() {
                   />
                 </Campo>
 
-                <Campo label="WhatsApp *" error={errores.whatsapp}>
-                  <input
-                    type="tel"
-                    value={form.whatsapp}
-                    onChange={(e) => actualizarCampo("whatsapp", formatWhatsapp(e.target.value))}
-                    placeholder="+51 999 888 777"
-                    className={inputClass(!!errores.whatsapp)}
-                  />
+                <Campo label="WhatsApp *" error={errores.whatsappNumero}>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      inputMode="tel"
+                      value={form.whatsappCodigo}
+                      onChange={(e) => actualizarCampo("whatsappCodigo", formatCodigoPais(e.target.value))}
+                      placeholder="+51"
+                      maxLength={4}
+                      className={`${inputClass(!!errores.whatsappNumero)} w-20 flex-shrink-0 text-center`}
+                    />
+                    <input
+                      type="tel"
+                      inputMode="numeric"
+                      value={agruparDigitos(form.whatsappNumero)}
+                      onChange={(e) => actualizarCampo("whatsappNumero", e.target.value.replace(/\D/g, "").slice(0, 12))}
+                      placeholder="999 888 777"
+                      className={inputClass(!!errores.whatsappNumero)}
+                    />
+                  </div>
                 </Campo>
               </div>
 

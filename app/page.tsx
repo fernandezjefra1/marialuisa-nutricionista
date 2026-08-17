@@ -16,6 +16,8 @@ export default function Home() {
       <CarruselComentarios />
       <FilosofiaYServicios />
       <SeccionEnfermedadesYFaq />
+      <NuestrosServicios />
+      <AlmuerzosEjemplos />
       <DietaMariaLuisa />
       <SeccionProductos />
       <SeccionCalculadoraImc />
@@ -72,6 +74,27 @@ function IcoWave({ cls = "" }) {
 }
 function IcoStomach({ cls = "" }) {
   return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M9 3H7a4 4 0 0 0-4 4v1a4 4 0 0 0 4 4h.5"/><path d="M14.5 12H15a4 4 0 0 1 4 4v1a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4v-1"/><path d="M9 3v9"/></svg>;
+}
+function IcoApple({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 20c-4 0-7-3.5-7-8 0-3.5 2-6 4.5-6 1 0 1.8.4 2.5 1 .7-.6 1.5-1 2.5-1C17 6 19 8.5 19 12c0 4.5-3 8-7 8z"/><path d="M12 6c0-1.5 1-3 3-3"/></svg>;
+}
+function IcoCross({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 8v8"/><path d="M8 12h8"/><rect x="3" y="3" width="18" height="18" rx="4"/></svg>;
+}
+function IcoStethoscope({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/><path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/></svg>;
+}
+function IcoPill({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="10" width="18" height="7" rx="3.5" transform="rotate(-45 12 12)"/><line x1="9.5" y1="14.5" x2="14.5" y2="9.5"/></svg>;
+}
+function IcoSnackBag({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8V6a6 6 0 0 1 12 0v2"/><path d="M5 8h14l1 12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>;
+}
+function IcoClock({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/></svg>;
+}
+function IcoWhatsapp({ cls = "" }) {
+  return <svg className={cls} viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.02 2C6.5 2 2.02 6.48 2.02 12c0 1.85.5 3.58 1.36 5.07L2 22l5.08-1.33A9.96 9.96 0 0 0 12.02 22C17.55 22 22 17.52 22 12S17.55 2 12.02 2zm0 18.06c-1.64 0-3.17-.48-4.46-1.31l-.32-.19-3.02.79.8-2.94-.21-.31A8.03 8.03 0 0 1 3.99 12c0-4.42 3.6-8.02 8.03-8.02 4.42 0 8.02 3.6 8.02 8.02 0 4.43-3.6 8.06-8.02 8.06z"/></svg>;
 }
 
 /* ---------- FONDO VEGETAL ANIMADO (ilustraciones SVG coloridas) ---------- */
@@ -350,7 +373,7 @@ function Navbar() {
               alt="Logo María Luisa Nutricionista"
               width={112}
               height={112}
-              className="w-10 h-10 sm:w-12 sm:h-12 object-contain drop-shadow-sm"
+              className="w-[58px] h-[58px] sm:w-[70px] sm:h-[70px] object-contain drop-shadow-sm"
             />
             <div className="hidden md:block leading-tight">
               <p className="font-playfair italic text-[var(--texto-principal)] text-base md:text-lg leading-none">
@@ -364,6 +387,21 @@ function Navbar() {
 
           {/* BOTONES DERECHA */}
           <div className="flex items-center gap-1.5 sm:gap-2.5">
+
+            {/* BOTÓN WHATSAPP — número visible en sm+, solo ícono en mobile */}
+            <a
+              href="https://wa.me/51985577017"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Escríbenos por WhatsApp al +51 985 577 017"
+              className="inline-flex items-center justify-center gap-1.5
+                         w-9 h-9 sm:w-auto sm:h-auto sm:px-4 sm:py-2
+                         rounded-full bg-[#25D366] text-white
+                         hover:bg-[#1ebe57] hover:scale-105 transition-all duration-300"
+            >
+              <IcoWhatsapp cls="w-4 h-4 flex-shrink-0" />
+              <span className="hidden sm:inline text-sm font-semibold">+51 985 577 017</span>
+            </a>
 
             {/* BOTÓN TIENDA — solo ícono en mobile, texto en sm+ */}
             <Link
@@ -623,7 +661,7 @@ function HeroLibro() {
               </div>
             </div>
             <Link
-              href="/comprar-libro"
+              href="/comprar-libro/nutricion-del-bebe"
               className="btn-coquette bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200 w-full md:w-fit text-center"
             >
               Adquirir el libro
@@ -1024,6 +1062,19 @@ function FilosofiaYServicios() {
               Filosofía <span className="font-semibold text-[var(--lime)]">profesional.</span>
             </h2>
 
+            {/* Bloque de especialidad — narrativa actualizada de la clienta */}
+            <div className="rounded-2xl border-2 border-[var(--lime)] bg-[var(--lime-soft)] p-5 md:p-6 mb-6">
+              <p className="text-xs uppercase tracking-widest text-[var(--lime)] font-semibold mb-2">
+                Especialidad
+              </p>
+              <p className="font-nunito text-base md:text-lg text-[var(--texto-principal)] leading-relaxed">
+                Nutricionista con amplia experiencia en nutrición infantil. Trabajo enfocado en elevar la talla
+                y evitar el exceso de peso en bebés, niños y adolescentes, logrando condiciones nutricionales
+                adecuadas en aproximadamente <span className="font-semibold text-[var(--lime)]">3 meses</span> de
+                acompañamiento personalizado.
+              </p>
+            </div>
+
             <div className="space-y-2">
               {secciones.map((s, i) => {
                 const activo = abierto === i;
@@ -1111,44 +1162,147 @@ function FilosofiaYServicios() {
   );
 }
 
+/* ---------- NUESTROS SERVICIOS ---------- */
+function NuestrosServicios() {
+  // TODO: Reemplazar con las descripciones específicas de cada servicio que enviará la clienta — por ahora son textos genéricos.
+  const servicios: { titulo: string; Ico: (p: { cls?: string }) => React.JSX.Element; desc: string }[] = [
+    { titulo: "Nutrición",                    Ico: IcoApple,        desc: "Consultas y planes nutricionales personalizados para cada etapa de la vida." },
+    { titulo: "Enfermería",                   Ico: IcoCross,        desc: "Atención de enfermería complementaria a tu tratamiento nutricional." },
+    { titulo: "Medicina",                     Ico: IcoStethoscope,  desc: "Evaluación médica general en coordinación con tu plan de nutrición." },
+    { titulo: "Venta de vitaminas",           Ico: IcoPill,         desc: "Suplementos y vitaminas seleccionados para complementar tu alimentación." },
+    { titulo: "Venta de snacks saludables",   Ico: IcoSnackBag,     desc: "Opciones prácticas y nutritivas para tus momentos de antojo." },
+    { titulo: "Venta de libros de nutrición", Ico: IcoBook,         desc: "Libros y guías escritos por María Luisa para aprender en casa." },
+    { titulo: "Atención previa cita",         Ico: IcoClock,        desc: "Orientación inicial para que llegues preparado a tu primera consulta." },
+  ];
+
+  return (
+    <section id="servicios-centro" className="py-12 sm:py-16 lg:py-20 bg-white relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
+        <div className="text-center mb-8 md:mb-12">
+          <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center justify-center gap-2">
+            <IcoLeaf cls="w-4 h-4" /> Nuestro centro
+          </p>
+          <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-3 text-[var(--texto-principal)]">
+            Nuestros <span className="font-semibold text-[var(--lime)]">servicios.</span>
+          </h2>
+          <p className="font-nunito text-[var(--texto-suave)] max-w-xl mx-auto text-sm md:text-base leading-relaxed">
+            Todo lo que ofrecemos en el Centro de Salud y Nutrición Preventivo María Luisa.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          {servicios.map((s) => (
+            <div
+              key={s.titulo}
+              className="p-5 rounded-2xl bg-[#f5f0e8] border-2 border-[var(--borde-verde)] transition hover:scale-[1.02] hover:border-[var(--lime)] hover:shadow-md flex flex-col"
+            >
+              <div className="w-12 h-12 rounded-full bg-[var(--lime-soft)] flex items-center justify-center mb-3">
+                <s.Ico cls="w-6 h-6 text-[var(--lime)]" />
+              </div>
+              <h3 className="font-semibold mb-1 text-sm md:text-base text-[var(--texto-principal)]">{s.titulo}</h3>
+              <p className="font-nunito text-xs sm:text-sm text-[var(--texto-suave)] leading-relaxed">{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- ALMUERZOS EJEMPLOS ---------- */
+function AlmuerzosEjemplos() {
+  const almuerzos = [
+    {
+      titulo: "Almuerzo con Pez Espada",
+      // TODO: Reemplazar con foto real del plato cuando la clienta la envíe.
+      imagen: null as string | null,
+      desc: "Filete de pez espada sin espinas, acompañado de vegetales al vapor. Rico en omega 3 y bajo en grasas.",
+    },
+    {
+      titulo: "Anchoveta con Ensalada",
+      // TODO: Reemplazar con foto real del plato cuando la clienta la envíe.
+      imagen: null as string | null,
+      desc: "Anchoveta enlatada peruana con ensalada fresca de tomate. Práctico, económico y súper nutritivo.",
+    },
+  ];
+
+  return (
+    <section className="py-12 sm:py-16 lg:py-20 bg-[var(--lime-soft)] relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
+        <div className="text-center mb-8 md:mb-12">
+          <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center justify-center gap-2">
+            <IcoBowl cls="w-4 h-4" /> Ejemplos reales
+          </p>
+          <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-3 text-[var(--texto-principal)]">
+            Almuerzos súper <span className="font-semibold text-[var(--lime)]">prácticos y nutritivos.</span>
+          </h2>
+          <p className="font-nunito text-[var(--texto-suave)] max-w-xl mx-auto text-sm md:text-base leading-relaxed">
+            Ejemplos de lo que trabajamos con nuestros pacientes.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2 gap-6 md:gap-8">
+          {almuerzos.map((a) => (
+            <div key={a.titulo} className="bg-white rounded-2xl border-2 border-[var(--borde-verde)] overflow-hidden">
+              <div className="w-full aspect-video bg-[var(--verde-pastel)] flex items-center justify-center">
+                {a.imagen ? (
+                  <img src={a.imagen} alt={a.titulo} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="flex flex-col items-center gap-2 text-[var(--verde-fuerte)]">
+                    <IcoBowl cls="w-10 h-10" />
+                    <span className="font-nunito text-xs">Foto próximamente</span>
+                  </div>
+                )}
+              </div>
+              <div className="p-5 sm:p-6">
+                <h3 className="font-playfair text-lg font-semibold text-[var(--texto-principal)] mb-2">{a.titulo}</h3>
+                <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed">{a.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /* ---------- DIETA MARÍA LUISA (PLANES) ---------- */
 function DietaMariaLuisa() {
+  // Precios y planes actualizados según indicaciones de la clienta (reemplazan los anteriores por completo).
   const planes = [
     {
-      badge: "Gratis",
+      badge: "Básico",
       badgeBg: "var(--lime-soft)",
       badgeColor: "var(--verde-fuerte)",
-      nombre: "Dieta Básica",
-      precio: "S/ 0",
-      periodo: "siempre",
-      desc: "Lo esencial para empezar a comer mejor.",
+      nombre: "Plan Básico",
+      precio: "S/ 20",
+      periodo: "plan diario",
+      desc: "Alimentación para las 24 horas, según tu edad, peso y talla.",
       beneficios: [
-        "Guía PDF de alimentos saludables",
-        "Lista de superalimentos peruanos",
-        "Tips semanales por WhatsApp",
-        "Acceso a contenido público",
+        "Alimentación para las 24 horas, según edad, peso y talla",
+        "Regalo: 01 lista práctica de loncheras saludables",
       ],
-      cta: "Descargar gratis",
+      cta: "Quiero el Plan Básico",
       ctaHref: "/dieta-basica",
       ctaExtra: "border-2 border-[var(--verde-fuerte)] text-[var(--verde-fuerte)] hover:bg-[var(--lime-soft)]",
       checkColor: "var(--lime)",
       destacado: false,
       popular: false,
+      imagen: "/images/free.png",
+      imagenAlt: "Plan Básico",
     },
     {
       badge: "VIP",
       badgeBg: "var(--primrose)",
       badgeColor: "white",
-      nombre: "Dieta VIP",
-      precio: "S/ 80",
-      periodo: "mensual",
-      desc: "Recomendaciones nutricionales semi-profundas adaptadas a ti.",
+      nombre: "Plan VIP",
+      precio: "S/ 40",
+      periodo: "quincenal",
+      desc: "Alimentación de una quincena programada día por día, totalmente personalizada.",
       beneficios: [
-        "Evaluación nutricional inicial",
-        "Plan alimenticio semanal personalizado",
-        "2 ajustes al mes según tu progreso",
-        "Chat directo con la nutricionista",
-        "Recetas dietéticas exclusivas",
+        "Alimentación de una quincena programada día por día",
+        "La alimentación es personalizada",
+        "Regalo: 01 libro de la autora",
       ],
       cta: "Quiero el plan VIP",
       ctaHref: "/dieta-vip",
@@ -1156,23 +1310,21 @@ function DietaMariaLuisa() {
       checkColor: "var(--primrose)",
       destacado: true,
       popular: true,
+      imagen: "/images/vip.png",
+      imagenAlt: "Plan VIP",
     },
     {
       badge: "Premium",
       badgeBg: "var(--verde-fuerte)",
       badgeColor: "white",
-      nombre: "Dieta Premium",
-      precio: "S/ 180",
+      nombre: "Plan Premium",
+      precio: "S/ 80",
       periodo: "mensual",
-      desc: "Dieta preventiva detallada con seguimiento profesional completo.",
+      desc: "Un mes completo de alimentación, con libro y video incluidos.",
       beneficios: [
-        "Evaluación clínica nutricional completa",
-        "Plan preventivo según historial médico",
-        "Seguimiento semanal personalizado",
-        "Análisis de progreso con métricas",
-        "Consultas ilimitadas por videollamada",
-        "Recetario personalizado físico + digital",
-        "Acceso prioritario a talleres y libros",
+        "Alimentación de 01 mes",
+        "Incluye libro",
+        "Incluye video",
       ],
       cta: "Acceder a Premium",
       ctaHref: "/dieta-premium",
@@ -1180,6 +1332,28 @@ function DietaMariaLuisa() {
       checkColor: "var(--verde-fuerte)",
       destacado: false,
       popular: false,
+      imagen: "/images/imagenlibro.jpeg",
+      imagenAlt: "Plan Premium",
+    },
+    {
+      badge: "MiniChef",
+      badgeBg: "var(--lime)",
+      badgeColor: "white",
+      nombre: "Plan MiniChef",
+      precio: "S/ 90",
+      periodo: "por confirmar",
+      // TODO: Reemplazar con la descripción real del Plan MiniChef cuando la clienta la envíe.
+      desc: "Próximamente detalles de este plan.",
+      beneficios: [] as string[],
+      cta: "Más información",
+      ctaHref: "/plan-minichef",
+      ctaExtra: "border-2 border-[var(--lime)] text-[var(--lime)] hover:bg-[var(--lime-soft)]",
+      checkColor: "var(--lime)",
+      destacado: false,
+      popular: false,
+      imagen: null as string | null,
+      imagenAlt: "",
+      proximamente: true,
     },
   ];
 
@@ -1195,17 +1369,17 @@ function DietaMariaLuisa() {
             Elige tu nivel de cuidado <span className="font-semibold text-[var(--lime)]">nutricional.</span>
           </h2>
           <p className="font-nunito text-[var(--texto-suave)] max-w-xl mx-auto text-sm md:text-base leading-relaxed">
-            Tres planes diseñados para acompañarte según tus necesidades.
+            Cuatro planes diseñados para acompañarte según tus necesidades.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
           {planes.map((plan, i) => (
             <div
               key={i}
               className={`bg-white rounded-2xl border-2 p-5 sm:p-6 transition relative flex flex-col ${
                 plan.destacado
-                  ? "md:scale-105 border-[var(--primrose)] shadow-xl shadow-pink-200"
+                  ? "lg:scale-105 border-[var(--primrose)] shadow-xl shadow-pink-200"
                   : "border-[var(--borde-verde)] hover:shadow-lg hover:shadow-green-100 hover:-translate-y-1"
               }`}
             >
@@ -1228,45 +1402,41 @@ function DietaMariaLuisa() {
                 <span className="text-sm text-[var(--texto-suave)]">/ {plan.periodo}</span>
               </div>
               <p className="font-nunito text-sm text-[var(--texto-suave)] mb-5 leading-relaxed">{plan.desc}</p>
-              <ul className="space-y-2.5 mb-6 flex-1">
-                {plan.beneficios.map((b, j) => (
-                  <li key={j} className="flex items-start gap-2.5 font-nunito text-sm text-[var(--texto-suave)]">
-                    <span
-                      className="mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0"
-                      style={{ borderColor: plan.checkColor }}
-                    >
-                      <svg className="w-3 h-3" style={{ color: plan.checkColor }} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                        <polyline points="20 6 9 17 4 12"/>
-                      </svg>
-                    </span>
-                    {b}
-                  </li>
-                ))}
-              </ul>
+
+              {plan.proximamente ? (
+                <div className="flex-1 mb-6 rounded-xl border-2 border-dashed border-[var(--lime)] bg-[var(--lime-soft)] flex items-center justify-center py-8 px-3 text-center">
+                  <p className="font-nunito text-sm font-semibold text-[var(--lime)]">
+                    🍳 Próximamente detalles
+                  </p>
+                </div>
+              ) : (
+                <ul className="space-y-2.5 mb-6 flex-1">
+                  {plan.beneficios.map((b, j) => (
+                    <li key={j} className="flex items-start gap-2.5 font-nunito text-sm text-[var(--texto-suave)]">
+                      <span
+                        className="mt-0.5 w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0"
+                        style={{ borderColor: plan.checkColor }}
+                      >
+                        <svg className="w-3 h-3" style={{ color: plan.checkColor }} fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                          <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                      </span>
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
               <Link
                 href={plan.ctaHref}
                 className={`block w-full text-center px-5 py-3 rounded-full font-medium transition text-sm ${plan.ctaExtra}`}
               >
                 {plan.cta}
               </Link>
-              {plan.nombre === "Dieta Premium" && (
+              {plan.imagen && (
                 <img
-                  src="/images/imagenlibro.jpeg"
-                  alt="Libro de dieta premium"
-                  className="w-full rounded-xl mt-4 object-cover"
-                />
-              )}
-              {plan.nombre === "Dieta VIP" && (
-                <img
-                  src="/images/vip.png"
-                  alt="Plan VIP"
-                  className="w-full rounded-xl mt-4 object-cover"
-                />
-              )}
-              {plan.nombre === "Dieta Básica" && (
-                <img
-                  src="/images/free.png"
-                  alt="Plan gratuito"
+                  src={plan.imagen}
+                  alt={plan.imagenAlt}
                   className="w-full rounded-xl mt-4 object-cover"
                 />
               )}
@@ -1309,6 +1479,20 @@ function Footer() {
 
       <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
 
+        {/* Firma institucional */}
+        <div className="text-center mb-10">
+          <Image
+            src="/images/logoNutricion.png"
+            alt="Logo María Luisa Nutricionista"
+            width={80}
+            height={80}
+            className="w-14 h-14 mx-auto mb-3 object-contain drop-shadow-sm"
+          />
+          <p className="font-playfair text-xl sm:text-2xl text-white leading-snug max-w-xl mx-auto">
+            Centro de Salud y Nutrición Preventivo María Luisa
+          </p>
+        </div>
+
         {/* Columnas info */}
         <div className="grid md:grid-cols-2 gap-8 mb-10">
           <div>
@@ -1317,13 +1501,13 @@ function Footer() {
               Contacto directo
             </h4>
             <a href="https://wa.me/51985577017" target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-3 group mb-4">
-              <span className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 bg-[#25D366]/20 group-hover:bg-[#25D366]/40 transition">
-                <svg viewBox="0 0 24 24" fill="#25D366" className="w-4 h-4"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.848L.057 23.885a.5.5 0 0 0 .612.612l6.037-1.475A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.87 0-3.618-.5-5.12-1.374l-.368-.214-3.814.932.95-3.718-.236-.385A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+              className="inline-flex items-center gap-4 group mb-4 bg-[#25D366]/15 hover:bg-[#25D366]/30 border border-[#25D366]/40 rounded-2xl px-5 py-4 transition-all hover:scale-105">
+              <span className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-[#25D366] whatsapp-pulse">
+                <svg viewBox="0 0 24 24" fill="white" className="w-6 h-6"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.848L.057 23.885a.5.5 0 0 0 .612.612l6.037-1.475A11.94 11.94 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.87 0-3.618-.5-5.12-1.374l-.368-.214-3.814.932.95-3.718-.236-.385A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
               </span>
               <div>
-                <p className="text-xs text-white/50 font-nunito">WhatsApp</p>
-                <p className="font-semibold text-white group-hover:text-[#25D366] transition text-sm">985 577 017</p>
+                <p className="text-xs text-white/60 font-nunito">Escríbenos por WhatsApp</p>
+                <p className="font-bold text-white group-hover:text-[#25D366] transition text-lg">+51 985 577 017</p>
               </div>
             </a>
           </div>
@@ -1335,22 +1519,22 @@ function Footer() {
             <div className="space-y-3">
               <a href="https://www.facebook.com/marialuisa.penavaldivia?locale=es_LA" target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-3 group">
-                <span className="w-9 h-9 rounded-xl bg-[#1877F2]/20 group-hover:bg-[#1877F2]/40 flex items-center justify-center transition">
-                  <svg viewBox="0 0 24 24" fill="#1877F2" className="w-4 h-4"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.514c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+                <span className="w-11 h-11 rounded-xl bg-[#1877F2]/20 group-hover:bg-[#1877F2]/40 flex items-center justify-center transition-all group-hover:scale-110">
+                  <svg viewBox="0 0 24 24" fill="#1877F2" className="w-5 h-5"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.514c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
                 </span>
                 <span className="font-nunito text-sm text-white/80 group-hover:text-white transition">Maria Luisa Peña Valdivia</span>
               </a>
               <a href="https://www.instagram.com/nutri.marialuisa.pe/" target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-3 group">
-                <span className="w-9 h-9 rounded-xl bg-[#E1306C]/20 group-hover:bg-[#E1306C]/40 flex items-center justify-center transition">
-                  <svg viewBox="0 0 24 24" fill="#E1306C" className="w-4 h-4"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                <span className="w-11 h-11 rounded-xl bg-[#E1306C]/20 group-hover:bg-[#E1306C]/40 flex items-center justify-center transition-all group-hover:scale-110">
+                  <svg viewBox="0 0 24 24" fill="#E1306C" className="w-5 h-5"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 </span>
                 <span className="font-nunito text-sm text-white/80 group-hover:text-white transition">nutri.marialuisa.pe</span>
               </a>
               <a href="https://www.tiktok.com/@maraluisanutricio?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer"
                 className="flex items-center gap-3 group">
-                <span className="w-9 h-9 rounded-xl bg-white/10 group-hover:bg-white/20 flex items-center justify-center transition">
-                  <svg viewBox="0 0 24 24" fill="white" className="w-4 h-4"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.95a8.2 8.2 0 0 0 4.79 1.52V7.03a4.85 4.85 0 0 1-1.02-.34z"/></svg>
+                <span className="w-11 h-11 rounded-xl bg-white/10 group-hover:bg-white/20 flex items-center justify-center transition-all group-hover:scale-110">
+                  <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.95a8.2 8.2 0 0 0 4.79 1.52V7.03a4.85 4.85 0 0 1-1.02-.34z"/></svg>
                 </span>
                 <span className="font-nunito text-sm text-white/80 group-hover:text-white transition">@MaríaLuisaNutri</span>
               </a>

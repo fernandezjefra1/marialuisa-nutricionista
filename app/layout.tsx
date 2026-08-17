@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Playfair_Display, Nunito } from "next/font/google";
 import "./globals.css";
+import WhatsAppFlotante from "@/components/WhatsAppFlotante";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -118,7 +119,7 @@ export default function RootLayout({
               "@id": "https://nutricionistamarialuisa.vercel.app",
               url: "https://nutricionistamarialuisa.vercel.app",
               telephone: "+51985577017",
-              priceRange: "S/.0 - S/.180",
+              priceRange: "S/.20 - S/.90",
               description:
                 "Nutricionista colegiada con más de 20 años de experiencia en nutrición preventiva.",
               address: {
@@ -176,6 +177,7 @@ export default function RootLayout({
           }}
         />
         {children}
+        <WhatsAppFlotante />
       </body>
     </html>
   );

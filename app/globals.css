@@ -260,6 +260,20 @@ body {
   animation: glow-pulse 5s ease-in-out infinite;
 }
 
+/* =========================================
+   PULSO SUAVE — BOTÓN/WIDGET WHATSAPP
+   ========================================= */
+
+@keyframes whatsapp-pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.55); }
+  70% { box-shadow: 0 0 0 14px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+
+.whatsapp-pulse {
+  animation: whatsapp-pulse-ring 2.4s ease-out infinite;
+}
+
 
 
 /* =========================================

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase";
 
 
 export default function Home() {
@@ -11,6 +12,8 @@ export default function Home() {
       <FloatingSparkles />
       <Navbar />
       <HeroLibro />
+      <SeccionPlanes />
+      <SeccionCatalogo />
       <FilosofiaYServicios />
       <Footer />
     </main>
@@ -18,18 +21,6 @@ export default function Home() {
 }
 
 /* ---------- ICONOS SVG REUTILIZABLES ---------- */
-function IcoEye({ cls = "" }) {
-  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>;
-}
-function IcoTarget({ cls = "" }) {
-  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>;
-}
-function IcoPerson({ cls = "" }) {
-  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>;
-}
-function IcoChild({ cls = "" }) {
-  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><circle cx="12" cy="5" r="3"/><path d="M12 8v5"/><path d="M9 21v-4l3-3 3 3v4"/><path d="M7 13l2-2"/><path d="M17 13l-2-2"/></svg>;
-}
 function IcoBook({ cls = "" }) {
   return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>;
 }
@@ -276,6 +267,16 @@ function Navbar() {
               <span className="hidden sm:inline text-sm font-semibold">+51 985 577 017</span>
             </a>
 
+            {/* BOTÓN CATÁLOGO */}
+            <Link
+              href="/productos"
+              aria-label="Catálogo"
+              className="inline-flex items-center justify-center gap-2 w-9 h-9 sm:w-auto sm:h-auto sm:px-5 sm:py-2 rounded-full border-2 border-[var(--primrose)] text-[var(--primrose)] hover:bg-[var(--primrose)] hover:text-white transition-all duration-300"
+            >
+              <svg className="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+              <span className="hidden sm:inline text-sm font-medium">Catálogo</span>
+            </Link>
+
             {/* BOTÓN CALCULADORA IMC — solo ícono en mobile, texto en sm+ */}
             <Link
               href="/calculadora-imc"
@@ -416,110 +417,41 @@ function HeroLibro() {
 }
 
 function FilosofiaYServicios() {
-  const secciones: { titulo: string; Ico: (p:{cls?:string})=>React.JSX.Element; contenido: React.ReactNode }[] = [
-    { titulo: "Visión",               Ico: IcoEye,    contenido: <>Promover y vender servicios y productos nutricionales dedicados a la nutrición <span className="text-[var(--lime)] font-semibold">preventiva</span> en todas las etapas de la vida.</> },
-    { titulo: "Misión",               Ico: IcoTarget,  contenido: "Cuidar el cuerpo humano con dietas María Luisa, escritas, cocinadas o envasadas, llegando a más familias cada día." },
-    { titulo: "Objetivo en los niños", Ico: IcoChild,  contenido: "Elevar la estatura promedio de los peruanos con la dieta María Luisa y vencer a la genética tradicional con el poder de la ciencia de la nutrición." },
-    { titulo: "Objetivo en los adultos", Ico: IcoPerson, contenido: "Mejorar la calidad de vida saludable de la población económicamente activa del Perú y Latinoamérica." },
-  ];
-
   const servicios: { n: string; titulo: string; Ico: (p:{cls?:string})=>React.JSX.Element; desc: React.ReactNode }[] = [
-    { n: "01", titulo: "Libros",       Ico: IcoBook,    desc: <>Guías prácticas de nutrición <span className="text-[var(--lime)] font-semibold">preventiva</span>.</> },
-    { n: "02", titulo: "Planes deportivos", Ico: IcoBlender, desc: "Alimentación para ganancia muscular y definición." },
-    { n: "03", titulo: "Catálogo",     Ico: IcoBowl,    desc: "Cúrcuma, sacha inchi, cacao, estevia." },
-    { n: "04", titulo: "Consultorías", Ico: IcoChat,    desc: "Asesorías personalizadas." },
+    { n: "01", titulo: "Consulta nutricional", Ico: IcoChat,    desc: "Evaluación y plan personalizado, presencial o virtual." },
+    { n: "02", titulo: "Nutrición deportiva",  Ico: IcoBlender, desc: <>Alimentación para <span className="text-[var(--lime)] font-semibold">ganar músculo y definir</span>.</> },
+    { n: "03", titulo: "Libro digital",        Ico: IcoBook,    desc: "Guías prácticas de nutrición preventiva." },
+    { n: "04", titulo: "Superalimentos",       Ico: IcoBowl,    desc: "Cúrcuma, sacha inchi, cacao y más en el catálogo." },
   ];
-
-  const [abierto, setAbierto] = useState<number | null>(0);
 
   return (
     <section id="sobre-mi" className="bg-[#f5f0e8] relative overflow-hidden">
       <FoodBg />
-      <div className="max-w-6xl mx-auto px-4 md:px-6 py-14 md:py-16 relative z-10">
-        <div className="grid md:grid-cols-2 gap-12 md:gap-16">
-
-          {/* IZQUIERDA: Filosofía */}
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-12 md:py-14 relative z-10">
+        <div className="grid md:grid-cols-2 gap-10 md:gap-14 items-center">
           <div>
             <p className="text-sm uppercase tracking-widest text-[var(--texto-principal)] mb-2 font-semibold flex items-center gap-2">
-              <span className="text-[var(--lime)]">♥</span> Nuestra propuesta
+              <span className="text-[var(--lime)]">♥</span> Sobre mí
             </p>
-            <h2 className="font-playfair text-3xl md:text-5xl font-bold mb-6 text-[var(--texto-principal)]">
-              Filosofía <span className="font-semibold text-[var(--lime)]">profesional.</span>
+            <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-4 text-[var(--texto-principal)]">
+              Nutrición que <span className="text-[var(--lime)]">transforma.</span>
             </h2>
-
-            {/* Bloque de especialidad — narrativa actualizada de la clienta */}
-            {/* TODO: Si la clienta quiere posicionarse en nutrición deportiva, necesitamos que ELLA
-                envíe su texto real de experiencia con deportistas/gimnasio. No inventar aquí. */}
-            <div className="rounded-2xl border-2 border-[var(--lime)] bg-[var(--lime-soft)] p-5 md:p-6 mb-6">
-              <p className="text-xs uppercase tracking-widest text-[var(--lime)] font-semibold mb-2">
-                Especialidad
-              </p>
+            {/* TODO: Reemplazar por el texto real de la clienta (enfoque fitness/deportivo). */}
+            <div className="rounded-2xl border-2 border-[var(--lime)] bg-[var(--lime-soft)] p-5 md:p-6">
+              <p className="text-xs uppercase tracking-widest text-[var(--lime)] font-semibold mb-2">Especialidad</p>
               <p className="font-nunito text-base md:text-lg text-[var(--texto-principal)] leading-relaxed">
-                Nutricionista con amplia experiencia en nutrición infantil. Trabajo enfocado en elevar la talla
-                y evitar el exceso de peso en bebés, niños y adolescentes, logrando condiciones nutricionales
-                adecuadas en aproximadamente <span className="font-semibold text-[var(--lime)]">3 meses</span> de
-                acompañamiento personalizado.
+                Nutricionista colegiada de la Universidad de San Marcos, con enfoque en
+                <span className="font-semibold text-[var(--lime)]"> nutrición deportiva y preventiva</span>.
+                Planes para gente de gimnasio que busca resultados reales.
               </p>
-            </div>
-
-            <div className="space-y-2">
-              {secciones.map((s, i) => {
-                const activo = abierto === i;
-                return (
-                  <div
-                    key={i}
-                    className={`rounded-2xl overflow-hidden transition-all border-2 ${
-                      activo
-                        ? "bg-[var(--lime-soft)] border-[var(--lime)]"
-                        : "bg-white border-[var(--borde-suave)]"
-                    }`}
-                  >
-                    <button
-                      onClick={() => setAbierto(abierto === i ? null : i)}
-                      className="w-full px-5 py-4 flex items-center gap-3 text-left transition"
-                    >
-                      <span className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition ${
-                        activo ? "bg-[var(--lime)] text-white" : "bg-[var(--lime-soft)] text-[var(--lime)]"
-                      }`}>
-                        <s.Ico cls="w-5 h-5" />
-                      </span>
-                      <span className="flex-1 text-base md:text-lg font-medium text-[var(--texto-principal)]">
-                        {s.titulo}
-                      </span>
-                      <span className={`text-2xl transition-transform duration-300 text-[var(--lime)] ${activo ? "rotate-45" : ""}`}>
-                        +
-                      </span>
-                    </button>
-                    <div className={`grid transition-all duration-500 ease-in-out ${
-                      activo ? "grid-rows-[1fr] opacity-100 px-5 pb-4" : "grid-rows-[0fr] opacity-0"
-                    }`}>
-                      <div className="overflow-hidden">
-                        <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed pl-[52px]">
-                          {s.contenido}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
             </div>
           </div>
-
-          {/* DERECHA: Servicios */}
           <div id="servicios">
-            <p className="text-sm uppercase tracking-widest text-[var(--texto-principal)] mb-2 font-semibold">
-              Lo que ofrezco
-            </p>
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 text-[var(--texto-principal)]">
-              Cuatro <span className="font-semibold text-[var(--lime)]">pilares.</span>
-            </h2>
-
-            <div className="grid sm:grid-cols-2 gap-4 md:gap-5">
+            <p className="text-sm uppercase tracking-widest text-[var(--texto-principal)] mb-2 font-semibold">Lo que ofrezco</p>
+            <h2 className="text-2xl md:text-3xl font-bold mb-5 text-[var(--texto-principal)]">Cuatro <span className="font-semibold text-[var(--lime)]">pilares.</span></h2>
+            <div className="grid sm:grid-cols-2 gap-4">
               {servicios.map((item) => (
-                <div
-                  key={item.n}
-                  className="p-5 rounded-2xl bg-white border-2 border-[var(--borde-verde)] transition cursor-default hover:scale-[1.02] hover:border-[var(--lime)] hover:shadow-md"
-                >
+                <div key={item.n} className="p-5 rounded-2xl bg-white border-2 border-[var(--borde-verde)] transition hover:border-[var(--lime)] hover:shadow-md">
                   <p className="text-xs mb-2 font-semibold text-[var(--lime)]">{item.n}</p>
                   <div className="w-11 h-11 rounded-full bg-[var(--lime-soft)] flex items-center justify-center mb-3">
                     <item.Ico cls="w-5 h-5 text-[var(--lime)]" />
@@ -532,18 +464,80 @@ function FilosofiaYServicios() {
           </div>
         </div>
       </div>
+    </section>
+  );
+}
 
-      {/* Barra inferior */}
-      <div className="bg-[var(--verde-fuerte)] text-white py-4 px-8 flex flex-col sm:flex-row items-center justify-between gap-3 relative text-center sm:text-left">
-        <p className="font-nunito text-sm">
-          Nutrición que <strong>transforma</strong>. Bienestar que <strong>se nota</strong>.
-        </p>
-        <div className="hidden sm:flex absolute left-1/2 -translate-x-1/2 -top-6 w-12 h-12 rounded-full bg-white border-4 border-[var(--verde-fuerte)] items-center justify-center shadow-md">
-          <IcoLeaf cls="w-6 h-6 text-[var(--verde-fuerte)]" />
+/* ---------- PLANES / ASESORÍAS (venta) ---------- */
+function SeccionPlanes() {
+  const WA = "51985577017";
+  const planes: { titulo: string; desc: string; badge: string; destacado: boolean; href?: string; wa?: string; cta: string }[] = [
+    { titulo: "Consulta nutricional", desc: "Evaluación completa y plan personalizado, presencial o virtual.", badge: "Más pedido", destacado: false, href: "/reservar-cita", cta: "Reservar cita" },
+    { titulo: "Plan Fitness personalizado", desc: "Alimentación para ganar músculo o definir, según tu rutina de gym.", badge: "Fitness", destacado: true, wa: "¡Hola María Luisa! Quiero información sobre el Plan Fitness personalizado.", cta: "Lo quiero" },
+    { titulo: "Asesoría deportiva mensual", desc: "Seguimiento continuo con ajustes y control por WhatsApp.", badge: "Mensual", destacado: false, wa: "¡Hola María Luisa! Quiero información sobre la Asesoría deportiva mensual.", cta: "Más información" },
+  ];
+  return (
+    <section id="planes" className="bg-white py-12 md:py-16 relative overflow-hidden">
+      <div className="max-w-6xl mx-auto px-4 md:px-6">
+        <div className="text-center mb-8">
+          <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold">Planes y asesorías</p>
+          <h2 className="font-playfair text-3xl md:text-4xl font-bold text-[var(--texto-principal)]">Elige tu <span className="text-[var(--lime)]">plan.</span></h2>
         </div>
-        <p className="font-nunito text-sm">
-          Salud · Equilibrio · Bienestar <span className="text-white">♥</span>
-        </p>
+        <div className="grid md:grid-cols-3 gap-5">
+          {planes.map((p) => (
+            <div key={p.titulo} className={`rounded-2xl p-6 flex flex-col border-2 transition hover:-translate-y-1 ${p.destacado ? "border-[var(--primrose)] bg-[var(--pinktone-soft)] shadow-lg shadow-pink-100" : "border-[var(--borde-verde)] bg-[var(--lime-soft)]"}`}>
+              <span className={`self-start text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-full mb-3 ${p.destacado ? "bg-[var(--primrose)] text-white" : "bg-white text-[var(--lime)]"}`}>{p.badge}</span>
+              <h3 className="font-playfair text-xl font-bold text-[var(--texto-principal)] mb-2">{p.titulo}</h3>
+              <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-6 flex-1">{p.desc}</p>
+              {p.href ? (
+                <Link href={p.href} className="text-center bg-[var(--primrose)] hover:bg-[var(--primrose-hover)] text-white text-sm font-semibold px-5 py-3 rounded-full transition">{p.cta}</Link>
+              ) : (
+                <a href={`https://wa.me/${WA}?text=${encodeURIComponent(p.wa!)}`} target="_blank" rel="noopener noreferrer" className="text-center bg-[var(--verde-fuerte)] hover:opacity-90 text-white text-sm font-semibold px-5 py-3 rounded-full transition">{p.cta}</a>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- CATÁLOGO (destacados) ---------- */
+type ProductoHome = { id: number; nombre: string; precio: number | null; imagen_url: string | null };
+function SeccionCatalogo() {
+  const [items, setItems] = useState<ProductoHome[]>([]);
+  useEffect(() => {
+    let vigente = true;
+    const supabase = createClient();
+    supabase.from("productos").select("id,nombre,precio,imagen_url").eq("activo", true).eq("destacado", true).order("orden", { ascending: true }).limit(4)
+      .then(({ data }) => { if (!vigente) return; setItems((data as ProductoHome[]) ?? []); });
+    return () => { vigente = false; };
+  }, []);
+  return (
+    <section id="catalogo" className="bg-[var(--verde-fuerte)] py-12 md:py-16 relative overflow-hidden text-white">
+      <div className="max-w-6xl mx-auto px-4 md:px-6">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+          <div>
+            <p className="text-sm uppercase tracking-widest text-[var(--lime-mid)] mb-2 font-semibold">Productos saludables</p>
+            <h2 className="font-playfair text-3xl md:text-4xl font-bold">Catálogo <span className="text-[var(--lime-mid)]">María Luisa.</span></h2>
+          </div>
+          <Link href="/productos" className="self-start md:self-auto bg-white text-[var(--verde-fuerte)] text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-[var(--lime-soft)] transition">Ver catálogo completo</Link>
+        </div>
+        {items.length > 0 && (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {items.map((p) => (
+              <div key={p.id} className="bg-white rounded-2xl overflow-hidden text-[var(--texto-principal)]">
+                <div className="relative aspect-square bg-[var(--lime-soft)]">
+                  {p.imagen_url && <Image src={p.imagen_url} alt={p.nombre} fill className="object-contain p-4" sizes="(max-width:768px) 50vw, 25vw" />}
+                </div>
+                <div className="p-3">
+                  <h3 className="font-semibold text-sm truncate">{p.nombre}</h3>
+                  {p.precio != null && <p className="font-nunito text-sm text-[var(--texto-suave)]">S/ {p.precio}</p>}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

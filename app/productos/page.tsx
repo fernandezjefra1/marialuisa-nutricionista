@@ -1,18 +1,12 @@
-import { Suspense } from "react";
+import type { Metadata } from "next";
 import ProductosContent from "./ProductosContent";
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "Catálogo de productos | María Luisa Nutricionista",
+  description:
+    "Suplementos y alimentos seleccionados para acompañar tu entrenamiento. Coordina tu pedido por WhatsApp.",
+};
 
 export default function ProductosPage() {
-  return (
-    <Suspense
-      fallback={
-        <main className="min-h-screen bg-[var(--yucca)] flex items-center justify-center">
-          <p className="text-sm text-[var(--texto-suave)]">Cargando...</p>
-        </main>
-      }
-    >
-      <ProductosContent />
-    </Suspense>
-  );
+  return <ProductosContent />;
 }

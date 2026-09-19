@@ -345,8 +345,6 @@ function LoginContent() {
   // ── Estado general ──
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [loginBloqueadoHasta, setLoginBloqueadoHasta] = useState<number | null>(null);
-  const [segundosBloqueo, setSegundosBloqueo] = useState(0);
 
   // Countdown reenvío OTP
   useEffect(() => {
@@ -354,19 +352,6 @@ function LoginContent() {
     const t = setTimeout(() => setSegundosRestantes((s) => s - 1), 1000);
     return () => clearTimeout(t);
   }, [segundosRestantes]);
-
-  // Countdown bloqueo de login
-  useEffect(() => {
-    if (!loginBloqueadoHasta) return;
-    const calc = () => Math.max(0, Math.ceil((loginBloqueadoHasta - Date.now()) / 1000));
-    setSegundosBloqueo(calc());
-    const t = setInterval(() => {
-      const r = calc();
-      setSegundosBloqueo(r);
-      if (r <= 0) { setLoginBloqueadoHasta(null); clearInterval(t); }
-    }, 1000);
-    return () => clearInterval(t);
-  }, [loginBloqueadoHasta]);
 
   function cambiarModo(m: Modo) {
     setModo(m);
@@ -389,7 +374,6 @@ function LoginContent() {
   // ── Login ────────────────────────────────────────────────────────────────────
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (loginBloqueadoHasta && Date.now() < loginBloqueadoHasta) return;
     setError(null);
     setCargando(true);
 
@@ -403,19 +387,11 @@ function LoginContent() {
       const data = await res.json();
 
       if (!data.ok) {
-        if (data.reason === "rate_limited") {
-          setLoginBloqueadoHasta(data.lockedUntil);
-          setError("Demasiados intentos fallidos. Tu cuenta está bloqueada temporalmente.");
-        } else if (data.reason === "invalid_credentials") {
-          const left: number = data.attemptsLeft ?? 0;
-          setError(
-            left > 0
-              ? `Correo o contraseña incorrectos. Te quedan ${left} intento${left !== 1 ? "s" : ""}.`
-              : "Correo o contraseña incorrectos."
-          );
-        } else {
-          setError("Ocurrió un error. Intenta de nuevo.");
-        }
+        setError(
+          data.reason === "invalid_credentials"
+            ? "Correo o contraseña incorrectos."
+            : "Ocurrió un error. Intenta de nuevo."
+        );
         return;
       }
 
@@ -647,23 +623,11 @@ function LoginContent() {
                 ¿Olvidaste tu contraseña?
               </Link>
 
-              {loginBloqueadoHasta && segundosBloqueo > 0 && (
-                <div className="flex items-start gap-2 bg-orange-50 border border-orange-200 rounded-xl px-4 py-3 text-sm text-orange-700">
-                  <IconoError />
-                  <span>
-                    Cuenta bloqueada por demasiados intentos. Vuelve a intentar en{" "}
-                    <span className="font-bold tabular-nums">
-                      {Math.floor(segundosBloqueo / 60)}:{(segundosBloqueo % 60).toString().padStart(2, "0")}
-                    </span>{" "}min.
-                  </span>
-                </div>
-              )}
-
-              {error && !loginBloqueadoHasta && <CajaError mensaje={error} />}
+              {error && <CajaError mensaje={error} />}
 
               <button
                 type="submit"
-                disabled={cargando || (!!loginBloqueadoHasta && segundosBloqueo > 0)}
+                disabled={cargando}
                 className="w-full bg-[var(--verde-fuerte)] hover:opacity-90 text-white py-3.5 rounded-full font-semibold transition hover:scale-105 shadow-md shadow-green-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
               >
                 {cargando ? "Ingresando..." : "Iniciar sesión"}

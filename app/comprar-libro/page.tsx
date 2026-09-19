@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 
-// TODO: Reemplazar con el link real de Hotmart de cada libro cuando la clienta lo envíe.
-const HOTMART_LINK = "#";
+const WHATSAPP_NUMERO = "51985577017";
 
 export const metadata: Metadata = {
   title: "Libros de nutrición",
   description:
-    "Descubre los libros de María Luisa Nutricionista: Nutrición del Bebé y Loncheras Saludables. Disponibles en físico, digital y en Hotmart.",
+    "Los libros de María Luisa Nutricionista: Nutrición del Bebé y Loncheras Saludables. Próximamente en versión digital.",
 };
 
 type Libro = {
@@ -18,8 +17,6 @@ type Libro = {
   portada: string;
   portadaProvisional?: boolean;
   descripcion: string;
-  precioDigital: number;
-  precioFisico: number;
 };
 
 const LIBROS: Libro[] = [
@@ -30,8 +27,6 @@ const LIBROS: Libro[] = [
     portada: "/images/libro-portada.jpg",
     descripcion:
       "Guía práctica para la alimentación de tu bebé, con recomendaciones nutricionales por etapa y recetas fáciles de preparar.",
-    precioDigital: 10,
-    precioFisico: 20,
   },
   {
     slug: "loncheras-saludables",
@@ -43,10 +38,19 @@ const LIBROS: Libro[] = [
     // TODO: Reemplazar descripción con el resumen que enviará la clienta para la contratapa.
     descripcion:
       "Ideas de loncheras nutritivas, rápidas y ricas para acompañar el crecimiento de los más pequeños de la casa.",
-    precioDigital: 20,
-    precioFisico: 30,
   },
 ];
+
+/* TODO: FASE 2 — Venta online de los libros digitales.
+   Aquí volverá el precio y el botón de compra. Hará falta:
+   - Una tabla de pedidos digitales (o reutilizar `compras`) con el estado del pago.
+   - El flujo de pago y la entrega del archivo (link firmado con expiración desde Supabase Storage).
+   - Un campo `archivo_url` por libro para servir el PDF solo a quien lo compró. */
+
+function linkWhatsApp(titulo: string): string {
+  const texto = `¡Hola María Luisa! Quiero que me avises cuando el libro "${titulo}" esté disponible en versión digital.`;
+  return `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(texto)}`;
+}
 
 export default function ComprarLibroPage() {
   return (
@@ -72,18 +76,24 @@ export default function ComprarLibroPage() {
             Aprende nutrición <span className="font-semibold shimmer-rose">página a página.</span>
           </h1>
           <p className="font-nunito text-[#5a7255] max-w-xl mx-auto text-sm">
-            Disponibles en físico, digital y en Hotmart.
+            Próximamente disponibles en versión digital. Déjanos tu mensaje y te avisamos apenas salgan.
           </p>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-6 md:gap-8">
           {LIBROS.map((libro) => (
             <div key={libro.slug} className="bg-white rounded-2xl border-2 border-[#C5DFC5] overflow-hidden flex flex-col">
-              {/* Portada + sello Hotmart */}
+              {/* Portada */}
               <div className="relative w-full aspect-[4/3] bg-[#f0f8ec]">
-                <Image src={libro.portada} alt={libro.titulo} fill className="object-cover" />
-                <span className="absolute top-3 right-3 bg-[#FF6600] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
-                  🔥 Disponible en Hotmart
+                <Image
+                  src={libro.portada}
+                  alt={libro.titulo}
+                  fill
+                  sizes="(max-width: 640px) 100vw, 50vw"
+                  className="object-cover"
+                />
+                <span className="absolute top-3 right-3 bg-[var(--verde-fuerte)] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+                  Próximamente
                 </span>
                 {libro.portadaProvisional && (
                   <span className="absolute bottom-3 left-3 bg-white/90 text-[#5a7255] text-[10px] font-semibold px-2.5 py-1 rounded-full">
@@ -97,16 +107,10 @@ export default function ComprarLibroPage() {
                 <p className="font-nunito text-xs text-[#8aa487] mb-3">Por {libro.autor}</p>
                 <p className="font-nunito text-sm text-[#5a7255] leading-relaxed mb-4">{libro.descripcion}</p>
 
-                <div className="flex items-center gap-4 mb-5 text-sm font-nunito">
-                  <div>
-                    <p className="text-[#8aa487] text-xs">Digital</p>
-                    <p className="font-playfair font-semibold text-[#31543d]">S/ {libro.precioDigital}</p>
-                  </div>
-                  <div className="w-px h-8 bg-[#C5DFC5]" />
-                  <div>
-                    <p className="text-[#8aa487] text-xs">Físico</p>
-                    <p className="font-playfair font-semibold text-[#31543d]">S/ {libro.precioFisico}</p>
-                  </div>
+                <div className="mb-5 rounded-xl bg-[#f0f8ec] border border-[#C5DFC5] px-4 py-3">
+                  <p className="font-nunito text-sm font-semibold text-[#31543d]">
+                    Disponible próximamente en versión digital
+                  </p>
                 </div>
 
                 <div className="mt-auto flex flex-col gap-2.5">
@@ -117,12 +121,12 @@ export default function ComprarLibroPage() {
                     Ver detalles
                   </Link>
                   <a
-                    href={HOTMART_LINK}
+                    href={linkWhatsApp(libro.titulo)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full text-center border-2 border-[#FF6600] text-[#FF6600] px-5 py-3 rounded-full font-semibold text-sm hover:bg-[#FF6600] hover:text-white transition"
+                    className="w-full text-center border-2 border-[#25D366] text-[#1FAA52] px-5 py-3 rounded-full font-semibold text-sm hover:bg-[#25D366] hover:text-white transition"
                   >
-                    🔥 Comprar en Hotmart
+                    Avísame por WhatsApp
                   </a>
                 </div>
               </div>

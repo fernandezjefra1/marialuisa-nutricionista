@@ -30,19 +30,23 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://nutricionistamarialuisa.vercel.app"),
   title: {
-    default: "María Luisa Nutricionista | Nutrición preventiva en Lima",
+    default: "María Luisa Nutricionista | Nutrición deportiva y preventiva en Lima",
     template: "%s | María Luisa Nutricionista",
   },
   description:
-    "Nutricionista colegiada con 20+ años de experiencia. Consultas personalizadas, planes nutricionales y talleres en San Juan de Miraflores, Lima. Atención presencial y virtual.",
+    "Nutricionista colegiada con 20+ años de experiencia. Planes de alimentación deportiva para ganancia muscular, definición y rendimiento en San Juan de Miraflores, Lima. Atención presencial y virtual.",
   keywords: [
+    "nutricionista deportiva Lima",
     "nutricionista Lima",
     "nutricionista San Juan de Miraflores",
-    "nutrición preventiva Perú",
+    "nutrición deportiva Perú",
+    "plan alimentación gimnasio",
+    "ganancia muscular nutrición",
+    "definición muscular dieta",
     "María Luisa Peña Valdivia",
     "consulta nutricional Lima",
-    "taller comida dietética",
     "dieta María Luisa",
     "alimentación saludable Lima",
     "calculadora IMC",
@@ -58,9 +62,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_PE",
     url: "https://nutricionistamarialuisa.vercel.app",
-    title: "María Luisa Nutricionista | Nutrición preventiva",
+    title: "María Luisa Nutricionista | Nutrición deportiva y preventiva",
     description:
-      "Más de 20 años de experiencia en nutrición preventiva. Consultas, talleres y libros para una vida saludable.",
+      "Más de 20 años de experiencia. Planes de alimentación para entrenamiento, consultas y libros para una vida saludable.",
     siteName: "María Luisa Nutricionista",
     images: [
       {
@@ -161,7 +165,7 @@ export default function RootLayout({
                     "@type": "Offer",
                     itemOffered: {
                       "@type": "Service",
-                      name: "Taller de comida dietética",
+                      name: "Plan de alimentación deportiva",
                     },
                   },
                   {

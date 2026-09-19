@@ -35,8 +35,18 @@ export default function AdministradoresPage() {
   }
 
   useEffect(() => {
-    cargarAdmins();
-  }, []);
+    let vigente = true;
+    supabase
+      .from("admin_emails")
+      .select("*")
+      .order("created_at", { ascending: true })
+      .then(({ data }) => {
+        if (!vigente) return;
+        setAdmins(data ?? []);
+        setLoading(false);
+      });
+    return () => { vigente = false; };
+  }, [supabase]);
 
   async function agregarAdmin(e: React.FormEvent) {
     e.preventDefault();

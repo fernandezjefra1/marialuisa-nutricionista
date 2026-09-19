@@ -7,6 +7,8 @@ import { useUser } from "@/lib/use-user";
 import { useAdmin } from "@/lib/use-admin";
 import { createClient } from "@/lib/supabase";
 
+const WHATSAPP_NUMERO = "51985577017";
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#f5f0e8] text-[var(--texto-principal)]">
@@ -21,7 +23,7 @@ export default function Home() {
       <DietaMariaLuisa />
       <SeccionProductos />
       <SeccionCalculadoraImc />
-      <BloqueEmpresasYPromotores />
+      <BloqueEmpresas />
       <AsesoriasProyectos />
       <Footer />
     </main>
@@ -72,9 +74,6 @@ function IcoBone({ cls = "" }) {
 function IcoWave({ cls = "" }) {
   return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>;
 }
-function IcoStomach({ cls = "" }) {
-  return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M9 3H7a4 4 0 0 0-4 4v1a4 4 0 0 0 4 4h.5"/><path d="M14.5 12H15a4 4 0 0 1 4 4v1a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4v-1"/><path d="M9 3v9"/></svg>;
-}
 function IcoApple({ cls = "" }) {
   return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M12 20c-4 0-7-3.5-7-8 0-3.5 2-6 4.5-6 1 0 1.8.4 2.5 1 .7-.6 1.5-1 2.5-1C17 6 19 8.5 19 12c0 4.5-3 8-7 8z"/><path d="M12 6c0-1.5 1-3 3-3"/></svg>;
 }
@@ -87,7 +86,7 @@ function IcoStethoscope({ cls = "" }) {
 function IcoPill({ cls = "" }) {
   return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="10" width="18" height="7" rx="3.5" transform="rotate(-45 12 12)"/><line x1="9.5" y1="14.5" x2="14.5" y2="9.5"/></svg>;
 }
-function IcoSnackBag({ cls = "" }) {
+function IcoBolsa({ cls = "" }) {
   return <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8V6a6 6 0 0 1 12 0v2"/><path d="M5 8h14l1 12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>;
 }
 function IcoClock({ cls = "" }) {
@@ -97,116 +96,116 @@ function IcoWhatsapp({ cls = "" }) {
   return <svg className={cls} viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.02 2C6.5 2 2.02 6.48 2.02 12c0 1.85.5 3.58 1.36 5.07L2 22l5.08-1.33A9.96 9.96 0 0 0 12.02 22C17.55 22 22 17.52 22 12S17.55 2 12.02 2zm0 18.06c-1.64 0-3.17-.48-4.46-1.31l-.32-.19-3.02.79.8-2.94-.21-.31A8.03 8.03 0 0 1 3.99 12c0-4.42 3.6-8.02 8.03-8.02 4.42 0 8.02 3.6 8.02 8.02 0 4.43-3.6 8.06-8.02 8.06z"/></svg>;
 }
 
+/* ---------- ILUSTRACIONES SVG DE FONDO (compartidas por los dos fondos) ---------- */
+type FoodSvgProps = { style?: React.CSSProperties; className?: string };
+
+/* Smoothie copa */
+const Smoothie = ({ className, style }: FoodSvgProps) => (
+  <svg className={className} style={style} viewBox="0 0 120 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M25 40 L35 150 Q60 162 85 150 L95 40 Z" fill="#b8dda0"/>
+    <path d="M28 60 L36 148 Q60 158 84 148 L92 60 Z" fill="#7dbf6a"/>
+    <path d="M25 40 Q60 45 95 40 Q60 35 25 40Z" fill="#a0cfaa"/>
+    <rect x="55" y="5" width="10" height="55" rx="5" fill="white" opacity="0.9"/>
+    <rect x="55" y="5" width="5" height="55" rx="5" fill="#7dbf6a" opacity="0.6"/>
+    <ellipse cx="60" cy="40" rx="35" ry="8" fill="#a8d890" opacity="0.5"/>
+    <circle cx="38" cy="90" r="4" fill="#5aaa5a" opacity="0.4"/>
+    <circle cx="82" cy="110" r="3" fill="#5aaa5a" opacity="0.4"/>
+  </svg>
+);
+
+/* Aguacate cortado */
+const Avocado = ({ className, style }: FoodSvgProps) => (
+  <svg className={className} style={style} viewBox="0 0 130 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M65 8 Q22 55 22 105 Q22 155 65 160 Q108 155 108 105 Q108 55 65 8Z" fill="#2d5016"/>
+    <path d="M65 22 Q38 65 38 105 Q38 145 65 150 Q92 145 92 105 Q92 65 65 22Z" fill="#c8e096"/>
+    <ellipse cx="65" cy="110" rx="20" ry="26" fill="#8B5E3C"/>
+    <ellipse cx="65" cy="108" rx="14" ry="18" fill="#a0724a"/>
+  </svg>
+);
+
+/* Kiwi rodaja */
+const Kiwi = ({ className, style }: FoodSvgProps) => (
+  <svg className={className} style={style} viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="80" cy="80" r="72" fill="#5a8a2a"/>
+    <circle cx="80" cy="80" r="58" fill="#d4e87a"/>
+    <circle cx="80" cy="80" r="14" fill="white"/>
+    {[0,30,60,90,120,150,180,210,240,270,300,330].map((a, i) => {
+      const rad = (Math.PI * a) / 180;
+      const x2 = 80 + 56 * Math.cos(rad);
+      const y2 = 80 + 56 * Math.sin(rad);
+      const sx = 80 + 14 * Math.cos(rad);
+      const sy = 80 + 14 * Math.sin(rad);
+      const ex = 80 + 40 * Math.cos(rad);
+      const ey = 80 + 40 * Math.sin(rad);
+      return (
+        <g key={i}>
+          <line x1={sx} y1={sy} x2={x2} y2={y2} stroke="white" strokeWidth="1.2" opacity="0.6"/>
+          <ellipse cx={ex} cy={ey} rx="5" ry="9" transform={`rotate(${a} ${ex} ${ey})`} fill="#2d4a10"/>
+        </g>
+      );
+    })}
+  </svg>
+);
+
+/* Limón rodaja */
+const Lime = ({ className, style }: FoodSvgProps) => (
+  <svg className={className} style={style} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="60" cy="60" r="56" fill="#8fcc3a"/>
+    <circle cx="60" cy="60" r="56" fill="#a8d840"/>
+    <circle cx="60" cy="60" r="44" fill="#c8ec60"/>
+    <circle cx="60" cy="60" r="10" fill="white" opacity="0.9"/>
+    {[0,45,90,135,180,225,270,315].map((a, i) => {
+      const rad = (Math.PI * a) / 180;
+      return (
+        <line key={i}
+          x1={60 + 10 * Math.cos(rad)} y1={60 + 10 * Math.sin(rad)}
+          x2={60 + 43 * Math.cos(rad)} y2={60 + 43 * Math.sin(rad)}
+          stroke="white" strokeWidth="1.5" opacity="0.7"/>
+      );
+    })}
+  </svg>
+);
+
+/* Uvas */
+const Grapes = ({ className, style }: FoodSvgProps) => (
+  <svg className={className} style={style} viewBox="0 0 140 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M70 40 Q75 18 80 12" stroke="#4a7a2a" strokeWidth="4" fill="none" strokeLinecap="round"/>
+    <path d="M80 12 Q96 4 100 18 Q85 22 80 12Z" fill="#4a7a2a"/>
+    {[
+      {x:45,y:110},{x:70,y:100},{x:95,y:110},
+      {x:32,y:85}, {x:57,y:75}, {x:82,y:75}, {x:107,y:85},
+      {x:45,y:60}, {x:70,y:50}, {x:95,y:60},
+                   {x:70,y:130}
+    ].map((g,i)=>(
+      <g key={i}>
+        <circle cx={g.x} cy={g.y} r="18" fill="#6b3d9a"/>
+        <circle cx={g.x-5} cy={g.y-5} r="5" fill="white" opacity="0.25"/>
+      </g>
+    ))}
+  </svg>
+);
+
+/* Brócoli */
+const Broccoli = ({ className, style }: FoodSvgProps) => (
+  <svg className={className} style={style} viewBox="0 0 160 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="68" y="110" width="24" height="60" rx="10" fill="#3d6e2a"/>
+    <rect x="72" y="110" width="8" height="60" rx="6" fill="#4d8a3a" opacity="0.5"/>
+    <circle cx="80" cy="80" r="38" fill="#3a8a3a"/>
+    <circle cx="48" cy="94" r="28" fill="#3a8a3a"/>
+    <circle cx="112" cy="94" r="28" fill="#3a8a3a"/>
+    <circle cx="62" cy="58" r="22" fill="#4aaa4a"/>
+    <circle cx="98" cy="58" r="22" fill="#4aaa4a"/>
+    <circle cx="80" cy="46" r="20" fill="#5aba5a"/>
+    <circle cx="48" cy="94" r="14" fill="#4aaa4a"/>
+    <circle cx="112" cy="94" r="14" fill="#4aaa4a"/>
+  </svg>
+);
+
+/* Duración y retraso de la animación flotante */
+const fd = (dur: string, del: string) => ({ "--fdur": dur, "--fdel": del } as React.CSSProperties);
+
 /* ---------- FONDO VEGETAL ANIMADO (ilustraciones SVG coloridas) ---------- */
 function FoodBg() {
-  type P = { style?: React.CSSProperties; className?: string };
-
-  /* Smoothie copa — esquina superior izquierda */
-  const Smoothie = ({ className, style }: P) => (
-    <svg className={className} style={style} viewBox="0 0 120 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M25 40 L35 150 Q60 162 85 150 L95 40 Z" fill="#b8dda0"/>
-      <path d="M28 60 L36 148 Q60 158 84 148 L92 60 Z" fill="#7dbf6a"/>
-      <path d="M25 40 Q60 45 95 40 Q60 35 25 40Z" fill="#a0cfaa"/>
-      <rect x="55" y="5" width="10" height="55" rx="5" fill="white" opacity="0.9"/>
-      <rect x="55" y="5" width="5" height="55" rx="5" fill="#7dbf6a" opacity="0.6"/>
-      <ellipse cx="60" cy="40" rx="35" ry="8" fill="#a8d890" opacity="0.5"/>
-      <circle cx="38" cy="90" r="4" fill="#5aaa5a" opacity="0.4"/>
-      <circle cx="82" cy="110" r="3" fill="#5aaa5a" opacity="0.4"/>
-    </svg>
-  );
-
-  /* Aguacate cortado — izquierda medio */
-  const Avocado = ({ className, style }: P) => (
-    <svg className={className} style={style} viewBox="0 0 130 170" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M65 8 Q22 55 22 105 Q22 155 65 160 Q108 155 108 105 Q108 55 65 8Z" fill="#2d5016"/>
-      <path d="M65 22 Q38 65 38 105 Q38 145 65 150 Q92 145 92 105 Q92 65 65 22Z" fill="#c8e096"/>
-      <ellipse cx="65" cy="110" rx="20" ry="26" fill="#8B5E3C"/>
-      <ellipse cx="65" cy="108" rx="14" ry="18" fill="#a0724a"/>
-    </svg>
-  );
-
-  /* Kiwi rodaja — esquina superior derecha */
-  const Kiwi = ({ className, style }: P) => (
-    <svg className={className} style={style} viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="80" cy="80" r="72" fill="#5a8a2a"/>
-      <circle cx="80" cy="80" r="58" fill="#d4e87a"/>
-      <circle cx="80" cy="80" r="14" fill="white"/>
-      {[0,30,60,90,120,150,180,210,240,270,300,330].map((a, i) => {
-        const rad = (Math.PI * a) / 180;
-        const x2 = 80 + 56 * Math.cos(rad);
-        const y2 = 80 + 56 * Math.sin(rad);
-        const sx = 80 + 14 * Math.cos(rad);
-        const sy = 80 + 14 * Math.sin(rad);
-        const ex = 80 + 40 * Math.cos(rad);
-        const ey = 80 + 40 * Math.sin(rad);
-        return (
-          <g key={i}>
-            <line x1={sx} y1={sy} x2={x2} y2={y2} stroke="white" strokeWidth="1.2" opacity="0.6"/>
-            <ellipse cx={ex} cy={ey} rx="5" ry="9"
-              transform={`rotate(${a} ${ex} ${ey})`}
-              fill="#2d4a10"/>
-          </g>
-        );
-      })}
-    </svg>
-  );
-
-  /* Limón rodaja — derecha medio */
-  const Lime = ({ className, style }: P) => (
-    <svg className={className} style={style} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="60" cy="60" r="56" fill="#8fcc3a"/>
-      <circle cx="60" cy="60" r="56" fill="#a8d840"/>
-      <circle cx="60" cy="60" r="44" fill="#c8ec60"/>
-      <circle cx="60" cy="60" r="10" fill="white" opacity="0.9"/>
-      {[0,45,90,135,180,225,270,315].map((a, i) => {
-        const rad = (Math.PI * a) / 180;
-        return (
-          <line key={i}
-            x1={60 + 10 * Math.cos(rad)} y1={60 + 10 * Math.sin(rad)}
-            x2={60 + 43 * Math.cos(rad)} y2={60 + 43 * Math.sin(rad)}
-            stroke="white" strokeWidth="1.5" opacity="0.7"/>
-        );
-      })}
-    </svg>
-  );
-
-  /* Uvas — esquina inferior izquierda */
-  const Grapes = ({ className, style }: P) => (
-    <svg className={className} style={style} viewBox="0 0 140 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M70 40 Q75 18 80 12" stroke="#4a7a2a" strokeWidth="4" fill="none" strokeLinecap="round"/>
-      <path d="M80 12 Q96 4 100 18 Q85 22 80 12Z" fill="#4a7a2a"/>
-      {[
-        {x:45,y:110},{x:70,y:100},{x:95,y:110},
-        {x:32,y:85}, {x:57,y:75}, {x:82,y:75}, {x:107,y:85},
-        {x:45,y:60}, {x:70,y:50}, {x:95,y:60},
-                     {x:70,y:130}
-      ].map((g,i)=>(
-        <g key={i}>
-          <circle cx={g.x} cy={g.y} r="18" fill="#6b3d9a"/>
-          <circle cx={g.x-5} cy={g.y-5} r="5" fill="white" opacity="0.25"/>
-        </g>
-      ))}
-    </svg>
-  );
-
-  /* Brócoli — esquina inferior derecha */
-  const Broccoli = ({ className, style }: P) => (
-    <svg className={className} style={style} viewBox="0 0 160 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="68" y="110" width="24" height="60" rx="10" fill="#3d6e2a"/>
-      <rect x="72" y="110" width="8" height="60" rx="6" fill="#4d8a3a" opacity="0.5"/>
-      <circle cx="80" cy="80" r="38" fill="#3a8a3a"/>
-      <circle cx="48" cy="94" r="28" fill="#3a8a3a"/>
-      <circle cx="112" cy="94" r="28" fill="#3a8a3a"/>
-      <circle cx="62" cy="58" r="22" fill="#4aaa4a"/>
-      <circle cx="98" cy="58" r="22" fill="#4aaa4a"/>
-      <circle cx="80" cy="46" r="20" fill="#5aba5a"/>
-      <circle cx="48" cy="94" r="14" fill="#4aaa4a"/>
-      <circle cx="112" cy="94" r="14" fill="#4aaa4a"/>
-    </svg>
-  );
-
-  const fd = (dur: string, del: string) => ({"--fdur": dur, "--fdel": del} as React.CSSProperties);
-
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
       {/* Esquina superior izquierda: smoothie */}
@@ -229,84 +228,6 @@ function FoodBg() {
 
 /* ---------- FONDO VEGETAL HERO (kiwis a la izquierda, sin palta ni smoothie) ---------- */
 function FoodBgHero() {
-  type P = { style?: React.CSSProperties; className?: string };
-
-  const Kiwi = ({ className, style }: P) => (
-    <svg className={className} style={style} viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="80" cy="80" r="72" fill="#5a8a2a"/>
-      <circle cx="80" cy="80" r="58" fill="#d4e87a"/>
-      <circle cx="80" cy="80" r="14" fill="white"/>
-      {[0,30,60,90,120,150,180,210,240,270,300,330].map((a, i) => {
-        const rad = (Math.PI * a) / 180;
-        const x2 = 80 + 56 * Math.cos(rad);
-        const y2 = 80 + 56 * Math.sin(rad);
-        const sx = 80 + 14 * Math.cos(rad);
-        const sy = 80 + 14 * Math.sin(rad);
-        const ex = 80 + 40 * Math.cos(rad);
-        const ey = 80 + 40 * Math.sin(rad);
-        return (
-          <g key={i}>
-            <line x1={sx} y1={sy} x2={x2} y2={y2} stroke="white" strokeWidth="1.2" opacity="0.6"/>
-            <ellipse cx={ex} cy={ey} rx="5" ry="9" transform={`rotate(${a} ${ex} ${ey})`} fill="#2d4a10"/>
-          </g>
-        );
-      })}
-    </svg>
-  );
-
-  const Lime = ({ className, style }: P) => (
-    <svg className={className} style={style} viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="60" cy="60" r="56" fill="#8fcc3a"/>
-      <circle cx="60" cy="60" r="56" fill="#a8d840"/>
-      <circle cx="60" cy="60" r="44" fill="#c8ec60"/>
-      <circle cx="60" cy="60" r="10" fill="white" opacity="0.9"/>
-      {[0,45,90,135,180,225,270,315].map((a, i) => {
-        const rad = (Math.PI * a) / 180;
-        return (
-          <line key={i}
-            x1={60 + 10 * Math.cos(rad)} y1={60 + 10 * Math.sin(rad)}
-            x2={60 + 43 * Math.cos(rad)} y2={60 + 43 * Math.sin(rad)}
-            stroke="white" strokeWidth="1.5" opacity="0.7"/>
-        );
-      })}
-    </svg>
-  );
-
-  const Grapes = ({ className, style }: P) => (
-    <svg className={className} style={style} viewBox="0 0 140 160" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M70 40 Q75 18 80 12" stroke="#4a7a2a" strokeWidth="4" fill="none" strokeLinecap="round"/>
-      <path d="M80 12 Q96 4 100 18 Q85 22 80 12Z" fill="#4a7a2a"/>
-      {[
-        {x:45,y:110},{x:70,y:100},{x:95,y:110},
-        {x:32,y:85}, {x:57,y:75}, {x:82,y:75}, {x:107,y:85},
-        {x:45,y:60}, {x:70,y:50}, {x:95,y:60},
-                     {x:70,y:130}
-      ].map((g,i)=>(
-        <g key={i}>
-          <circle cx={g.x} cy={g.y} r="18" fill="#6b3d9a"/>
-          <circle cx={g.x-5} cy={g.y-5} r="5" fill="white" opacity="0.25"/>
-        </g>
-      ))}
-    </svg>
-  );
-
-  const Broccoli = ({ className, style }: P) => (
-    <svg className={className} style={style} viewBox="0 0 160 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="68" y="110" width="24" height="60" rx="10" fill="#3d6e2a"/>
-      <rect x="72" y="110" width="8" height="60" rx="6" fill="#4d8a3a" opacity="0.5"/>
-      <circle cx="80" cy="80" r="38" fill="#3a8a3a"/>
-      <circle cx="48" cy="94" r="28" fill="#3a8a3a"/>
-      <circle cx="112" cy="94" r="28" fill="#3a8a3a"/>
-      <circle cx="62" cy="58" r="22" fill="#4aaa4a"/>
-      <circle cx="98" cy="58" r="22" fill="#4aaa4a"/>
-      <circle cx="80" cy="46" r="20" fill="#5aba5a"/>
-      <circle cx="48" cy="94" r="14" fill="#4aaa4a"/>
-      <circle cx="112" cy="94" r="14" fill="#4aaa4a"/>
-    </svg>
-  );
-
-  const fd = (dur: string, del: string) => ({"--fdur": dur, "--fdel": del} as React.CSSProperties);
-
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
       <Kiwi     className="absolute -top-8 -left-14 w-32 md:w-40 opacity-85 food-d2" style={fd("7s","0s")} />
@@ -403,10 +324,10 @@ function Navbar() {
               <span className="hidden sm:inline text-sm font-semibold">+51 985 577 017</span>
             </a>
 
-            {/* BOTÓN TIENDA — solo ícono en mobile, texto en sm+ */}
+            {/* BOTÓN CATÁLOGO — solo ícono en mobile, texto en sm+ */}
             <Link
               href="/productos"
-              aria-label="Tienda"
+              aria-label="Catálogo"
               className="inline-flex items-center justify-center gap-2
                          w-9 h-9 sm:w-auto sm:h-auto sm:px-5 sm:py-2
                          rounded-full border-2 border-[var(--primrose)] text-[var(--primrose)]
@@ -418,7 +339,7 @@ function Navbar() {
                 <line x1="3" y1="6" x2="21" y2="6"/>
                 <path d="M16 10a4 4 0 01-8 0"/>
               </svg>
-              <span className="hidden sm:inline text-sm font-medium">Tienda</span>
+              <span className="hidden sm:inline text-sm font-medium">Catálogo</span>
             </Link>
 
             {/* BOTÓN CALCULADORA IMC — solo ícono en mobile, texto en sm+ */}
@@ -578,7 +499,7 @@ function MenuUsuario() {
   );
 }
 
-/* ---------- HERO: INTRO + LIBRO + TALLER ---------- */
+/* ---------- HERO: INTRO + LIBRO ---------- */
 function HeroLibro() {
   return (
     <section id="libro" className="relative overflow-hidden bg-[#f5f0e8]">
@@ -588,11 +509,13 @@ function HeroLibro() {
         {/* ── INTRO: María Luisa arriba en móvil, al lado en desktop ── */}
         <div className="relative rounded-3xl overflow-hidden">
           {/* Fondo San Marcos */}
-          <img
+          <Image
             src="/images/sanmarcos.png"
             alt=""
             aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover object-center"
+            fill
+            sizes="100vw"
+            className="object-cover object-center"
           />
           {/* Capa suave para que el texto se lea bien */}
           <div className="absolute inset-0 bg-[#f5f0e8]/75" />
@@ -610,10 +533,13 @@ function HeroLibro() {
           </div>
           {/* Imagen — queda arriba en móvil, derecha en desktop */}
           <div className="flex justify-center md:justify-end">
-            <img
+            <Image
               src="/images/marialuisa.png"
               alt="María Luisa Nutricionista"
-              className="w-44 sm:w-56 md:w-72 lg:w-80 flotar drop-shadow-2xl pointer-events-none"
+              width={320}
+              height={420}
+              priority
+              className="w-44 sm:w-56 md:w-72 lg:w-80 h-auto flotar drop-shadow-2xl pointer-events-none"
             />
           </div>
           </div>{/* fin grid interior */}
@@ -646,75 +572,19 @@ function HeroLibro() {
               Guía de nutrición infantil <span className="text-[var(--lime)] font-semibold">preventiva</span> desde
               los 6 meses hasta el año de vida. Recientemente presentada en el Colegio de Nutricionistas del Perú.
             </p>
+            {/* TODO: FASE 2 — aquí volverá el precio y el botón de compra digital */}
             <div className="flex items-center gap-3 mb-5">
               <div className="relative bg-[var(--lime-soft)] border-2 border-[var(--lime)] rounded-2xl px-4 py-2.5 flex flex-col items-start halo-animado overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full" style={{animation:"shimmer-slide 2.5s ease-in-out infinite"}}/>
-                <span className="text-xs uppercase tracking-widest text-[var(--lime)] font-bold mb-0.5 relative z-10">Digital</span>
-                <div className="flex items-baseline gap-1.5 relative z-10">
-                  <span className="text-3xl font-bold text-[var(--texto-principal)]">S/ 10</span>
-                  <span className="text-xs bg-[var(--primrose)] text-white px-1.5 py-0.5 rounded-full font-bold bow-animate">¡Oferta!</span>
-                </div>
-              </div>
-              <div className="bg-white border-2 border-[var(--borde-verde)] rounded-2xl px-4 py-2.5 flex flex-col items-start">
-                <span className="text-xs uppercase tracking-widest text-[var(--texto-tenue)] font-semibold mb-0.5">Físico</span>
-                <span className="text-3xl font-semibold text-[var(--texto-principal)]">S/ 20</span>
+                <span className="text-xs uppercase tracking-widest text-[var(--lime)] font-bold mb-0.5 relative z-10">Versión digital</span>
+                <span className="text-xl font-bold text-[var(--texto-principal)] relative z-10">Próximamente</span>
               </div>
             </div>
             <Link
               href="/comprar-libro/nutricion-del-bebe"
               className="btn-coquette bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200 w-full md:w-fit text-center"
             >
-              Adquirir el libro
-            </Link>
-          </div>
-        </div>
-
-        {/* ── TALLER: imagen arriba en móvil, fila en desktop ── */}
-        <div id="taller" className="grid md:grid-cols-2 gap-6 md:gap-10 items-center">
-          {/* Imagen */}
-          <div className="relative w-full max-w-[280px] sm:max-w-xs mx-auto md:mx-0 pb-4">
-            <p className="text-xs uppercase tracking-widest text-[var(--lime)] mb-3 font-semibold flex items-center gap-2">
-              <IcoBlender cls="w-4 h-4" /> Próximo taller
-            </p>
-            <div className="absolute inset-0 top-8 bg-gradient-to-br from-[var(--lime-soft)] to-[var(--verde-fuerte)]/30 rounded-2xl -rotate-3 -z-0" />
-            <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-green-200 overflow-hidden border-4 border-white z-10">
-              <Image src="/images/taller-dietetica.jpeg" alt="Taller de Comida Dietética" fill className="object-cover object-top"/>
-            </div>
-          </div>
-          {/* Info */}
-          <div className="flex flex-col">
-            <h2 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-3 text-[var(--texto-principal)]">
-              Taller de <span className="text-[var(--lime)]">Comida Dietética.</span>
-            </h2>
-            <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-4">
-              Aprende a cocinar rico y saludable. Un taller práctico donde descubrirás
-              comidas fáciles, saludables y saciadoras que transformarán tu día a día.
-            </p>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="bg-[var(--verde-fuerte)] rounded-2xl px-4 py-2.5 flex flex-col items-start">
-                <span className="text-xs uppercase tracking-widest text-white/70 font-semibold mb-0.5">Presencial</span>
-                <span className="text-3xl font-bold text-white">S/ 80</span>
-              </div>
-              <div className="bg-[var(--verde-fuerte)]/80 border-2 border-[var(--borde-verde)] rounded-2xl px-4 py-2.5 flex flex-col items-start">
-                <span className="text-xs uppercase tracking-widest text-white/70 font-semibold mb-0.5">Virtual</span>
-                <span className="text-3xl font-bold text-white">S/ 40</span>
-              </div>
-            </div>
-            <ul className="space-y-2 mb-5">
-              {["Degustación incluida","Materiales: taper, cubiertos, jabón y toalla","Modalidad presencial y virtual"].map((item,i)=>(
-                <li key={i} className="flex items-center gap-2 font-nunito text-sm text-[var(--texto-suave)]">
-                  <span className="w-5 h-5 rounded-full bg-[var(--lime-soft)] flex items-center justify-center flex-shrink-0">
-                    <svg className="w-3 h-3 text-[var(--lime)]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                      <polyline points="20 6 9 17 4 12"/>
-                    </svg>
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <Link href="/reservar-taller"
-              className="btn-coquette bg-[var(--verde-fuerte)] text-white px-6 py-3 rounded-full hover:opacity-90 transition font-medium shadow-lg shadow-green-200 w-full md:w-fit text-center">
-              Reservar cupo ahora
+              Ver el libro
             </Link>
           </div>
         </div>
@@ -725,17 +595,36 @@ function HeroLibro() {
 }
 
 /* ---------- CARRUSEL DE COMENTARIOS ---------- */
+type Comentario = {
+  id: string;
+  nombre: string;
+  avatar_url: string | null;
+  estrellas: number;
+  comentario: string;
+  creado_en: string;
+  /* Se calcula al cargar los datos, no en el render, para no leer el reloj durante el renderizado */
+  fechaTexto: string;
+};
+
+type ComentarioDB = Omit<Comentario, "fechaTexto">;
+
+function fechaRelativa(iso: string, ahora: number): string {
+  const dias = Math.floor((ahora - new Date(iso).getTime()) / 86400000);
+  if (dias === 0) return "Hoy";
+  if (dias === 1) return "Hace 1 día";
+  if (dias < 30) return `Hace ${dias} días`;
+  const meses = Math.floor(dias / 30);
+  return meses === 1 ? "Hace 1 mes" : `Hace ${meses} meses`;
+}
+
+function conFechaTexto(filas: ComentarioDB[]): Comentario[] {
+  const ahora = Date.now();
+  return filas.map((c) => ({ ...c, fechaTexto: fechaRelativa(c.creado_en, ahora) }));
+}
+
+
 function CarruselComentarios() {
   const { user, nombre, loading: userLoading } = useUser();
-
-  type Comentario = {
-    id: string;
-    nombre: string;
-    avatar_url: string | null;
-    estrellas: number;
-    comentario: string;
-    creado_en: string;
-  };
 
   const [comentarios, setComentarios] = useState<Comentario[]>([]);
   const [texto, setTexto] = useState("");
@@ -752,7 +641,7 @@ function CarruselComentarios() {
         .eq("aprobado", true)
         .order("creado_en", { ascending: false })
         .limit(6);
-      if (data) setComentarios(data);
+      if (data) setComentarios(conFechaTexto(data));
     }
     cargarComentarios();
   }, []);
@@ -781,19 +670,10 @@ function CarruselComentarios() {
         .eq("aprobado", true)
         .order("creado_en", { ascending: false })
         .limit(6);
-      if (data) setComentarios(data);
+      if (data) setComentarios(conFechaTexto(data));
       setTimeout(() => setToast(""), 4000);
     }
     setEnviando(false);
-  }
-
-  function fechaRelativa(iso: string) {
-    const dias = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
-    if (dias === 0) return "Hoy";
-    if (dias === 1) return "Hace 1 día";
-    if (dias < 30) return `Hace ${dias} días`;
-    const meses = Math.floor(dias / 30);
-    return meses === 1 ? "Hace 1 mes" : `Hace ${meses} meses`;
   }
 
   const burbujas = [
@@ -1005,7 +885,7 @@ function CarruselComentarios() {
                       )}
                       <div>
                         <p className="text-sm font-semibold text-[var(--texto-principal)]">{c.nombre}</p>
-                        <p className="text-xs text-gray-500 font-nunito">{fechaRelativa(c.creado_en)}</p>
+                        <p className="text-xs text-gray-500 font-nunito">{c.fechaTexto}</p>
                       </div>
                     </div>
                     <div className="flex gap-0.5 mb-2">
@@ -1040,8 +920,8 @@ function FilosofiaYServicios() {
 
   const servicios: { n: string; titulo: string; Ico: (p:{cls?:string})=>React.JSX.Element; desc: React.ReactNode }[] = [
     { n: "01", titulo: "Libros",       Ico: IcoBook,    desc: <>Guías prácticas de nutrición <span className="text-[var(--lime)] font-semibold">preventiva</span>.</> },
-    { n: "02", titulo: "Talleres",     Ico: IcoBlender, desc: "Comida dietética, fácil y saciadora." },
-    { n: "03", titulo: "Productos",    Ico: IcoBowl,    desc: "Cúrcuma, sacha inchi, cacao, estevia." },
+    { n: "02", titulo: "Planes deportivos", Ico: IcoBlender, desc: "Alimentación para ganancia muscular y definición." },
+    { n: "03", titulo: "Catálogo",     Ico: IcoBowl,    desc: "Cúrcuma, sacha inchi, cacao, estevia." },
     { n: "04", titulo: "Consultorías", Ico: IcoChat,    desc: "Asesorías personalizadas." },
   ];
 
@@ -1063,6 +943,8 @@ function FilosofiaYServicios() {
             </h2>
 
             {/* Bloque de especialidad — narrativa actualizada de la clienta */}
+            {/* TODO: Si la clienta quiere posicionarse en nutrición deportiva, necesitamos que ELLA
+                envíe su texto real de experiencia con deportistas/gimnasio. No inventar aquí. */}
             <div className="rounded-2xl border-2 border-[var(--lime)] bg-[var(--lime-soft)] p-5 md:p-6 mb-6">
               <p className="text-xs uppercase tracking-widest text-[var(--lime)] font-semibold mb-2">
                 Especialidad
@@ -1169,9 +1051,9 @@ function NuestrosServicios() {
     { titulo: "Nutrición",                    Ico: IcoApple,        desc: "Consultas y planes nutricionales personalizados para cada etapa de la vida." },
     { titulo: "Enfermería",                   Ico: IcoCross,        desc: "Atención de enfermería complementaria a tu tratamiento nutricional." },
     { titulo: "Medicina",                     Ico: IcoStethoscope,  desc: "Evaluación médica general en coordinación con tu plan de nutrición." },
-    { titulo: "Venta de vitaminas",           Ico: IcoPill,         desc: "Suplementos y vitaminas seleccionados para complementar tu alimentación." },
-    { titulo: "Venta de snacks saludables",   Ico: IcoSnackBag,     desc: "Opciones prácticas y nutritivas para tus momentos de antojo." },
-    { titulo: "Venta de libros de nutrición", Ico: IcoBook,         desc: "Libros y guías escritos por María Luisa para aprender en casa." },
+    { titulo: "Suplementos deportivos",       Ico: IcoPill,         desc: "Proteínas, vitaminas y suplementos seleccionados para tu entrenamiento." },
+    { titulo: "Catálogo de productos",        Ico: IcoBolsa,     desc: "Alimentos prácticos y nutritivos, coordinados por WhatsApp." },
+    { titulo: "Libros de nutrición",          Ico: IcoBook,         desc: "Libros y guías escritos por María Luisa para aprender en casa." },
     { titulo: "Atención previa cita",         Ico: IcoClock,        desc: "Orientación inicial para que llegues preparado a tu primera consulta." },
   ];
 
@@ -1237,16 +1119,22 @@ function AlmuerzosEjemplos() {
             Almuerzos súper <span className="font-semibold text-[var(--lime)]">prácticos y nutritivos.</span>
           </h2>
           <p className="font-nunito text-[var(--texto-suave)] max-w-xl mx-auto text-sm md:text-base leading-relaxed">
-            Ejemplos de lo que trabajamos con nuestros pacientes.
+            Ejemplos de lo que trabajamos con nuestros pacientes, con la proteína y las porciones ajustadas a tu entrenamiento.
           </p>
         </div>
 
         <div className="grid sm:grid-cols-2 gap-6 md:gap-8">
           {almuerzos.map((a) => (
             <div key={a.titulo} className="bg-white rounded-2xl border-2 border-[var(--borde-verde)] overflow-hidden">
-              <div className="w-full aspect-video bg-[var(--verde-pastel)] flex items-center justify-center">
+              <div className="relative w-full aspect-video bg-[var(--verde-pastel)] flex items-center justify-center">
                 {a.imagen ? (
-                  <img src={a.imagen} alt={a.titulo} className="w-full h-full object-cover" />
+                  <Image
+                    src={a.imagen}
+                    alt={a.titulo}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                    className="object-cover"
+                  />
                 ) : (
                   <div className="flex flex-col items-center gap-2 text-[var(--verde-fuerte)]">
                     <IcoBowl cls="w-10 h-10" />
@@ -1369,7 +1257,7 @@ function DietaMariaLuisa() {
             Elige tu nivel de cuidado <span className="font-semibold text-[var(--lime)]">nutricional.</span>
           </h2>
           <p className="font-nunito text-[var(--texto-suave)] max-w-xl mx-auto text-sm md:text-base leading-relaxed">
-            Cuatro planes diseñados para acompañarte según tus necesidades.
+            Cuatro planes diseñados para acompañarte según tu objetivo: ganancia muscular, definición o rendimiento.
           </p>
         </div>
 
@@ -1434,10 +1322,13 @@ function DietaMariaLuisa() {
                 {plan.cta}
               </Link>
               {plan.imagen && (
-                <img
+                <Image
                   src={plan.imagen}
                   alt={plan.imagenAlt}
-                  className="w-full rounded-xl mt-4 object-cover"
+                  width={400}
+                  height={300}
+                  sizes="(max-width: 768px) 100vw, 400px"
+                  className="w-full h-auto rounded-xl mt-4 object-cover"
                 />
               )}
             </div>
@@ -1694,7 +1585,7 @@ function SeccionEnfermedadesYFaq() {
   );
 }
 
-/* ---------- SECCIÓN PRODUCTOS DESTACADOS + MAPA ---------- */
+/* ---------- SECCIÓN CATÁLOGO DESTACADO ---------- */
 function SeccionProductos() {
   const productos = [
     { nombre: "Harina de Cúrcuma", precio: 15, descripcion: "Libre de gluten · 250 gr",    color: "primrose", imagen: "/images/harinaCurcuma.png" },
@@ -1716,7 +1607,7 @@ function SeccionProductos() {
   ];
 
   return (
-    <section id="tienda" className="py-12 sm:py-16 lg:py-20 bg-[var(--verde-fuerte)] relative overflow-hidden">
+    <section id="catalogo" className="py-12 sm:py-16 lg:py-20 bg-[var(--verde-fuerte)] relative overflow-hidden">
       {/* Burbujas animadas */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         {burbujas.map((b, i) => (
@@ -1737,14 +1628,14 @@ function SeccionProductos() {
           <div className="flex items-center justify-center gap-2 mb-3">
             <IcoLeaf cls="w-5 h-5 text-white" />
             <span className="text-xs sm:text-sm uppercase tracking-wider text-white/90 font-semibold">
-              Nuestra tienda
+              Catálogo destacado
             </span>
           </div>
           <h2 className="font-playfair text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2">
             Productos <span className="font-semibold shimmer-white">naturales.</span>
           </h2>
           <p className="font-nunito text-white/80 text-sm sm:text-base">
-            Superalimentos, harinas y suplementos cuidadosamente seleccionados.
+            Superalimentos, harinas y suplementos para acompañar tu entrenamiento.
           </p>
         </div>
 
@@ -1769,13 +1660,22 @@ function SeccionProductos() {
           ))}
         </div>
 
-        <div className="text-center">
+        <div className="text-center flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/productos"
             className="inline-block bg-white text-[var(--primrose)] px-6 py-3 rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all"
           >
-            Ver tienda completa →
+            Ver catálogo completo →
           </Link>
+          <a
+            href={`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent("¡Hola María Luisa! Quiero consultar por los productos del catálogo.")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-full font-medium hover:bg-[#1ebe57] hover:shadow-lg hover:scale-105 transition-all"
+          >
+            <IcoWhatsapp cls="w-4 h-4" />
+            Pedir por WhatsApp
+          </a>
         </div>
       </div>
     </section>
@@ -2014,21 +1914,8 @@ function AsesoriasProyectos() {
   );
 }
 
-/* ---------- EMPRESAS + PROMOTORES (bloque unificado) ---------- */
-function BloqueEmpresasYPromotores() {
-  const beneficiosPromotores = [
-    { texto: "Comisión por cada venta de libros y talleres",                                color: "var(--primrose)" },
-    { texto: "Material de marketing listo para usar",                                       color: "var(--lime)"     },
-    { texto: "Capacitación nutricional básica",                                             color: "var(--primrose)" },
-    { texto: "Crecimiento profesional con respaldo del Colegio de Nutricionistas",          color: "var(--lime)"     },
-  ];
-
-  const statsPromotores = [
-    { val: "+50", sub: "promotores activos", color: "var(--primrose)", bg: "var(--pinktone-soft)" },
-    { val: "24",  sub: "regiones del Perú",  color: "var(--lime)",     bg: "var(--lime-soft)"     },
-    { val: "25%", sub: "comisión máxima",    color: "var(--primrose)", bg: "var(--pinktone-soft)" },
-  ];
-
+/* ---------- EMPRESAS ---------- */
+function BloqueEmpresas() {
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-[#f5f0e8] relative overflow-hidden">
       <FoodBg />
@@ -2098,65 +1985,6 @@ function BloqueEmpresasYPromotores() {
               Conocer el programa
             </Link>
           </div>
-        </div>
-
-        {/* FILA 2: Promotores — texto izquierda, imagen derecha */}
-        <div className="grid md:grid-cols-2 gap-8 md:gap-10 items-center mb-12">
-          <div>
-            <p className="text-sm uppercase tracking-widest text-[var(--primrose)] mb-2 font-semibold flex items-center gap-2">
-              <IcoLeaf cls="w-4 h-4" /> Únete al equipo
-            </p>
-            <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-4 leading-tight text-[var(--texto-principal)]">
-              Buscamos promotores<br />
-              <span className="font-semibold text-[var(--primrose)]">en todo el Perú.</span>
-            </h2>
-            <p className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed mb-6">
-              Conviértete en embajador de la marca María Luisa Nutricionista. Vende libros, talleres y
-              productos nutricionales, gana comisiones y ayuda a más familias a vivir mejor.
-            </p>
-            <ul className="space-y-3 mb-8">
-              {beneficiosPromotores.map(({ texto, color }, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className="mt-[3px] flex-shrink-0 font-bold text-lg leading-none" style={{ color }}>—</span>
-                  <span className="font-nunito text-base text-[var(--texto-suave)] leading-relaxed">{texto}</span>
-                </li>
-              ))}
-            </ul>
-            <Link
-              href="/promotores"
-              className="btn-coquette block sm:inline-block w-full sm:w-auto text-center bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200"
-            >
-              Postular como promotor
-            </Link>
-          </div>
-
-          <div className="relative">
-            <div className="relative max-w-md mx-auto md:mx-0">
-              <div className="absolute -inset-4 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl -rotate-2" />
-              <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white">
-                <Image
-                  src="/images/conferencia-grupo.jpeg"
-                  alt="Programa de promotores María Luisa Nutricionista"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* FILA 3: Stats promotores — ancho completo */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {statsPromotores.map(({ val, sub, color, bg }, i) => (
-            <div
-              key={i}
-              className="rounded-2xl px-6 py-5 text-center transition hover:scale-105 cursor-default"
-              style={{ background: bg }}
-            >
-              <p className="font-playfair text-3xl font-bold mb-1" style={{ color }}>{val}</p>
-              <p className="font-nunito text-sm text-[var(--texto-suave)]">{sub}</p>
-            </div>
-          ))}
         </div>
 
       </div>

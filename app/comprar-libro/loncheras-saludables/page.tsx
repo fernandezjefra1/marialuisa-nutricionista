@@ -1,19 +1,23 @@
-"use client";
-
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 
 const WHATSAPP_NUMERO = "51985577017";
-// TODO: Reemplazar con el link real de Hotmart cuando la clienta lo envíe.
-const HOTMART_LINK = "#";
 // TODO: Reemplazar imagen placeholder con la portada real del libro de Loncheras.
 const PORTADA_PLACEHOLDER = "/images/imagenlibro.jpeg";
-const PRECIO_VIRTUAL = 20;
-const PRECIO_FISICO = 30;
+
+export const metadata: Metadata = {
+  title: "Loncheras Saludables | Libro de María Luisa Nutricionista",
+  description:
+    "Ideas de loncheras nutritivas, rápidas y ricas. Próximamente disponible en versión digital.",
+};
+
+/* TODO: FASE 2 — Venta online del libro digital.
+   Aquí volverán el precio y el botón de compra (ver nota en app/comprar-libro/page.tsx). */
 
 export default function LoncherasSaludablesPage() {
   const mensaje = encodeURIComponent(
-    "Hola María Luisa, quisiera más información sobre el libro Loncheras Saludables 🍎"
+    "¡Hola María Luisa! Quiero que me avises cuando el libro \"Loncheras Saludables\" esté disponible en versión digital."
   );
 
   return (
@@ -36,9 +40,15 @@ export default function LoncherasSaludablesPage() {
           {/* Portada */}
           <div className="relative">
             <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-lg bg-white">
-              <Image src={PORTADA_PLACEHOLDER} alt="Loncheras Saludables (portada provisional)" fill className="object-cover" />
-              <span className="absolute top-3 right-3 bg-[#FF6600] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
-                🔥 Hotmart
+              <Image
+                src={PORTADA_PLACEHOLDER}
+                alt="Loncheras Saludables (portada provisional)"
+                fill
+                sizes="(max-width: 768px) 100vw, 280px"
+                className="object-cover"
+              />
+              <span className="absolute top-3 right-3 bg-[var(--verde-fuerte)] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+                Próximamente
               </span>
             </div>
             <p className="font-nunito text-[11px] text-[#5a7255] mt-2 text-center italic">
@@ -62,37 +72,24 @@ export default function LoncherasSaludablesPage() {
               de los más pequeños de la casa. Descripción completa pendiente de confirmación por la clienta.
             </p>
 
-            <div className="grid sm:grid-cols-2 gap-3 mb-8">
-              <div className="p-5 rounded-2xl border-2 border-[#C5DFC5] bg-white">
-                <h3 className="font-playfair font-semibold text-[#31543d] mb-1">Libro Digital</h3>
-                <p className="font-nunito text-xs text-[#5a7255] mb-3">PDF · Precio provisional</p>
-                <p className="font-playfair text-2xl font-semibold text-[#31543d]">S/ {PRECIO_VIRTUAL}</p>
-              </div>
-              <div className="p-5 rounded-2xl border-2 border-[#C5DFC5] bg-white">
-                <h3 className="font-playfair font-semibold text-[#31543d] mb-1">Libro Físico</h3>
-                <p className="font-nunito text-xs text-[#5a7255] mb-3">Precio provisional</p>
-                <p className="font-playfair text-2xl font-semibold text-[#31543d]">S/ {PRECIO_FISICO}</p>
-              </div>
+            <div className="mb-8 p-6 rounded-2xl border-2 border-[#C5DFC5] bg-white">
+              <h2 className="font-playfair text-xl font-semibold text-[#31543d] mb-2">
+                Disponible próximamente en versión digital
+              </h2>
+              <p className="font-nunito text-sm text-[#5a7255] leading-relaxed">
+                Estamos preparando la edición digital de este libro. Escríbenos por WhatsApp
+                y te avisamos apenas esté lista.
+              </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3">
-              <a
-                href={`https://wa.me/${WHATSAPP_NUMERO}?text=${mensaje}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-coquette flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#1FAA52] text-white px-6 py-4 rounded-full transition font-semibold shadow-lg shadow-green-200 font-nunito"
-              >
-                Quiero más información
-              </a>
-              <a
-                href={HOTMART_LINK}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 border-2 border-[#FF6600] text-[#FF6600] px-6 py-4 rounded-full transition font-semibold hover:bg-[#FF6600] hover:text-white font-nunito"
-              >
-                🔥 Comprar en Hotmart
-              </a>
-            </div>
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMERO}?text=${mensaje}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-coquette inline-flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#1FAA52] text-white px-6 py-4 rounded-full transition font-semibold shadow-lg shadow-green-200 font-nunito w-full sm:w-auto"
+            >
+              Avísame por WhatsApp
+            </a>
           </div>
         </div>
       </div>

@@ -2,11 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase";
-import { useUser } from "@/lib/use-user";
-import { useCarrito } from "@/lib/use-carrito";
-import CarritoFlotante from "@/components/CarritoFlotante";
 
 type Producto = {
   id: number;
@@ -19,7 +15,7 @@ type Producto = {
   destacado: boolean;
 };
 
-const CATEGORIAS_SNACKS = ["snacks", "bebidas", "comida-dietetica"];
+const WHATSAPP = "51985577017";
 
 const BADGE_CATEGORIA: Record<string, string> = {
   libros: "Guía completa",
@@ -28,41 +24,46 @@ const BADGE_CATEGORIA: Record<string, string> = {
   semillas: "100% Natural",
   endulzantes: "Sin azúcar",
   cereales: "100% Natural",
-  snacks: "Fresco del día",
   bebidas: "Fresco",
   "comida-dietetica": "Dietético",
 };
 
+const NOMBRE_CATEGORIA: Record<string, string> = {
+  todos: "Todos",
+  harinas: "Harinas",
+  semillas: "Semillas",
+  superalimentos: "Superalimentos",
+  endulzantes: "Endulzantes",
+  cereales: "Cereales",
+  general: "General",
+  libros: "Libros",
+  bebidas: "Bebidas",
+  "comida-dietetica": "Comida dietética",
+};
+
+/** Nombre legible de una categoría; si no está mapeada, se capitaliza el slug */
+function nombreCategoria(cat: string): string {
+  if (NOMBRE_CATEGORIA[cat]) return NOMBRE_CATEGORIA[cat];
+  const limpio = cat.replace(/-/g, " ");
+  return limpio.charAt(0).toUpperCase() + limpio.slice(1);
+}
+
 function getBadge(producto: Producto): string {
-  const nombre = producto.nombre.toLowerCase();
-  if (nombre.includes("físico") || nombre.includes("fisico")) return "Envío incluido";
   return BADGE_CATEGORIA[producto.categoria] || "Destacado";
 }
 
+/** Link de WhatsApp con el nombre del producto prellenado */
+function linkWhatsApp(producto: Producto): string {
+  const texto = `¡Hola María Luisa! Me interesa "${producto.nombre}" (S/ ${producto.precio}) del catálogo. ¿Está disponible?`;
+  return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(texto)}`;
+}
 
 export default function ProductosContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { user, loading: loadingUser } = useUser();
   const supabase = createClient();
-  const { agregar, cantidadTotal } = useCarrito();
 
   const [productos, setProductos] = useState<Producto[]>([]);
   const [cargando, setCargando] = useState(true);
-  const [tabActiva, setTabActiva] = useState<"productos" | "snacks">("productos");
   const [categoriaActiva, setCategoriaActiva] = useState<string>("todos");
-  const [agregadoId, setAgregadoId] = useState<number | null>(null);
-
-  useEffect(() => {
-    const tab = searchParams.get("tab");
-    if (tab === "snacks") setTabActiva("snacks");
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (!loadingUser && !user) {
-      router.push("/login?redirect=/productos");
-    }
-  }, [loadingUser, user, router]);
 
   useEffect(() => {
     async function cargar() {
@@ -78,68 +79,11 @@ export default function ProductosContent() {
     cargar();
   }, [supabase]);
 
-  if (loadingUser || !user) {
-    return (
-      <main className="min-h-screen bg-white flex items-center justify-center">
-        <p className="text-sm text-[var(--texto-suave)]">Cargando...</p>
-      </main>
-    );
-  }
-
-  const todosProductos = productos.filter((p) => !CATEGORIAS_SNACKS.includes(p.categoria));
-  const todosSnacks = productos.filter((p) => CATEGORIAS_SNACKS.includes(p.categoria));
-  const productosVisibles = tabActiva === "productos" ? todosProductos : todosSnacks;
-  const categoriasDeTab = ["todos", ...Array.from(new Set(productosVisibles.map((p) => p.categoria)))];
+  const categorias = ["todos", ...Array.from(new Set(productos.map((p) => p.categoria)))];
   const productosFiltrados =
     categoriaActiva === "todos"
-      ? productosVisibles
-      : productosVisibles.filter((p) => p.categoria === categoriaActiva);
-
-  function cambiarTab(nueva: "productos" | "snacks") {
-    setTabActiva(nueva);
-    setCategoriaActiva("todos");
-    const url = new URL(window.location.href);
-    if (nueva === "productos") {
-      url.searchParams.delete("tab");
-    } else {
-      url.searchParams.set("tab", nueva);
-    }
-    window.history.replaceState({}, "", url);
-  }
-
-  function handleAgregar(producto: Producto) {
-    const tipo = CATEGORIAS_SNACKS.includes(producto.categoria) ? "snack" : "producto";
-    agregar({
-      id: producto.id,
-      nombre: producto.nombre,
-      precio: producto.precio,
-      imagen_url: producto.imagen_url || undefined,
-      tipo,
-    });
-    setAgregadoId(producto.id);
-    setTimeout(() => setAgregadoId(null), 1500);
-  }
-
-  const nombreCategoria = (cat: string) => {
-    const nombres: Record<string, string> = {
-      todos: "Todos",
-      harinas: "Harinas",
-      semillas: "Semillas",
-      superalimentos: "Superalimentos",
-      endulzantes: "Endulzantes",
-      cereales: "Cereales",
-      general: "General",
-      libros: "Libros",
-      snacks: "Sándwiches",
-      bebidas: "Bebidas",
-      "comida-dietetica": "Comida dietética",
-    };
-    return nombres[cat] || cat;
-  };
-
-  function abrirCarrito() {
-    window.dispatchEvent(new CustomEvent("abrir-carrito"));
-  }
+      ? productos
+      : productos.filter((p) => p.categoria === categoriaActiva);
 
   return (
     <main className="min-h-screen bg-white">
@@ -162,75 +106,53 @@ export default function ProductosContent() {
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
               </svg>
             </Link>
-            <button
-              onClick={abrirCarrito}
-              className="flex items-center gap-1.5 sm:gap-2 bg-[var(--primrose)] hover:bg-[var(--primrose-hover)] text-white px-3 sm:px-4 py-2 rounded-full transition text-sm font-semibold shadow-md shadow-pink-200"
+            <a
+              href={`https://wa.me/${WHATSAPP}?text=${encodeURIComponent("¡Hola María Luisa! Quiero consultar por el catálogo de productos.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 sm:gap-2 bg-[var(--lime)] hover:bg-[var(--lime-hover)] text-white px-3 sm:px-4 py-2 rounded-full transition text-sm font-semibold shadow-md shadow-green-200"
             >
-              <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.993 2.898 9.83 9.83 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.82 11.82 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413"/>
               </svg>
-              <span className="hidden sm:inline">Carrito</span>
-              {cantidadTotal > 0 && (
-                <span className="bg-white text-[var(--primrose)] rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
-                  {cantidadTotal}
-                </span>
-              )}
-            </button>
+              <span className="hidden sm:inline">Pedir por WhatsApp</span>
+            </a>
           </div>
         </div>
       </header>
 
       {/* ===== HERO — FLYER ===== */}
-      <section className="w-full overflow-hidden" style={{height:"300px"}}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+      <section className="relative w-full overflow-hidden" style={{ height: "300px" }}>
+        <Image
           src="/images/flayeeeeeeerfinal.png"
-          alt="Tienda María Luisa Nutricionista"
-          style={{display:"block", width:"100%", height:"100%", objectFit:"cover", objectPosition:"center center"}}
+          alt="Catálogo María Luisa Nutricionista"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
         />
       </section>
 
-      {/* ===== TABS ===== */}
-      <section className="bg-white border-b border-[var(--borde-rosa)] sticky top-[60px] sm:top-[68px] z-20">
-        <div className="max-w-7xl mx-auto px-3 sm:px-6">
-          <div className="flex gap-1 justify-center">
-            {(["productos","snacks"] as const).map((tab) => {
-              const activa = tabActiva === tab;
-              const color = tab === "productos" ? "var(--primrose)" : "var(--lime)";
-              const count = tab === "productos" ? todosProductos.length : todosSnacks.length;
-              return (
-                <button
-                  key={tab}
-                  onClick={() => cambiarTab(tab)}
-                  className={`px-5 sm:px-8 py-3 sm:py-4 font-medium text-sm sm:text-base transition relative font-nunito capitalize ${
-                    activa ? "text-[var(--texto-principal)]" : "text-[var(--texto-suave)] hover:text-[var(--texto-principal)]"
-                  }`}
-                >
-                  <span className="flex items-center gap-2">
-                    {tab === "productos" ? "Productos" : "Snacks"}
-                    <span className="text-sm px-2 py-0.5 rounded-full" style={{
-                      background: activa ? color : "var(--pinktone-soft)",
-                      color: activa ? "white" : "var(--texto-suave)"
-                    }}>
-                      {count}
-                    </span>
-                  </span>
-                  {activa && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5" style={{background: color}} />
-                  )}
-                </button>
-              );
-            })}
-          </div>
+      {/* ===== INTRO CATÁLOGO ===== */}
+      <section className="bg-white py-6 sm:py-8 border-b border-[var(--borde-rosa)]">
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <h1 className="font-playfair text-2xl sm:text-3xl font-bold text-[var(--texto-principal)]">
+            Catálogo de <span className="text-[var(--primrose)]">productos</span>
+          </h1>
+          <p className="font-nunito text-sm sm:text-base text-[var(--texto-suave)] leading-relaxed mt-2">
+            Suplementos y alimentos seleccionados para acompañar tu entrenamiento.
+            Los precios son referenciales: escríbenos por WhatsApp para confirmar
+            disponibilidad y coordinar tu pedido.
+          </p>
         </div>
       </section>
 
       {/* ===== FILTROS CATEGORÍA ===== */}
-      {categoriasDeTab.length > 2 && (
+      {categorias.length > 2 && (
         <section className="bg-white py-3 sm:py-5 border-b border-[var(--borde-rosa)]">
           <div className="max-w-7xl mx-auto px-3 sm:px-6">
             <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
-              {categoriasDeTab.map((cat) => {
+              {categorias.map((cat) => {
                 const activa = categoriaActiva === cat;
                 return (
                   <button
@@ -265,13 +187,7 @@ export default function ProductosContent() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {productosFiltrados.map((producto) => (
-                <ProductoCard
-                  key={producto.id}
-                  producto={producto}
-                  onAgregar={() => handleAgregar(producto)}
-                  recienAgregado={agregadoId === producto.id}
-                  esSnack={CATEGORIAS_SNACKS.includes(producto.categoria)}
-                />
+                <ProductoCard key={producto.id} producto={producto} />
               ))}
             </div>
           )}
@@ -293,11 +209,11 @@ export default function ProductosContent() {
               },
               {
                 svg: <svg className="w-5 h-5 text-[var(--lime)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>,
-                title: "Nutrición Preventiva", sub: "Para todas las etapas de la vida",
+                title: "Apoyo a tu entrenamiento", sub: "Para ganancia muscular, definición y rendimiento",
               },
               {
                 svg: <svg className="w-5 h-5 text-[var(--lime)]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>,
-                title: "Envíos Seguros", sub: "Llegamos a tu hogar con mucho cuidado",
+                title: "Coordinación directa", sub: "Confirmamos stock y entrega por WhatsApp",
               },
             ] as { svg: React.ReactNode; title: string; sub: string }[]).map((f, i) => (
               <div key={i} className="flex items-start gap-4">
@@ -313,27 +229,14 @@ export default function ProductosContent() {
           </div>
         </div>
       </section>
-
-      <CarritoFlotante />
     </main>
   );
 }
 
 /* ===== TARJETA DE PRODUCTO ===== */
-function ProductoCard({
-  producto,
-  onAgregar,
-  recienAgregado,
-  esSnack,
-}: {
-  producto: Producto;
-  onAgregar: () => void;
-  recienAgregado: boolean;
-  esSnack: boolean;
-}) {
+function ProductoCard({ producto }: { producto: Producto }) {
   const stockBajo = producto.stock <= 5;
   const sinStock = producto.stock === 0;
-  const colorPrincipal = esSnack ? "lime" : "primrose";
 
   return (
     <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 border border-[var(--borde-verde)] group">
@@ -345,6 +248,7 @@ function ProductoCard({
             src={producto.imagen_url}
             alt={producto.nombre}
             fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             className="object-cover group-hover:scale-105 transition duration-500"
             onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
           />
@@ -356,9 +260,7 @@ function ProductoCard({
 
         {/* Badge destacado — top left */}
         {producto.destacado && (
-          <span className={`absolute top-3 left-3 text-white text-xs px-3 py-1 rounded-full font-semibold shadow ${
-            colorPrincipal === "primrose" ? "bg-[var(--primrose)]" : "bg-[var(--lime)]"
-          }`}>
+          <span className="absolute top-3 left-3 bg-[var(--primrose)] text-white text-xs px-3 py-1 rounded-full font-semibold shadow">
             Destacado
           </span>
         )}
@@ -378,9 +280,7 @@ function ProductoCard({
 
       {/* Info */}
       <div className="p-3 sm:p-4">
-        <p className={`font-nunito text-xs uppercase tracking-widest mb-1 font-semibold ${
-          colorPrincipal === "primrose" ? "text-[var(--primrose)]" : "text-[var(--lime)]"
-        }`}>
+        <p className="font-nunito text-xs uppercase tracking-widest mb-1 font-semibold text-[var(--primrose)]">
           {nombreCategoria(producto.categoria)}
         </p>
         <h3 className="font-semibold text-[var(--texto-principal)] mb-1.5 text-sm sm:text-base leading-snug">{producto.nombre}</h3>
@@ -391,52 +291,32 @@ function ProductoCard({
         )}
 
         <div className="flex items-center justify-between gap-2">
-          <p className="text-xl sm:text-2xl font-semibold text-[var(--texto-principal)]">
-            S/ {producto.precio}
-          </p>
-          <button
-            onClick={onAgregar}
-            disabled={sinStock}
-            className={`flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition shrink-0 ${
-              sinStock
-                ? "bg-neutral-200 text-neutral-400 cursor-not-allowed"
-                : recienAgregado
-                ? "bg-green-500 text-white"
-                : colorPrincipal === "primrose"
-                ? "bg-[var(--primrose)] hover:bg-[var(--primrose-hover)] text-white shadow-md shadow-pink-200"
-                : "bg-[var(--lime)] hover:bg-[var(--lime-hover)] text-white shadow-md shadow-green-200"
-            }`}
-          >
-            {recienAgregado ? (
-              <>
-                <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                <span className="hidden sm:inline">Agregado</span>
-              </>
-            ) : sinStock ? (
-              "Agotado"
-            ) : (
-              <>
-                <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                <span className="sm:hidden">Agregar</span>
-                <span className="hidden sm:inline">Agregar al carrito</span>
-              </>
-            )}
-          </button>
+          <div>
+            <p className="text-xl sm:text-2xl font-semibold text-[var(--texto-principal)]">
+              S/ {producto.precio}
+            </p>
+            <p className="font-nunito text-[10px] text-[var(--texto-tenue)] leading-none">precio referencial</p>
+          </div>
+          {sinStock ? (
+            <span className="px-2.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold bg-neutral-200 text-neutral-400 shrink-0">
+              Agotado
+            </span>
+          ) : (
+            <a
+              href={linkWhatsApp(producto)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition shrink-0 bg-[var(--lime)] hover:bg-[var(--lime-hover)] text-white shadow-md shadow-green-200"
+            >
+              <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.993 2.898 9.83 9.83 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.82 11.82 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413"/>
+              </svg>
+              <span className="sm:hidden">Pedir</span>
+              <span className="hidden sm:inline">Pedir por WhatsApp</span>
+            </a>
+          )}
         </div>
       </div>
     </div>
   );
-}
-
-/* Helper usado en ProductoCard */
-function nombreCategoria(cat: string) {
-  const nombres: Record<string, string> = {
-    todos: "Todos", harinas: "Harinas", semillas: "Semillas",
-    superalimentos: "Superalimentos", endulzantes: "Endulzantes",
-    cereales: "Cereales", general: "General", libros: "Libros",
-    snacks: "Sándwiches", bebidas: "Bebidas", "comida-dietetica": "Comida dietética",
-  };
-  return nombres[cat] || cat;
 }

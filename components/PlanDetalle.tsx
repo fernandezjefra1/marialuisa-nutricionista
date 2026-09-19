@@ -77,7 +77,14 @@ export default function PlanDetalle({ badge, nombre, precio, periodo, desc, bene
         </div>
 
         {imagen && (
-          <img src={imagen} alt={nombre} className="w-full max-w-md mx-auto rounded-2xl shadow-lg mb-8 object-cover" />
+          <Image
+            src={imagen}
+            alt={nombre}
+            width={448}
+            height={336}
+            sizes="(max-width: 768px) 100vw, 448px"
+            className="w-full max-w-md mx-auto h-auto rounded-2xl shadow-lg mb-8 object-cover"
+          />
         )}
 
         {proximamente ? (

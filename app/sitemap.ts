@@ -14,7 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/dieta-basica`,        lastModified, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/dieta-vip`,           lastModified, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/dieta-premium`,       lastModified, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${baseUrl}/promotores`,          lastModified, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/plan-minichef`,       lastModified, changeFrequency: "monthly", priority: 0.7 },
     { url: `${baseUrl}/terminos`,            lastModified, changeFrequency: "yearly",  priority: 0.3 },
     { url: `${baseUrl}/privacidad`,          lastModified, changeFrequency: "yearly",  priority: 0.3 },
   ];

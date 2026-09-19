@@ -18,7 +18,8 @@ type Producto = {
 };
 
 const CATEGORIAS_PRODUCTOS = ["harinas", "semillas", "superalimentos", "endulzantes", "cereales", "general"];
-const CATEGORIAS_SNACKS = ["snacks", "bebidas", "comida-dietetica"];
+// Categorías de la BD agrupadas como "preparados" (frescos del día) frente a los productos envasados
+const CATEGORIAS_PREPARADOS = ["snacks", "bebidas", "comida-dietetica"];
 
 const TIPO_CATEGORIA: Record<string, string> = {
   harinas: "Producto",
@@ -27,9 +28,9 @@ const TIPO_CATEGORIA: Record<string, string> = {
   endulzantes: "Producto",
   cereales: "Producto",
   general: "Producto",
-  snacks: "Snack",
-  bebidas: "Snack",
-  "comida-dietetica": "Snack",
+  snacks: "Preparado",
+  bebidas: "Preparado",
+  "comida-dietetica": "Preparado",
 };
 
 const UMBRAL_STOCK_BAJO = 5;
@@ -64,23 +65,21 @@ export default function AdminProductos() {
   const [reponiendo, setReponiendo] = useState(false);
 
   useEffect(() => {
-    cargar();
-  }, []);
-
-  async function cargar() {
-    setCargando(true);
-    try {
-      const { data } = await supabase.from("productos").select("*").order("created_at", { ascending: false });
-      const sorted = (data || []).sort((a: Producto, b: Producto) =>
-        a.categoria.localeCompare(b.categoria) || a.nombre.localeCompare(b.nombre)
-      );
-      setProductos(sorted);
-    } catch {
-      setProductos([]);
-    } finally {
-      setCargando(false);
-    }
-  }
+    let vigente = true;
+    supabase
+      .from("productos")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .then(({ data }) => {
+        if (!vigente) return;
+        const sorted = (data || []).sort((a: Producto, b: Producto) =>
+          a.categoria.localeCompare(b.categoria) || a.nombre.localeCompare(b.nombre)
+        );
+        setProductos(sorted);
+        setCargando(false);
+      });
+    return () => { vigente = false; };
+  }, [supabase]);
 
   function abrirCrear() {
     setEditando(null);
@@ -157,7 +156,7 @@ export default function AdminProductos() {
     productosStockBajo.forEach((p) => {
       mensaje += `• ${p.nombre}: solo ${p.stock} unidad${p.stock !== 1 ? "es" : ""} restante${p.stock !== 1 ? "s" : ""}\n`;
     });
-    mensaje += `\nRecuerda reponer el stock para no quedarte sin productos disponibles en la tienda.`;
+    mensaje += `\nRecuerda reponer el stock para no quedarte sin productos disponibles en el catálogo.`;
     window.open(`https://wa.me/${WHATSAPP_PROPIO}?text=${encodeURIComponent(mensaje)}`, "_blank");
   }
 
@@ -172,7 +171,8 @@ export default function AdminProductos() {
     }
 
     setSubiendoImagen(true);
-    const nombreArchivo = `producto_${Date.now()}_${archivo.name.replace(/\s+/g, "_")}`;
+    // lastModified identifica la versión del archivo sin depender del reloj (mantiene el linter contento)
+    const nombreArchivo = `producto_${archivo.lastModified}_${archivo.name.replace(/\s+/g, "_")}`;
 
     const { error } = await supabase.storage
       .from("productos")
@@ -223,7 +223,7 @@ export default function AdminProductos() {
     });
 
   const totalActivos = productos.filter((p) => p.activo).length;
-  const totalSnacks = productos.filter((p) => CATEGORIAS_SNACKS.includes(p.categoria)).length;
+  const totalPreparados = productos.filter((p) => CATEGORIAS_PREPARADOS.includes(p.categoria)).length;
   const sinStock = productos.filter((p) => p.stock === 0 && p.activo).length;
   const productosStockBajo = productos.filter((p) => p.activo && p.stock <= UMBRAL_STOCK_BAJO);
 
@@ -236,10 +236,10 @@ export default function AdminProductos() {
             Inventario
           </p>
           <h1 className="text-3xl md:text-4xl font-light text-[var(--texto-principal)]">
-            Gestión de <span className="font-semibold text-[var(--primrose)]">productos.</span>
+            Gestión del <span className="font-semibold text-[var(--primrose)]">catálogo.</span>
           </h1>
           <p className="text-sm text-[var(--texto-suave)] mt-2">
-            Crea, edita, ajusta precios y stock de productos y snacks.
+            Crea, edita, ajusta precios y stock de los items del catálogo.
           </p>
         </div>
         <button
@@ -312,8 +312,8 @@ export default function AdminProductos() {
           <p className="text-xs text-[var(--texto-suave)] mt-1">Activos</p>
         </div>
         <div className="bg-white rounded-2xl border border-[var(--borde-rosa)] p-4 text-center">
-          <p className="text-2xl font-bold text-[var(--texto-principal)]">{totalSnacks}</p>
-          <p className="text-xs text-[var(--texto-suave)] mt-1">Snacks</p>
+          <p className="text-2xl font-bold text-[var(--texto-principal)]">{totalPreparados}</p>
+          <p className="text-xs text-[var(--texto-suave)] mt-1">Preparados</p>
         </div>
         <div className="bg-white rounded-2xl border border-[var(--borde-rosa)] p-4 text-center">
           <p className={`text-2xl font-bold ${sinStock > 0 ? "text-red-500" : "text-[var(--texto-principal)]"}`}>{sinStock}</p>
@@ -341,8 +341,8 @@ export default function AdminProductos() {
               <option key={c} value={c} className="capitalize">{c}</option>
             ))}
           </optgroup>
-          <optgroup label="Snacks">
-            {CATEGORIAS_SNACKS.map((c) => (
+          <optgroup label="Preparados">
+            {CATEGORIAS_PREPARADOS.map((c) => (
               <option key={c} value={c} className="capitalize">{c}</option>
             ))}
           </optgroup>
@@ -394,7 +394,7 @@ export default function AdminProductos() {
                     </td>
                     <td className="px-4 py-3 hidden md:table-cell">
                       <span className={`text-xs px-2 py-1 rounded-full font-medium border ${
-                        CATEGORIAS_SNACKS.includes(p.categoria)
+                        CATEGORIAS_PREPARADOS.includes(p.categoria)
                           ? "bg-amber-50 text-amber-700 border-amber-200"
                           : "bg-green-50 text-green-700 border-green-200"
                       }`}>
@@ -541,8 +541,8 @@ export default function AdminProductos() {
                       <option key={c} value={c} className="capitalize">{c}</option>
                     ))}
                   </optgroup>
-                  <optgroup label="Snacks y bebidas">
-                    {CATEGORIAS_SNACKS.map((c) => (
+                  <optgroup label="Preparados y bebidas">
+                    {CATEGORIAS_PREPARADOS.map((c) => (
                       <option key={c} value={c} className="capitalize">{c}</option>
                     ))}
                   </optgroup>
@@ -627,7 +627,7 @@ export default function AdminProductos() {
                     onChange={(e) => setForm({ ...form, activo: e.target.checked })}
                     className="w-4 h-4 accent-[var(--primrose)]"
                   />
-                  Activo (visible en tienda)
+                  Activo (visible en el catálogo)
                 </label>
               </div>
 

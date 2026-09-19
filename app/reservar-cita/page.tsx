@@ -1,10 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
-import { useUser } from "@/lib/use-user";
 
 const WHATSAPP_NUMERO = "51985577017";
 
@@ -19,8 +18,9 @@ const TIPO_LABELS: Record<TipoCita, string> = {
 export default function ReservarCitaPage() {
   const router = useRouter();
   const supabase = createClient();
-  const { user, nombre, correo, loading } = useUser();
 
+  const [nombre, setNombre] = useState("");
+  const [correo, setCorreo] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
   const [tipoCita, setTipoCita] = useState<TipoCita>("primera_consulta");
   const [fecha, setFecha] = useState("");
@@ -29,26 +29,20 @@ export default function ReservarCitaPage() {
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login?redirect=/reservar-cita");
-    }
-  }, [loading, user, router]);
-
-  if (loading || !user) {
-    return (
-      <main className="min-h-screen bg-[var(--yucca)] flex items-center justify-center">
-        <p className="text-sm text-[var(--texto-suave)]">Cargando...</p>
-      </main>
-    );
-  }
-
   // Fecha mínima: mañana
   const fechaMin = new Date();
   fechaMin.setDate(fechaMin.getDate() + 1);
   const fechaMinStr = fechaMin.toISOString().split("T")[0];
 
   async function handleReservar() {
+    if (!nombre.trim()) {
+      setError("Por favor ingresa tu nombre completo.");
+      return;
+    }
+    if (!correo.trim() || !correo.includes("@")) {
+      setError("Por favor ingresa un correo válido.");
+      return;
+    }
     if (!whatsapp.trim() || whatsapp.replace(/\D/g, "").length < 9) {
       setError("Por favor ingresa un número de WhatsApp válido.");
       return;
@@ -65,7 +59,7 @@ export default function ReservarCitaPage() {
     setEnviando(true);
 
     await supabase.from("reservas_cita").insert({
-      user_id: user!.id,
+      user_id: null,
       nombre,
       correo,
       whatsapp,
@@ -99,7 +93,7 @@ export default function ReservarCitaPage() {
     const url = `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(mensajeWA)}`;
     window.open(url, "_blank");
 
-    router.push("/perfil?tab=compras&cita=1");
+    router.push("/?cita=1");
   }
 
   return (
@@ -190,14 +184,30 @@ export default function ReservarCitaPage() {
             )}
 
             <div className="space-y-5">
-              <div className="bg-[var(--lime-soft)] rounded-xl p-4 border border-[var(--borde-verde)]">
-                <p className="text-xs uppercase tracking-widest text-[var(--lime)] mb-2 font-semibold">
-                  Tus datos (de tu perfil)
-                </p>
-                <p className="text-sm font-semibold text-[var(--texto-principal)]">
-                  {nombre}
-                </p>
-                <p className="text-xs text-[var(--texto-suave)]">{correo}</p>
+              <div>
+                <label className="text-xs uppercase tracking-widest text-[var(--texto-suave)] mb-2 block font-semibold">
+                  Nombre completo *
+                </label>
+                <input
+                  type="text"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  placeholder="Ej. Ana Pérez"
+                  className="w-full border border-[var(--borde-rosa)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--primrose)] transition"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs uppercase tracking-widest text-[var(--texto-suave)] mb-2 block font-semibold">
+                  Correo electrónico *
+                </label>
+                <input
+                  type="email"
+                  value={correo}
+                  onChange={(e) => setCorreo(e.target.value)}
+                  placeholder="tucorreo@ejemplo.com"
+                  className="w-full border border-[var(--borde-rosa)] px-4 py-3 rounded-lg focus:outline-none focus:border-[var(--primrose)] transition"
+                />
               </div>
 
               <div>
@@ -326,7 +336,7 @@ export default function ReservarCitaPage() {
             <span className="text-[var(--primrose)]">Nutricionista</span>
           </p>
           <p className="text-xs text-pink-100/60">
-            Nutrición preventiva para todas las etapas de la vida
+            Nutrición deportiva y preventiva para todas las etapas de la vida
           </p>
         </div>
       </footer>

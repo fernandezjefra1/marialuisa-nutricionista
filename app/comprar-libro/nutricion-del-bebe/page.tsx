@@ -4,14 +4,14 @@ import Image from "next/image";
 
 const WHATSAPP_NUMERO = "51985577017";
 
+// TODO: Reemplazar por el enlace real del checkout de Hotmart del libro digital.
+const HOTMART_URL = "https://pay.hotmart.com/";
+
 export const metadata: Metadata = {
   title: "Nutrición del Bebé | Libro de María Luisa Nutricionista",
   description:
-    "Guía de nutrición infantil preventiva desde los 6 meses hasta el año de vida. Próximamente disponible en versión digital.",
+    "Guía de nutrición infantil preventiva desde los 6 meses hasta el año de vida. Disponible en versión digital.",
 };
-
-/* TODO: FASE 2 — Venta online del libro digital.
-   Aquí volverán el precio y el botón de compra (ver nota en app/comprar-libro/page.tsx). */
 
 const CONTENIDO = [
   "Alimentación por etapas, desde los 6 meses hasta el año de vida",
@@ -22,7 +22,7 @@ const CONTENIDO = [
 
 export default function NutricionDelBebePage() {
   const mensaje = encodeURIComponent(
-    "¡Hola María Luisa! Quiero que me avises cuando el libro \"Nutrición del Bebé\" esté disponible en versión digital."
+    "¡Hola María Luisa! Tengo una consulta sobre el libro digital \"Nutrición del Bebé\"."
   );
 
   return (
@@ -30,9 +30,9 @@ export default function NutricionDelBebePage() {
       {/* Header */}
       <header className="bg-[#edf7e8] border-b border-[#C5DFC5]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
-          <Link href="/comprar-libro" className="font-nunito text-sm text-[#5a7255] hover:text-[#31543d] transition flex items-center gap-1 shrink-0">
+          <Link href="/" className="font-nunito text-sm text-[#5a7255] hover:text-[#31543d] transition flex items-center gap-1 shrink-0">
             <span className="sm:hidden">←</span>
-            <span className="hidden sm:inline">← Volver a los libros</span>
+            <span className="hidden sm:inline">← Volver al inicio</span>
           </Link>
           <p className="font-playfair font-semibold text-[#31543d] truncate px-3">María Luisa Nutricionista</p>
           <div className="w-16 sm:w-24 shrink-0" />
@@ -53,8 +53,8 @@ export default function NutricionDelBebePage() {
                 className="object-cover"
                 priority
               />
-              <span className="absolute top-3 right-3 bg-[var(--verde-fuerte)] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
-                Próximamente
+              <span className="absolute top-3 right-3 bg-[var(--lime)] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+                Versión digital
               </span>
             </div>
           </div>
@@ -62,7 +62,7 @@ export default function NutricionDelBebePage() {
           {/* Info */}
           <div>
             <p className="font-nunito text-xs uppercase tracking-widest text-[#6daa6d] mb-2 font-semibold">
-              Nuevo lanzamiento
+              Libro digital
             </p>
             <h1 className="font-playfair text-3xl md:text-4xl font-light text-[#31543d] mb-2">
               Nutrición <span className="font-semibold shimmer-rose">del Bebé.</span>
@@ -91,23 +91,32 @@ export default function NutricionDelBebePage() {
               </ul>
             </div>
 
-            <div className="mb-8 p-6 rounded-2xl border-2 border-[#C5DFC5] bg-white">
+            <div className="mb-6 p-6 rounded-2xl border-2 border-[#C5DFC5] bg-white">
               <h2 className="font-playfair text-xl font-semibold text-[#31543d] mb-2">
-                Disponible próximamente en versión digital
+                Compra tu libro digital
               </h2>
-              <p className="font-nunito text-sm text-[#5a7255] leading-relaxed">
-                Estamos preparando la edición digital de este libro. Escríbenos por WhatsApp
-                y te avisamos apenas esté lista.
+              <p className="font-nunito text-sm text-[#5a7255] leading-relaxed mb-5">
+                Pago 100% seguro a través de Hotmart. Tras la compra recibirás el acceso a la
+                descarga en tu correo.
               </p>
+
+              <a
+                href={HOTMART_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-coquette inline-flex items-center justify-center gap-3 bg-[var(--primrose)] hover:bg-[var(--primrose-hover)] text-white px-6 py-4 rounded-full transition font-semibold shadow-lg shadow-pink-200 font-nunito w-full"
+              >
+                Comprar versión digital
+              </a>
             </div>
 
             <a
               href={`https://wa.me/${WHATSAPP_NUMERO}?text=${mensaje}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-coquette inline-flex items-center justify-center gap-3 bg-[#25D366] hover:bg-[#1FAA52] text-white px-6 py-4 rounded-full transition font-semibold shadow-lg shadow-green-200 font-nunito w-full sm:w-auto"
+              className="inline-flex items-center justify-center gap-2 text-sm text-[#5a7255] hover:text-[#31543d] font-nunito transition"
             >
-              Avísame por WhatsApp
+              ¿Tienes dudas? Escríbenos por WhatsApp →
             </a>
           </div>
         </div>

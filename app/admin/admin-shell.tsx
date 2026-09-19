@@ -47,8 +47,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const navItems = [
     { href: "/admin",                 label: "Dashboard",       icon: <IcoHome /> },
-    { href: "/admin/productos",       label: "Catálogo",        icon: <IcoBox /> },
     { href: "/admin/citas",           label: "Citas",           icon: <IcoCalendar /> },
+    { href: "/admin/constancias",     label: "Constancias",     icon: <IcoBox /> },
     { href: "/admin/administradores", label: "Administradores", icon: <IcoUsers /> },
   ];
 

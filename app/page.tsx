@@ -643,6 +643,9 @@ function Footer() {
         {/* Bottom bar */}
         <div className="pt-6 border-t border-white/10 text-center text-xs text-white font-nunito">
           <p>© {new Date().getFullYear()} María Luisa Nutricionista. Todos los derechos reservados.</p>
+          <p className="mt-2">
+            <Link href="/login" className="text-white/30 hover:text-white/70 transition">Acceso administradora</Link>
+          </p>
         </div>
       </div>
     </footer>

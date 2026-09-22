@@ -378,7 +378,7 @@ function HeroLibro() {
             <div className="absolute inset-0 top-8 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl rotate-3 -z-0" />
             <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white z-10">
               <Image
-                src="/images/loncheras-portada.png"
+                src="/images/loncheras-portada.jpg"
                 alt="Libro Loncheras Saludables - Lic. María Luisa"
                 fill
                 className="object-contain bg-white"

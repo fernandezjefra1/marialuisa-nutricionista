@@ -347,7 +347,7 @@ function HeroLibro() {
           {/* Frase — queda abajo en móvil, izquierda en desktop */}
           <div className="text-center md:text-left">
             <p className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[var(--texto-principal)] font-semibold italic leading-tight mb-4">
-              &ldquo;Vive la magia de la comida dietética&rdquo;
+              &ldquo;Vive la magia de la dieta preventiva&rdquo;
             </p>
             <p className="text-sm md:text-base text-[var(--texto-suave)]">
               María Luisa Nutricionista &nbsp;·&nbsp;
@@ -378,10 +378,10 @@ function HeroLibro() {
             <div className="absolute inset-0 top-8 bg-gradient-to-br from-[var(--pinktone)] to-[var(--lime-soft)] rounded-2xl rotate-3 -z-0" />
             <div className="relative aspect-[3/4] rounded-2xl shadow-2xl shadow-pink-200 overflow-hidden border-4 border-white z-10">
               <Image
-                src="/images/libro-portada.jpg"
-                alt="Libro Nutrición del Bebé - Lic. María Luisa"
+                src="/images/loncheras-portada.png"
+                alt="Libro Loncheras Saludables - Lic. María Luisa"
                 fill
-                className="object-cover"
+                className="object-contain bg-white"
                 priority
               />
             </div>
@@ -389,11 +389,11 @@ function HeroLibro() {
           {/* Info */}
           <div className="flex flex-col">
             <h1 className="font-playfair text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light leading-tight tracking-tight mb-3 text-[var(--texto-principal)]">
-              Nutrición <span className="font-semibold shimmer-rose">del Bebé.</span>
+              Loncheras <span className="font-semibold shimmer-rose">Saludables.</span>
             </h1>
             <p className="font-nunito text-sm text-[var(--texto-suave)] leading-relaxed mb-5">
-              Guía de nutrición infantil <span className="text-[var(--lime)] font-semibold">preventiva</span> desde
-              los 6 meses hasta el año de vida. Recientemente presentada en el Colegio de Nutricionistas del Perú.
+              Loncheras y snacks saludables para inicial, primaria y secundaria, con menús de la
+              <span className="text-[var(--lime)] font-semibold"> Costa, Sierra y Selva</span> del Perú.
             </p>
             <div className="flex items-center gap-3 mb-5">
               <div className="relative bg-[var(--lime-soft)] border-2 border-[var(--lime)] rounded-2xl px-4 py-2.5 flex flex-col items-start halo-animado overflow-hidden">
@@ -403,7 +403,7 @@ function HeroLibro() {
               </div>
             </div>
             <Link
-              href="/comprar-libro/nutricion-del-bebe"
+              href="/comprar-libro/loncheras-saludables"
               className="btn-coquette bg-[var(--primrose)] text-white px-6 py-3 rounded-full hover:bg-[var(--primrose-hover)] transition font-medium shadow-lg shadow-pink-200 w-full md:w-fit text-center"
             >
               Ver y comprar el libro

@@ -30,7 +30,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nutricionistamarialuisa.vercel.app"),
+  metadataBase: new URL("https://www.marialuisanutricionista.com"),
+  alternates: { canonical: "/" },
   title: {
     default: "María Luisa Nutricionista | Nutrición deportiva y preventiva en Lima",
     template: "%s | María Luisa Nutricionista",
@@ -61,7 +62,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_PE",
-    url: "https://nutricionistamarialuisa.vercel.app",
+    url: "https://www.marialuisanutricionista.com",
     title: "María Luisa Nutricionista | Nutrición deportiva y preventiva",
     description:
       "Más de 20 años de experiencia. Planes de alimentación para entrenamiento, consultas y libros para una vida saludable.",
@@ -119,9 +120,9 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "MedicalBusiness",
               name: "María Luisa Nutricionista",
-              image: "https://nutricionistamarialuisa.vercel.app/images/logoNutricion.png",
-              "@id": "https://nutricionistamarialuisa.vercel.app",
-              url: "https://nutricionistamarialuisa.vercel.app",
+              image: "https://www.marialuisanutricionista.com/images/logoNutricion.png",
+              "@id": "https://www.marialuisanutricionista.com",
+              url: "https://www.marialuisanutricionista.com",
               telephone: "+51985577017",
               priceRange: "S/.20 - S/.90",
               description:

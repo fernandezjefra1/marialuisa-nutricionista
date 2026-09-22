@@ -3,26 +3,24 @@ import Link from "next/link";
 import Image from "next/image";
 
 const WHATSAPP_NUMERO = "51985577017";
-
-// TODO: Reemplazar por el enlace real del checkout de Hotmart del libro digital.
-const HOTMART_URL = "https://pay.hotmart.com/";
+const HOTMART_URL = "https://go.hotmart.com/U107706372S?dp=1";
 
 export const metadata: Metadata = {
-  title: "Nutrición del Bebé | Libro de María Luisa Nutricionista",
+  title: "Loncheras Saludables | Libro de María Luisa Nutricionista",
   description:
-    "Guía de nutrición infantil preventiva desde los 6 meses hasta el año de vida. Disponible en versión digital.",
+    "Libro digital de loncheras y snacks saludables para inicial, primaria y secundaria, con menús de la Costa, Sierra y Selva del Perú. Vista previa gratis.",
 };
 
 const CONTENIDO = [
-  "Alimentación por etapas, desde los 6 meses hasta el año de vida",
-  "Cantidades y texturas recomendadas en cada mes",
-  "Recetas fáciles con ingredientes que se consiguen en el mercado",
-  "Señales de alerta y cuándo consultar con un profesional",
+  "Loncheras por región: Costa, Sierra y Selva del Perú",
+  "Menús para inicial, primaria y secundaria",
+  "Valor nutricional y calorías de cada lonchera",
+  "Enfermedades comunes y cómo prevenirlas desde la lonchera",
 ];
 
-export default function NutricionDelBebePage() {
+export default function LoncherasSaludablesPage() {
   const mensaje = encodeURIComponent(
-    "¡Hola María Luisa! Tengo una consulta sobre el libro digital \"Nutrición del Bebé\"."
+    '¡Hola María Luisa! Tengo una consulta sobre el libro digital "Loncheras Saludables".'
   );
 
   return (
@@ -39,42 +37,38 @@ export default function NutricionDelBebePage() {
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 md:py-14">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 md:py-14">
         <div className="grid md:grid-cols-[280px_1fr] gap-8 md:gap-12 items-start">
-
           {/* Portada */}
           <div className="relative">
             <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden shadow-lg bg-white">
               <Image
-                src="/images/libro-portada.jpg"
-                alt="Libro Nutrición del Bebé — Lic. María Luisa"
+                src="/images/loncheras-portada.png"
+                alt="Libro Loncheras Saludables — Lic. María Luisa"
                 fill
                 sizes="(max-width: 768px) 100vw, 280px"
-                className="object-cover"
+                className="object-contain bg-white"
                 priority
               />
               <span className="absolute top-3 right-3 bg-[var(--lime)] text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
-                Versión digital
+                Libro digital
               </span>
             </div>
           </div>
 
           {/* Info */}
           <div>
-            <p className="font-nunito text-xs uppercase tracking-widest text-[#6daa6d] mb-2 font-semibold">
-              Libro digital
-            </p>
+            <p className="font-nunito text-xs uppercase tracking-widest text-[#6daa6d] mb-2 font-semibold">Nuevo lanzamiento</p>
             <h1 className="font-playfair text-3xl md:text-4xl font-light text-[#31543d] mb-2">
-              Nutrición <span className="font-semibold shimmer-rose">del Bebé.</span>
+              Loncheras <span className="font-semibold shimmer-rose">Saludables.</span>
             </h1>
             <p className="font-nunito text-xs text-[#8aa487] mb-6">Por María Luisa Peña Valdivia</p>
 
             <p className="font-nunito text-[#5a7255] leading-relaxed mb-6">
-              Guía de nutrición infantil preventiva desde los 6 meses hasta el año de vida.
-              Recientemente presentada en el Colegio de Nutricionistas del Perú.
+              Loncheras y snacks saludables para inicial, primaria y secundaria, con menús
+              económicos de la Costa, Sierra y Selva del Perú y su valor nutricional.
             </p>
 
-            {/* TODO: Confirmar con la clienta el índice real del libro. */}
             <div className="mb-8">
               <h2 className="font-playfair text-lg font-semibold text-[#31543d] mb-3">Qué vas a encontrar</h2>
               <ul className="space-y-2.5">
@@ -92,21 +86,18 @@ export default function NutricionDelBebePage() {
             </div>
 
             <div className="mb-6 p-6 rounded-2xl border-2 border-[#C5DFC5] bg-white">
-              <h2 className="font-playfair text-xl font-semibold text-[#31543d] mb-2">
-                Compra tu libro digital
-              </h2>
+              <h2 className="font-playfair text-xl font-semibold text-[#31543d] mb-2">Compra tu libro digital</h2>
               <p className="font-nunito text-sm text-[#5a7255] leading-relaxed mb-5">
                 Pago 100% seguro a través de Hotmart. Tras la compra recibirás el acceso a la
                 descarga en tu correo.
               </p>
-
               <a
                 href={HOTMART_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-coquette inline-flex items-center justify-center gap-3 bg-[var(--primrose)] hover:bg-[var(--primrose-hover)] text-white px-6 py-4 rounded-full transition font-semibold shadow-lg shadow-pink-200 font-nunito w-full"
               >
-                Comprar versión digital
+                Comprar versión completa
               </a>
             </div>
 
@@ -120,6 +111,34 @@ export default function NutricionDelBebePage() {
             </a>
           </div>
         </div>
+
+        {/* VISTA PREVIA */}
+        <section className="mt-14">
+          <div className="text-center mb-5">
+            <p className="font-nunito text-xs uppercase tracking-widest text-[#6daa6d] mb-1 font-semibold">Vista previa gratis</p>
+            <h2 className="font-playfair text-2xl md:text-3xl font-semibold text-[#31543d]">Hojea el libro</h2>
+            <p className="font-nunito text-sm text-[#5a7255] mt-1">
+              Lee gratis desde la portada hasta el capítulo <b>Enfermedades comunes</b>. El libro completo se adquiere por Hotmart.
+            </p>
+          </div>
+          <div className="rounded-2xl overflow-hidden border-2 border-[#C5DFC5] bg-white shadow-lg">
+            <iframe
+              src="/libro/loncheras-preview.pdf#view=FitH"
+              title="Vista previa — Loncheras Saludables"
+              className="w-full h-[75vh]"
+            />
+          </div>
+          <div className="text-center mt-6">
+            <a
+              href={HOTMART_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-coquette inline-flex items-center justify-center gap-3 bg-[var(--primrose)] hover:bg-[var(--primrose-hover)] text-white px-8 py-4 rounded-full transition font-semibold shadow-lg shadow-pink-200 font-nunito"
+            >
+              Comprar el libro completo
+            </a>
+          </div>
+        </section>
       </div>
     </div>
   );

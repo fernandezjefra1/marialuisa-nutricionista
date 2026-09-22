@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin/", "/api/", "/login/"],
     },
-    sitemap: "https://nutricionistamarialuisa.vercel.app/sitemap.xml",
+    sitemap: "https://www.marialuisanutricionista.com/sitemap.xml",
   };
 }
